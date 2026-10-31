@@ -1,4 +1,5 @@
 import { start } from "workflow/api";
+import { z } from "zod";
 import { previewWorkflow } from "@/workflows/preview";
 import { assertSameOrigin, requireOwner } from "@/lib/server/auth";
 import { getPool } from "@/lib/server/db";
@@ -10,20 +11,28 @@ import {
   cancelSessionPreviews,
 } from "@/lib/server/jobs";
 import { ownedSession } from "@/lib/server/sessions";
-import { revisionSchema } from "@/lib/server/validation";
 import { handle, json, readJson } from "@/lib/server/http";
 type Context = { params: Promise<{ id: string }> };
+const previewRequestSchema = z
+  .object({
+    expectedRevision: z.number().int().nonnegative(),
+    candidateId: z.string().min(1).max(200).optional(),
+    variantId: z.enum(["light", "build", "full"]).optional(),
+  })
+  .strict();
 export async function POST(request: Request, context: Context) {
   return handle(async () => {
-    assertSameOrigin(request);
+    assertSameOrigin(request, { requireOrigin: true });
     const ownerId = await requireOwner(request);
     const { id } = await context.params;
-    const { expectedRevision } = revisionSchema.parse(await readJson(request));
+    const { expectedRevision, candidateId, variantId } =
+      previewRequestSchema.parse(await readJson(request));
     const { jobs } = await queuePreviews(
       ownerId,
       id,
       expectedRevision,
       requesterHash(request),
+      { candidateId, variantId },
     );
     for (const job of jobs) {
       try {

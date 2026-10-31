@@ -5,6 +5,7 @@ import {
   getMakeupTask,
   YouCamError,
   InvalidRecipeError,
+  validateEffects,
 } from "@/lib/youcam";
 import { getPool, transaction } from "@/lib/server/db";
 import {
@@ -26,6 +27,7 @@ import {
 } from "@/lib/server/assets";
 import { ownedSession } from "@/lib/server/sessions";
 import { ApiError } from "@/lib/server/auth";
+import { readPreviewBudget } from "@/lib/server/preview-budget";
 
 async function cancelled(job: ProviderJob) {
   if (!job.cancel_requested && job.state !== "cancelled") return false;
@@ -167,6 +169,12 @@ export async function submitPreviewStep(jobId: string): Promise<boolean> {
       return { kind: "cancelled" as const };
     if (job.state === "succeeded" || job.state === "failed")
       return { kind: "terminal" as const };
+    if (
+      ["stopped", "completed"].includes(session.stage) &&
+      !job.provider_task_id &&
+      !job.submission_started_at
+    )
+      return { kind: "stale" as const };
     if (!jobMatchesSession(session, job)) return { kind: "stale" as const };
     if (job.provider_task_id) {
       if (job.state === "unknown_submission")
@@ -177,7 +185,18 @@ export async function submitPreviewStep(jobId: string): Promise<boolean> {
       return { kind: "submitted" as const };
     }
     if (job.submission_started_at) return { kind: "uncertain" as const };
-    if (!job.provider_file_id) return { kind: "missing" as const };
+    if (!job.provider_file_id || job.provider_file_id.length > 2048)
+      return { kind: "missing" as const };
+    try {
+      validateEffects(job.input.effects);
+    } catch {
+      return { kind: "invalid" as const };
+    }
+    // A job may have waited through a cache expiry or an operational pause.
+    // Recheck before persisting submission intent, and never repeat a paid POST.
+    const budget = await readPreviewBudget(client);
+    if (!budget.available)
+      return { kind: "resting" as const, message: budget.message! };
     await client.query(
       "UPDATE provider_jobs SET state='submitting',submission_started_at=now(),attempts=attempts+1,updated_at=now() WHERE id=$1",
       [jobId],
@@ -208,6 +227,18 @@ export async function submitPreviewStep(jobId: string): Promise<boolean> {
       jobId,
       "source_unavailable",
       "The prepared source is unavailable. Your choices are saved.",
+      false,
+      true,
+    );
+    return false;
+  }
+  if (prepared.kind === "invalid" || prepared.kind === "resting") {
+    await failJob(
+      jobId,
+      prepared.kind === "resting" ? "live_previews_resting" : "invalid_recipe",
+      prepared.kind === "resting"
+        ? prepared.message
+        : "This preview recipe could not be prepared. Please choose the method again.",
       false,
       true,
     );

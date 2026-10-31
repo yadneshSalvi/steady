@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { StudioAsset, StudioSession } from "../src/lib/contracts";
 import { SAMPLE_SETUP } from "../src/lib/catalog";
 import { createSession } from "../src/lib/planner";
+import { selectPreviewLevel } from "../src/lib/youcam/recipes";
 
 const mocks = vi.hoisted(() => ({
   query: vi.fn(),
@@ -62,9 +63,13 @@ beforeEach(() => {
   vi.stubEnv("YOUCAM_DAILY_JOB_LIMIT", "16");
   vi.stubEnv("YOUCAM_SESSION_JOB_LIMIT", "4");
   vi.stubEnv("YOUCAM_IP_DAILY_JOB_LIMIT", "8");
-  session = createSession(structuredClone(SAMPLE_SETUP), "studio-id");
+  session = createSession(
+    { ...structuredClone(SAMPLE_SETUP), mode: "personal", consent: true },
+    "studio-id",
+  );
   session.sourceAssetId = "source-id";
   session.candidates = session.candidates.slice(0, 1);
+  session.selectedCandidateId = session.candidates[0].id;
   session.candidates[0].previewJobId = "job-id";
   job = {
     id: "job-id",
@@ -98,10 +103,58 @@ beforeEach(() => {
 });
 
 describe("durable preview projection", () => {
+  it("stores an unselected ladder result without replacing the chosen target", () => {
+    const candidate = session.candidates[0];
+    const full = candidate.previewVariants!.find(
+      (variant) => variant.id === "full",
+    )!;
+    full.previewJobId = job.id;
+    const light = candidate.previewVariants!.find(
+      (variant) => variant.id === "light",
+    )!;
+    light.previewStatus = "ready";
+    light.previewAsset = { ...output, id: "existing-light-output" };
+    selectPreviewLevel(candidate, "light");
+    session.activePlan = structuredClone(candidate);
+    job.input = { effects: structuredClone(full.recipe), variantId: "full" };
+    job.request_hash = previewRequestHash(job.source_asset_id, full.recipe);
+    job.state = "succeeded";
+    job.output_asset_id = output.id;
+    expect(projectJobIntoSession(session, job, output)).toBe(true);
+    expect(candidate.previewAsset?.id).toBe("existing-light-output");
+    expect(candidate.recipe).toEqual(light.recipe);
+    expect(session.activePlan.previewAsset?.id).toBe("existing-light-output");
+    expect(full.previewAsset?.id).toBe(output.id);
+    expect(session.assets.map((asset) => asset.id)).toEqual([output.id]);
+  });
+
+  it("updates the matching selected level in both candidate and approved plan", () => {
+    const candidate = session.candidates[0];
+    const full = candidate.previewVariants!.find(
+      (variant) => variant.id === "full",
+    )!;
+    full.previewJobId = job.id;
+    selectPreviewLevel(candidate, "full");
+    session.activePlan = structuredClone(candidate);
+    job.input = { effects: structuredClone(full.recipe), variantId: "full" };
+    job.state = "succeeded";
+    job.output_asset_id = output.id;
+    expect(projectJobIntoSession(session, job, output)).toBe(true);
+    expect(candidate.previewAsset?.id).toBe(output.id);
+    expect(session.activePlan.previewAsset?.id).toBe(output.id);
+    expect(
+      session.activePlan.previewVariants?.find(
+        (variant) => variant.id === "full",
+      )?.previewStatus,
+    ).toBe("ready");
+  });
+
   it("resumes an interrupted known task without a new reservation or task identity", async () => {
     job.state = "failed";
     job.error_code = "workflow_interrupted";
-    const result = await queuePreviews("owner", session.id, 0, "ip-hash");
+    const result = await queuePreviews("owner", session.id, 0, "ip-hash", {
+      variantId: "full",
+    });
     expect(result.jobs).toHaveLength(1);
     expect(result.jobs[0]).toMatchObject({
       id: job.id,
@@ -220,7 +273,9 @@ describe("durable preview projection", () => {
     job.state = "succeeded";
     job.output_asset_id = output.id;
     delete session.candidates[0].previewJobId;
-    const result = await queuePreviews("owner", session.id, 0, "ip-hash");
+    const result = await queuePreviews("owner", session.id, 0, "ip-hash", {
+      variantId: "full",
+    });
     expect(result.jobs).toEqual([]);
     expect(result.session.candidates[0]).toMatchObject({
       previewJobId: job.id,

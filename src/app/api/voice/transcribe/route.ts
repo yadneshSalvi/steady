@@ -5,7 +5,7 @@ import { parseVoiceCommand } from "@/lib/voice";
 export const maxDuration = 30;
 export async function POST(request: Request) {
   return handle(async () => {
-    assertSameOrigin(request);
+    assertSameOrigin(request, { requireOrigin: true });
     const ownerId = await requireOwner(request);
     if (request.headers.get("x-steady-voice-consent") !== "deepgram-v1")
       throw new ApiError(
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
         "AUDIO_SIZE",
         "Please say one short studio command.",
       );
-    await reserveAIRequest(ownerId, "voice_command");
+    await reserveAIRequest(ownerId, "voice_command", request);
     const response = await fetch(
       "https://api.deepgram.com/v1/listen?model=nova-3&language=en&smart_format=true&punctuate=true&keyterm=Steady",
       {

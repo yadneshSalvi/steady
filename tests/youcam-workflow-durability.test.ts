@@ -17,6 +17,10 @@ const mocks = vi.hoisted(() => ({
   readAssetBytes: vi.fn(),
   readLimited: vi.fn(),
   storePhoto: vi.fn(),
+  readPreviewBudget: vi.fn(),
+}));
+vi.mock("../src/lib/server/preview-budget", () => ({
+  readPreviewBudget: mocks.readPreviewBudget,
 }));
 vi.mock("../src/lib/server/db", () => ({
   getPool: () => ({ query: mocks.query }),
@@ -90,6 +94,7 @@ beforeEach(() => {
   mocks.ownedSession.mockResolvedValue({ id: job.session_id });
   mocks.jobMatchesSession.mockReturnValue(true);
   mocks.takeProviderRequest.mockResolvedValue(true);
+  mocks.readPreviewBudget.mockResolvedValue({ available: true, remaining: 20 });
   mocks.failJob.mockResolvedValue(undefined);
   mocks.cancelJob.mockImplementation(async () => {
     if (job.state !== "succeeded") job.state = "cancelled";
@@ -135,6 +140,26 @@ beforeEach(() => {
 });
 
 describe("provider workflow crash and cancellation boundaries", () => {
+  it("rechecks the cached floor before writing submission intent or sending a paid POST", async () => {
+    job.provider_task_id = null;
+    job.submission_started_at = null;
+    mocks.readPreviewBudget.mockResolvedValue({
+      available: false,
+      remaining: 0,
+      message: "Fresh previews are resting.",
+    });
+    await expect(submitPreviewStep(job.id)).resolves.toBe(false);
+    expect(job.submission_started_at).toBeNull();
+    expect(mocks.submitMakeupTask).not.toHaveBeenCalled();
+    expect(mocks.failJob).toHaveBeenCalledWith(
+      job.id,
+      "live_previews_resting",
+      expect.any(String),
+      false,
+      true,
+    );
+  });
+
   it("resumes a known task without another paid POST", async () => {
     await expect(submitPreviewStep(job.id)).resolves.toBe(true);
     expect(mocks.submitMakeupTask).not.toHaveBeenCalled();

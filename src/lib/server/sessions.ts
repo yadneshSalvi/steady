@@ -68,6 +68,12 @@ export async function newSession(
   ownerId: string,
   setup: SetupInput,
 ): Promise<StudioSession> {
+  if (setup.mode === "sample" && setup.includeLips)
+    throw new ApiError(
+      400,
+      "SAMPLE_LIPS_UNAVAILABLE",
+      "Recorded samples cover cheeks or eyes. Use a personal studio for optional lip color.",
+    );
   // A source capture is always attached after creation with a validated ownership check.
   if (setup.sourceAssetId)
     throw new ApiError(
@@ -183,6 +189,10 @@ export async function markSessionDeleted(ownerId: string, sessionId: string) {
     );
     await client.query(
       "UPDATE provider_jobs SET state = 'cancelled', updated_at = now() WHERE session_id = $1 AND state NOT IN ('succeeded','failed','unknown_submission')",
+      [sessionId],
+    );
+    await client.query(
+      "UPDATE quota_reservations q SET released=true FROM provider_jobs j WHERE q.id=j.id AND j.session_id=$1 AND j.provider_task_id IS NULL AND j.submission_started_at IS NULL",
       [sessionId],
     );
   });

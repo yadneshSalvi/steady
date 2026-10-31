@@ -5,10 +5,10 @@ import { handle, json } from "@/lib/server/http";
 export const maxDuration = 90;
 export async function POST(request: Request) {
   return handle(async () => {
-    assertSameOrigin(request);
+    assertSameOrigin(request, { requireOrigin: true });
     const ownerId = await requireOwner(request);
     const input = await selectedImage(request);
-    await reserveAIRequest(ownerId, "tools");
+    await reserveAIRequest(ownerId, "tools", request);
     return json(await recognizeTools(input));
   });
 }

@@ -40,7 +40,10 @@ let session: StudioSession;
 beforeEach(() => {
   vi.clearAllMocks();
   vi.stubEnv("BLOB_READ_WRITE_TOKEN", "test-storage-token");
-  session = createSession(structuredClone(SAMPLE_SETUP), "test-studio");
+  session = createSession(
+    { ...structuredClone(SAMPLE_SETUP), mode: "personal", consent: true },
+    "test-studio",
+  );
   mocks.ownedSession.mockImplementation(async () => session);
   mocks.persistSession.mockResolvedValue(undefined);
   mocks.transaction.mockImplementation(

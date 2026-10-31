@@ -13,7 +13,7 @@ import {
   analyzeInspiration,
   recognizeTools,
 } from "@/lib/server/vision-assistant";
-import type { PlanAction } from "@/lib/contracts";
+import type { PlanAction, StoredMeasurement } from "@/lib/contracts";
 
 let bytes: Buffer;
 let differentBytes: Buffer;
@@ -248,5 +248,94 @@ describe("selected-still AI boundaries", () => {
       message:
         "AI guidance could not read this photo right now. Try again, or continue with your own choices.",
     });
+  });
+  it("passes measured numbers to the model and never overrides local abstention", async () => {
+    const fetcher = vi.fn().mockImplementation(() =>
+      Promise.resolve(
+        gemini({
+          comparable: true,
+          state: "optional_adjustment",
+          summary: "It appears ready for another pass.",
+          reasons: ["A tentative edge observation."],
+          suggestedActionId: action.id,
+        }),
+      ),
+    );
+    vi.stubGlobal("fetch", fetcher);
+    const measurement: StoredMeasurement = {
+      version: 1,
+      region: "left_cheek",
+      verdict: "build",
+      progress: 0.38,
+      deltaA: 2,
+      deltaE00: 2.3,
+      uniformity: 0.9,
+      lagging: null,
+      provenance: "local_camera",
+      reportedPass: false,
+      targetLevel: "full",
+      targetAssetId: "chosen-target",
+      elapsedMs: 120,
+    };
+    const input = {
+      baseline: { bytes, contentType: "image/jpeg" },
+      checkpoint: { bytes: differentBytes, contentType: "image/jpeg" },
+      action,
+      availableActions: [action],
+    };
+    const result = await analyzeCheckpoint({ ...input, measurement });
+    expect(result.suggestedActionId).toBe(action.id);
+    const prompt = JSON.parse(fetcher.mock.calls[0][1].body).contents[0]
+      .parts[0].text;
+    expect(prompt).toContain('"progress":0.38');
+    expect(prompt).toContain("sole numeric reference");
+    expect(prompt).toContain("do not invent a different percentage");
+    const abstained = await analyzeCheckpoint({
+      ...input,
+      measurement: {
+        ...measurement,
+        verdict: "insufficient",
+        progress: null,
+        reason: "The reference light changed. Return to the original light.",
+      },
+    });
+    expect(abstained).toMatchObject({
+      state: "insufficient_evidence",
+      summary: "The reference light changed. Return to the original light.",
+    });
+    expect(abstained.suggestedActionId).toBeUndefined();
+    const atTarget = await analyzeCheckpoint({
+      ...input,
+      measurement: { ...measurement, verdict: "at_target", progress: 1 },
+    });
+    expect(atTarget.suggestedActionId).toBeUndefined();
+    expect(
+      JSON.parse(fetcher.mock.calls[2][1].body).contents[0].parts[0].text,
+    ).toContain("supplied list: []");
+  });
+  it("supports the finite eye goal and explicitly confirmed eye product suggestions", async () => {
+    const fetcher = vi
+      .fn()
+      .mockResolvedValueOnce(gemini({ ...inspiration, lookId: "eyes" }))
+      .mockResolvedValueOnce(
+        gemini({
+          tools: ["liner_pen"],
+          products: ["eye_liner", "eye_shadow"],
+          notes: ["Confirm the eye-use labels on your own products."],
+        }),
+      );
+    vi.stubGlobal("fetch", fetcher);
+    expect(
+      await analyzeInspiration({ bytes, contentType: "image/jpeg" }),
+    ).toMatchObject({ lookId: "eyes" });
+    expect(
+      await recognizeTools({ bytes, contentType: "image/jpeg" }),
+    ).toMatchObject({
+      tools: ["liner_pen"],
+      products: ["eye_liner", "eye_shadow"],
+    });
+    expect(
+      JSON.parse(fetcher.mock.calls[1][1].body).contents[0].parts[0].text,
+    ).toContain("visible eye-use labeling is required");
   });
 });

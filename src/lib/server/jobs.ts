@@ -1,12 +1,26 @@
 import "server-only";
 import { createHash, randomUUID } from "node:crypto";
-import type { MakeupEffect, StudioSession, StudioAsset } from "@/lib/contracts";
-import { validateEffects } from "@/lib/youcam/recipes";
+import type {
+  CandidatePlan,
+  MakeupEffect,
+  PreviewLevel,
+  PreviewVariant,
+  StudioSession,
+  StudioAsset,
+} from "@/lib/contracts";
+import {
+  makePreviewVariants,
+  selectPreviewLevel,
+  validateEffects,
+} from "@/lib/youcam/recipes";
 import { ApiError } from "./auth";
 import { getPool, transaction } from "./db";
 import { ownedSession, expectRevision, persistSession } from "./sessions";
 import { presentAsset, type AssetRow } from "./assets";
 import type { PoolClient } from "pg";
+import { readPreviewBudget, type PreviewBudget } from "./preview-budget";
+
+export { requesterHash } from "./auth";
 
 export interface ProviderJob {
   id: string;
@@ -15,7 +29,11 @@ export interface ProviderJob {
   candidate_id: string;
   source_asset_id: string;
   request_hash: string;
-  input: { effects: MakeupEffect[] };
+  input: {
+    effects: MakeupEffect[];
+    variantId?: PreviewLevel;
+    purpose?: "preview" | "adaptation";
+  };
   state: string;
   provider_task_id: string | null;
   provider_file_id: string | null;
@@ -25,6 +43,7 @@ export interface ProviderJob {
   output_asset_id: string | null;
   error_code?: string | null;
   error_message?: string | null;
+  superseded_at?: Date | null;
 }
 export function canResumeKnownTask(job: ProviderJob): boolean {
   return Boolean(
@@ -57,13 +76,43 @@ export function jobMatchesSession(
   session: StudioSession,
   job: ProviderJob,
 ): boolean {
-  const candidate = session.candidates.find(
-    (item) => item.id === job.candidate_id && item.previewJobId === job.id,
+  return (
+    !job.superseded_at &&
+    session.sourceAssetId === job.source_asset_id &&
+    candidateCopies(session, job.candidate_id).some((candidate) =>
+      targetMatches(candidate, job),
+    )
   );
-  if (!candidate || session.sourceAssetId !== job.source_asset_id) return false;
+}
+
+function candidateCopies(session: StudioSession, id: string): CandidatePlan[] {
+  return [
+    ...new Set([
+      ...session.candidates,
+      ...(session.adaptation ? [session.adaptation.candidate] : []),
+      ...(session.activePlan ? [session.activePlan] : []),
+    ]),
+  ].filter((candidate) => candidate.id === id);
+}
+
+function jobTarget(
+  candidate: CandidatePlan,
+  job: ProviderJob,
+): CandidatePlan | PreviewVariant | undefined {
+  const target = job.input.variantId
+    ? candidate.previewVariants?.find(
+        (variant) => variant.id === job.input.variantId,
+      )
+    : candidate;
+  return target?.previewJobId === job.id ? target : undefined;
+}
+
+function targetMatches(candidate: CandidatePlan, job: ProviderJob): boolean {
+  const target = jobTarget(candidate, job);
+  if (!target) return false;
   try {
     return (
-      previewRequestHash(job.source_asset_id, candidate.recipe) ===
+      previewRequestHash(job.source_asset_id, target.recipe) ===
         job.request_hash &&
       previewRequestHash(job.source_asset_id, job.input.effects) ===
         job.request_hash
@@ -81,72 +130,69 @@ export function projectJobIntoSession(
   asset?: StudioAsset,
 ): boolean {
   if (!jobMatchesSession(session, job)) return false;
-  const candidate = session.candidates.find(
-    (item) => item.id === job.candidate_id,
-  )!;
-  const before = JSON.stringify({
-    candidate,
-    activePlan: session.activePlan,
-    assets: session.assets,
-  });
-  if (job.cancel_requested || job.state === "cancelled") {
-    candidate.previewStatus = "cancelled";
-    candidate.previewError =
-      "Preview cancelled in STEADY. An already submitted provider task may still use a credit.";
-    delete candidate.previewAsset;
-  } else if (job.state === "succeeded") {
-    if (
-      !asset ||
+  const snapshot = () =>
+    JSON.stringify({
+      candidates: session.candidates,
+      activePlan: session.activePlan,
+      adaptation: session.adaptation,
+      assets: session.assets,
+    });
+  const before = snapshot();
+  if (
+    job.state === "succeeded" &&
+    (!asset ||
       asset.id !== job.output_asset_id ||
       asset.provenance !== "virtual_preview" ||
-      asset.purpose !== "preview"
-    )
-      return false;
-    candidate.previewStatus = "ready";
-    candidate.previewAsset = asset;
-    delete candidate.previewError;
-    if (!session.assets.some((item) => item.id === asset.id))
-      session.assets.push(asset);
-  } else if (
-    job.state === "failed" ||
-    (job.state === "unknown_submission" && !job.provider_task_id)
-  ) {
-    candidate.previewStatus = "failed";
-    candidate.previewError =
-      job.error_message ||
-      "The preview could not be completed. Your chosen method is preserved.";
-    delete candidate.previewAsset;
-  } else {
-    candidate.previewStatus = job.state === "queued" ? "queued" : "processing";
-    delete candidate.previewError;
-    delete candidate.previewAsset;
-  }
-  if (session.activePlan?.id === candidate.id) {
-    try {
-      if (
-        previewRequestHash(job.source_asset_id, session.activePlan.recipe) ===
-        job.request_hash
-      ) {
-        session.activePlan = {
-          ...session.activePlan,
-          previewStatus: candidate.previewStatus,
-          previewAsset: candidate.previewAsset,
-          previewError: candidate.previewError,
-          previewJobId: job.id,
-        };
-      }
-    } catch {
-      /* An invalid or newer target is left untouched. */
+      asset.purpose !== "preview")
+  )
+    return false;
+  for (const candidate of candidateCopies(session, job.candidate_id)) {
+    if (!targetMatches(candidate, job)) continue;
+    const target = jobTarget(candidate, job)!;
+    if (job.cancel_requested || job.state === "cancelled") {
+      target.previewStatus = "cancelled";
+      target.previewError = "Preview stopped. Your chosen method is saved.";
+      target.previewRetryable =
+        !job.provider_task_id && !job.submission_started_at;
+      delete target.previewAsset;
+    } else if (job.state === "succeeded") {
+      target.previewStatus = "ready";
+      target.previewAsset = asset!;
+      delete target.previewRetryable;
+      delete target.previewError;
+      if (!session.assets.some((item) => item.id === asset!.id))
+        session.assets.push(asset!);
+    } else if (
+      job.state === "failed" ||
+      (job.state === "unknown_submission" && !job.provider_task_id)
+    ) {
+      target.previewStatus = "failed";
+      target.previewRetryable =
+        canResumeKnownTask(job) ||
+        (job.state === "failed" &&
+          !job.provider_task_id &&
+          !job.submission_started_at);
+      target.previewError =
+        job.state === "failed" &&
+        !canResumeKnownTask(job) &&
+        Boolean(job.provider_task_id || job.submission_started_at)
+          ? "This preview could not be created. Try a new photo; your chosen method is saved."
+          : job.error_message ||
+            "The preview stopped before submission. Please try again.";
+      delete target.previewAsset;
+    } else {
+      target.previewStatus = job.state === "queued" ? "queued" : "processing";
+      delete target.previewRetryable;
+      delete target.previewError;
+      delete target.previewAsset;
     }
+    if (
+      job.input.variantId &&
+      (candidate.selectedPreviewVariantId || "full") === job.input.variantId
+    )
+      selectPreviewLevel(candidate, job.input.variantId);
   }
-  return (
-    before !==
-    JSON.stringify({
-      candidate,
-      activePlan: session.activePlan,
-      assets: session.assets,
-    })
-  );
+  return before !== snapshot();
 }
 async function outputAsset(
   client: PoolClient,
@@ -159,13 +205,9 @@ async function outputAsset(
   );
   return row.rows[0] ? presentAsset(row.rows[0]) : undefined;
 }
-export function requesterHash(request: Request) {
-  const raw = process.env.VERCEL
-    ? request.headers.get("x-vercel-forwarded-for") || "unknown"
-    : "local-development";
-  return createHash("sha256")
-    .update(`${process.env.BETTER_AUTH_SECRET}:${raw.split(",")[0].trim()}`)
-    .digest("hex");
+export interface PreviewRequestOptions {
+  candidateId?: string;
+  variantId?: PreviewLevel;
 }
 
 export async function queuePreviews(
@@ -173,57 +215,167 @@ export async function queuePreviews(
   sessionId: string,
   expectedRevision: number,
   ipHash: string,
+  options: PreviewRequestOptions = {},
 ) {
-  if (process.env.YOUCAM_LIVE_ENABLED !== "true")
-    throw new ApiError(
-      503,
-      "LIVE_PREVIEWS_PAUSED",
-      "Fresh previews are paused. You can still choose a method and explore the studio.",
-      true,
-    );
-  return transaction(async (client) => {
+  const result = await transaction(async (client) => {
     const session = await ownedSession(ownerId, sessionId, client, true);
     expectRevision(session, expectedRevision);
+    if (session.mode === "sample")
+      throw new ApiError(
+        403,
+        "SAMPLE_PREVIEWS_RECORDED",
+        "The sample uses saved YouCam previews. Start a personal studio to create fresh previews.",
+      );
+    if (["completed", "stopped"].includes(session.stage))
+      throw new ApiError(
+        409,
+        "STUDIO_ENDED",
+        "This studio has finished. Its saved methods and previews are still available.",
+      );
+    if (session.stage === "reviewing")
+      throw new ApiError(
+        409,
+        "PREVIEW_STAGE",
+        "Review your saved result before starting another studio for a fresh preview.",
+      );
     if (!session.sourceAssetId)
       throw new ApiError(
         422,
         "PHOTO_REQUIRED",
         "Add your source photo before creating personal previews.",
       );
-    if (!session.candidates.length)
+    if (!session.candidates.length && !session.adaptation?.candidate)
       throw new ApiError(
         422,
         "NO_PLAN",
         "Confirm comfortable movements and tools before creating previews.",
       );
-    if (!["choosing", "ready"].includes(session.stage))
+    const adapting = !["choosing", "ready"].includes(session.stage);
+    if (
+      adapting &&
+      (!["applying", "paused", "adapting"].includes(session.stage) ||
+        options.variantId !== "light")
+    )
       throw new ApiError(
         409,
         "PREVIEW_STAGE",
-        "Create previews before starting application.",
+        "During application, request a Light preview for a softer target.",
+      );
+    const candidateId = options.candidateId || session.selectedCandidateId;
+    const candidate = candidateId
+      ? candidateCopies(session, candidateId)[0]
+      : undefined;
+    if (!candidate)
+      throw new ApiError(
+        422,
+        "PREVIEW_METHOD_REQUIRED",
+        "Choose a method before creating its personal previews.",
+      );
+    if (!candidate.previewVariants?.length) {
+      const variants = makePreviewVariants(
+        session.lookId,
+        candidate.routeId,
+        session.includeLips,
+      );
+      for (const copy of candidateCopies(session, candidate.id))
+        copy.previewVariants = structuredClone(variants);
+    }
+    const selectedLevel = candidate.selectedPreviewVariantId || "full";
+    const targets = candidate
+      .previewVariants!.filter(
+        (variant) => !options.variantId || variant.id === options.variantId,
+      )
+      .sort(
+        (a, b) =>
+          Number(b.id === selectedLevel) - Number(a.id === selectedLevel),
+      );
+    if (!targets.length)
+      throw new ApiError(
+        422,
+        "PREVIEW_LEVEL_REQUIRED",
+        "Choose an available preview level.",
       );
     await client.query("SELECT pg_advisory_xact_lock(7134239)");
+    await client.query(
+      "UPDATE quota_reservations q SET released=true FROM provider_jobs j WHERE q.id=j.id AND NOT q.released AND j.state IN ('failed','cancelled') AND j.provider_task_id IS NULL AND j.submission_started_at IS NULL",
+    );
     const counts = await client.query<{
       global: string;
       owner: string;
       ip: string;
+      adaptation: string;
     }>(
-      "SELECT count(*) FILTER (WHERE day=CURRENT_DATE) AS global, count(*) FILTER (WHERE owner_id=$1) AS owner, count(*) FILTER (WHERE ip_hash=$2 AND day=CURRENT_DATE) AS ip FROM quota_reservations WHERE NOT released",
+      "SELECT count(*) AS global,count(*) FILTER (WHERE q.owner_id=$1) AS owner,count(*) FILTER (WHERE q.ip_hash=$2) AS ip,count(*) FILTER (WHERE q.owner_id=$1 AND j.input->>'purpose'='adaptation') AS adaptation FROM quota_reservations q LEFT JOIN provider_jobs j ON j.id=q.id WHERE NOT q.released AND q.day=CURRENT_DATE",
       [ownerId, ipHash],
     );
     const usage = counts.rows[0];
     const jobs: ProviderJob[] = [];
     let newReservations = 0;
+    let deferred = 0;
+    let hasPending = false;
     let changed = false;
-    for (const candidate of session.candidates) {
-      const effects = validateEffects(candidate.recipe);
+    let budget: PreviewBudget | undefined;
+    let blockedMessage: string | undefined;
+    const remainingQuota = () =>
+      Math.max(
+        0,
+        Math.min(
+          configuredLimit("YOUCAM_DAILY_JOB_LIMIT", 12) -
+            Number(usage.global) -
+            newReservations,
+          configuredLimit("YOUCAM_SESSION_JOB_LIMIT", 6) -
+            Number(usage.owner) -
+            newReservations,
+          configuredLimit("YOUCAM_IP_DAILY_JOB_LIMIT", 8) -
+            Number(usage.ip) -
+            newReservations,
+          adapting
+            ? Math.min(
+                2,
+                configuredLimit("YOUCAM_ADAPTATION_DAILY_JOB_LIMIT", 2),
+              ) -
+                Number(usage.adaptation || 0) -
+                newReservations
+            : Infinity,
+          budget ? budget.remaining - newReservations : Infinity,
+        ),
+      );
+    const bind = (variant: PreviewVariant, job: ProviderJob) => {
+      for (const copy of candidateCopies(session, candidate.id)) {
+        const target = copy.previewVariants?.find(
+          (entry) => entry.id === variant.id,
+        );
+        if (
+          target &&
+          previewRequestHash(session.sourceAssetId!, target.recipe) ===
+            job.request_hash
+        ) {
+          changed ||= target.previewJobId !== job.id;
+          target.previewJobId = job.id;
+        }
+      }
+    };
+    for (const variant of targets) {
+      const effects = validateEffects(variant.recipe);
       const hash = previewRequestHash(session.sourceAssetId, effects);
       const previous = await client.query<ProviderJob>(
-        "SELECT * FROM provider_jobs WHERE session_id=$1 AND candidate_id=$2 AND request_hash=$3 FOR UPDATE",
+        "SELECT * FROM provider_jobs WHERE session_id=$1 AND candidate_id=$2 AND request_hash=$3 AND superseded_at IS NULL FOR UPDATE",
         [session.id, candidate.id, hash],
       );
-      if (previous.rows[0]) {
-        const prior = previous.rows[0];
+      const prior = previous.rows[0];
+      const retryUnsubmitted =
+        prior &&
+        ["failed", "cancelled"].includes(prior.state) &&
+        !prior.provider_task_id &&
+        !prior.submission_started_at;
+      if (prior && !retryUnsubmitted) {
+        if (!prior.input.variantId) {
+          prior.input = { ...prior.input, variantId: variant.id };
+          await client.query(
+            "UPDATE provider_jobs SET input=$2::jsonb WHERE id=$1",
+            [prior.id, JSON.stringify(prior.input)],
+          );
+        }
         if (canResumeKnownTask(prior)) {
           await client.query(
             "UPDATE provider_jobs SET state='waiting',error_code=NULL,error_message=NULL,workflow_run_id=NULL,updated_at=now() WHERE id=$1 AND provider_task_id IS NOT NULL",
@@ -240,8 +392,13 @@ export async function queuePreviews(
           !prior.cancel_requested
         )
           jobs.push(prior);
-        changed ||= candidate.previewJobId !== prior.id;
-        candidate.previewJobId = prior.id;
+        hasPending ||= ![
+          "succeeded",
+          "failed",
+          "cancelled",
+          "unknown_submission",
+        ].includes(prior.state);
+        bind(variant, prior);
         changed =
           projectJobIntoSession(
             session,
@@ -250,19 +407,20 @@ export async function queuePreviews(
           ) || changed;
         continue;
       }
-      const pending = newReservations + 1;
-      if (
-        Number(usage.global) + pending >
-          configuredLimit("YOUCAM_DAILY_JOB_LIMIT", 16) ||
-        Number(usage.owner) + pending >
-          configuredLimit("YOUCAM_SESSION_JOB_LIMIT", 4) ||
-        Number(usage.ip) + pending >
-          configuredLimit("YOUCAM_IP_DAILY_JOB_LIMIT", 8)
-      )
-        throw new ApiError(
-          429,
-          "PREVIEW_ALLOWANCE",
-          "This studio's preview allowance has been used for now. Your methods and saved work remain available.",
+      if (!budget) budget = await readPreviewBudget(client);
+      if (!budget.available || remainingQuota() < 1) {
+        deferred++;
+        blockedMessage =
+          !budget.available || budget.remaining - newReservations < 1
+            ? budget.message ||
+              "Fresh previews are resting; recorded results and your saved methods still work."
+            : "The remaining preview levels can be requested after the daily allowance resets. Your methods and saved work are still available.";
+        continue;
+      }
+      if (retryUnsubmitted)
+        await client.query(
+          "UPDATE provider_jobs SET superseded_at=now(),updated_at=now() WHERE id=$1 AND state IN ('failed','cancelled') AND provider_task_id IS NULL AND submission_started_at IS NULL",
+          [prior.id],
         );
       const jobId = randomUUID();
       const result = await client.query<ProviderJob>(
@@ -274,28 +432,61 @@ export async function queuePreviews(
           candidate.id,
           session.sourceAssetId,
           hash,
-          JSON.stringify({ effects }),
+          JSON.stringify({
+            effects,
+            variantId: variant.id,
+            purpose: adapting ? "adaptation" : "preview",
+          }),
         ],
       );
       await client.query(
-        "INSERT INTO quota_reservations(id,owner_id,ip_hash) VALUES($1,$2,$3)",
+        "INSERT INTO quota_reservations(id,owner_id,ip_hash,created_at) VALUES($1,$2,$3,clock_timestamp())",
         [jobId, ownerId, ipHash],
       );
       newReservations++;
-      candidate.previewStatus = "queued";
-      candidate.previewJobId = jobId;
-      delete candidate.previewError;
-      delete candidate.previewAsset;
-      jobs.push(result.rows[0]);
+      const created = result.rows[0];
+      bind(variant, created);
+      projectJobIntoSession(session, created);
+      jobs.push(created);
       changed = true;
     }
+    if (deferred && !jobs.length && !hasPending) {
+      const resting = budget && (!budget.available || budget.remaining < 1);
+      // Commit the shared balance snapshot and released reservations even when
+      // no new work fits. Rejected requests must not force a fresh balance GET.
+      return new ApiError(
+        resting ? 503 : 429,
+        budget?.reason === "disabled"
+          ? "LIVE_PREVIEWS_PAUSED"
+          : resting
+            ? "LIVE_PREVIEWS_RESTING"
+            : "PREVIEW_ALLOWANCE",
+        blockedMessage!,
+        true,
+      );
+    }
+    const batch = {
+      requested: targets.length,
+      queued: jobs.length,
+      deferred,
+      remaining: remainingQuota(),
+      ...(blockedMessage
+        ? {
+            message: `${jobs.length ? `${jobs.length} preview level${jobs.length === 1 ? " is" : "s are"} queued. ` : ""}${blockedMessage}`,
+          }
+        : {}),
+    };
+    changed ||= JSON.stringify(session.previewBatch) !== JSON.stringify(batch);
+    session.previewBatch = batch;
     if (changed) {
       session.revision++;
       session.updatedAt = new Date().toISOString();
       await persistSession(client, session, session.events);
     }
-    return { session, jobs };
+    return { session, jobs, batch };
   });
+  if (result instanceof ApiError) throw result;
+  return result;
 }
 export async function getJob(id: string): Promise<ProviderJob | null> {
   const result = await getPool().query<ProviderJob>(
@@ -351,22 +542,23 @@ export async function failJob(
 ) {
   // A second workflow may observe the first while its POST is in flight. It
   // cannot overwrite a task ID that was persisted before this update arrived.
-  await getPool().query(
-    "UPDATE provider_jobs SET state=$2,error_code=$3,error_message=$4,updated_at=now() WHERE id=$1 AND state NOT IN ('succeeded','cancelled') AND (NOT $5::boolean OR provider_task_id IS NULL) AND (NOT $6::boolean OR (provider_task_id IS NULL AND submission_started_at IS NULL))",
-    [
-      jobId,
-      uncertain ? "unknown_submission" : "failed",
-      code,
-      message,
-      uncertain,
-      release,
-    ],
-  );
-  if (release)
-    await getPool().query(
-      "UPDATE quota_reservations SET released=true WHERE id=$1 AND EXISTS(SELECT 1 FROM provider_jobs WHERE id=$1 AND provider_task_id IS NULL AND submission_started_at IS NULL)",
+  await transaction(async (client) => {
+    await client.query(
+      "UPDATE provider_jobs SET state=$2,error_code=$3,error_message=$4,updated_at=now() WHERE id=$1 AND state NOT IN ('succeeded','cancelled') AND (NOT $5::boolean OR provider_task_id IS NULL) AND (NOT $6::boolean OR (provider_task_id IS NULL AND submission_started_at IS NULL))",
+      [
+        jobId,
+        uncertain ? "unknown_submission" : "failed",
+        code,
+        message,
+        uncertain,
+        release,
+      ],
+    );
+    await client.query(
+      "UPDATE quota_reservations SET released=true WHERE id=$1 AND EXISTS(SELECT 1 FROM provider_jobs WHERE id=$1 AND state IN ('failed','cancelled') AND provider_task_id IS NULL AND submission_started_at IS NULL)",
       [jobId],
     );
+  });
   await setPreviewStatus(jobId, "failed", message);
 }
 export async function takeProviderRequest(): Promise<boolean> {
@@ -386,14 +578,16 @@ export async function failWorkflowRun(
   runId: string,
   reason: "workflow_interrupted" | "polling_timeout" = "workflow_interrupted",
 ) {
-  await getPool().query(
-    "UPDATE provider_jobs SET state=CASE WHEN provider_task_id IS NULL AND submission_started_at IS NOT NULL THEN 'unknown_submission' ELSE 'failed' END,error_code=CASE WHEN provider_task_id IS NULL AND submission_started_at IS NOT NULL THEN 'unknown_submission' ELSE $3 END,error_message=CASE WHEN provider_task_id IS NULL AND submission_started_at IS NOT NULL THEN 'The provider may have received this request. It will not be submitted again automatically.' WHEN provider_task_id IS NOT NULL THEN 'This preview paused before its result was saved. Request previews again to check the existing task without another paid submission.' ELSE 'The preview stopped before submission. Your choices are saved.' END,updated_at=now() WHERE id=$1 AND workflow_run_id=$2 AND state NOT IN ('succeeded','failed','cancelled','unknown_submission')",
-    [jobId, runId, reason],
-  );
-  await getPool().query(
-    "UPDATE quota_reservations SET released=true WHERE id=$1 AND EXISTS(SELECT 1 FROM provider_jobs WHERE id=$1 AND workflow_run_id=$2 AND state='failed' AND provider_task_id IS NULL AND submission_started_at IS NULL)",
-    [jobId, runId],
-  );
+  await transaction(async (client) => {
+    await client.query(
+      "UPDATE provider_jobs SET state=CASE WHEN provider_task_id IS NULL AND submission_started_at IS NOT NULL THEN 'unknown_submission' ELSE 'failed' END,error_code=CASE WHEN provider_task_id IS NULL AND submission_started_at IS NOT NULL THEN 'unknown_submission' ELSE $3 END,error_message=CASE WHEN provider_task_id IS NULL AND submission_started_at IS NOT NULL THEN 'The provider may have received this request. It will not be submitted again automatically.' WHEN provider_task_id IS NOT NULL THEN 'This preview paused before its result was saved. Request previews again to check the existing task without another paid submission.' ELSE 'The preview stopped before submission. Your choices are saved.' END,updated_at=now() WHERE id=$1 AND workflow_run_id=$2 AND state NOT IN ('succeeded','failed','cancelled','unknown_submission')",
+      [jobId, runId, reason],
+    );
+    await client.query(
+      "UPDATE quota_reservations SET released=true WHERE id=$1 AND EXISTS(SELECT 1 FROM provider_jobs WHERE id=$1 AND workflow_run_id=$2 AND state='failed' AND provider_task_id IS NULL AND submission_started_at IS NULL)",
+      [jobId, runId],
+    );
+  });
   await setPreviewStatus(jobId, "failed");
 }
 export async function cancelSessionPreviews(
@@ -403,7 +597,7 @@ export async function cancelSessionPreviews(
   return transaction(async (client) => {
     const session = await ownedSession(ownerId, sessionId, client, true);
     const rows = await client.query<ProviderJob>(
-      "UPDATE provider_jobs SET cancel_requested=true,state='cancelled',updated_at=now() WHERE session_id=$1 AND state NOT IN ('succeeded','failed','cancelled','unknown_submission') RETURNING *",
+      "UPDATE provider_jobs SET cancel_requested=true,state='cancelled',updated_at=now() WHERE session_id=$1 AND (state NOT IN ('succeeded','failed','cancelled','unknown_submission') OR (state='unknown_submission' AND provider_task_id IS NOT NULL)) RETURNING *",
       [sessionId],
     );
     if (rows.rows.length) {
@@ -411,7 +605,8 @@ export async function cancelSessionPreviews(
         "UPDATE quota_reservations SET released=true WHERE id=ANY($1::uuid[]) AND EXISTS(SELECT 1 FROM provider_jobs j WHERE j.id=quota_reservations.id AND j.provider_task_id IS NULL AND j.submission_started_at IS NULL)",
         [rows.rows.map((job) => job.id)],
       );
-      let changed = false;
+      let changed = Boolean(session.previewBatch);
+      delete session.previewBatch;
       for (const job of rows.rows)
         changed = projectJobIntoSession(session, job) || changed;
       if (changed) {
@@ -425,13 +620,15 @@ export async function cancelSessionPreviews(
 }
 
 export async function cancelJob(jobId: string): Promise<void> {
-  await getPool().query(
-    "UPDATE provider_jobs SET cancel_requested=true,state='cancelled',updated_at=now() WHERE id=$1 AND (state NOT IN ('succeeded','failed','unknown_submission') OR (state='unknown_submission' AND provider_task_id IS NOT NULL))",
-    [jobId],
-  );
-  await getPool().query(
-    "UPDATE quota_reservations SET released=true WHERE id=$1 AND EXISTS(SELECT 1 FROM provider_jobs WHERE id=$1 AND state='cancelled' AND provider_task_id IS NULL AND submission_started_at IS NULL)",
-    [jobId],
-  );
+  await transaction(async (client) => {
+    await client.query(
+      "UPDATE provider_jobs SET cancel_requested=true,state='cancelled',updated_at=now() WHERE id=$1 AND (state NOT IN ('succeeded','failed','unknown_submission') OR (state='unknown_submission' AND provider_task_id IS NOT NULL))",
+      [jobId],
+    );
+    await client.query(
+      "UPDATE quota_reservations SET released=true WHERE id=$1 AND EXISTS(SELECT 1 FROM provider_jobs WHERE id=$1 AND state='cancelled' AND provider_task_id IS NULL AND submission_started_at IS NULL)",
+      [jobId],
+    );
+  });
   await setPreviewStatus(jobId, "cancelled");
 }

@@ -11,12 +11,14 @@ import {
 import { transaction } from "@/lib/server/db";
 import { currentAction, applyCommand } from "@/lib/planner";
 import { handle, json, readJson } from "@/lib/server/http";
+import { measurementSchema } from "@/lib/server/validation";
 const schema = z
   .object({
     expectedRevision: z.number().int().nonnegative(),
     actionId: z.string().min(1).max(150),
     assetId: z.string().uuid(),
     consent: z.literal(true),
+    measurement: measurementSchema.optional(),
   })
   .strict();
 export const maxDuration = 90;
@@ -25,7 +27,7 @@ export async function POST(
   context: { params: Promise<{ id: string }> },
 ) {
   return handle(async () => {
-    assertSameOrigin(request);
+    assertSameOrigin(request, { requireOrigin: true });
     const ownerId = await requireOwner(request);
     const { id } = await context.params;
     const input = schema.parse(await readJson(request));
@@ -56,7 +58,30 @@ export async function POST(
         "CHECKPOINT_REQUIRED",
         "Choose an actual checkpoint photo from this studio.",
       );
-    await reserveAIRequest(ownerId, "checkpoint");
+    if (
+      input.measurement &&
+      (input.measurement.region !== action.region ||
+        input.measurement.targetAssetId !==
+          session.activePlan?.previewAsset?.id ||
+        input.measurement.targetLevel !==
+          (session.activePlan?.selectedPreviewVariantId ?? "full") ||
+        input.measurement.provenance !== "local_camera")
+    )
+      throw new ApiError(
+        422,
+        "CHECKPOINT_TARGET_CHANGED",
+        "Check this frame against the current target before requesting a second opinion.",
+      );
+    // Validate the current action, provenance, and exact selected target before
+    // spending an AI request or sending a client-reported measurement onward.
+    if (input.measurement)
+      applyCommand(session, {
+        type: "checkpoint",
+        actionId: input.actionId,
+        assetId: input.assetId,
+        measurement: input.measurement,
+      });
+    await reserveAIRequest(ownerId, "checkpoint", request);
     const [baseline, checkpoint] = await Promise.all([
       readAssetBytes(ownerId, session.sourceAssetId),
       readAssetBytes(ownerId, input.assetId),
@@ -69,6 +94,7 @@ export async function POST(
       checkpoint: { bytes: checkpoint, contentType: "image/jpeg" },
       action,
       availableActions,
+      measurement: input.measurement,
     });
     const next = await transaction(async (client) => {
       const current = await ownedSession(ownerId, id, client, true);
@@ -77,6 +103,7 @@ export async function POST(
         type: "checkpoint",
         actionId: input.actionId,
         assetId: input.assetId,
+        measurement: input.measurement,
       });
       const observation = updated.observations.at(-1)!;
       observation.state = assessment.state;

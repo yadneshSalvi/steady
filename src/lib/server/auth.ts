@@ -1,6 +1,7 @@
 import "server-only";
 import { betterAuth } from "better-auth";
 import { anonymous } from "better-auth/plugins";
+import { createHash } from "node:crypto";
 import { getPool } from "./db";
 
 function buildAuth() {
@@ -47,7 +48,10 @@ export class ApiError extends Error {
   }
 }
 
-export function assertSameOrigin(request: Request) {
+export function assertSameOrigin(
+  request: Request,
+  options: { requireOrigin?: boolean } = {},
+) {
   const origin = request.headers.get("origin");
   const requestOrigin = new URL(request.url).origin;
   const allowed = new Set([
@@ -55,10 +59,20 @@ export function assertSameOrigin(request: Request) {
     process.env.BETTER_AUTH_URL,
     ...(process.env.VERCEL_URL ? [`https://${process.env.VERCEL_URL}`] : []),
   ]);
-  if (origin && !allowed.has(origin))
+  if ((options.requireOrigin && !origin) || (origin && !allowed.has(origin)))
     throw new ApiError(
       403,
       "ORIGIN_REJECTED",
       "This request did not come from your studio.",
     );
+}
+
+/** Trust the platform's overwritten header, never a caller supplied proxy IP. */
+export function requesterHash(request: Request): string {
+  const raw = process.env.VERCEL
+    ? request.headers.get("x-vercel-forwarded-for") || "unknown"
+    : "local-development";
+  return createHash("sha256")
+    .update(`${process.env.BETTER_AUTH_SECRET}:${raw.split(",")[0].trim()}`)
+    .digest("hex");
 }

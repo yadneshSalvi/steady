@@ -112,6 +112,12 @@ export function assertUploadStage(
   session: StudioSession,
   purpose: "baseline" | "checkpoint" | "final",
 ) {
+  if (session.mode === "sample")
+    throw new ApiError(
+      400,
+      "SAMPLE_UPLOAD_UNAVAILABLE",
+      "The recorded sample keeps its fictional source. Open a personal studio to use your own photos.",
+    );
   if (session.stage === "completed" || session.stage === "stopped")
     throw new ApiError(
       409,
