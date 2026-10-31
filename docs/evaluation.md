@@ -53,6 +53,14 @@ A separate application workflow then completed one personal-path synthetic-fixtu
 
 [AI evaluation](evaluation-ai.md) records the actual Gemini 4 Argon and GPT-6 Astra probes, timings, and limitations. Exposure-change and identical-image probes exercised abstention. No model-generated assessment is treated as an independent label of real-world correctness.
 
+## Production verification
+
+The public [production studio](https://steady-taupe-pi.vercel.app) was verified on October 31, 2026 using the application commit and deployment recorded in [release verification](release-checklist.md). The canonical entry and `/api/config` returned 200; unauthenticated `/api/sessions` and `/api/cron/cleanup` returned 401. All three exact recorded sample previews were visually checked in the deployed application.
+
+One fresh production rose/tapping preview completed with `state=succeeded` and `attempts=1`. The provider task ID, Workflow run ID, and private Blob output persisted, and no retry was needed. This extends the local integration evidence to the deployed browser→API→database→Workflow→YouCam→private result path.
+
+Production Gemini inspiration analysis also succeeded on the synthetic terracotta image. It identified warm terracotta, explained a lighting limitation, and did not select a look automatically. These are operational and synthetic-input checks; they do not establish real-user cosmetic quality, physical accessibility, or participant outcomes.
+
 ## Practical limits
 
 Race tests simulate failure boundaries and selected database predicates; they are not a distributed load or penetration test. A crash between a paid POST and task-ID persistence remains inherently ambiguous and intentionally blocks resubmission. The catalog is limited to broad cheek color and optional lips. Hand tracking, calibrated occlusion/lighting assessment, arbitrary transfer, clinical claims, measured user improvement, and artist validation are not implemented or claimed.

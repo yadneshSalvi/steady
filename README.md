@@ -4,6 +4,8 @@
 
 The studio uses a warm cream and forest editorial identity, deliberate controls, readable instructions, optional speech, and an unretouched local camera. This is a working Next.js application with private persistence and real provider integrations.
 
+**Live studio:** [steady-taupe-pi.vercel.app](https://steady-taupe-pi.vercel.app). Production verification on October 31, 2026 passed the recorded sample, a fresh YouCam preview with private output storage, and Gemini inspiration interpretation. See the [release record](docs/release-checklist.md) for the verified application commit and deployment.
+
 ## Start locally
 
 Use Node 22.12 or later and pnpm 10.15.0. PostgreSQL and a private Vercel Blob store are required for persistent personal sessions. The database must be dedicated to this application.

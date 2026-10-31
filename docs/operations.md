@@ -8,13 +8,17 @@ Do not overwrite development credentials with production values. Local developme
 
 `vercel.json` schedules `/api/cron/cleanup` daily at 03:17 UTC. Configure `CRON_SECRET`; the route checks its bearer token. Inspect Workflow state and sanitized logs after release. Logs contain internal job IDs and stable categories, never credentials, signed image URLs, raw model responses, selected images, or voice transcripts.
 
+The verified production studio is [steady-taupe-pi.vercel.app](https://steady-taupe-pi.vercel.app), running Node 22.x with migrations001–003 applied. The [release record](release-checklist.md) identifies the application commit and `READY` deployment. Public entry/configuration requests returned 200 and unauthenticated session/cleanup requests returned 401. The scheduled cleanup is configured; the deployment smoke checked its authorization boundary rather than running a scheduled deletion cycle.
+
+A production preview completed once through the deployed Workflow and retained its provider task, Workflow run ID, and private Blob output. The deployed Gemini helper also completed. Release logs showed the PostgreSQL driver's SSL-mode forward-compatibility warning for `sslmode=require`, with no corresponding request failures. Review explicit TLS-mode configuration before a driver upgrade; no TLS behavior was changed for this release.
+
 ## Provider access and budgets
 
 `YOUCAM_LIVE_ENABLED=false` prevents fresh paid preview tasks while the sample and manual studio remain usable. Enable deliberately after an integration check. The adapter uses `YOUCAM_API_KEY` and the Makeup VTO endpoint on `YOUCAM_API_BASE_URL`; provider credentials remain server-side.
 
 Default application guards are 16 new jobs per database day globally, 4 per anonymous owner, and 8 per hashed IP per day. `YOUCAM_SESSION_JOB_LIMIT` names the anonymous-owner allowance, not a newly opened studio: creating or deleting a studio cannot reset it. Zero is a valid configured limit. Reservations remain spent/reserved after an ambiguous submit; a known failure before submission can release one. A global request limiter allows 80 provider requests per five-minute window for STEADY. These are configurable abuse safeguards, not provider pricing promises.
 
-The account API reported one YouCam unit per Makeup VTO result on October 31, 2026. Record live calls in the private execution ledger. A comparison can request multiple methods, so check its candidate count. Never repeat a paid POST to recover an uncertain result.
+The account API reported one YouCam unit per Makeup VTO result on October 31, 2026. A read-only balance check after production verification confirmed 1,028 units remaining; this is a release-time snapshot, not a live balance. Record live calls in the private execution ledger. A comparison can request multiple methods, so check its candidate count. Never repeat a paid POST to recover an uncertain result.
 
 Inspect the adapter smoke's dry run before submitting:
 
