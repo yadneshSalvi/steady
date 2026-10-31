@@ -3,12 +3,14 @@
  * Reuses the running development server and removes only its own test studio.
  */
 import { createHash, randomUUID } from "node:crypto";
+import { writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { test, expect, type BrowserContext } from "@playwright/test";
 import { BlobNotFoundError, del, head } from "@vercel/blob";
 import { Pool } from "pg";
 import type { StudioAsset, StudioSession } from "../../src/lib/contracts";
 import { signInAnonymous } from "./support/auth";
+import { newIsolatedAppContext } from "./support/deployment-context";
 
 const enabled =
   process.env.STEADY_RUN_PRIVATE_UPLOAD_E2E === "1" &&
@@ -118,12 +120,12 @@ test("synthetic personal photo stays private and deletion erases its owned objec
     expect(ownerRead.headers()["content-type"]).toContain("image/jpeg");
     expect((await ownerRead.body()).length).toBeGreaterThan(1000);
     evidence.ownerRead = ownerRead.status();
-    const anonymous = await browser.newContext({ baseURL: origin });
+    const anonymous = await newIsolatedAppContext(browser, { baseURL: origin });
     otherContexts.push(anonymous);
     const unauthenticated = await anonymous.request.get(asset.url);
     expect(unauthenticated.status()).toBe(401);
     evidence.unauthenticatedRead = unauthenticated.status();
-    const foreign = await browser.newContext({ baseURL: origin });
+    const foreign = await newIsolatedAppContext(browser, { baseURL: origin });
     otherContexts.push(foreign);
     const signedIn = await signInAnonymous(foreign.request, origin);
     expect(signedIn.ok()).toBe(true);
@@ -177,6 +179,45 @@ test("synthetic personal photo stays private and deletion erases its owned objec
     privatePath = stored.rows[0].pathname;
     expect((await head(privatePath)).size).toBeGreaterThan(1000);
 
+    const configResponse = await page.request.get("/api/config");
+    expect(configResponse.status()).toBe(200);
+    const config = await configResponse.json();
+    if (
+      config.livePreviews === false &&
+      config.livePreviewReason === "balance_floor"
+    ) {
+      const fresh = (await (
+        await page.request.get(`/api/sessions/${sessionId}`)
+      ).json()) as StudioSession;
+      // APIRequestContext bypasses page.route. Never send this real request
+      // unless the deployment has confirmed its active credit floor.
+      const rested = await page.request.post(
+        `/api/sessions/${sessionId}/previews`,
+        {
+          headers: { Origin: origin },
+          data: {
+            expectedRevision: fresh.revision,
+            candidateId: fresh.candidates[0].id,
+          },
+        },
+      );
+      expect(rested.status()).toBe(503);
+      expect((await rested.json()).error.code).toBe("LIVE_PREVIEWS_RESTING");
+      const jobs = await database.query<{ count: string }>(
+        "SELECT count(*) FROM provider_jobs WHERE session_id=$1 AND owner_id=$2",
+        [sessionId, ownerId],
+      );
+      expect(jobs.rows[0].count).toBe("0");
+      evidence.floorProbeRequests = 1;
+      evidence.floorProbeHttpStatus = 503;
+      evidence.floorProbeCode = "LIVE_PREVIEWS_RESTING";
+      evidence.floorProbeProviderJobs = 0;
+    } else {
+      evidence.floorProbeRequests = 0;
+      evidence.floorProbeSkipped =
+        "No active balance floor was confirmed; no preview request was sent.";
+    }
+
     const deleted = await page.request.delete(`/api/sessions/${sessionId}`, {
       headers: { Origin: origin },
     });
@@ -211,14 +252,18 @@ test("synthetic personal photo stays private and deletion erases its owned objec
       .toBe(true);
     deletionVerified = true;
     expect(freshPreviewRequests).toBe(0);
-    evidence.youcamPreviewRequests = freshPreviewRequests;
+    evidence.browserFreshPreviewRequests = freshPreviewRequests;
     evidence.privateObjectErased = true;
     evidence.testStudioErased = true;
     evidence.sessionDigest = createHash("sha256")
       .update(sessionId)
       .digest("hex");
+    const evidencePath = testInfo.outputPath("private-upload-evidence.json");
+    await writeFile(evidencePath, JSON.stringify(evidence, null, 2), {
+      mode: 0o600,
+    });
     await testInfo.attach("private-upload-evidence", {
-      body: JSON.stringify(evidence, null, 2),
+      path: evidencePath,
       contentType: "application/json",
     });
   } finally {

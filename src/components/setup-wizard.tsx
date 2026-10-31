@@ -35,7 +35,13 @@ import type {
   StudioSession,
   ToolId,
 } from "@/lib/contracts";
-import { createSession, getConfig, getSession } from "@/lib/client";
+import {
+  commandSession,
+  createSession,
+  getConfig,
+  getSession,
+} from "@/lib/client";
+import { planCandidates } from "@/lib/planner/compiler";
 import { uploadPhoto } from "@/lib/upload-client";
 import {
   Button,
@@ -49,8 +55,20 @@ import { PhotoAssist } from "./photo-assist";
 
 const steps = ["Your look", "Your movements", "Your tools", "Your photo"];
 const motions: Motion[] = ["tapping", "blending", "short_strokes"];
-const tools: ToolId[] = ["fingertips", "sponge", "wide_brush", "lip_brush"];
-const products: ProductId[] = ["cream_blush", "powder_blush", "lip_color"];
+const tools: ToolId[] = [
+  "fingertips",
+  "sponge",
+  "wide_brush",
+  "lip_brush",
+  "liner_pen",
+];
+const products: ProductId[] = [
+  "cream_blush",
+  "powder_blush",
+  "lip_color",
+  "eye_liner",
+  "eye_shadow",
+];
 const motionDetails: Record<Motion, string> = {
   tapping: "Light, gentle pressing",
   blending: "Broad, sweeping movements",
@@ -61,6 +79,7 @@ const toolDetails: Record<ToolId, string> = {
   sponge: "Your makeup sponge",
   wide_brush: "A soft, broad makeup brush",
   lip_brush: "Your small lip brush",
+  liner_pen: "An eyeliner pen or eye pencil",
 };
 
 export function ComfortChoices({
@@ -257,6 +276,19 @@ export function SetupWizard() {
   const headingRef = useRef<HTMLHeadingElement | null>(null);
   const changedStep = useRef(false);
   const currentLook = LOOKS.find((item) => item.id === lookId) || LOOKS[0];
+  const currentSetup: SetupInput = {
+    lookId,
+    includeLips,
+    preferences,
+    tools: selectedTools,
+    products: selectedProducts,
+    mode,
+    consent,
+  };
+  const feasibility = planCandidates(currentSetup);
+  const retainedPhoto = pendingSession?.assets.find(
+    (asset) => asset.id === pendingSession.sourceAssetId,
+  );
 
   useEffect(() => {
     void getConfig()
@@ -290,7 +322,11 @@ export function SetupWizard() {
           const personalFromSample =
             source.mode === "sample" && !query.get("edit");
           setLookId(source.lookId);
-          setIncludeLips(source.includeLips);
+          setIncludeLips(
+            query.get("edit") && source.mode === "sample"
+              ? false
+              : source.includeLips,
+          );
           setPreferences(
             personalFromSample
               ? freshPreferences()
@@ -303,6 +339,17 @@ export function SetupWizard() {
           setSelectedProducts(personalFromSample ? [] : [...source.products]);
           setMode(query.get("edit") ? source.mode : "personal");
           setReuseName(source.activePlan?.name || "your previous setup");
+          if (
+            query.get("edit") &&
+            ["choosing", "ready"].includes(source.stage)
+          ) {
+            setPendingSession(source);
+            setConsent(true);
+          } else if (query.get("edit")) {
+            setError(
+              "Your application has started. Change its remaining method in the mirror, or start a fresh studio.",
+            );
+          }
         })
         .catch(() =>
           setError(
@@ -323,9 +370,22 @@ export function SetupWizard() {
     setStep(next);
   }
   function next() {
-    if (step === 2 && (!selectedTools.length || !selectedProducts.length)) {
+    if (
+      step === 1 &&
+      !Object.values(preferences.movements).some(
+        (value) => value === "comfortable",
+      )
+    ) {
       setError(
-        "Choose the tools and at least one product you actually have. We’ll explain if a method needs something else.",
+        "Confirm at least one movement that feels good. You can try it away from your face first, or return when you are ready.",
+      );
+      return;
+    }
+    if (step === 2 && !feasibility.candidates.length) {
+      setError(
+        lookId === "eyes"
+          ? "No method fits yet. Pair comfortable short strokes with an eyeliner pen and eye liner, or tapping with fingertips or an eyelid-suitable sponge and eye shadow."
+          : "No method fits yet. Pair a comfortable movement with its tool and product: tapping with fingertips or a sponge and cream blush, or broad blending with a suitable brush and blush. Lip color also needs a matching lip method.",
       );
       return;
     }
@@ -343,6 +403,20 @@ export function SetupWizard() {
     );
   }
 
+  function chooseSampleMode() {
+    if (pendingSession && pendingSession.mode !== "sample") {
+      setError(
+        "Open a new sample studio to explore fictional inventory. This studio keeps your own photo and confirmed tools.",
+      );
+      return false;
+    }
+    setMode("sample");
+    setIncludeLips(false);
+    setFile(null);
+    setConsent(false);
+    return true;
+  }
+
   async function enterStudio() {
     if (busy) return;
     if (!consent) {
@@ -353,9 +427,15 @@ export function SetupWizard() {
       );
       return;
     }
-    if (mode === "personal" && !file) {
+    if (mode === "personal" && !file && !retainedPhoto) {
       setError(
         "Choose or take your baseline photo first. You can also explore with the labeled sample.",
+      );
+      return;
+    }
+    if (!feasibility.candidates.length) {
+      setError(
+        "Choose a comfortable movement and its matching tool and product before continuing.",
       );
       return;
     }
@@ -363,17 +443,12 @@ export function SetupWizard() {
     setBusy(true);
     try {
       setStatus("Saving your choices…");
-      let session =
-        pendingSession ||
-        (await createSession({
-          lookId,
-          includeLips,
-          preferences,
-          tools: selectedTools,
-          products: selectedProducts,
-          mode,
-          consent,
-        }));
+      let session = pendingSession
+        ? await commandSession(pendingSession, {
+            type: "update_setup",
+            setup: currentSetup,
+          })
+        : await createSession(currentSetup);
       setPendingSession(session);
       if (mode === "personal" && file) {
         setStatus("Saving your selected photo privately…");
@@ -412,7 +487,7 @@ export function SetupWizard() {
                 <button
                   onClick={() => goTo(index)}
                   aria-label={`${name}, step ${index + 1} of 4`}
-                  disabled={index > step || busy || !!pendingSession}
+                  disabled={index > step || busy}
                   aria-current={index === step ? "step" : undefined}
                 >
                   <span className="setup-step-icon">
@@ -447,10 +522,16 @@ export function SetupWizard() {
               </div>
             ) : reuseName ? (
               <div className="sample-banner">
-                <Notice title={`A fresh start with ${reuseName}`}>
-                  We’ve brought over your choices. Confirm your tools and
-                  movements today; no completed steps or photos are carried
-                  forward.
+                <Notice
+                  title={
+                    query.get("edit")
+                      ? "Your setup, ready to adjust"
+                      : `A fresh start with ${reuseName}`
+                  }
+                >
+                  {query.get("edit")
+                    ? "Your starting photo stays with this studio. Adjust your choices and compare the methods again."
+                    : "Confirm your tools and movements for this new studio."}
                 </Notice>
               </div>
             ) : null}
@@ -474,7 +555,10 @@ export function SetupWizard() {
                       className="look-choice"
                       aria-pressed={lookId === look.id}
                       key={look.id}
-                      onClick={() => setLookId(look.id)}
+                      onClick={() => {
+                        setLookId(look.id);
+                        if (look.id === "eyes") setIncludeLips(false);
+                      }}
                     >
                       <span className="look-choice-art">
                         <span
@@ -496,23 +580,33 @@ export function SetupWizard() {
                   <strong>{currentLook.description}</strong>
                   <br /> {currentLook.attributes.join(" · ")}
                 </div>
-                <div className="form-field">
-                  <label className="checkbox-label">
-                    <input
-                      type="checkbox"
-                      checked={includeLips}
-                      onChange={(event) => setIncludeLips(event.target.checked)}
-                    />
-                    <span>
-                      <strong>Add a touch of lip color</strong>
-                      <br /> Optional. A lip method needs your own lip product
-                      and a comfortable movement.
-                    </span>
-                  </label>
-                </div>
+                {lookId !== "eyes" ? (
+                  <div className="form-field">
+                    <label className="checkbox-label">
+                      <input
+                        type="checkbox"
+                        checked={includeLips}
+                        disabled={mode === "sample"}
+                        onChange={(event) =>
+                          setIncludeLips(event.target.checked)
+                        }
+                      />
+                      <span>
+                        <strong>Add a touch of lip color</strong>
+                        <br />{" "}
+                        {mode === "sample"
+                          ? "Lip color is available with your own photo. Recorded samples cover cheeks or eyes."
+                          : "Optional. A lip method needs your own lip product and a comfortable movement."}
+                      </span>
+                    </label>
+                  </div>
+                ) : null}
                 <PhotoAssist
                   kind="inspiration"
-                  onLook={(result) => setLookId(result.lookId)}
+                  onLook={(result) => {
+                    setLookId(result.lookId);
+                    if (result.lookId === "eyes") setIncludeLips(false);
+                  }}
                 />
               </>
             ) : null}
@@ -567,75 +661,87 @@ export function SetupWizard() {
                 <fieldset className="field-group">
                   <legend>Your tools</legend>
                   <div className="option-grid">
-                    {tools.map((tool) => (
-                      <label className="tool-option" key={tool}>
-                        <input
-                          type="checkbox"
-                          checked={selectedTools.includes(tool)}
-                          onChange={() =>
-                            toggle(tool, selectedTools, setSelectedTools)
-                          }
-                        />
-                        <span className="tool-option-icon">
-                          {tool === "fingertips" ? (
-                            <Hand size={28} strokeWidth={1.2} aria-hidden />
-                          ) : tool === "sponge" ? (
-                            <Circle size={26} strokeWidth={1.2} aria-hidden />
-                          ) : (
-                            <Paintbrush
-                              size={28}
-                              strokeWidth={1.2}
-                              aria-hidden
-                            />
-                          )}
-                        </span>
-                        <span>
-                          <strong>{TOOL_LABELS[tool]}</strong>
-                          <small>{toolDetails[tool]}</small>
-                        </span>
-                      </label>
-                    ))}
+                    {tools
+                      .filter((tool) =>
+                        lookId === "eyes"
+                          ? ["fingertips", "sponge", "liner_pen"].includes(tool)
+                          : tool !== "liner_pen",
+                      )
+                      .map((tool) => (
+                        <label className="tool-option" key={tool}>
+                          <input
+                            type="checkbox"
+                            checked={selectedTools.includes(tool)}
+                            onChange={() =>
+                              toggle(tool, selectedTools, setSelectedTools)
+                            }
+                          />
+                          <span className="tool-option-icon">
+                            {tool === "fingertips" ? (
+                              <Hand size={28} strokeWidth={1.2} aria-hidden />
+                            ) : tool === "sponge" ? (
+                              <Circle size={26} strokeWidth={1.2} aria-hidden />
+                            ) : (
+                              <Paintbrush
+                                size={28}
+                                strokeWidth={1.2}
+                                aria-hidden
+                              />
+                            )}
+                          </span>
+                          <span>
+                            <strong>{TOOL_LABELS[tool]}</strong>
+                            <small>{toolDetails[tool]}</small>
+                          </span>
+                        </label>
+                      ))}
                   </div>
                 </fieldset>
                 <fieldset className="field-group" style={{ marginTop: 28 }}>
                   <legend>Your products</legend>
                   <div className="option-grid">
-                    {products.map((product) => (
-                      <label className="tool-option" key={product}>
-                        <input
-                          type="checkbox"
-                          checked={selectedProducts.includes(product)}
-                          onChange={() =>
-                            toggle(
-                              product,
-                              selectedProducts,
-                              setSelectedProducts,
-                            )
-                          }
-                        />
-                        <span className="tool-option-icon">
-                          <span
-                            className="product-dot"
-                            style={{
-                              display: "block",
-                              width: 25,
-                              height: 25,
-                              background:
-                                product === "lip_color"
-                                  ? currentLook.lipColor
-                                  : currentLook.color,
-                              borderRadius:
-                                product === "powder_blush" ? "50%" : "7px",
-                              border: "1px solid #0002",
-                            }}
+                    {products
+                      .filter((product) =>
+                        lookId === "eyes"
+                          ? ["eye_liner", "eye_shadow"].includes(product)
+                          : !["eye_liner", "eye_shadow"].includes(product),
+                      )
+                      .map((product) => (
+                        <label className="tool-option" key={product}>
+                          <input
+                            type="checkbox"
+                            checked={selectedProducts.includes(product)}
+                            onChange={() =>
+                              toggle(
+                                product,
+                                selectedProducts,
+                                setSelectedProducts,
+                              )
+                            }
                           />
-                        </span>
-                        <span>
-                          <strong>{PRODUCT_LABELS[product]}</strong>
-                          <small>Confirm your own product</small>
-                        </span>
-                      </label>
-                    ))}
+                          <span className="tool-option-icon">
+                            <span
+                              className="product-dot"
+                              style={{
+                                display: "block",
+                                width: 25,
+                                height: 25,
+                                background:
+                                  product === "lip_color"
+                                    ? currentLook.lipColor
+                                    : currentLook.color,
+                                borderRadius:
+                                  product === "powder_blush" ? "50%" : "7px",
+                                border: "1px solid #0002",
+                              }}
+                            />
+                          </span>
+                          <span>
+                            <strong>{PRODUCT_LABELS[product]}</strong>
+                            <small>Confirm your own product</small>
+                          </span>
+                        </label>
+                      ))}
                   </div>
                 </fieldset>
                 <details className="method-details">
@@ -651,10 +757,12 @@ export function SetupWizard() {
                 </details>
                 <PhotoAssist
                   kind="tools"
+                  allowSampleInventory={
+                    !pendingSession || pendingSession.mode === "sample"
+                  }
                   onTools={(newTools, newProducts, source) => {
                     if (source === "sample") {
-                      setMode("sample");
-                      setConsent(false);
+                      if (!chooseSampleMode()) return;
                     }
                     setSelectedTools((current) => [
                       ...new Set([...current, ...newTools]),
@@ -708,8 +816,7 @@ export function SetupWizard() {
                     variant="secondary"
                     className={mode === "sample" ? "is-selected" : ""}
                     onClick={() => {
-                      setMode("sample");
-                      setConsent(false);
+                      chooseSampleMode();
                     }}
                     disabled={!!pendingSession}
                   >
@@ -717,6 +824,25 @@ export function SetupWizard() {
                     Use the sample
                   </Button>
                 </div>
+                {mode === "sample" ? (
+                  <p className="field-note">
+                    Recorded samples cover cheeks or eyes. Optional lip color is
+                    available with your own photo.
+                  </p>
+                ) : null}
+                {mode === "personal" && retainedPhoto && !file ? (
+                  <div className="retained-photo">
+                    <Image
+                      src={retainedPhoto.url}
+                      alt="Your saved starting photo"
+                      width={160}
+                      height={200}
+                      unoptimized
+                    />
+                    <p>Your starting photo is kept.</p>
+                    <ProvenanceLabel kind="actual_capture" />
+                  </div>
+                ) : null}
                 {mode === "personal" ? (
                   <StillCapture
                     file={file}
@@ -759,9 +885,6 @@ export function SetupWizard() {
                           <strong>
                             I understand this is a synthetic sample walkthrough.
                           </strong>
-                          <br /> The example portrait is AI-created. Steps can
-                          be explored, but a sample completion does not
-                          represent an actual participant outcome.
                         </>
                       )}
                     </span>
@@ -769,6 +892,25 @@ export function SetupWizard() {
                 </div>
                 <DraftNote />
               </>
+            ) : null}
+            {step >= 1 ? (
+              <div
+                className={`setup-feasibility ${feasibility.candidates.length ? "is-ready" : ""}`}
+                role="status"
+              >
+                <strong>
+                  {feasibility.candidates.length
+                    ? `${feasibility.candidates.length} method${feasibility.candidates.length === 1 ? "" : "s"} fit your choices`
+                    : "A method needs your choices"}
+                </strong>
+                <p>
+                  {feasibility.candidates.length
+                    ? "Your movements, tools and products work together. You can keep adjusting them."
+                    : step === 1
+                      ? "Confirm a movement, then match it with your tools and products."
+                      : "Confirm a comfortable movement and its matching tool and product before adding a photo."}
+                </p>
+              </div>
             ) : null}
             {error ? (
               <div style={{ marginTop: 22 }}>
@@ -783,7 +925,7 @@ export function SetupWizard() {
                 <Button
                   variant="quiet"
                   onClick={() => goTo(step - 1)}
-                  disabled={busy || !!pendingSession}
+                  disabled={busy}
                 >
                   <ArrowLeft size={17} aria-hidden />
                   Back

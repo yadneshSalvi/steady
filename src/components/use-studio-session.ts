@@ -54,7 +54,11 @@ export function useStudioSession(id: string) {
       try {
         return update(await operation(current.current));
       } catch (cause) {
-        if (cause instanceof ApiError && cause.status === 409) {
+        if (
+          cause instanceof ApiError &&
+          cause.status === 409 &&
+          cause.code === "REVISION_CONFLICT"
+        ) {
           await refresh();
           setError(
             "Your session was updated in another view. We’ve refreshed it; please choose your next action again.",

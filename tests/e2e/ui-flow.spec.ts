@@ -9,6 +9,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { SAMPLE_SETUP } from "../../src/lib/catalog";
 import type { StudioSession } from "../../src/lib/contracts";
 import { signInAnonymous } from "./support/auth";
+import { installStudioFixture } from "./support/studio-fixture";
 
 const paidOperations =
   /\/api\/(?:inspiration|tool-suggestions|voice\/transcribe|sessions\/[^/]+\/(?:previews|checkpoint-analysis))(?:\?|$)/;
@@ -76,19 +77,9 @@ test("sample studio completes, adapts, saves, reuses and deletes through the UI"
   try {
     await test.step("choose the labeled sample and its methods", async () => {
       await signInAnonymous(page.request);
-      await page.goto("/studio/new?mode=sample");
-      await expect(
-        page.getByRole("heading", { level: 1 }),
-      ).toHaveAccessibleName("Let’s begin with you.");
-      for (let index = 0; index < 3; index += 1)
-        await page
-          .getByRole("button", { name: "Continue", exact: true })
-          .click();
+      await page.goto("/");
       await page
-        .getByRole("checkbox", { name: /I understand this is a synthetic/ })
-        .check();
-      await page
-        .getByRole("button", { name: "Find my methods", exact: true })
+        .getByRole("button", { name: "Quick sample", exact: true })
         .click();
       await page.waitForURL(/\/studio\/[^/]+\/looks$/);
       sessionId = new URL(page.url()).pathname.split("/")[2];
@@ -98,17 +89,44 @@ test("sample studio completes, adapts, saves, reuses and deletes through the UI"
       await expect(
         page.getByRole("heading", { level: 1 }),
       ).toHaveAccessibleName("Three ways. Entirely yours.");
+      const firstMethod = page.getByRole("article").first();
+      await firstMethod.getByRole("button", { name: /Stop at Build/ }).click();
+      await expect(
+        firstMethod.getByRole("button", { name: /Stop at Build/ }),
+      ).toHaveAttribute("aria-pressed", "true");
+      await expect(
+        page.getByRole("button", { name: /Generate fresh/ }),
+      ).toHaveCount(0);
+      await page
+        .getByRole("button", { name: "Recorded YouCam", exact: true })
+        .first()
+        .click();
+      await expect(
+        page.getByRole("dialog", { name: "Recorded YouCam" }),
+      ).toContainText("real YouCam render");
+      await page.keyboard.press("Escape");
       await checkAccessibility(page);
       await page
         .getByRole("button", { name: "Choose this method", exact: true })
         .first()
         .click();
       await page.waitForURL(/\/mirror$/);
+      expect(
+        (await sessionFrom(page, sessionId)).activePlan
+          ?.selectedPreviewVariantId,
+      ).toBe("build");
       await page
         .getByRole("button", { name: "Begin the walkthrough", exact: true })
         .click();
       await expect(
-        page.getByRole("button", { name: "Explore a checkpoint", exact: true }),
+        page.getByRole("button", { name: /Stop at Build/ }),
+      ).toHaveAttribute("aria-pressed", "true");
+      await page.getByRole("button", { name: /Stop at Full/ }).click();
+      await expect(
+        page.getByRole("button", { name: /Stop at Full/ }),
+      ).toHaveAttribute("aria-pressed", "true");
+      await expect(
+        page.getByRole("button", { name: "Measure the sample", exact: true }),
       ).toBeVisible();
     });
 
@@ -125,12 +143,12 @@ test("sample studio completes, adapts, saves, reuses and deletes through the UI"
       await page.getByRole("button", { name: "Pause", exact: true }).focus();
       await tabTo(
         page,
-        page.getByRole("button", { name: "Explore a checkpoint", exact: true }),
+        page.getByRole("button", { name: "Measure the sample", exact: true }),
       );
 
       await page.setViewportSize({ width: 390, height: 844 });
       await checkAccessibility(page);
-      for (const name of ["Explore a checkpoint", "Pause"]) {
+      for (const name of ["Measure the sample", "Pause"]) {
         const bounds = await page
           .getByRole("button", { name, exact: true })
           .boundingBox();
@@ -167,11 +185,17 @@ test("sample studio completes, adapts, saves, reuses and deletes through the UI"
         }));
         expect(metrics).toEqual({ width: 632, scale: 2 });
         await checkAccessibility(page);
-        const instruction = page.locator(".instruction-scroll h2");
+        const instruction = page
+          .getByRole("region", {
+            name: "Current makeup instruction",
+            exact: true,
+          })
+          .getByRole("heading", { level: 2 });
+        await expect(instruction).toBeVisible();
         await instruction.focus();
         await expect(instruction).toBeInViewport();
         const checkpoint = page.getByRole("button", {
-          name: "Explore a checkpoint",
+          name: "Measure the sample",
           exact: true,
         });
         await checkpoint.scrollIntoViewIfNeeded();
@@ -193,7 +217,7 @@ test("sample studio completes, adapts, saves, reuses and deletes through the UI"
     let confirmedId = "";
     await test.step("confirm a checkpoint and adapt only the remaining work", async () => {
       await page
-        .getByRole("button", { name: "Explore a checkpoint", exact: true })
+        .getByRole("button", { name: "Measure the sample", exact: true })
         .focus();
       await page.keyboard.press("Enter");
       const continueSample = page.getByRole("button", {
@@ -201,6 +225,35 @@ test("sample studio completes, adapts, saves, reuses and deletes through the UI"
         exact: true,
       });
       await expect(continueSample).toBeVisible();
+      const progress = page.getByRole("progressbar", {
+        name: "Color change toward your chosen target",
+      });
+      await expect(progress).toBeVisible();
+      expect(
+        Number(await progress.getAttribute("aria-valuenow")),
+      ).toBeGreaterThan(20);
+      expect(Number(await progress.getAttribute("aria-valuenow"))).toBeLessThan(
+        65,
+      );
+      await expect(
+        page
+          .locator('[aria-label="Measured color change heatmap"] > g > polygon')
+          .first(),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("button", { name: "Simulated checkpoint", exact: true }),
+      ).toBeVisible();
+      const measured = await sessionFrom(page, sessionId);
+      expect(measured.observations.at(-1)?.measurement?.provenance).toBe(
+        "simulated",
+      );
+      expect(measured.observations.at(-1)?.measurement?.targetLevel).toBe(
+        "full",
+      );
+      expect(
+        measured.assets.every((asset) => asset.purpose !== "checkpoint"),
+      ).toBe(true);
+      await screenshot(page, testInfo, "simulated-measurement-heatmap");
       await tabTo(page, continueSample);
       await page.keyboard.press("Enter");
       await expect(page.locator(".step-label")).toHaveText("Step 02 of 02");
@@ -222,13 +275,10 @@ test("sample studio completes, adapts, saves, reuses and deletes through the UI"
         .getByRole("button", { name: "Use this change", exact: true })
         .click();
       await page
-        .getByRole("checkbox", { name: /ready to continue exploring/ })
-        .check();
-      await page
-        .getByRole("button", { name: "Continue at my pace", exact: true })
+        .getByRole("button", { name: "Continue sample", exact: true })
         .click();
       await expect(
-        page.getByRole("button", { name: "Explore a checkpoint", exact: true }),
+        page.getByRole("button", { name: "Measure the sample", exact: true }),
       ).toBeVisible();
       const after = await sessionFrom(page, sessionId);
       expect(after.completedActionIds).toEqual([confirmedId]);
@@ -237,7 +287,7 @@ test("sample studio completes, adapts, saves, reuses and deletes through the UI"
 
     await test.step("finish and save the sample without fabricating a physical outcome", async () => {
       await page
-        .getByRole("button", { name: "Explore a checkpoint", exact: true })
+        .getByRole("button", { name: "Measure the sample", exact: true })
         .click();
       await page
         .getByRole("button", { name: "Continue the sample", exact: true })
@@ -330,8 +380,47 @@ test("sample studio completes, adapts, saves, reuses and deletes through the UI"
     ).toEqual([]);
     expect(errors).toEqual([]);
   } finally {
-    if (sessionId) await page.request.delete(`/api/sessions/${sessionId}`);
+    if (sessionId)
+      await page.request
+        .delete(`/api/sessions/${sessionId}`, { timeout: 5000 })
+        .catch(() => {});
   }
+});
+
+test("a resting budget disables fresh work while recorded stopping points and methods remain usable", async ({
+  page,
+}) => {
+  const fixture = await installStudioFixture(page, { missingFull: true });
+  await page.goto(`/studio/${fixture.id}/looks`);
+  await expect(page.locator(".preview-explainer")).toContainText(
+    "Fresh previews are resting",
+  );
+  await expect(
+    page.getByRole("button", {
+      name: "Generate fresh ladder · up to 1 unit",
+      exact: true,
+    }),
+  ).toBeDisabled();
+  const candidate = page.getByRole("article").first();
+  await candidate.getByRole("button", { name: /Stop at Light/ }).click();
+  await expect(
+    candidate.getByRole("img", { name: /^light YouCam target/ }),
+  ).toBeVisible();
+  await expect(
+    candidate.getByRole("button", { name: "Recorded YouCam", exact: true }),
+  ).toBeVisible();
+  await candidate
+    .getByRole("button", { name: "Choose this method", exact: true })
+    .click();
+  await page.waitForURL(/\/mirror$/);
+  await page
+    .getByRole("button", { name: "Begin my method", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Check this step", exact: true }),
+  ).toBeVisible();
+  expect(fixture.snapshot().activePlan?.selectedPreviewVariantId).toBe("light");
+  expect(fixture.blockedRequests).toEqual([]);
 });
 
 test("one available method keeps its full heading and a useful desktop composition", async ({

@@ -29,7 +29,13 @@ import { useEffect, useRef, useState } from "react";
 import { LOOKS, PRODUCT_LABELS, TOOL_LABELS } from "@/lib/catalog";
 import { uploadPhoto } from "@/lib/upload-client";
 import type { Preferences, StudioSession } from "@/lib/contracts";
-import { api } from "@/lib/client";
+import { api, requestPreviews } from "@/lib/client";
+import { useCheckpointMeasurement } from "./use-checkpoint-measurement";
+import { MeasurementVisual, RegionTarget } from "./measurement-visual";
+import { StaticFaceGuide } from "./static-face-guide";
+import { PreviewLadder } from "./preview-ladder";
+import { ShoppingNote } from "./shopping-note";
+import { stalledCheckpoint } from "@/lib/vision/measurement-guidance";
 import {
   ActionList,
   BackLink,
@@ -61,7 +67,6 @@ export function GuidedMirror({ id }: { id: string }) {
     cameraError,
     start: startCamera,
     stop: stopCamera,
-    capture: capturePhoto,
   } = useCamera();
   const router = useRouter();
   const session = studio.session;
@@ -91,6 +96,7 @@ export function GuidedMirror({ id }: { id: string }) {
     string | undefined
   >();
   const [localError, setLocalError] = useState("");
+  const [clearAreaConfirmed, setClearAreaConfirmed] = useState(false);
   const [stopConfirm, setStopConfirm] = useState(false);
   const [helpRequested, setHelpRequested] = useState(false);
   const [online, setOnline] = useState(true);
@@ -110,7 +116,20 @@ export function GuidedMirror({ id }: { id: string }) {
     !!session &&
     (session.stage === "paused" || localPause || session.resumeRequired);
   const adapting = adaptOpen || session?.stage === "adapting";
-  const blocked = studio.busy || uploading || analyzing;
+  const measurement = useCheckpointMeasurement({
+    session,
+    action,
+    videoRef,
+    cameraActive,
+    enabled:
+      !!session &&
+      ["ready", "applying"].includes(session.stage) &&
+      !paused &&
+      !adapting &&
+      !checkpointOpen,
+  });
+  const blocked =
+    studio.busy || uploading || analyzing || measurement.measuring;
 
   useEffect(() => {
     queueMicrotask(() => {
@@ -224,7 +243,7 @@ export function GuidedMirror({ id }: { id: string }) {
           </h1>
           <p>
             {session.mode === "sample"
-              ? "You’ve explored your method. Review this synthetic walkthrough, or start your own studio when you’re ready."
+              ? "Review your checkpoints and the method you chose, or open your own studio."
               : "Take a little space to decide how you feel. Your actual photo and your assessment belong to you."}
           </p>
           <ButtonLink href={`/studio/${id}/review`}>
@@ -267,7 +286,7 @@ export function GuidedMirror({ id }: { id: string }) {
     if (session?.stage === "applying") await studio.run({ type: "pause" });
   }
   async function resume() {
-    if (!confirmedState) {
+    if (!isSample && !confirmedState) {
       setLocalError(
         "Confirm that the completed steps still describe your makeup before continuing.",
       );
@@ -327,7 +346,22 @@ export function GuidedMirror({ id }: { id: string }) {
       setLocalPause(true);
     }
   }
+  async function recordMeasurement(reportedPass: boolean) {
+    if (!action) return;
+    const measured = await measurement.measureNow(reportedPass);
+    if (measured) {
+      setCheckpointFile(measured.file ?? null);
+      setCheckpointAssetId(undefined);
+      const next = await studio.run({
+        type: "checkpoint",
+        actionId: action.id,
+        measurement: measured.measurement,
+      });
+      if (next) setCheckpointRecorded(true);
+    }
+  }
   async function checkStep() {
+    measurement.clearCheckpoint();
     setLocalError("");
     stopSpeech();
     setCheckpointRecorded(false);
@@ -339,24 +373,7 @@ export function GuidedMirror({ id }: { id: string }) {
       checkpointHeadingRef.current?.focus();
       checkpointHeadingRef.current?.scrollIntoView({ block: "start" });
     });
-    if (cameraActive && !isSample) {
-      try {
-        setCheckpointFile(await capturePhoto());
-      } catch (cause) {
-        setLocalError(
-          cause instanceof Error
-            ? cause.message
-            : "Choose a checkpoint photo to continue.",
-        );
-      }
-    }
-    if (isSample && action) {
-      const next = await studio.run({
-        type: "checkpoint",
-        actionId: action.id,
-      });
-      if (next) setCheckpointRecorded(true);
-    }
+    if (isSample || cameraActive) await recordMeasurement(false);
   }
   async function saveCheckpoint() {
     if (!action || !session || uploading) return;
@@ -413,6 +430,7 @@ export function GuidedMirror({ id }: { id: string }) {
             actionId: action.id,
             assetId,
             consent: true,
+            measurement: measurement.summary ?? undefined,
           }),
         },
       );
@@ -553,9 +571,7 @@ export function GuidedMirror({ id }: { id: string }) {
       <div className="mirror-title-row">
         <div>
           <p className="eyebrow">
-            {isSample
-              ? "Sample walkthrough · no physical result"
-              : "Your personal studio"}
+            {isSample ? "Sample walkthrough" : "Your personal studio"}
           </p>
           <h1>
             {plan.name}
@@ -611,8 +627,9 @@ export function GuidedMirror({ id }: { id: string }) {
                     !paused &&
                     !adapting &&
                     !checkpointOpen &&
-                    session.stage === "applying"
+                    ["ready", "applying"].includes(session.stage)
                   }
+                  onTracking={measurement.onTracking}
                   region={action.region}
                   mirrored={session.preferences.mirror}
                 />
@@ -637,7 +654,6 @@ export function GuidedMirror({ id }: { id: string }) {
               <span className="mirror-guide-note">
                 {session.preferences.mirror ? "Mirror view" : "Photo view"} ·
                 unretouched
-                <br /> Guides don’t verify makeup application.
               </span>
             </>
           ) : isSample ? (
@@ -649,17 +665,18 @@ export function GuidedMirror({ id }: { id: string }) {
                 width={1200}
                 height={1500}
               />
-              <div className="mirror-top-controls">
-                <span className="mirror-camera-status">
-                  <Sparkles size={12} aria-hidden />
-                  SYNTHETIC SAMPLE
-                </span>
-              </div>
+              {action &&
+              measurement.source?.eligible &&
+              !paused &&
+              !adapting ? (
+                <StaticFaceGuide
+                  points={measurement.source.landmarks}
+                  region={action.region}
+                  width={measurement.source.image.width}
+                  height={measurement.source.image.height}
+                />
+              ) : null}
               <ProvenanceLabel kind="synthetic_inspiration" />
-              <p className="mirror-bottom-caption">
-                Explore the instructions with the sample. No live tracking or
-                physical application is claimed.
-              </p>
             </>
           ) : (
             <div className="mirror-camera-placeholder">
@@ -718,17 +735,60 @@ export function GuidedMirror({ id }: { id: string }) {
               {session.adaptation ? (
                 <>
                   <p>{session.adaptation.explanation}</p>
+                  {session.adaptation.productChangeNote ? (
+                    <Notice title="Keep the finish in mind">
+                      {session.adaptation.productChangeNote}
+                    </Notice>
+                  ) : null}
+                  {session.adaptation.candidate.previewAsset &&
+                  action &&
+                  measurement.source ? (
+                    <RegionTarget
+                      asset={session.adaptation.candidate.previewAsset}
+                      landmarks={measurement.source.landmarks}
+                      region={action.region}
+                      level={
+                        session.adaptation.candidate.selectedPreviewVariantId ??
+                        "full"
+                      }
+                    />
+                  ) : (
+                    <p className="small">
+                      The preview for this adapted method is not ready yet.
+                    </p>
+                  )}
+                  {session.mode === "personal" &&
+                  session.adaptation.changesGoal &&
+                  !session.adaptation.candidate.previewAsset ? (
+                    <Button
+                      variant="secondary"
+                      disabled={blocked}
+                      onClick={() =>
+                        void studio.perform((current) =>
+                          requestPreviews(current, {
+                            candidateId: current.adaptation!.candidate.id,
+                            variantId: "light",
+                          }),
+                        )
+                      }
+                    >
+                      Generate softer target · 1 unit
+                    </Button>
+                  ) : null}
                   <div className="adapt-diff">
                     <h3>{session.adaptation.candidate.name}</h3>
                     <p>{session.adaptation.candidate.description}</p>
                     <ul>
-                      <li>
-                        {session.adaptation.preservedActionIds.length} confirmed{" "}
-                        {session.adaptation.preservedActionIds.length === 1
-                          ? "step stays"
-                          : "steps stay"}{" "}
-                        in place.
-                      </li>
+                      {session.adaptation.preservedActionIds.length > 0 ? (
+                        <li>
+                          {session.adaptation.preservedActionIds.length}{" "}
+                          confirmed{" "}
+                          {session.adaptation.preservedActionIds.length === 1
+                            ? "step stays"
+                            : "steps stay"}{" "}
+                          in place.
+                        </li>
+                      ) : null}
                       <li>
                         {session.adaptation.removedActionIds.length} remaining{" "}
                         {session.adaptation.removedActionIds.length === 1
@@ -884,25 +944,28 @@ export function GuidedMirror({ id }: { id: string }) {
                     ? "The sample’s confirmed steps are saved. Continue when you’re ready to explore the remaining instructions."
                     : "Your confirmed steps are saved. Before continuing, check that they still describe what’s actually on your face."}
               </p>
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  checked={confirmedState}
-                  onChange={(event) => setConfirmedState(event.target.checked)}
-                />
-                <span>
-                  {isSample
-                    ? "I’m ready to continue exploring the sample’s confirmed steps."
-                    : "The confirmed steps still match my current makeup. I’ll take a fresh checkpoint if anything has changed."}
-                </span>
-              </label>
+              {!isSample ? (
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={confirmedState}
+                    onChange={(event) =>
+                      setConfirmedState(event.target.checked)
+                    }
+                  />
+                  <span>
+                    The confirmed steps still match my current makeup. I’ll take
+                    a fresh checkpoint if anything has changed.
+                  </span>
+                </label>
+              ) : null}
               <Button
                 onClick={() => void resume()}
                 busy={studio.busy}
-                disabled={blocked || !confirmedState}
+                disabled={blocked || (!isSample && !confirmedState)}
               >
                 <Play size={17} aria-hidden />
-                Continue at my pace
+                {isSample ? "Continue sample" : "Continue at my pace"}
               </Button>
               <Button
                 variant="secondary"
@@ -942,11 +1005,12 @@ export function GuidedMirror({ id }: { id: string }) {
                 nearby. You’ll see one instruction at a time, and every step
                 waits for you.
               </p>
-              <p className="field-note">
-                {isSample
-                  ? "This sample explores the application flow without representing real cosmetic application."
-                  : "You can follow the method with the live mirror or your own mirror. Your judgment is always the final word."}
-              </p>
+              {!isSample ? (
+                <p className="field-note">
+                  You can follow the method with the live mirror or your own
+                  mirror. Your judgment is always the final word.
+                </p>
+              ) : null}
               <Button
                 onClick={() => void studio.run({ type: "start" })}
                 busy={studio.busy}
@@ -965,7 +1029,7 @@ export function GuidedMirror({ id }: { id: string }) {
               </h2>
               <p>
                 {isSample
-                  ? "You’ve explored every instruction in this example. The sample doesn’t represent a physical result. You can start a personal studio whenever you’re ready."
+                  ? "Your checkpoints and method changes are ready to review."
                   : "You’ve confirmed each step of your method. Take a moment to decide how you feel about your result, then make space for your actual photo."}
               </p>
               <Button onClick={() => void review()} busy={studio.busy}>
@@ -996,36 +1060,125 @@ export function GuidedMirror({ id }: { id: string }) {
                     ))}
                   </div>
                 </div>
-                <div className="tool-chip">
-                  <span className="tool-chip-icon">
-                    {action.tool === "fingertips" ? (
-                      <Hand size={29} strokeWidth={1.15} aria-hidden />
-                    ) : (
-                      <Paintbrush size={29} strokeWidth={1.15} aria-hidden />
-                    )}
-                  </span>
-                  <div>
-                    <small>Your tool + product</small>
-                    <strong>
+                <div className="instruction-focus">
+                  <div className="instruction-copy">
+                    <p className="instruction-supply">
                       {TOOL_LABELS[action.tool]} ·{" "}
                       {PRODUCT_LABELS[action.product]}
-                    </strong>
+                    </p>
+                    <h2
+                      key={action.id}
+                      ref={instructionHeadingRef}
+                      tabIndex={-1}
+                    >
+                      {primaryInstruction}
+                    </h2>
+                    <p className="stopping-cue">{action.stoppingCue}</p>
+                  </div>
+                  <div className="instruction-target">
+                    {plan.previewAsset && measurement.source ? (
+                      <RegionTarget
+                        asset={plan.previewAsset}
+                        landmarks={measurement.source.landmarks}
+                        region={action.region}
+                        level={plan.selectedPreviewVariantId ?? "full"}
+                      />
+                    ) : (
+                      <p className="small">
+                        Choose a preview target to enable color measurement.
+                      </p>
+                    )}
+                    <PreviewLadder
+                      candidate={plan}
+                      compact
+                      disabled={blocked}
+                      onChoose={(level) =>
+                        void studio.run({
+                          type: "select_preview_level",
+                          candidateId: plan.id,
+                          level,
+                        })
+                      }
+                    />
                   </div>
                 </div>
-                <h2 key={action.id} ref={instructionHeadingRef} tabIndex={-1}>
-                  {primaryInstruction}
-                </h2>
-                <p className="instruction-detail">
-                  {supportingInstruction ? `${supportingInstruction} ` : ""}
-                  {action.detail}
-                </p>
-                <p className="stopping-cue">{action.stoppingCue}</p>
+                <details className="instruction-notes">
+                  <summary>Movement details</summary>
+                  <p className="instruction-detail">
+                    {supportingInstruction ? `${supportingInstruction} ` : ""}
+                    {action.detail}
+                  </p>
+                </details>
+                {!isSample && cameraActive ? (
+                  <div className="baseline-status" role="status">
+                    <strong>
+                      {measurement.baselineReady
+                        ? "✓ Baseline captured"
+                        : measurement.baselineBlocked
+                          ? "Original baseline is no longer in memory"
+                          : "Hold still before applying color · capturing baseline"}
+                    </strong>
+                    {measurement.baselineBlocked ||
+                    measurement.baselineReady ? (
+                      <details>
+                        <summary>Start the baseline again</summary>
+                        <p>
+                          Use this only if this area is still clear of newly
+                          applied product. Keep the original baseline if you
+                          have already made a pass.
+                        </p>
+                        <label className="checkbox-label">
+                          <input
+                            type="checkbox"
+                            checked={clearAreaConfirmed}
+                            onChange={(event) =>
+                              setClearAreaConfirmed(event.target.checked)
+                            }
+                          />
+                          <span>
+                            I haven’t applied product to this area yet.
+                          </span>
+                        </label>
+                        <Button
+                          variant="secondary"
+                          disabled={!clearAreaConfirmed || blocked}
+                          onClick={() => {
+                            measurement.resetBaseline();
+                            setClearAreaConfirmed(false);
+                          }}
+                        >
+                          Capture a new baseline
+                        </Button>
+                      </details>
+                    ) : null}
+                  </div>
+                ) : null}
+                {action && stalledCheckpoint(session, action.id) ? (
+                  <Notice title="A broader tool may help">
+                    Two reported passes added less than 10% toward your target.
+                    Review a method that covers more area with the product you
+                    already use.
+                    <Button
+                      variant="secondary"
+                      onClick={() => void openAdaptation()}
+                    >
+                      Make this easier
+                    </Button>
+                  </Notice>
+                ) : null}
               </div>
               <div className="instruction-control-dock">
                 <div className="instruction-buttons">
-                  <Button onClick={() => void checkStep()} disabled={blocked}>
+                  <Button
+                    onClick={() => void checkStep()}
+                    disabled={blocked || (isSample && measurement.preparing)}
+                  >
                     <Camera size={18} aria-hidden />
-                    {isSample ? "Explore a checkpoint" : "Check this step"}
+                    {isSample
+                      ? measurement.preparing
+                        ? "Preparing local check…"
+                        : "Measure the sample"
+                      : "Check this step"}
                   </Button>
                   <Button
                     variant="secondary"
@@ -1050,7 +1203,11 @@ export function GuidedMirror({ id }: { id: string }) {
                     onClick={() => void review()}
                     disabled={blocked}
                   >
-                    Keep this result <ArrowRight size={14} aria-hidden />
+                    {action.region === "left_eye" ||
+                    action.region === "right_eye"
+                      ? "Stop eye steps"
+                      : "Keep this result"}{" "}
+                    <ArrowRight size={14} aria-hidden />
                   </Button>
                 </div>
               </div>
@@ -1058,63 +1215,44 @@ export function GuidedMirror({ id }: { id: string }) {
           )}
         </section>
       </div>
-      {studio.error || localError ? (
+      {studio.error || localError || measurement.error ? (
         <div className="mirror-message">
-          <Notice kind="error">{localError || studio.error}</Notice>
+          <Notice kind="error">
+            {localError || studio.error || measurement.error}
+          </Notice>
         </div>
       ) : null}
       {checkpointOpen && action && !paused && !adapting ? (
         <section className="checkpoint-panel" aria-label="Your checkpoint">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              gap: 20,
-            }}
-          >
+          <div className="checkpoint-heading">
             <h3 ref={checkpointHeadingRef} tabIndex={-1}>
-              {checkpointRecorded ? (
-                observation?.state === "optional_adjustment" ? (
-                  <>
-                    One option,
-                    <br /> <em>if you’d like.</em>
-                  </>
-                ) : observation?.state === "ai_observation" ? (
-                  <>
-                    A little
-                    <br /> <em>perspective.</em>
-                  </>
-                ) : (
-                  <>
-                    You decide
-                    <br /> <em>what feels ready.</em>
-                  </>
-                )
-              ) : (
-                <>
-                  A moment
-                  <br /> <em>to see your step.</em>
-                </>
-              )}
+              A moment to see your step.
             </h3>
             <Button
               variant="quiet"
+              aria-label="Close checkpoint"
+              disabled={blocked}
               onClick={() => {
                 setCheckpointOpen(false);
                 setCheckpointFile(null);
               }}
-              aria-label="Close checkpoint"
-              disabled={blocked}
             >
               <X size={18} aria-hidden />
             </Button>
           </div>
-          {isSample ? (
-            <p>
-              This is a synthetic sample. The checkpoint below illustrates the
-              user judgment flow; it isn’t evidence of physical makeup
-              application.
+          {measurement.measuring ? (
+            <p role="status">
+              <LoaderCircle size={18} className="spin" aria-hidden /> Measuring
+              this captured frame on your device…
             </p>
+          ) : null}
+          {measurement.summary ? (
+            <MeasurementVisual
+              measurement={measurement.summary}
+              local={measurement.checkpoint}
+              action={action}
+              targetAsset={plan.previewAsset}
+            />
           ) : checkpointUrl ? (
             <div className="checkpoint-still">
               <Image
@@ -1122,11 +1260,11 @@ export function GuidedMirror({ id }: { id: string }) {
                 width={1200}
                 height={1200}
                 unoptimized
-                alt="Your selected actual checkpoint photo"
+                alt="Your selected checkpoint photo"
               />
               <ProvenanceLabel kind="actual_capture" />
             </div>
-          ) : !checkpointRecorded ? (
+          ) : !isSample ? (
             <StillCapture
               file={checkpointFile}
               onSelected={(file) => {
@@ -1138,126 +1276,100 @@ export function GuidedMirror({ id }: { id: string }) {
               showGuidelines={false}
             />
           ) : null}
+          {observation?.method === "vision_assistant_v1" ? (
+            <div className="second-opinion">
+              <strong>Optional second opinion</strong>
+              <p>{observation.reason}</p>
+            </div>
+          ) : !measurement.summary && checkpointRecorded ? (
+            <p role="status">{observation?.reason}</p>
+          ) : null}
           {checkpointRecorded ? (
-            <>
-              <p role="status">
-                <strong>
-                  {observation?.reason ||
-                    "Look at this step and decide whether you’d like to continue."}
-                </strong>
-              </p>
-              {observation?.reasons?.length ? (
-                <ul className="observation-reasons">
-                  {observation.reasons.map((reason) => (
-                    <li key={reason}>{reason}</li>
-                  ))}
-                </ul>
-              ) : null}
-              <p>
-                {observation?.method === "vision_assistant_v1"
-                  ? "An AI observation is one perspective. Your confirmation of the step is a separate choice."
-                  : "This manual check leaves the judgment to you. Your next choice is recorded as your own confirmation."}
-              </p>
-              {observation?.suggestedActionId &&
-              plan.actions.find(
-                (item) =>
-                  item.id === observation.suggestedActionId &&
-                  !session.completedActionIds.includes(item.id),
-              ) ? (
-                <p className="stopping-cue">
-                  Optional next action:{" "}
-                  {
-                    plan.actions.find(
-                      (item) => item.id === observation.suggestedActionId,
-                    )!.instruction
-                  }
-                </p>
-              ) : null}
-              <div className="button-row">
-                <Button onClick={() => void completeStep()} busy={studio.busy}>
-                  {isSample
-                    ? "Continue the sample"
-                    : "I’m ready for the next step"}
-                  <ArrowRight size={17} aria-hidden />
-                </Button>
+            <div className="button-row">
+              <Button onClick={() => void completeStep()} disabled={blocked}>
+                {isSample
+                  ? "Continue the sample"
+                  : "I’m ready for the next step"}
+                <ArrowRight size={17} aria-hidden />
+              </Button>
+              {isSample || cameraActive ? (
                 <Button
                   variant="secondary"
-                  onClick={() => {
-                    setCheckpointRecorded(false);
-                    setCheckpointFile(null);
-                    setAiConsent(false);
-                    setCheckpointAssetId(undefined);
-                  }}
+                  disabled={blocked}
+                  onClick={() => void recordMeasurement(true)}
                 >
-                  Choose another photo
+                  I made a pass · check again
                 </Button>
-                <Button variant="quiet" onClick={() => void openAdaptation()}>
-                  Try another way
-                </Button>
-              </div>
-            </>
-          ) : (
-            <>
-              <p>
-                {checkpointFile
-                  ? "This still stays on your device until you choose to save it. It will be stored privately with your session; AI guidance is optional and requires your permission below."
-                  : "A photo is optional for a manual check. You can use your own mirror and decide whether you’re ready."}
-              </p>
-              {checkpointFile ? (
-                <label className="checkbox-label" style={{ marginTop: 20 }}>
-                  <input
-                    type="checkbox"
-                    checked={aiConsent}
-                    onChange={(event) => setAiConsent(event.target.checked)}
-                    disabled={analyzing}
-                  />
-                  <span>
-                    I agree to send this selected still to Google Gemini or
-                    OpenAI for visual guidance on this step. Live camera frames
-                    stay on my device.
-                  </span>
-                </label>
               ) : null}
-              <div className="button-row">
-                {checkpointFile ? (
-                  <>
-                    <Button
-                      onClick={() => void analyzeCheckpoint()}
-                      busy={analyzing}
-                      disabled={!aiConsent || studio.busy || uploading}
-                    >
-                      <Sparkles size={17} aria-hidden />
-                      {analyzing
-                        ? "Looking at your selected still…"
-                        : "Ask AI about this step"}
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      onClick={() => void saveCheckpoint()}
-                      busy={uploading}
-                      disabled={studio.busy || analyzing}
-                    >
-                      <Camera size={17} aria-hidden />
-                      Save photo & use my judgment
-                    </Button>
-                  </>
-                ) : null}
+              <Button
+                variant="quiet"
+                disabled={blocked}
+                onClick={() => void openAdaptation()}
+              >
+                Make this easier
+              </Button>
+            </div>
+          ) : (
+            <div className="button-row">
+              <Button
+                variant="secondary"
+                disabled={blocked}
+                onClick={() => void manualCheckpoint()}
+              >
+                Use my judgment
+              </Button>
+              {(isSample || cameraActive) && !measurement.measuring ? (
                 <Button
                   variant="quiet"
-                  onClick={() => void manualCheckpoint()}
-                  disabled={blocked}
+                  disabled={blocked || measurement.preparing}
+                  onClick={() => void recordMeasurement(false)}
                 >
-                  Use my judgment without a photo
+                  Try the local check again
                 </Button>
-              </div>
-              {analyzing ? (
-                <p role="status" style={{ marginTop: 15 }}>
-                  Reading the still you selected. You can pause at any time;
-                  this assessment won’t mark a step complete.
-                </p>
               ) : null}
-            </>
+            </div>
           )}
+          {!isSample && checkpointFile ? (
+            <details className="second-opinion-options">
+              <summary>Ask for a second opinion</summary>
+              <p>
+                This selected still will be stored privately and sent with your
+                measured numbers for optional AI guidance.
+              </p>
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={aiConsent}
+                  onChange={(event) => setAiConsent(event.target.checked)}
+                  disabled={blocked}
+                />
+                <span>
+                  I agree to send this selected still to Google Gemini or
+                  OpenAI.
+                </span>
+              </label>
+              <div className="button-row">
+                <Button
+                  onClick={() => void analyzeCheckpoint()}
+                  busy={analyzing}
+                  disabled={!aiConsent || studio.busy || uploading}
+                >
+                  <Sparkles size={17} aria-hidden />
+                  Ask AI about this step
+                </Button>
+                {!measurement.summary ? (
+                  <Button
+                    variant="secondary"
+                    onClick={() => void saveCheckpoint()}
+                    busy={uploading}
+                    disabled={blocked}
+                  >
+                    Save photo &amp; use my judgment
+                  </Button>
+                ) : null}
+              </div>
+            </details>
+          ) : null}
         </section>
       ) : null}
       {stopConfirm ? (
@@ -1295,11 +1407,8 @@ export function GuidedMirror({ id }: { id: string }) {
             aria-hidden
             style={{ display: "inline", verticalAlign: "-2px", marginRight: 5 }}
           />
-          Live camera frames stay here. Photos are sent only when you choose.
-          <br />{" "}
-          {isSample
-            ? "Synthetic sample. No participant outcome."
-            : "Unretouched camera. No automatic step completion."}
+          Local checkpoints stay on this device. Only measured numbers are
+          saved.
         </p>
         <Button
           variant="quiet"
@@ -1393,6 +1502,7 @@ export function GuidedMirror({ id }: { id: string }) {
           </div>
         </section>
       ) : null}
+      <ShoppingNote plan={plan} lookId={session.lookId} />
       <details className="mirror-step-summary">
         <summary>
           Your method, at a glance <ChevronDown size={17} aria-hidden />

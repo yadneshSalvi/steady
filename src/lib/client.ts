@@ -2,6 +2,7 @@
 
 import type {
   PublicConfig,
+  PreviewLevel,
   SavedMethod,
   SessionCommand,
   SetupInput,
@@ -71,11 +72,14 @@ export const commandSession = (
     method: "POST",
     body: JSON.stringify({ expectedRevision: session.revision, command }),
   });
-export const requestPreviews = (session: StudioSession) =>
+export const requestPreviews = (
+  session: StudioSession,
+  options: { candidateId?: string; variantId?: PreviewLevel } = {},
+) =>
   api<StudioSession>(
     `/api/sessions/${encodeURIComponent(session.id)}/previews`,
     {
       method: "POST",
-      body: JSON.stringify({ expectedRevision: session.revision }),
+      body: JSON.stringify({ expectedRevision: session.revision, ...options }),
     },
   );

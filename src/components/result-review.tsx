@@ -32,6 +32,8 @@ import {
   StepProgress,
 } from "./ui";
 import { useStudioSession } from "./use-studio-session";
+import { CheckpointHistory } from "./checkpoint-history";
+import { ShoppingNote } from "./shopping-note";
 
 const outcomeLabels: Record<Outcome["classification"], string> = {
   original_completed: "Original goal completed",
@@ -251,7 +253,7 @@ export function ResultReview({ id }: { id: string }) {
         </h1>
         <p>
           {isSample
-            ? "You’ve explored how a method can change with you. This is a walkthrough, not a participant result."
+            ? "Review the color checkpoints, the target you chose, and how your method changed."
             : "The photo is real. How it feels is yours to say. Keep what you love, and tell us how the method felt."}
         </p>
       </div>
@@ -266,7 +268,7 @@ export function ResultReview({ id }: { id: string }) {
             <div className="review-capture">
               <Image
                 src="/images/studio-portrait.jpg"
-                alt="Fictional AI-created adult sample portrait; not a participant result"
+                alt="Fictional adult sample portrait"
                 width={1200}
                 height={1500}
               />
@@ -361,10 +363,6 @@ export function ResultReview({ id }: { id: string }) {
                 }
                 recordedAt={preview?.recordedAt}
               />
-              <br />{" "}
-              {preview
-                ? "An appearance reference, not the physical outcome."
-                : "No virtual preview is used as your result."}
             </div>
           </div>
         </div>
@@ -380,8 +378,8 @@ export function ResultReview({ id }: { id: string }) {
               <h2>
                 {finished ? (
                   <>
-                    A walkthrough,
-                    <br /> <em>not an outcome.</em>
+                    Your sample,
+                    <br /> <em>ready to revisit.</em>
                   </>
                 ) : (
                   <>
@@ -390,10 +388,6 @@ export function ResultReview({ id }: { id: string }) {
                   </>
                 )}
               </h2>
-              <p>
-                The example portrait is synthetic. Exploring these steps does
-                not represent actual makeup application or physical completion.
-              </p>
               <p>
                 Start your own studio with a photo and your choices when you’re
                 ready.
@@ -625,6 +619,10 @@ export function ResultReview({ id }: { id: string }) {
           ) : null}
         </div>
       </div>
+      <CheckpointHistory session={session} />
+      {session.activePlan ? (
+        <ShoppingNote plan={session.activePlan} lookId={session.lookId} />
+      ) : null}
       {session.activePlan ? (
         <details className="mirror-step-summary" style={{ marginTop: 40 }}>
           <summary>

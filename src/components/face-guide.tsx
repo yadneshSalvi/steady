@@ -12,11 +12,13 @@ export function FaceGuide({
   enabled,
   region,
   mirrored,
+  onTracking,
 }: {
   videoRef: RefObject<HTMLVideoElement | null>;
   enabled: boolean;
   region: Region;
   mirrored: boolean;
+  onTracking?: (points: readonly Point[]) => void;
 }) {
   const [points, setPoints] = useState<Point[]>([]);
   const [state, setState] = useState<
@@ -80,6 +82,7 @@ export function FaceGuide({
           return;
         }
         const next: Point[] = event.data.points;
+        onTracking?.(next);
         if (!next.length) {
           previous.current = [];
           setPoints([]);
@@ -158,7 +161,7 @@ export function FaceGuide({
       worker.terminate();
       previous.current = [];
     };
-  }, [enabled, videoRef]);
+  }, [enabled, videoRef, onTracking]);
   if (!enabled) return null;
   const projected =
     points.length && sourceSize.width

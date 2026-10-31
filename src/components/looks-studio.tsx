@@ -10,8 +10,6 @@ import {
   Hand,
   ImageIcon,
   LoaderCircle,
-  RefreshCw,
-  Sparkles,
   WandSparkles,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -32,6 +30,18 @@ import {
   StepProgress,
 } from "./ui";
 import { useStudioSession } from "./use-studio-session";
+import { PreviewLadder } from "./preview-ladder";
+
+function generationLabel(candidate: CandidatePlan) {
+  const units =
+    candidate.previewVariants?.filter(
+      (variant) => variant.previewStatus !== "ready",
+    ).length ?? 1;
+  const retry = candidate.previewVariants?.some(
+    (variant) => variant.previewStatus === "failed" && variant.previewRetryable,
+  );
+  return `${retry ? "Retry available previews" : "Generate fresh ladder"} · up to ${units} ${units === 1 ? "unit" : "units"}`;
+}
 
 function Preview({
   candidate,
@@ -51,7 +61,7 @@ function Preview({
         <>
           <Image
             src={candidate.previewAsset.url}
-            alt={`YouCam virtual preview for ${candidate.name}; generated appearance, not an actual result`}
+            alt={`${candidate.selectedPreviewVariantId ?? "full"} YouCam target for ${candidate.name}`}
             width={1200}
             height={1500}
             unoptimized
@@ -112,7 +122,13 @@ export function LooksStudio({ id }: { id: string }) {
   const refresh = studio.refresh;
   const previewPending = !!session?.candidates.some(
     (item) =>
-      item.previewStatus === "queued" || item.previewStatus === "processing",
+      item.previewStatus === "queued" ||
+      item.previewStatus === "processing" ||
+      item.previewVariants?.some(
+        (variant) =>
+          variant.previewStatus === "queued" ||
+          variant.previewStatus === "processing",
+      ),
   );
 
   useEffect(() => {
@@ -143,27 +159,12 @@ export function LooksStudio({ id }: { id: string }) {
       />
     );
   const look = LOOKS.find((item) => item.id === session.lookId) || LOOKS[0];
-  const requested = session.candidates.some((item) => !!item.previewJobId);
-  const hasRecordedPreviews = session.candidates.some(
-    (item) => !!item.previewAsset?.recordedAt,
-  );
-  const allFreshReady =
-    session.candidates.length > 0 &&
-    session.candidates.every(
-      (item) =>
-        item.previewStatus === "ready" &&
-        !!item.previewAsset &&
-        !item.previewAsset.recordedAt,
-    );
-  const hasFailedPreview = session.candidates.some(
-    (item) =>
-      item.previewStatus === "failed" || item.previewStatus === "cancelled",
-  );
+  const canEdit = ["choosing", "ready"].includes(session.stage);
   const canRequest =
+    session.mode === "personal" &&
     !!config?.livePreviews &&
-    !previewPending &&
-    !!session.candidates.length &&
-    !allFreshReady;
+    canEdit &&
+    !previewPending;
 
   async function choose(candidate: CandidatePlan) {
     setSelected(candidate.id);
@@ -245,54 +246,27 @@ export function LooksStudio({ id }: { id: string }) {
       {session.candidates.length ? (
         <div className="preview-explainer">
           <div>
-            <strong>
-              <Sparkles
-                size={15}
-                aria-hidden
-                style={{
-                  display: "inline",
-                  verticalAlign: "-3px",
-                  marginRight: 6,
-                }}
-              />
-              A glimpse of the color, not a promise.
-            </strong>
+            <strong>Find your color. Choose where to stop.</strong>
             <p>
               {previewPending
-                ? "YouCam is preparing your previews. You can keep exploring the methods while you wait."
-                : hasRecordedPreviews
-                  ? "Recorded YouCam renders of this synthetic sample portrait. These are appearance references, not physical results."
+                ? "YouCam is preparing your chosen method's intensity ladder. Your place is saved."
+                : session.mode === "sample"
+                  ? `Compare ${session.lookId === "eyes" ? "Light and Full" : "Light, Build and Full"}. The mirror will measure toward the stopping point you choose.`
                   : config?.livePreviews
-                    ? "YouCam renders each color recipe on your selected photo. Skin smoothing stays off."
+                    ? `Generate a YouCam ladder for the method you want to try. Each fresh ladder uses up to ${session.lookId === "eyes" ? 2 : 3} units.`
                     : configError
-                      ? "Preview availability couldn’t be checked. Your method choices are still here. Refresh this page to try again."
-                      : "Live previews are currently unavailable. Your methods are ready to explore."}
+                      ? "Preview availability could not be checked. Refresh to try again."
+                      : config?.livePreviewMessage ||
+                        "Fresh previews are resting. Your methods are ready to explore."}
             </p>
           </div>
-          <Button
-            variant="secondary"
-            disabled={!canRequest || studio.busy}
-            busy={studio.busy && !selected}
-            onClick={() => void studio.perform(requestPreviews)}
-          >
-            {previewPending ? (
-              <LoaderCircle size={16} className="spin" aria-hidden />
-            ) : requested ? (
-              <RefreshCw size={16} aria-hidden />
-            ) : (
-              <WandSparkles size={16} aria-hidden />
-            )}
-            {previewPending
-              ? "Previews in progress"
-              : allFreshReady
-                ? "Previews ready"
-                : hasFailedPreview
-                  ? "Retry previews"
-                  : hasRecordedPreviews
-                    ? "Generate fresh previews"
-                    : "Create my previews"}
-          </Button>
         </div>
+      ) : null}
+      {session.previewBatch?.deferred ? (
+        <Notice>
+          {session.previewBatch.message ||
+            `${session.previewBatch.queued} previews queued; ${session.previewBatch.deferred} will wait for allowance to renew.`}
+        </Notice>
       ) : null}
       {studio.error ? (
         <div style={{ marginTop: 23 }}>
@@ -349,6 +323,63 @@ export function LooksStudio({ id }: { id: string }) {
               <article className="candidate-card" key={candidate.id}>
                 <Preview candidate={candidate} index={index} />
                 <div className="candidate-body">
+                  <PreviewLadder
+                    candidate={candidate}
+                    disabled={studio.busy || !canEdit}
+                    onChoose={(level) =>
+                      void studio.run({
+                        type: "select_preview_level",
+                        candidateId: candidate.id,
+                        level,
+                      })
+                    }
+                  />
+                  {session.mode === "personal" &&
+                  canEdit &&
+                  !candidate.previewVariants?.every(
+                    (variant) => variant.previewStatus === "ready",
+                  ) ? (
+                    <div className="method-generation">
+                      <Button
+                        variant="secondary"
+                        disabled={
+                          !canRequest ||
+                          studio.busy ||
+                          candidate.previewVariants?.every(
+                            (variant) =>
+                              variant.previewStatus === "ready" ||
+                              variant.previewRetryable === false,
+                          )
+                        }
+                        busy={
+                          studio.busy && selected === `preview:${candidate.id}`
+                        }
+                        onClick={() => {
+                          setSelected(`preview:${candidate.id}`);
+                          void studio
+                            .perform((current) =>
+                              requestPreviews(current, {
+                                candidateId: candidate.id,
+                              }),
+                            )
+                            .finally(() => setSelected(""));
+                        }}
+                      >
+                        <WandSparkles size={16} aria-hidden />
+                        {generationLabel(candidate)}
+                      </Button>
+                      {candidate.previewVariants?.some(
+                        (variant) =>
+                          variant.previewRetryable === false &&
+                          variant.previewStatus === "failed",
+                      ) ? (
+                        <p className="small">
+                          This preview couldn’t be created.{" "}
+                          <a href="/studio/new">Try a new photo.</a>
+                        </p>
+                      ) : null}
+                    </div>
+                  ) : null}
                   <p className="eyebrow">{candidate.tagline}</p>
                   <h2>{candidate.name}</h2>
                   <p className="candidate-description">
@@ -388,7 +419,7 @@ export function LooksStudio({ id }: { id: string }) {
                     <Button
                       onClick={() => void choose(candidate)}
                       busy={studio.busy && selected === candidate.id}
-                      disabled={studio.busy}
+                      disabled={studio.busy || !canEdit}
                     >
                       Choose this method <ArrowRight size={17} aria-hidden />
                     </Button>
@@ -406,9 +437,8 @@ export function LooksStudio({ id }: { id: string }) {
           </div>
           {session.candidates.length === 1 ? (
             <Notice>
-              Only one distinct method currently fits these confirmed choices.
-              We won’t present a duplicate as an alternative. You can confirm
-              another comfortable movement or available tool in a fresh setup.
+              One method fits your choices. You can adjust your setup to compare
+              another movement or tool.
             </Notice>
           ) : null}
           <DraftNote />

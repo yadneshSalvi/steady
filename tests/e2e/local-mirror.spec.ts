@@ -1,84 +1,270 @@
-import { test, expect } from "@playwright/test";
-import { SAMPLE_SETUP } from "../../src/lib/catalog";
-import type { StudioSession } from "../../src/lib/contracts";
-import { signInAnonymous } from "./support/auth";
+import { test, expect, type Page } from "@playwright/test";
+import { writeFile } from "node:fs/promises";
+import { REFERENCE_LANDMARKS } from "../../src/lib/vision/measure";
+import recordedLandmarks from "../fixtures/sample-landmarks.json" with { type: "json" };
+import { installStudioFixture, ladder } from "./support/studio-fixture";
 
-test("actual local model tracks a synthetic video fixture without uploading frames", async ({
-  page,
-}) => {
-  test.setTimeout(120_000);
-  // This is a generated adult image rendered as a video stream, not a participant or hardware-camera result.
-  await page.addInitScript(() => {
-    Object.defineProperty(navigator.mediaDevices, "getUserMedia", {
-      configurable: true,
-      value: async () => {
-        const image = new Image();
-        image.src = "/images/studio-portrait.jpg";
-        await image.decode();
-        const canvas = document.createElement("canvas");
-        canvas.width = 640;
-        canvas.height = 800;
-        const ctx = canvas.getContext("2d")!;
-        ctx.drawImage(image, 0, 0, 640, 800);
-        const timer = window.setInterval(
-          () => ctx.drawImage(image, 0, 0, 640, 800),
-          90,
+type FrameOptions = { rotate?: number; uneven?: boolean };
+type FixtureWindow = Window & {
+  __steadyFrame?: (url: string, options?: FrameOptions) => Promise<void>;
+};
+
+async function syntheticCamera(page: Page) {
+  const points = REFERENCE_LANDMARKS.heldOut.map(
+    (index) => recordedLandmarks.points[index],
+  );
+  const patch = {
+    x: Math.min(...points.map((point) => point.x)),
+    right: Math.max(...points.map((point) => point.x)),
+    y: Math.min(...points.map((point) => point.y)),
+    bottom: Math.max(...points.map((point) => point.y)),
+  };
+  await page.addInitScript(
+    ({ patch, source }) => {
+      Object.defineProperty(navigator.mediaDevices, "getUserMedia", {
+        configurable: true,
+        value: async () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = 1024;
+          canvas.height = 1280;
+          const context = canvas.getContext("2d")!;
+          let current: HTMLCanvasElement;
+          const paint = async (url: string, options: FrameOptions = {}) => {
+            const image = new Image();
+            image.src = url;
+            await image.decode();
+            const frame = document.createElement("canvas");
+            frame.width = canvas.width;
+            frame.height = canvas.height;
+            const drawing = frame.getContext("2d", {
+              willReadFrequently: true,
+            })!;
+            drawing.fillStyle = "#baa595";
+            drawing.fillRect(0, 0, frame.width, frame.height);
+            drawing.save();
+            drawing.translate(frame.width / 2, frame.height / 2);
+            drawing.rotate(((options.rotate ?? 0) * Math.PI) / 180);
+            drawing.drawImage(
+              image,
+              -frame.width / 2,
+              -frame.height / 2,
+              frame.width,
+              frame.height,
+            );
+            drawing.restore();
+            if (options.uneven) {
+              const pixels = drawing.getImageData(
+                0,
+                0,
+                frame.width,
+                frame.height,
+              );
+              for (
+                let y = Math.floor(patch.y * frame.height);
+                y < Math.ceil(patch.bottom * frame.height);
+                y++
+              )
+                for (
+                  let x = Math.floor(patch.x * frame.width);
+                  x < Math.ceil(patch.right * frame.width);
+                  x++
+                )
+                  for (let channel = 0; channel < 3; channel++) {
+                    const index = (y * frame.width + x) * 4 + channel;
+                    const value = pixels.data[index] / 255;
+                    const linear =
+                      (value <= 0.04045
+                        ? value / 12.92
+                        : ((value + 0.055) / 1.055) ** 2.4) * 0.6;
+                    pixels.data[index] = Math.round(
+                      255 *
+                        (linear <= 0.0031308
+                          ? linear * 12.92
+                          : 1.055 * linear ** (1 / 2.4) - 0.055),
+                    );
+                  }
+              drawing.putImageData(pixels, 0, 0);
+            }
+            current = frame;
+            context.drawImage(frame, 0, 0);
+          };
+          await paint(source);
+          (window as FixtureWindow).__steadyFrame = paint;
+          const timer = window.setInterval(
+            () => context.drawImage(current, 0, 0),
+            80,
+          );
+          const stream = canvas.captureStream(12);
+          stream
+            .getVideoTracks()[0]
+            .addEventListener("ended", () => clearInterval(timer));
+          return stream;
+        },
+      });
+    },
+    { patch, source: ladder.source.url },
+  );
+}
+
+async function setFrame(page: Page, url: string, options: FrameOptions = {}) {
+  await page.evaluate(
+    async ({ url, options }) => {
+      await (window as FixtureWindow).__steadyFrame!(url, options);
+      const video = document.querySelector("video")!;
+      for (let frame = 0; frame < 2; frame++)
+        await new Promise<void>((resolve) =>
+          video.requestVideoFrameCallback(() => resolve()),
         );
-        const stream = canvas.captureStream(12);
-        stream
-          .getVideoTracks()[0]
-          .addEventListener("ended", () => clearInterval(timer));
-        return stream;
-      },
-    });
-  });
+    },
+    { url, options },
+  );
+}
+
+test("real IMAGE and VIDEO models measure synthetic Light→Full pixels and abstain on lighting or pose drift without uploading frames", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(120_000);
+  // Real on-device models over a synthetic video; not a physical usability,
+  // hardware-camera performance, or participant-outcome evaluation.
+  const fixture = await installStudioFixture(page);
+  await syntheticCamera(page);
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  await signInAnonymous(page.request);
-  const created = await page.request.post("/api/sessions", {
-    data: { ...SAMPLE_SETUP, mode: "personal", consent: true },
-  });
-  expect(created.status(), await created.text()).toBe(201);
-  let session = (await created.json()) as StudioSession;
-  const selected = await page.request.post(
-    `/api/sessions/${session.id}/events`,
-    {
-      data: {
-        expectedRevision: session.revision,
-        command: {
-          type: "approve_candidate",
-          candidateId: session.candidates[0].id,
-        },
-      },
-    },
-  );
-  expect(selected.ok(), await selected.text()).toBe(true);
-  session = await selected.json();
-  await page.goto(`/studio/${session.id}/mirror`);
-  await page.getByRole("button", { name: "Open my camera" }).click();
+  await page.goto(`/studio/${fixture.id}/mirror`);
+  await page
+    .getByRole("button", { name: "Open my camera", exact: true })
+    .click();
   await expect(
     page.getByLabel("Live camera in mirror view, unretouched"),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Begin my method" }).click();
-  const calls: string[] = [];
-  page.on("request", (request) => {
-    if (request.method() === "POST" && request.url().includes("/api/"))
-      calls.push(request.url());
-  });
-  await expect(page.locator(".face-guide")).toContainText(
-    "Placement guide · processed on this device",
+  await page
+    .getByRole("button", { name: "Begin my method", exact: true })
+    .click();
+  await expect(page.locator(".baseline-status")).toContainText(
+    "Baseline captured",
     { timeout: 60_000 },
   );
   await expect(page.locator(".face-guide polygon")).toBeVisible();
-  await page.screenshot({
-    path: "test-results/local-model-synthetic-video.png",
+  const light = ladder.records.find(
+    (record) =>
+      record.lookId === "rose" &&
+      record.texture === "satin" &&
+      record.level === "light",
+  )!;
+  const full = ladder.records.find(
+    (record) =>
+      record.lookId === "rose" &&
+      record.texture === "satin" &&
+      record.level === "full",
+  )!;
+  const progress = page.getByRole("progressbar", {
+    name: "Color change toward your chosen target",
   });
-  expect(
-    calls.filter((url) =>
-      /upload|inspiration|checkpoint-analysis|tool-suggestions/.test(url),
+  let observationCount = 0;
+  async function check() {
+    await page
+      .getByRole("button", { name: "Check this step", exact: true })
+      .click();
+    observationCount++;
+    await expect
+      .poll(() => fixture.snapshot().observations.length)
+      .toBe(observationCount);
+    await expect(
+      page.getByRole("button", {
+        name: "I’m ready for the next step",
+        exact: true,
+      }),
+    ).toBeVisible();
+    return fixture.snapshot().observations.at(-1)!.measurement!;
+  }
+  async function close() {
+    await page
+      .getByRole("button", { name: "Close checkpoint", exact: true })
+      .click();
+  }
+
+  await setFrame(page, light.output.url);
+  const measuredLight = await check();
+  expect(measuredLight.provenance).toBe("local_camera");
+  expect(measuredLight.verdict).toBe("build");
+  expect(measuredLight.progress).toBeGreaterThan(0.2);
+  expect(measuredLight.progress).toBeLessThan(0.65);
+  await expect(progress).toBeVisible();
+  await expect(
+    page
+      .locator('[aria-label="Measured color change heatmap"] > g > polygon')
+      .first(),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Hide heatmap", exact: true }).click();
+  await expect(
+    page.locator('[aria-label="Measured color change heatmap"]'),
+  ).toHaveCount(0);
+  await page.getByRole("button", { name: "Show heatmap", exact: true }).click();
+  await page.screenshot({
+    path: testInfo.outputPath("synthetic-light-checkpoint.png"),
+    fullPage: true,
+  });
+  await close();
+
+  await setFrame(page, full.output.url);
+  const measuredFull = await check();
+  expect(measuredFull.verdict).toBe("at_target");
+  expect(Math.abs(measuredFull.progress! - 1)).toBeLessThanOrEqual(0.15);
+  expect(fixture.snapshot().completedActionIds).toEqual([]);
+  await close();
+
+  await setFrame(page, full.output.url, { uneven: true });
+  const relit = await check();
+  expect(relit.verdict).toBe("insufficient");
+  expect(relit.progress).toBeNull();
+  expect(relit.reason).toMatch(/light changed/i);
+  await expect(progress).toHaveCount(0);
+  await close();
+
+  await setFrame(page, full.output.url, { rotate: 22 });
+  const turned = await check();
+  expect(turned.verdict).toBe("insufficient");
+  expect(turned.progress).toBeNull();
+  expect(turned.reason).toMatch(/angle changed|whole face visible/i);
+  await close();
+
+  await setFrame(page, full.output.url);
+  const recovered = await check();
+  expect(recovered.verdict).toBe("at_target");
+  expect(Math.abs(recovered.progress! - 1)).toBeLessThanOrEqual(0.15);
+  const measurements = [measuredLight, measuredFull, relit, turned, recovered];
+  const timingPath = testInfo.outputPath("synthetic-camera-measurements.json");
+  await writeFile(
+    timingPath,
+    JSON.stringify(
+      {
+        evidenceClass: "synthetic_canvas_camera_engineering_test",
+        frame: { width: 1024, height: 1280, framesPerSecond: 12 },
+        browser: page.context().browser()?.version(),
+        timingScope:
+          "Warmed capture, exact IMAGE inference, PNG encoding and pixel calculation; excludes model startup, JPEG encoding, persistence and UI rendering. No physical webcam or participant.",
+        measurements,
+      },
+      null,
+      2,
     ),
-  ).toEqual([]);
+  );
+  await testInfo.attach("synthetic-camera-measurements", {
+    path: timingPath,
+    contentType: "application/json",
+  });
+  for (const command of fixture.commands) {
+    expect(JSON.stringify(command)).not.toMatch(
+      /data:image|landmarks|checkpointUrl|"pixels"|"heatmap"/,
+    );
+    if (command.type === "checkpoint") expect(command.assetId).toBeUndefined();
+  }
+  expect(fixture.blockedRequests).toEqual([]);
+  expect(
+    fixture.snapshot().assets.every((asset) => asset.purpose !== "checkpoint"),
+  ).toBe(true);
   expect(errors).toEqual([]);
+  await close();
   await page
     .getByRole("button", { name: "Pause", exact: true })
     .first()

@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowDown,
-  ArrowRight,
   ArrowUpRight,
   Check,
   Hand,
@@ -13,6 +12,7 @@ import {
   WandSparkles,
 } from "lucide-react";
 import { ButtonLink, ProvenanceLabel } from "@/components/ui";
+import { QuickSample } from "@/components/quick-sample";
 
 function CheekSketch() {
   return (
@@ -81,9 +81,7 @@ export default function HomePage() {
             <ButtonLink href="/studio/new">
               Find your way <ArrowUpRight size={21} aria-hidden />
             </ButtonLink>
-            <Link href="/studio/new?mode=sample" className="text-link">
-              Explore the sample <ArrowRight size={17} aria-hidden />
-            </Link>
+            <QuickSample />
           </div>
           <div className="hero-assurance">
             <span>
@@ -277,10 +275,20 @@ export default function HomePage() {
             </Link>
           ))}
         </div>
-        <p className="collection-note">
-          Color studies are inspiration, not personalized previews. Your virtual
-          previews are made separately with YouCam.
-        </p>
+        <div className="eye-sample-callout">
+          <div>
+            <p className="eyebrow">Defined eyes</p>
+            <h3>
+              Keep the emphasis.
+              <br />
+              <em>Change the movement.</em>
+            </h3>
+            <p>
+              Explore a fine upper line, then adapt it to softly tapped shadow.
+            </p>
+          </div>
+          <QuickSample eyes />
+        </div>
       </section>
 
       <section className="manifesto">

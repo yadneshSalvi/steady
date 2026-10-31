@@ -2,6 +2,109 @@ import { test, expect, type Page } from "@playwright/test";
 import { SAMPLE_SETUP } from "../../src/lib/catalog";
 import type { StudioSession } from "../../src/lib/contracts";
 import { signInAnonymous } from "./support/auth";
+import { installStudioFixture } from "./support/studio-fixture";
+
+test("editing an existing setup keeps its starting photo and saves into the same studio", async ({
+  page,
+}) => {
+  const fixture = await installStudioFixture(page);
+  const sourceId = fixture.snapshot().sourceAssetId;
+  await page.goto(`/studio/new?edit=${fixture.id}`);
+  await expect(
+    page.getByText("Your setup, ready to adjust", { exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await page.getByRole("checkbox", { name: /^Fingertips/ }).uncheck();
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await expect(
+    page.getByRole("img", { name: "Your saved starting photo", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Your starting photo is kept.", { exact: true }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Find my methods", exact: true })
+    .click();
+  await page.waitForURL(`**/studio/${fixture.id}/looks`);
+  expect(fixture.snapshot().sourceAssetId).toBe(sourceId);
+  expect(fixture.snapshot().tools).not.toContain("fingertips");
+  expect(
+    fixture.commands.filter((command) => command.type === "update_setup"),
+  ).toHaveLength(1);
+  expect(fixture.blockedRequests).toEqual([]);
+});
+
+test("a stage conflict preserves its specific recovery message", async ({
+  page,
+}) => {
+  const fixture = await installStudioFixture(page);
+  await page.route(`**/api/sessions/${fixture.id}/events`, async (route) => {
+    if (route.request().postDataJSON().command.type !== "select_preview_level")
+      return route.fallback();
+    await route.fulfill({
+      status: 409,
+      json: {
+        error: {
+          code: "PREVIEW_STAGE",
+          message:
+            "Return to your active method before changing its stopping point.",
+        },
+      },
+    });
+  });
+  await page.goto(`/studio/${fixture.id}/looks`);
+  await page
+    .getByRole("article")
+    .first()
+    .getByRole("button", { name: /Stop at Build/ })
+    .click();
+  await expect(
+    page.getByText(
+      "Return to your active method before changing its stopping point.",
+      { exact: true },
+    ),
+  ).toBeVisible();
+  await expect(page.getByText(/updated in another view/)).toHaveCount(0);
+  expect(fixture.blockedRequests).toEqual([]);
+});
+
+test("setup explains an unknown movement and incompatible tools before asking for a photo", async ({
+  page,
+}) => {
+  await page.goto("/studio/new");
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await expect(
+    page
+      .getByRole("group", { name: "Tapping comfort", exact: true })
+      .getByRole("radio", { name: "Not sure", exact: true }),
+  ).toBeChecked();
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await expect(
+    page.getByText(/Confirm at least one movement that feels good/),
+  ).toBeVisible();
+  await page
+    .getByRole("group", { name: "Tapping comfort", exact: true })
+    .getByRole("radio", { name: "Feels good", exact: true })
+    .check();
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await page.getByRole("checkbox", { name: /^Fingertips/ }).check();
+  await page.getByRole("checkbox", { name: /^Powder blush/ }).check();
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await expect(page.getByText(/No method fits yet/)).toBeVisible();
+  await expect(
+    page.getByLabel("Choose your starting photo", { exact: true }),
+  ).toHaveCount(0);
+  await page.getByRole("checkbox", { name: /^Powder blush/ }).uncheck();
+  await page.getByRole("checkbox", { name: /^Cream blush/ }).check();
+  await expect(page.locator(".setup-feasibility")).toContainText(
+    "1 method fit your choices",
+  );
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await expect(
+    page.getByLabel("Choose your starting photo", { exact: true }),
+  ).toBeVisible();
+});
 
 test("sign-in burst limit ends the spinner and preserves a retryable setup", async ({
   page,
@@ -92,15 +195,14 @@ test("camera denial keeps manual checkpoint and physical confirmation available"
   await page
     .getByRole("button", { name: "Check this step", exact: true })
     .click();
-  await page
-    .getByRole("button", { name: "Use my judgment without a photo" })
-    .click();
+  await page.getByRole("button", { name: "Use my judgment" }).click();
   await expect(
     page.getByRole("button", { name: "I’m ready for the next step" }),
   ).toBeVisible();
   await page
     .getByRole("button", { name: "I’m ready for the next step" })
     .click();
+  await expect(page.locator(".step-label")).toHaveText("Step 02 of 02");
   const state = (await (
     await page.request.get(`/api/sessions/${id}`)
   ).json()) as StudioSession;

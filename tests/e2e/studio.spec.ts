@@ -3,6 +3,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { SAMPLE_SETUP } from "../../src/lib/catalog";
 import type { StudioSession, SessionCommand } from "../../src/lib/contracts";
 import { signInAnonymous } from "./support/auth";
+import { newIsolatedAppContext } from "./support/deployment-context";
 
 test("editorial entry has accessible controls on desktop and mobile", async ({
   page,
@@ -37,7 +38,7 @@ test("owner-bound durable session preserves physical confirmations through adapt
   expect(created.status(), await created.text()).toBe(201);
   let session = (await created.json()) as StudioSession;
   expect(session.candidates.length).toBeGreaterThanOrEqual(2);
-  const other = await browser.newContext();
+  const other = await newIsolatedAppContext(browser);
   const denied = await other.request.get(`/api/sessions/${session.id}`);
   expect(denied.status()).toBe(401);
   await other.close();

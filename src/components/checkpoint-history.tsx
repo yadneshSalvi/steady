@@ -1,0 +1,140 @@
+"use client";
+import { useEffect, useState } from "react";
+import type {
+  CheckpointObservation,
+  PlanAction,
+  StudioSession,
+} from "@/lib/contracts";
+import {
+  createMeasurementTarget,
+  measureCheckpoint,
+} from "@/lib/vision/measure";
+import {
+  loadLocalFrame,
+  readLocalCheckpoint,
+  type LocalCheckpoint,
+} from "@/lib/vision/local-checkpoints";
+import { MeasurementVisual } from "./measurement-visual";
+import { sameStoredMeasurement } from "@/lib/vision/measurement-guidance";
+
+function CheckpointEntry({
+  session,
+  observation,
+  action,
+}: {
+  session: StudioSession;
+  observation: CheckpointObservation;
+  action: PlanAction;
+}) {
+  const [local, setLocal] = useState<LocalCheckpoint | null>(null);
+  const measurement = observation.measurement!;
+  const target = session.assets.find(
+    (asset) => asset.id === measurement.targetAssetId,
+  );
+  useEffect(() => {
+    const remembered = readLocalCheckpoint(session.id, observation.actionId);
+    if (
+      remembered &&
+      remembered.targetUrl === target?.url &&
+      sameStoredMeasurement(remembered.measurement, measurement)
+    ) {
+      queueMicrotask(() => setLocal(remembered));
+      return;
+    }
+    queueMicrotask(() => setLocal(null));
+    if (session.mode !== "sample" || !target) return;
+    const source = session.assets.find(
+      (asset) => asset.id === session.sourceAssetId,
+    );
+    const lightUrl = target.url.replace(/-(light|build|full)\./, "-light.");
+    if (!source || (lightUrl === target.url && !target.url.includes("-light.")))
+      return;
+    let alive = true;
+    void (async () => {
+      const baseline = await loadLocalFrame(source.url);
+      const [preview, checkpoint] = await Promise.all([
+        loadLocalFrame(target.url, baseline.landmarks),
+        loadLocalFrame(lightUrl, baseline.landmarks),
+      ]);
+      const result = measureCheckpoint({
+        baseline,
+        checkpoint,
+        target: createMeasurementTarget(baseline, preview, measurement.region),
+      });
+      if (alive)
+        setLocal({
+          actionId: observation.actionId,
+          checkpointUrl: lightUrl,
+          targetUrl: target.url,
+          result,
+          measurement,
+          landmarks: checkpoint.landmarks,
+          targetLandmarks: baseline.landmarks,
+          isSample: true,
+          elapsedMs: measurement.elapsedMs,
+          width: checkpoint.image.width,
+          height: checkpoint.image.height,
+        });
+    })().catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [session, observation.actionId, target, measurement]);
+  return (
+    <article className="review-checkpoint">
+      <h3>{action.title}</h3>
+      <MeasurementVisual
+        measurement={measurement}
+        local={local}
+        action={action}
+        targetAsset={target}
+        compact
+      />
+      {!local && session.mode === "personal" ? (
+        <p className="small muted">
+          The numbers are saved. This browser no longer holds the checkpoint
+          image.
+        </p>
+      ) : null}
+    </article>
+  );
+}
+
+export function CheckpointHistory({ session }: { session: StudioSession }) {
+  const latest = new Map<string, CheckpointObservation>();
+  for (const observation of session.observations)
+    if (observation.measurement) latest.set(observation.actionId, observation);
+  const entries = [...latest.values()].flatMap((observation) => {
+    const action =
+      observation.actionSnapshot ??
+      session.activePlan?.actions.find(
+        (item) => item.id === observation.actionId,
+      ) ??
+      session.candidates
+        .flatMap((plan) => plan.actions)
+        .find((item) => item.id === observation.actionId);
+    return action ? [{ observation, action }] : [];
+  });
+  if (!entries.length) return null;
+  return (
+    <section
+      className="review-checkpoints"
+      aria-label="Your measured checkpoints"
+    >
+      <p className="eyebrow">From baseline to your chosen target</p>
+      <h2>
+        Your checkpoints,
+        <br />
+        <em>one step at a time.</em>
+      </h2>
+      {entries.map(({ observation, action }) => (
+        <CheckpointEntry
+          key={observation.id}
+          session={session}
+          observation={observation}
+          action={action}
+        />
+      ))}
+    </section>
+  );
+}

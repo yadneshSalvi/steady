@@ -25,8 +25,10 @@ export function PhotoAssist({
   kind,
   onLook,
   onTools,
+  allowSampleInventory = true,
 }: {
   kind: "inspiration" | "tools";
+  allowSampleInventory?: boolean;
   onLook?: (result: InspirationSuggestion) => void;
   onTools?: (
     tools: ToolId[],
@@ -197,7 +199,7 @@ export function PhotoAssist({
                 : "Your tool reference"
           }
         />
-        {kind === "tools" && !file ? (
+        {kind === "tools" && !file && allowSampleInventory ? (
           <Button
             variant="quiet"
             onClick={() => void chooseSampleInventory()}

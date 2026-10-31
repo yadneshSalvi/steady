@@ -65,6 +65,7 @@ export function SiteFooter() {
         <p>A little guidance. Entirely your expression.</p>
       </div>
       <div className="footer-links">
+        <Link href="/evidence">Evidence &amp; limits</Link>
         <Link href="/settings/access#your-data">Your photos & privacy</Link>
         <Link href="/settings/access">Access & comfort</Link>
         <span>Made to move with you.</span>

@@ -3,7 +3,6 @@ import {
   ArrowLeft,
   ArrowRight,
   Check,
-  ChevronDown,
   CircleHelp,
   LoaderCircle,
   Sparkles,
@@ -12,6 +11,7 @@ import {
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import type { PlanAction, Provenance } from "@/lib/contracts";
 import { PRODUCT_LABELS, TOOL_LABELS } from "@/lib/catalog";
+import { ProvenanceChip } from "./provenance-chip";
 
 export function Button({
   children,
@@ -166,23 +166,25 @@ export function ProvenanceLabel({
   className = "",
   recordedAt,
 }: {
-  kind: Provenance;
+  kind: Provenance | "simulated_checkpoint";
   className?: string;
   recordedAt?: string;
 }) {
-  const text =
-    kind === "synthetic_inspiration"
-      ? "AI-created inspiration"
-      : kind === "virtual_preview"
-        ? recordedAt
-          ? "Recorded YouCam preview"
-          : "YouCam virtual preview"
-        : "Your actual photo";
   return (
-    <span className={`provenance ${className}`}>
-      <span aria-hidden />
-      {text}
-    </span>
+    <ProvenanceChip
+      kind={
+        kind === "simulated_checkpoint"
+          ? "simulated"
+          : kind === "synthetic_inspiration"
+            ? "synthetic"
+            : kind === "actual_capture"
+              ? "photo"
+              : recordedAt
+                ? "recorded"
+                : "fresh"
+      }
+      className={className}
+    />
   );
 }
 
@@ -262,43 +264,18 @@ export function ActionList({
 }
 
 export function DraftNote({ short = false }: { short?: boolean }) {
-  if (short)
-    return (
-      <p className="draft-note">
-        <Sparkles size={14} aria-hidden />
-        AI-assisted guidance · your judgment comes first.
-      </p>
-    );
   return (
-    <details className="guidance-disclosure">
-      <summary>
-        <Sparkles size={16} aria-hidden />
-        About this guidance <ChevronDown size={16} aria-hidden />
-      </summary>
-      <p>
-        STEADY combines structured cosmetic methods with AI assistance. Previews
-        illustrate appearance; they don’t establish physical fit or completion.
-        Follow your product’s directions, choose what feels comfortable, and
-        pause or change any step.
-      </p>
-    </details>
+    <p className={`draft-note ${short ? "draft-note--short" : ""}`}>
+      <Sparkles size={14} aria-hidden />
+      <Link href="/evidence">Guidance &amp; evidence</Link>
+    </p>
   );
 }
 
 export function SampleDisclosure() {
   return (
-    <details className="sample-disclosure">
-      <summary>
-        <Sparkles size={16} aria-hidden />
-        <span>Sample · AI-created portrait</span>
-        <ChevronDown size={16} aria-hidden />
-      </summary>
-      <p>
-        This walkthrough uses a fictional adult portrait and an example profile.
-        Requested YouCam previews are real renders of that synthetic image.
-        Exploring the sample doesn’t represent a real participant or physical
-        result.
-      </p>
-    </details>
+    <div className="sample-disclosure">
+      <ProvenanceChip kind="synthetic" />
+    </div>
   );
 }
