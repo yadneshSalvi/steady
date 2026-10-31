@@ -1,0 +1,31 @@
+# Local strategy and implementation plans
+/plans/
+
+# Credentials and environment overrides
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Dependencies and generated build output
+node_modules/
+.pnpm-store/
+.next/
+.vercel/
+.turbo/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Local test output and private user data
+playwright-report/
+test-results/
+/uploads/
+/private/
+/artifacts/private/
+
+# Local machine files
+.DS_Store
+*.log
