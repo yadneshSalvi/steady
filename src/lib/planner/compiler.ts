@@ -7,7 +7,11 @@ import type {
   SetupInput,
   ToolId,
 } from "../contracts";
-import { makeRecipe, validateEffects } from "../youcam/recipes";
+import {
+  makeRecipe,
+  makePreviewVariants,
+  validateEffects,
+} from "../youcam/recipes";
 import { TECHNIQUES, techniqueById, type TechniqueDefinition } from "./library";
 
 export type PlanningConflictCode =
@@ -17,6 +21,7 @@ export type PlanningConflictCode =
   | "tool_unconfirmed"
   | "product_unconfirmed"
   | "lip_requirements"
+  | "eye_requirements"
   | "invalid_plan"
   | "unknown_technique"
   | "invalid_dependency"
@@ -99,18 +104,115 @@ function makeAction(
     title:
       region === "lips"
         ? technique.title
-        : `Your ${region === "left_cheek" ? "left" : "right"} cheek`,
+        : region === "left_eye" || region === "right_eye"
+          ? `Your ${region === "left_eye" ? "left" : "right"} upper lid`
+          : `Your ${region === "left_cheek" ? "left" : "right"} cheek`,
     instruction: technique.instruction(region),
     detail:
-      "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+      technique.regionKind === "eye"
+        ? "Use only products and tools labeled for eyelid makeup. Apply to comfortably closed upper-lid skin, then move your hands away and match your baseline eye position before checking. You can pause or skip."
+        : "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
     stoppingCue: technique.stoppingCue,
     region,
     motion: technique.motion,
+    ...(technique.precision ? { precision: technique.precision } : {}),
     tool: technique.tool,
     product: technique.product,
     dependsOn: dependency ? [dependency] : [],
     alternativeIds: [...technique.alternatives],
     evidencePolicy: "user_judgment",
+  };
+}
+
+function regionKind(region: Region): TechniqueDefinition["regionKind"] {
+  return region === "lips"
+    ? "lips"
+    : region === "left_eye" || region === "right_eye"
+      ? "eye"
+      : "cheek";
+}
+
+function compileEyes(
+  setup: SetupInput,
+  technique: TechniqueDefinition,
+): CandidatePlan {
+  const routeId = technique.routeId!;
+  const id = `eyes-${routeId}-${technique.id}-v1`;
+  const left = makeAction(technique, "left_eye", `${id}:left_eye`);
+  const right = makeAction(technique, "right_eye", `${id}:right_eye`, left.id);
+  return {
+    id,
+    routeId,
+    name: technique.title,
+    tagline:
+      routeId === "liner"
+        ? "Fine upper line · short strokes"
+        : "Soft eye shadow · tapping",
+    description:
+      routeId === "liner"
+        ? "Defines the upper lash line with precise short strokes and your confirmed eyeliner pen."
+        : "Keeps eye emphasis with a softly tapped shadow edge instead of a fine line.",
+    tools: [technique.tool],
+    attributes: [
+      "Eye emphasis",
+      routeId === "liner" ? "Fine upper line" : "Soft upper-lid shadow",
+    ],
+    tradeoffs: [
+      routeId === "liner"
+        ? "Uses high precision short strokes you confirmed comfortable."
+        : "Uses low precision tapping; the soft edge changes the fine-line appearance.",
+      `Requires ${PRODUCT_LABELS[technique.product].toLowerCase()} and ${TOOL_LABELS[technique.tool].toLowerCase()} suitable for eyelid makeup.`,
+    ],
+    actions: [left, right],
+    previewStatus: "not_requested",
+    recipe: makeRecipe("eyes", routeId, false),
+    previewVariants: makePreviewVariants("eyes", routeId, false),
+    selectedPreviewVariantId: "full",
+  };
+}
+
+function planEyes(setup: SetupInput): {
+  candidates: CandidatePlan[];
+  conflicts: PlanningConflict[];
+} {
+  if (setup.includeLips)
+    return {
+      candidates: [],
+      conflicts: [
+        planningConflict(
+          "eye_requirements",
+          "Defined eyes is an eye-only goal.",
+          "Leave optional lip color off for this goal.",
+        ),
+      ],
+    };
+  const techniques = TECHNIQUES.filter(
+    (technique) =>
+      technique.regionKind === "eye" &&
+      technique.lookIds.includes(setup.lookId),
+  );
+  const plans = techniques
+    .filter((technique) => !requirements(technique, setup).length)
+    .map((technique) => compileEyes(setup, technique))
+    .filter((plan) => validatePlan(plan, setup).valid)
+    .sort(
+      (a, b) => resourceCost(a) - resourceCost(b) || a.id.localeCompare(b.id),
+    );
+  const best = new Map<CandidatePlan["routeId"], CandidatePlan>();
+  for (const plan of plans)
+    if (!best.has(plan.routeId)) best.set(plan.routeId, plan);
+  const candidates = [...best.values()].sort(
+    (a, b) =>
+      ["liner", "shadow"].indexOf(a.routeId) -
+      ["liner", "shadow"].indexOf(b.routeId),
+  );
+  return {
+    candidates,
+    conflicts: candidates.length
+      ? []
+      : uniqueConflicts(
+          techniques.flatMap((technique) => requirements(technique, setup)),
+        ),
   };
 }
 
@@ -138,7 +240,9 @@ function compile(
         ? "Powder blush · broad blending"
         : routeId === "sponge"
           ? "Cream blush · sponge tapping"
-          : "Cream blush · fingertip tapping",
+          : routeId === "buff"
+            ? "Cream blush · broad brush blending"
+            : "Cream blush · fingertip tapping",
     description: `${look.attributes[0]} using your ${TOOL_LABELS[cheek.tool].toLowerCase()} and the ${MOTION_LABELS[cheek.motion].toLowerCase()} movement you confirmed comfortable.`,
     tools: [...new Set(actions.map((action) => action.tool))],
     attributes: [
@@ -151,12 +255,16 @@ function compile(
         ? "Uses a wide brush and powder rather than tapping cream blush."
         : routeId === "sponge"
           ? "Uses a sponge rather than direct fingertip application."
-          : "Uses fingertips rather than a separate cheek tool.",
+          : routeId === "buff"
+            ? "Uses a wide brush to blend cream blush."
+            : "Uses fingertips rather than a separate cheek tool.",
       routeId === "sweep"
         ? "Requires powder blush and a wide blush brush."
         : routeId === "sponge"
           ? "Requires cream blush and a makeup sponge."
-          : "Requires cream blush; no separate cheek tool.",
+          : routeId === "buff"
+            ? "Requires cream blush and a wide brush suitable for cream products."
+            : "Requires cream blush; no separate cheek tool.",
       ...(lip
         ? [
             `Lip color uses ${TOOL_LABELS[lip.tool].toLowerCase()} and ${MOTION_LABELS[lip.motion].toLowerCase()}.`,
@@ -166,6 +274,8 @@ function compile(
     actions,
     previewStatus: "not_requested",
     recipe: makeRecipe(setup.lookId, routeId, Boolean(lip)),
+    previewVariants: makePreviewVariants(setup.lookId, routeId, Boolean(lip)),
+    selectedPreviewVariantId: "full",
   };
 }
 
@@ -195,6 +305,7 @@ export function planCandidates(setup: SetupInput): {
       ],
     };
   }
+  if (setup.lookId === "eyes") return planEyes(setup);
   const cheeks = TECHNIQUES.filter(
     (technique) =>
       technique.regionKind === "cheek" &&
@@ -239,10 +350,12 @@ export function planCandidates(setup: SetupInput): {
   }
   const candidates = [...bestByRoute.values()].sort(
     (a, b) =>
-      ["tap", "sweep", "sponge"].indexOf(a.routeId) -
-      ["tap", "sweep", "sponge"].indexOf(b.routeId),
+      ["tap", "sweep", "sponge", "buff"].indexOf(a.routeId) -
+      ["tap", "sweep", "sponge", "buff"].indexOf(b.routeId),
   );
-  const valid = candidates.filter((plan) => validatePlan(plan, setup).valid);
+  const valid = candidates
+    .filter((plan) => validatePlan(plan, setup).valid)
+    .slice(0, 3);
   return valid.length
     ? { candidates: valid, conflicts: [] }
     : {
@@ -271,7 +384,7 @@ export function repairCandidates(
   const choices = remaining.map((action) => {
     const relevant = TECHNIQUES.filter(
       (technique) =>
-        (technique.regionKind === "lips") === (action.region === "lips") &&
+        technique.regionKind === regionKind(action.region) &&
         technique.lookIds.includes(setup.lookId),
     );
     return relevant.filter((technique) => {
@@ -294,18 +407,18 @@ export function repairCandidates(
     );
   const candidates = combinations
     .filter((combination) => {
-      const cheeks = combination.filter(
-        (technique) => technique.regionKind === "cheek",
+      const paired = combination.filter(
+        (technique) => technique.regionKind !== "lips",
       );
       return (
-        !cheeks.length ||
-        cheeks.every((technique) => technique.id === cheeks[0].id)
+        !paired.length ||
+        paired.every((technique) => technique.id === paired[0].id)
       );
     })
     .map((combination) => {
       const candidate = structuredClone(original);
       const remainingCheek = combination.find(
-        (technique) => technique.regionKind === "cheek",
+        (technique) => technique.regionKind !== "lips",
       );
       candidate.routeId = remainingCheek?.routeId ?? original.routeId;
       candidate.id = `${setup.lookId}-${candidate.routeId}-repair-${combination.map((technique) => technique.id).join("-")}`;
@@ -337,12 +450,45 @@ export function repairCandidates(
           ),
         ),
       ];
+      // A new physical method must carry its own target recipe. Completed
+      // actions remain untouched; the preview describes the unfinished region.
+      candidate.previewVariants = makePreviewVariants(
+        setup.lookId,
+        candidate.routeId,
+        setup.includeLips,
+      );
+      candidate.selectedPreviewVariantId = candidate.previewVariants.some(
+        (variant) => variant.id === original.selectedPreviewVariantId,
+      )
+        ? original.selectedPreviewVariantId!
+        : "full";
+      candidate.recipe = structuredClone(
+        candidate.previewVariants.find(
+          (variant) => variant.id === candidate.selectedPreviewVariantId,
+        )!.recipe,
+      );
+      candidate.previewStatus = "not_requested";
+      delete candidate.previewAsset;
+      delete candidate.previewJobId;
+      delete candidate.previewError;
       return candidate;
     })
     .filter((candidate) => validatePlan(candidate, setup, completed).valid)
-    .sort(
-      (a, b) => resourceCost(a) - resourceCost(b) || a.id.localeCompare(b.id),
-    );
+    .sort((a, b) => {
+      const productChanges = (plan: CandidatePlan) =>
+        plan.actions
+          .slice(completed.length)
+          .reduce(
+            (count, action, index) =>
+              count + Number(action.product !== remaining[index].product),
+            0,
+          );
+      return (
+        productChanges(a) - productChanges(b) ||
+        resourceCost(a) - resourceCost(b) ||
+        a.id.localeCompare(b.id)
+      );
+    });
   return {
     candidates,
     conflicts: candidates.length ? [] : uniqueConflicts(problems),
@@ -360,10 +506,14 @@ export function validatePlan(
     completedActions.map((action) => [action.id, action]),
   );
   const ids = new Set<string>();
-  const regions = setup.includeLips
-    ? ["left_cheek", "right_cheek", "lips"]
-    : ["left_cheek", "right_cheek"];
+  const regions =
+    setup.lookId === "eyes"
+      ? ["left_eye", "right_eye"]
+      : setup.includeLips
+        ? ["left_cheek", "right_cheek", "lips"]
+        : ["left_cheek", "right_cheek"];
   if (
+    (setup.lookId === "eyes" && setup.includeLips) ||
     !plan.actions.length ||
     plan.actions.length !== regions.length ||
     plan.actions.some((action, index) => action.region !== regions[index])
@@ -372,7 +522,9 @@ export function validatePlan(
       planningConflict(
         "invalid_plan",
         "Actions must cover the agreed anatomical regions in order.",
-        "Rebuild the plan with left cheek, right cheek and optional lips.",
+        setup.lookId === "eyes"
+          ? "Rebuild the eye-only plan with left and right upper lids."
+          : "Rebuild the plan with left cheek, right cheek and optional lips.",
       ),
     );
   }
@@ -413,9 +565,10 @@ export function validatePlan(
       action.validation !== "draft" ||
       action.evidencePolicy !== "user_judgment" ||
       action.motion !== technique.motion ||
+      action.precision !== technique.precision ||
       action.tool !== technique.tool ||
       action.product !== technique.product ||
-      (action.region === "lips") !== (technique.regionKind === "lips") ||
+      regionKind(action.region) !== technique.regionKind ||
       action.instruction !== technique.instruction(action.region) ||
       action.stoppingCue !== technique.stoppingCue ||
       JSON.stringify(action.alternativeIds) !==
@@ -435,6 +588,18 @@ export function validatePlan(
           "invalid_plan",
           "This method does not support the selected look.",
           "Choose a supported look or method.",
+        ),
+      );
+    if (
+      setup.lookId === "eyes" &&
+      !completed.has(action.id) &&
+      technique.routeId !== plan.routeId
+    )
+      problems.push(
+        planningConflict(
+          "invalid_plan",
+          "An unfinished eye uses a different appearance method from its target.",
+          "Use the selected eye method for unfinished work; preserve completed eyes separately.",
         ),
       );
     if (!completed.has(action.id))
@@ -468,6 +633,18 @@ export function validatePlan(
   }
   try {
     const effects = validateEffects(plan.recipe);
+    const eyeGoal = setup.lookId === "eyes";
+    const expectedCategory = eyeGoal
+      ? plan.routeId === "liner"
+        ? "eye_liner"
+        : "eye_shadow"
+      : "blush";
+    if (
+      !effects.some((effect) => effect.category === expectedCategory) ||
+      (eyeGoal && plan.routeId !== "liner" && plan.routeId !== "shadow") ||
+      (!eyeGoal && (plan.routeId === "liner" || plan.routeId === "shadow"))
+    )
+      throw new Error("Appearance family mismatch");
     if (
       effects.some((effect) => effect.category === "lip_color") !==
       setup.includeLips

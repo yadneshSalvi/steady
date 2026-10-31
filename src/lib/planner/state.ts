@@ -7,7 +7,8 @@ import type {
   StudioAsset,
   StudioSession,
 } from "../contracts";
-import { softerRecipe } from "../youcam/recipes";
+import { selectPreviewLevel } from "../youcam/recipes";
+import { PRODUCT_LABELS } from "../catalog";
 import {
   planCandidates,
   planningConflict,
@@ -191,16 +192,6 @@ function propose(
   session.stage = "paused";
   session.resumeRequired = true;
   session.adaptation = undefined;
-  if (command.reason === "softer" && preserved.length) {
-    session.conflicts = [
-      planningConflict(
-        "target_requires_removal",
-        "A softer full-look preview could imply reducing product already applied.",
-        "Keep the current result, change the remaining method, ask for assistance, or finish here. This library has no supported removal method.",
-      ),
-    ];
-    return;
-  }
   const preferences: Preferences = structuredClone(session.preferences);
   if (command.reason === "movement")
     preferences.movements[action.motion] = "avoid";
@@ -253,20 +244,35 @@ function propose(
     return result;
   });
   candidate.tools = [...new Set(candidate.actions.map((item) => item.tool))];
-  const changesGoal = command.reason === "softer";
-  candidate.recipe = changesGoal
-    ? softerRecipe(active.recipe)
-    : structuredClone(active.recipe);
-  // Reusing a target with exactly the same source/recipe is explicit; a new goal
-  // never inherits an old preview or an in-flight job's identity.
-  candidate.previewStatus = changesGoal
-    ? "not_requested"
-    : active.previewStatus === "ready"
-      ? "ready"
-      : "not_requested";
-  candidate.previewAsset = changesGoal ? undefined : active.previewAsset;
-  candidate.previewJobId = undefined;
-  candidate.previewError = undefined;
+  const eyeMethodChanged =
+    session.lookId === "eyes" && candidate.routeId !== active.routeId;
+  const changesGoal = command.reason === "softer" || eyeMethodChanged;
+  // Reuse only an exact source/recipe target, never the previous method's
+  // picture just because the physical look kept its name.
+  for (const variant of candidate.previewVariants ?? []) {
+    const matching = [active, ...session.candidates]
+      .flatMap((plan) => plan.previewVariants ?? [])
+      .find(
+        (entry) =>
+          entry.previewStatus === "ready" &&
+          entry.previewAsset &&
+          JSON.stringify(entry.recipe) === JSON.stringify(variant.recipe),
+      );
+    if (matching) {
+      variant.previewStatus = "ready";
+      variant.previewAsset = structuredClone(matching.previewAsset);
+    }
+  }
+  const requestedLevel =
+    command.reason === "softer"
+      ? "light"
+      : (active.selectedPreviewVariantId ?? "full");
+  selectPreviewLevel(
+    candidate,
+    candidate.previewVariants?.some((variant) => variant.id === requestedLevel)
+      ? requestedLevel
+      : "full",
+  );
   candidate.tradeoffs = [
     ...candidate.tradeoffs,
     ...(preserved.length
@@ -274,9 +280,16 @@ function propose(
           "Completed areas stay as you applied them. Only remaining actions change.",
         ]
       : []),
-    ...(changesGoal
+    ...(command.reason === "softer"
       ? [
-          "Proposes a subtler virtual color target. No physical quantity has been inferred.",
+          "Uses the Light target for the remaining area. Completed areas keep their recorded target.",
+        ]
+      : []),
+    ...(eyeMethodChanged
+      ? [
+          candidate.routeId === "shadow"
+            ? "Changes the remaining eye from a fine line to softly tapped shadow while keeping eye emphasis."
+            : "Changes the remaining eye from soft shadow to a fine upper line while keeping eye emphasis.",
         ]
       : []),
   ];
@@ -299,11 +312,30 @@ function propose(
     removedActionIds: active.actions
       .filter((item) => !session.completedActionIds.includes(item.id))
       .map((item) => item.id),
-    explanation: changesGoal
-      ? "Proposes a softer color target before application. The target changes only after your approval."
-      : `Keeps ${preserved.length} confirmed action${preserved.length === 1 ? "" : "s"} and changes the remaining method. No applied makeup is removed.`,
+    explanation: eyeMethodChanged
+      ? `Keeps eye emphasis and changes ${preserved.length ? "the remaining eye" : "the unapplied eyes"} from ${active.routeId === "liner" ? "a fine upper line" : "soft shadow"} to ${candidate.routeId === "shadow" ? "softly tapped shadow" : "a fine upper line"}. ${preserved.length ? "Your completed eye stays exactly as applied; the new preview describes unfinished work." : "This changes the appearance goal as well as the method."}`
+      : changesGoal
+        ? "Sets Light as the stopping point for the remaining area. Your completed work stays as you applied it."
+        : preserved.length
+          ? `Keeps ${preserved.length} confirmed action${preserved.length === 1 ? "" : "s"} and changes the remaining method.`
+          : "Changes your next movement while keeping the color you chose.",
     changesGoal,
     revisedPreferences: preferences,
+    productChangeNote:
+      session.lookId === "eyes"
+        ? preserved.some(
+            (item) =>
+              item.product !== candidate.actions[preserved.length]?.product,
+          )
+          ? `Your completed ${preserved[0].region === "left_eye" ? "left" : "right"} eye keeps ${PRODUCT_LABELS[preserved[0].product].toLowerCase()}. The remaining eye uses ${PRODUCT_LABELS[candidate.actions[preserved.length].product].toLowerCase()}, so the two sides may differ. Choose whether to keep this change, pause, or stop; no applied product is removed.`
+          : undefined
+        : preserved.some(
+              (item) =>
+                item.region !== "lips" &&
+                item.product !== candidate.actions[preserved.length]?.product,
+            )
+          ? `Your completed cheek used ${PRODUCT_LABELS[preserved.find((item) => item.region !== "lips")!.product].toLowerCase()}. ${PRODUCT_LABELS[candidate.actions[preserved.length].product]} on the remaining cheek may look different. You can keep the same cream product with a sponge or a suitable brush, or choose this change and soften the finished edge with a clean tool.`
+          : undefined,
   };
   // Reporting a difficult motion takes effect immediately; declining a proposal
   // does not silently turn that motion back into a comfortable choice.
@@ -335,6 +367,90 @@ export function applyCommand(
   let eventType: string = command.type;
   let eventDetail: string | undefined;
   switch (command.type) {
+    case "update_setup": {
+      requireStage(session, ["choosing", "ready"]);
+      if (
+        session.completedActionIds.length ||
+        command.setup.mode !== session.mode
+      )
+        throw new DomainError(
+          "immutable_physical_state",
+          "Keep this studio's source and completed work. Start a new studio to change its mode.",
+        );
+      const planned = planCandidates({
+        ...command.setup,
+        sourceAssetId: session.sourceAssetId,
+      });
+      if (!planned.candidates.length)
+        throw new DomainError(
+          "invalid_plan",
+          "Confirm a comfortable movement and its matching tool and product before continuing.",
+        );
+      session.lookId = command.setup.lookId;
+      session.includeLips = command.setup.includeLips;
+      session.preferences = structuredClone(command.setup.preferences);
+      session.tools = [...command.setup.tools];
+      session.products = [...command.setup.products];
+      for (const candidate of planned.candidates) {
+        for (const variant of candidate.previewVariants ?? []) {
+          const old = session.candidates
+            .flatMap((item) => item.previewVariants ?? [])
+            .find(
+              (entry) =>
+                entry.previewStatus === "ready" &&
+                entry.previewAsset &&
+                JSON.stringify(entry.recipe) === JSON.stringify(variant.recipe),
+            );
+          if (old) {
+            variant.previewStatus = "ready";
+            variant.previewAsset = structuredClone(old.previewAsset);
+          }
+        }
+        selectPreviewLevel(
+          candidate,
+          candidate.selectedPreviewVariantId ?? "full",
+        );
+      }
+      session.candidates = planned.candidates;
+      session.conflicts = [];
+      session.activePlan = undefined;
+      session.selectedCandidateId = undefined;
+      session.stage = "choosing";
+      eventDetail = "Setup edited; the existing source photo was kept.";
+      break;
+    }
+    case "select_preview_level": {
+      requireStage(session, ["choosing", "ready", "applying", "paused"]);
+      const candidate = session.candidates.find(
+        (item) => item.id === command.candidateId,
+      );
+      if (!candidate)
+        throw new DomainError("unknown_candidate", "Choose a current method.");
+      if (
+        !candidate.previewVariants?.some(
+          (variant) => variant.id === command.level,
+        )
+      )
+        throw new DomainError(
+          "invalid_plan",
+          "Choose an available stopping point for this method.",
+        );
+      if (
+        (session.stage === "applying" || session.stage === "paused") &&
+        candidate.id !== session.activePlan?.id
+      )
+        throw new DomainError(
+          "invalid_transition",
+          "Use Make this easier to change the active method.",
+        );
+      selectPreviewLevel(candidate, command.level);
+      if (session.activePlan?.id === candidate.id) {
+        selectPreviewLevel(session.activePlan, command.level);
+        if (session.completedActionIds.length) session.goalChanged = true;
+      }
+      eventDetail = `Stopping point: ${command.level}. Only remaining actions use this target.`;
+      break;
+    }
     case "approve_candidate": {
       requireStage(session, ["choosing", "ready"]);
       if (session.completedActionIds.length)
@@ -407,15 +523,57 @@ export function applyCommand(
           "Select an actual checkpoint capture for this action.",
         );
       }
+      const measured = command.measurement;
+      if (
+        measured &&
+        (measured.region !== currentAction(session)?.region ||
+          measured.provenance !==
+            (session.mode === "sample" ? "simulated" : "local_camera"))
+      )
+        throw new DomainError(
+          "invalid_asset",
+          "The local measurement must describe this action and source.",
+        );
+      if (
+        measured &&
+        !session.assets.some(
+          (item) =>
+            item.id === measured.targetAssetId &&
+            item.provenance === "virtual_preview",
+        )
+      )
+        throw new DomainError(
+          "invalid_asset",
+          "The measurement needs this studio's YouCam target.",
+        );
+      if (
+        measured &&
+        (session.activePlan?.previewAsset?.id !== measured.targetAssetId ||
+          (session.activePlan?.selectedPreviewVariantId ?? "full") !==
+            measured.targetLevel)
+      )
+        throw new DomainError(
+          "invalid_asset",
+          "The checkpoint target changed. Check this step against the current stopping point.",
+        );
       session.observations.push({
         id: `${session.id}:observation:${session.revision + 1}`,
         actionId: command.actionId,
+        actionSnapshot: structuredClone(currentAction(session)!),
         assetId: asset?.id,
-        state: asset ? "unsupported_action" : "insufficient_evidence",
-        reason: asset
-          ? "Automatic cosmetic feedback is unavailable for this check. You decide whether to keep this result."
-          : "No actual checkpoint was selected. You can choose a capture or use your own judgment.",
-        method: "user_judgment_only_v1",
+        state: measured
+          ? "measured_checkpoint"
+          : asset
+            ? "unsupported_action"
+            : "insufficient_evidence",
+        reason: measured
+          ? (measured.reason ??
+            `Local color change: ${Math.round((measured.progress ?? 0) * 100)}% of the ${measured.targetLevel} target.`)
+          : asset
+            ? "Automatic cosmetic feedback is unavailable for this check. You decide whether to keep this result."
+            : "Use your judgment to keep this step or make an adjustment.",
+        method: measured ? "local_color_v1" : "user_judgment_only_v1",
+        measurement: measured ? structuredClone(measured) : undefined,
         createdAt: at,
       });
       actionId = command.actionId;
@@ -489,7 +647,14 @@ export function applyCommand(
       session.preferences = structuredClone(proposal.revisedPreferences);
       session.activePlan = structuredClone(proposal.candidate);
       session.selectedCandidateId = proposal.candidate.id;
-      session.candidates.push(structuredClone(proposal.candidate));
+      session.candidates = [
+        structuredClone(proposal.candidate),
+        ...session.candidates.filter(
+          (item) =>
+            item.id !== proposal.fromCandidateId &&
+            item.id !== proposal.candidate.id,
+        ),
+      ].slice(0, 3);
       session.goalChanged ||= proposal.changesGoal;
       session.adaptation = undefined;
       session.stage = "paused";
@@ -666,6 +831,10 @@ export function applyCommand(
     actionId,
     detail: eventDetail,
     provenance: command.type === "attach_asset" ? "system" : "user_confirmed",
+    measurement:
+      command.type === "checkpoint" && command.measurement
+        ? structuredClone(command.measurement)
+        : undefined,
   });
   return session;
 }

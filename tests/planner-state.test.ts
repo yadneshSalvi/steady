@@ -136,7 +136,10 @@ describe("physical-state transition invariants", () => {
       product: "powder_blush",
       dependsOn: [applied.id],
     });
-    expect(proposal.candidate.recipe).toEqual(originalRecipe);
+    expect(proposal.candidate.recipe).not.toEqual(originalRecipe);
+    expect(proposal.candidate.previewAsset).toBeUndefined();
+    expect(proposal.productChangeNote).toContain("cream blush");
+    expect(proposal.productChangeNote).toContain("may look different");
     expect(() =>
       applyCommand(session, { type: "accept_adaptation", proposalId: "stale" }),
     ).toThrow(DomainError);
@@ -282,9 +285,13 @@ describe("physical-state transition invariants", () => {
       type: "propose_adaptation",
       reason: "softer",
     });
-    expect(applied.adaptation).toBeUndefined();
-    expect(applied.conflicts[0].code).toBe("target_requires_removal");
+    expect(applied.adaptation!.candidate.selectedPreviewVariantId).toBe(
+      "light",
+    );
+    expect(applied.adaptation!.explanation).toContain("remaining area");
+    expect(applied.adaptation!.candidate.actions[0]).toEqual(physical);
     expect(applied.activePlan!.actions[0]).toEqual(physical);
+    expect(applied.goalChanged).toBe(false);
   });
 
   it("classifies complete, accepted-partial, stopped and unassessed sample outcomes distinctly", () => {

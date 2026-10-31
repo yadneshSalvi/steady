@@ -112,9 +112,14 @@ describe("finite method compiler", () => {
                   blend &&
                     input.tools.includes("wide_brush") &&
                     input.products.includes("powder_blush"),
+                ) +
+                Number(
+                  blend &&
+                    input.tools.includes("wide_brush") &&
+                    input.products.includes("cream_blush"),
                 )
               : 0;
-            expect(planned.candidates.length).toBe(expectedCount);
+            expect(planned.candidates.length).toBe(Math.min(3, expectedCount));
             if (!expectedCount)
               expect(planned.conflicts.length).toBeGreaterThan(0);
             for (const plan of planned.candidates) {
@@ -132,6 +137,38 @@ describe("finite method compiler", () => {
     }
     expect(cases).toBe(6912);
   }, 30_000);
+
+  it("describes the cream brush's own movement and supplies when it is offered beside fingertips", () => {
+    const input = setup();
+    input.tools = ["fingertips", "wide_brush"];
+    input.products = ["cream_blush"];
+    input.preferences.movements = {
+      tapping: "comfortable",
+      blending: "comfortable",
+      short_strokes: "unknown",
+    };
+    const candidates = planCandidates(input).candidates;
+    expect(candidates.map((candidate) => candidate.routeId)).toEqual([
+      "tap",
+      "buff",
+    ]);
+    const brush = candidates[1];
+    expect(brush.name).toBe("Brush-blended cream");
+    expect(brush.tagline).toBe("Cream blush · broad brush blending");
+    expect(brush.tools).toEqual(["wide_brush"]);
+    expect(brush.tradeoffs).toEqual([
+      "Uses a wide brush to blend cream blush.",
+      "Requires cream blush and a wide brush suitable for cream products.",
+    ]);
+    expect(
+      brush.actions.every(
+        (action) =>
+          action.tool === "wide_brush" &&
+          action.motion === "blending" &&
+          action.product === "cream_blush",
+      ),
+    ).toBe(true);
+  });
 
   it("requires lip product and an independently compatible lip tool/motion", () => {
     const input = setup();

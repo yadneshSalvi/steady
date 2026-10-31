@@ -3,7 +3,17 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { StudioAsset, StudioSession } from "../contracts";
-import { validateEffects } from "../youcam/recipes";
+import { selectPreviewLevel, validateEffects } from "../youcam/recipes";
+import { RECORDED_LADDER_MANIFEST_SHA256 } from "../youcam/ladder-integrity";
+import {
+  RecordedLadderManifestSchema,
+  type RecordedLadderManifest,
+} from "../youcam/ladder-recorded";
+import { RECORDED_EYES_MANIFEST_SHA256 } from "../youcam/eye-integrity";
+import {
+  RecordedEyesManifestSchema,
+  type RecordedEyesManifest,
+} from "../youcam/eye-recorded";
 import { RECORDED_MANIFEST_SHA256 } from "../youcam/recorded-integrity";
 import {
   RecordedSamplesManifestSchema,
@@ -48,6 +58,62 @@ async function verifiedCatalog(): Promise<RecordedSamplesManifest | undefined> {
 
 // This caches immutable public deployment assets, never jobs or user captures.
 let catalog: Promise<RecordedSamplesManifest | undefined> | undefined;
+let ladders: Promise<RecordedLadderManifest | undefined> | undefined;
+let eyes: Promise<RecordedEyesManifest | undefined> | undefined;
+
+async function verifiedEyes(): Promise<RecordedEyesManifest | undefined> {
+  if (!RECORDED_EYES_MANIFEST_SHA256) return undefined;
+  try {
+    const root = join(process.cwd(), "public");
+    const [raw, source] = await Promise.all([
+      readFile(join(root, "examples/recorded-eyes.json")),
+      readFile(join(root, "images/studio-portrait.jpg")),
+    ]);
+    if (hash(raw) !== RECORDED_EYES_MANIFEST_SHA256) return undefined;
+    const manifest = RecordedEyesManifestSchema.parse(
+      JSON.parse(raw.toString("utf8")),
+    );
+    if (hash(source) !== manifest.source.sha256) return undefined;
+    const verified = await Promise.all(
+      manifest.records.map(
+        async (record) =>
+          recipeHash(record.recipe) === record.recipeHash &&
+          hash(await readFile(join(root, record.output.url.slice(1)))) ===
+            record.output.sha256,
+      ),
+    );
+    return verified.every(Boolean) ? manifest : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+async function verifiedLadders(): Promise<RecordedLadderManifest | undefined> {
+  if (!RECORDED_LADDER_MANIFEST_SHA256) return undefined;
+  try {
+    const root = join(process.cwd(), "public");
+    const [raw, source] = await Promise.all([
+      readFile(join(root, "examples/recorded-ladders.json")),
+      readFile(join(root, "images/studio-portrait.jpg")),
+    ]);
+    if (hash(raw) !== RECORDED_LADDER_MANIFEST_SHA256) return undefined;
+    const manifest = RecordedLadderManifestSchema.parse(
+      JSON.parse(raw.toString("utf8")),
+    );
+    if (hash(source) !== manifest.source.sha256) return undefined;
+    const verified = await Promise.all(
+      manifest.records.map(
+        async (record) =>
+          recipeHash(record.recipe) === record.recipeHash &&
+          hash(await readFile(join(root, record.output.url.slice(1)))) ===
+            record.output.sha256,
+      ),
+    );
+    return verified.every(Boolean) ? manifest : undefined;
+  } catch {
+    return undefined;
+  }
+}
 
 export async function attachRecordedSamplePreviews(
   session: StudioSession,
@@ -66,6 +132,87 @@ export async function attachRecordedSamplePreviews(
     source.provenance !== "synthetic_inspiration" ||
     source.purpose !== "baseline" ||
     source.url !== "/images/studio-portrait.jpg"
+  )
+    return;
+  let ladder: RecordedLadderManifest | RecordedEyesManifest | undefined;
+  if (session.lookId === "eyes") {
+    eyes ??= verifiedEyes();
+    ladder = await eyes;
+    if (!ladder) eyes = undefined;
+  } else {
+    ladders ??= verifiedLadders();
+    ladder = await ladders;
+    if (!ladder) ladders = undefined;
+  }
+  if (
+    ladder &&
+    source.width === ladder.source.width &&
+    source.height === ladder.source.height
+  ) {
+    const plans = [
+      ...session.candidates,
+      ...(session.activePlan ? [session.activePlan] : []),
+      ...(session.adaptation ? [session.adaptation.candidate] : []),
+    ];
+    for (const plan of plans) {
+      if (
+        plan.previewJobId ||
+        (plan.previewAsset && !plan.previewAsset.recordedAt)
+      )
+        continue;
+      const selected = plan.previewVariants?.find(
+        (variant) => variant.id === (plan.selectedPreviewVariantId ?? "full"),
+      );
+      try {
+        if (selected && recipeHash(selected.recipe) !== recipeHash(plan.recipe))
+          continue;
+      } catch {
+        continue;
+      }
+      for (const variant of plan.previewVariants ?? []) {
+        if (
+          variant.previewJobId ||
+          (variant.previewAsset && !variant.previewAsset.recordedAt)
+        )
+          continue;
+        const exact = ladder.records.find(
+          (record) =>
+            ("lookId" in record
+              ? record.lookId === session.lookId
+              : session.lookId === "eyes" && record.routeId === plan.routeId) &&
+            record.level === variant.id &&
+            record.recipeHash === recipeHash(variant.recipe),
+        );
+        if (!exact) continue;
+        const key =
+          "lookId" in exact
+            ? `${exact.lookId}-${exact.texture}`
+            : `eyes-${exact.routeId}`;
+        const asset: StudioAsset = {
+          id: `ladder-${key}-${exact.level}-${exact.recipeHash.slice(0, 16)}`,
+          url: exact.output.url,
+          provenance: "virtual_preview",
+          purpose: "preview",
+          createdAt: exact.generatedAt,
+          recordedAt: exact.generatedAt,
+          providerRequestHash: exact.providerRequestHash,
+          width: exact.output.width,
+          height: exact.output.height,
+        };
+        variant.previewStatus = "ready";
+        variant.previewAsset = asset;
+        delete variant.previewError;
+        if (!session.assets.some((item) => item.id === asset.id))
+          session.assets.push(asset);
+      }
+      if (plan.previewVariants?.length)
+        selectPreviewLevel(plan, plan.selectedPreviewVariantId ?? "full");
+    }
+  }
+  // Modern plans use the separately pinned intensity-ladder manifest. Historical
+  // method recordings remain available only to their original recipe contracts.
+  if (
+    session.candidates.every((candidate) => !!candidate.previewVariants?.length)
   )
     return;
   catalog ??= verifiedCatalog();

@@ -1,10 +1,17 @@
 /** Shared browser/server contracts. A virtual preview can never be an actual capture. */
 export type Motion = "tapping" | "blending" | "short_strokes";
 export type Comfort = "comfortable" | "avoid" | "unknown";
-export type ToolId = "fingertips" | "sponge" | "wide_brush" | "lip_brush";
-export type ProductId = "cream_blush" | "powder_blush" | "lip_color";
-export type Region = "left_cheek" | "right_cheek" | "lips";
-export type LookId = "rose" | "terracotta" | "berry";
+export type ToolId =
+  "fingertips" | "sponge" | "wide_brush" | "lip_brush" | "liner_pen";
+export type ProductId =
+  "cream_blush" | "powder_blush" | "lip_color" | "eye_liner" | "eye_shadow";
+export type EyeRegion = "left_eye" | "right_eye";
+export type EyeMethod = "liner" | "shadow";
+export type Region = "left_cheek" | "right_cheek" | "lips" | EyeRegion;
+export type LookId = "rose" | "terracotta" | "berry" | "eyes";
+export type PreviewLevel = "light" | "build" | "full";
+export type PreviewStatus =
+  "not_requested" | "queued" | "processing" | "ready" | "failed" | "cancelled";
 export type Provenance =
   "synthetic_inspiration" | "actual_capture" | "virtual_preview";
 export type SessionStage =
@@ -71,6 +78,7 @@ export interface PlanAction {
   stoppingCue: string;
   region: Region;
   motion: Motion;
+  precision?: "low" | "high";
   tool: ToolId;
   product: ProductId;
   dependsOn: string[];
@@ -80,7 +88,7 @@ export interface PlanAction {
 
 export interface CandidatePlan {
   id: string;
-  routeId: "tap" | "sweep" | "sponge";
+  routeId: "tap" | "sweep" | "sponge" | "buff" | EyeMethod;
   name: string;
   tagline: string;
   description: string;
@@ -88,17 +96,43 @@ export interface CandidatePlan {
   attributes: string[];
   tradeoffs: string[];
   actions: PlanAction[];
-  previewStatus:
-    | "not_requested"
-    | "queued"
-    | "processing"
-    | "ready"
-    | "failed"
-    | "cancelled";
+  previewStatus: PreviewStatus;
   previewAsset?: StudioAsset;
   previewJobId?: string;
   previewError?: string;
+  previewRetryable?: boolean;
   recipe: MakeupEffect[];
+  previewVariants?: PreviewVariant[];
+  selectedPreviewVariantId?: PreviewLevel;
+}
+
+export interface PreviewVariant {
+  id: PreviewLevel;
+  intensity: 25 | 45 | 65;
+  recipe: MakeupEffect[];
+  previewStatus: PreviewStatus;
+  previewAsset?: StudioAsset;
+  previewJobId?: string;
+  previewError?: string;
+  previewRetryable?: boolean;
+}
+
+/** Scalar local observations only: frames and face coordinates are never stored. */
+export interface StoredMeasurement {
+  version: 1;
+  region: Region;
+  verdict: "build" | "at_target" | "over" | "insufficient";
+  progress: number | null;
+  deltaA: number | null;
+  deltaE00: number | null;
+  uniformity: number | null;
+  lagging: "inner" | "outer" | "upper" | "lower" | "left" | "right" | null;
+  reason?: string;
+  provenance: "local_camera" | "simulated";
+  reportedPass: boolean;
+  targetLevel: PreviewLevel;
+  targetAssetId: string;
+  elapsedMs: number;
 }
 
 /** Exact provider effect fields are validated in the server-only adapter. */
@@ -117,14 +151,17 @@ export interface PlanningConflict {
 export interface CheckpointObservation {
   id: string;
   actionId: string;
+  actionSnapshot?: PlanAction;
   assetId?: string;
   state:
     | "insufficient_evidence"
     | "unsupported_action"
     | "ai_observation"
-    | "optional_adjustment";
+    | "optional_adjustment"
+    | "measured_checkpoint";
   reason: string;
-  method: "user_judgment_only_v1" | "vision_assistant_v1";
+  method: "user_judgment_only_v1" | "vision_assistant_v1" | "local_color_v1";
+  measurement?: StoredMeasurement;
   model?: string;
   reasons?: string[];
   suggestedActionId?: string;
@@ -138,6 +175,7 @@ export interface SessionEvent {
   actionId?: string;
   detail?: string;
   provenance?: "user_confirmed" | "system";
+  measurement?: StoredMeasurement;
 }
 
 export interface AdaptationProposal {
@@ -150,6 +188,7 @@ export interface AdaptationProposal {
   explanation: string;
   changesGoal: boolean;
   revisedPreferences: Preferences;
+  productChangeNote?: string;
 }
 
 export interface Outcome {
@@ -190,14 +229,28 @@ export interface StudioSession {
   outcome?: Outcome;
   savedMethod: boolean;
   resumeRequired: boolean;
+  previewBatch?: {
+    requested: number;
+    queued: number;
+    deferred: number;
+    remaining: number;
+    message?: string;
+  };
 }
 
 export type SessionCommand =
   | { type: "approve_candidate"; candidateId: string }
+  | { type: "select_preview_level"; candidateId: string; level: PreviewLevel }
+  | { type: "update_setup"; setup: SetupInput }
   | { type: "start" }
   | { type: "pause" }
   | { type: "resume"; confirmedPhysicalState: boolean }
-  | { type: "checkpoint"; actionId: string; assetId?: string }
+  | {
+      type: "checkpoint";
+      actionId: string;
+      assetId?: string;
+      measurement?: StoredMeasurement;
+    }
   | { type: "complete_action"; actionId: string }
   | {
       type: "propose_adaptation";
@@ -223,6 +276,8 @@ export type SessionCommand =
 export interface PublicConfig {
   persistence: "cloud" | "unavailable";
   livePreviews: boolean;
+  livePreviewReason?: "disabled" | "balance_floor" | "balance_unavailable";
+  livePreviewMessage?: string;
   maxUploadBytes: number;
   sampleAvailable: boolean;
 }
