@@ -1,0 +1,707 @@
+{
+  "schemaVersion": 1,
+  "recipeRevision": 3,
+  "evidenceClass": "recorded_live_youcam_on_synthetic_source",
+  "source": {
+    "assetId": "sample-portrait-v1",
+    "url": "/images/studio-portrait.jpg",
+    "sha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+    "width": 1024,
+    "height": 1280
+  },
+  "records": [
+    {
+      "lookId": "rose",
+      "texture": "satin",
+      "level": "light",
+      "intensity": 25,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#BE6680",
+              "texture": "satin",
+              "colorIntensity": 25,
+              "glowStrength": 10
+            }
+          ]
+        }
+      ],
+      "recipeHash": "027c61562adc54001274692f0ee266de915b4e47f6dad03f8e9cda3288af49a8",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "fe76382464815be0151e9c1bcc542c8089d4a261de5e5c372f6e5c166ac07d01",
+      "taskHash": "0f7fcd67b84ea1d581e0e242d2ebe6342673f7033f7196ff0ec8a7fa4d540332",
+      "generatedAt": "2026-10-31T18:35:02.661Z",
+      "output": {
+        "url": "/examples/ladder/rose-satin-light.png",
+        "sha256": "54af39575df87776d501d415f30895005a83b1fbcfca006a43f590636aedc64b",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "rose",
+      "texture": "satin",
+      "level": "build",
+      "intensity": 45,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#BE6680",
+              "texture": "satin",
+              "colorIntensity": 45,
+              "glowStrength": 10
+            }
+          ]
+        }
+      ],
+      "recipeHash": "3ad22e4da6ed23fd4064e8d63c2f48b67e92a0885d94e76063629bb003d8a94d",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "26fc175bbdba45cae6f959730cba1cbf26419236c5fcd379557635b72e6fba7e",
+      "taskHash": "02c93fd352edac9a153a284fe0f40397ae8d627cb4e5a0051df9ba7217c359cb",
+      "generatedAt": "2026-10-31T18:35:10.666Z",
+      "output": {
+        "url": "/examples/ladder/rose-satin-build.png",
+        "sha256": "b47ebb610e3cf2ec61269ae6524d063cae1efd4e0185e34f964ec632697709c4",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "rose",
+      "texture": "satin",
+      "level": "full",
+      "intensity": 65,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#BE6680",
+              "texture": "satin",
+              "colorIntensity": 65,
+              "glowStrength": 10
+            }
+          ]
+        }
+      ],
+      "recipeHash": "878ad56fb522f4d2893aa7bf9c0728b9b28750f2dbc3539ef6ade406caa6c5b3",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "9844c167cfc96f3f102084e874e7385db83e52a655be2277d2fbcce9dc4e08f5",
+      "taskHash": "36e1c442b4c8688dbf656db8ed0c5faae7605ea94a16547694128cc3c4132e38",
+      "generatedAt": "2026-10-31T18:35:18.676Z",
+      "output": {
+        "url": "/examples/ladder/rose-satin-full.png",
+        "sha256": "3774389bc1400f93ff32a90f3e7d3aa14ebe008cfa1b742a103dc73a0d07b5cd",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "rose",
+      "texture": "matte",
+      "level": "light",
+      "intensity": 25,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#BE6680",
+              "texture": "matte",
+              "colorIntensity": 25
+            }
+          ]
+        }
+      ],
+      "recipeHash": "a037b55c6ee28bcc4c6f87e6aa738ce4d91378810f9f344cb9e4c11a83d59cd4",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "14c243bf2f63cdf78107105287a0d1222edb24cb0c4fed489b1b8c33bd3519d2",
+      "taskHash": "1dff4cd801badb32c23274ac07d464262996a87804b5359e7f0ca3c89cfa6ab4",
+      "generatedAt": "2026-10-31T18:35:26.697Z",
+      "output": {
+        "url": "/examples/ladder/rose-matte-light.png",
+        "sha256": "d585c0e6bbe621b297222fc4c383a21264752be6566768dc69f2caa3f721322c",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "rose",
+      "texture": "matte",
+      "level": "build",
+      "intensity": 45,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#BE6680",
+              "texture": "matte",
+              "colorIntensity": 45
+            }
+          ]
+        }
+      ],
+      "recipeHash": "fb71c306b28fcd291b1f1aaee34f7479d20e401c9f62253a1c4012e3fe5b83d9",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "2936d11116ccd861b5051e9894a59f41418bec2bc2c485ebfbecf36339bf307a",
+      "taskHash": "797e7f56bc293b42f3e6d19c49461f4bb4f60f5e99cdaad5ebde4c18b950297f",
+      "generatedAt": "2026-10-31T18:35:40.435Z",
+      "output": {
+        "url": "/examples/ladder/rose-matte-build.png",
+        "sha256": "abb8d55765a915b595be6abec14f4580cf536ee08d5e3d318311757a09490930",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "rose",
+      "texture": "matte",
+      "level": "full",
+      "intensity": 65,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#BE6680",
+              "texture": "matte",
+              "colorIntensity": 65
+            }
+          ]
+        }
+      ],
+      "recipeHash": "abd6c8fcc414ce6f0829ce7b9043f963c92b17da822b4d6991d2a2a86d854af8",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "0421cb0866c6ddb1d955bffde1c01d56fb04b274b483a18c43f946655051e499",
+      "taskHash": "17b8bd652e712b7d1203e0f283b8124ccc7f8927ed381ba8f628ffa549b7e568",
+      "generatedAt": "2026-10-31T18:35:48.441Z",
+      "output": {
+        "url": "/examples/ladder/rose-matte-full.png",
+        "sha256": "a1a592b55f0a682c100041ff99f30c415e0d86c81296d102a7a93f8ef5e04574",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "terracotta",
+      "texture": "satin",
+      "level": "light",
+      "intensity": 25,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#BF7153",
+              "texture": "satin",
+              "colorIntensity": 25,
+              "glowStrength": 10
+            }
+          ]
+        }
+      ],
+      "recipeHash": "e3492a56ff0e54be1a974a1676250dbdb45ec04f62468315b6c3095df85506df",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "f8e343a2768cbd8affe685dfa03236c504781b4137d3473b5c237cba189e67cc",
+      "taskHash": "63212464b782cf0d8149d7ae9e0ef22c7541dbd9f8650ec287697d92b0d070e9",
+      "generatedAt": "2026-10-31T18:36:01.960Z",
+      "output": {
+        "url": "/examples/ladder/terracotta-satin-light.png",
+        "sha256": "35ed62bbd20c8ea1656ecf8abb36a4cd0f20cd0ce56e9135be3566021f9201b1",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "terracotta",
+      "texture": "satin",
+      "level": "build",
+      "intensity": 45,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#BF7153",
+              "texture": "satin",
+              "colorIntensity": 45,
+              "glowStrength": 10
+            }
+          ]
+        }
+      ],
+      "recipeHash": "29c2498a96041c351ba58fa7bbc3b5dc9769425ea9269ac24a807fc31b6ad77f",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "8084a970861db091fea2c045514736319c5b3af862d2bfff7eb880eaf936285d",
+      "taskHash": "184f6c782cecc30c20e16b60071f70cae8072407f0b2bec25cac6009fafc3c87",
+      "generatedAt": "2026-10-31T18:36:09.818Z",
+      "output": {
+        "url": "/examples/ladder/terracotta-satin-build.png",
+        "sha256": "a69617ff33a135011437be092dce83972acb1968c02c8c5a5119d053a8cf4812",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "terracotta",
+      "texture": "satin",
+      "level": "full",
+      "intensity": 65,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#BF7153",
+              "texture": "satin",
+              "colorIntensity": 65,
+              "glowStrength": 10
+            }
+          ]
+        }
+      ],
+      "recipeHash": "0d271682093db8d42da955a743bb16863135687c0a68aaf6ebd6e6822227e72e",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "8f78a82211bd5b4f2a8500d721fbe96c8826f7bbab1c89f1e8dce98f4787d2c4",
+      "taskHash": "2a0792ca836e69d001ebf8b34fa76a8b76fc1b4778b66e0bfb493e2c676d38b2",
+      "generatedAt": "2026-10-31T18:36:17.553Z",
+      "output": {
+        "url": "/examples/ladder/terracotta-satin-full.png",
+        "sha256": "4f8ecc0155c43c54924354c2e328f32857f722becb9737ab4db19db63259bd21",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "terracotta",
+      "texture": "matte",
+      "level": "light",
+      "intensity": 25,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#BF7153",
+              "texture": "matte",
+              "colorIntensity": 25
+            }
+          ]
+        }
+      ],
+      "recipeHash": "f4542872575ecc9542cfc6eaac706144c0bfce0304728f47c2f584485a1f89f4",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "f437547d76f7fdf39fdf708ee9a978550f7d467e1b358449bd921597a944444c",
+      "taskHash": "34616a8b4a490c39ad1be716d1b3fc39d26555c5ef0ec1269c488051c090a03d",
+      "generatedAt": "2026-10-31T18:36:25.464Z",
+      "output": {
+        "url": "/examples/ladder/terracotta-matte-light.png",
+        "sha256": "6c8bd4ac0d8b82de2fc5cfea68b231c03d5b37195ddca9ef54abf9fca00c866f",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "terracotta",
+      "texture": "matte",
+      "level": "build",
+      "intensity": 45,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#BF7153",
+              "texture": "matte",
+              "colorIntensity": 45
+            }
+          ]
+        }
+      ],
+      "recipeHash": "b9c87692731d8260e04849bf6cece377841f19108a650e6d3f6f577c393166ee",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "977c26b0f5b2a9cbafeebcab184bd2b37e3f6aee9a7e2b1157dddf0a260b21d8",
+      "taskHash": "4abb13b07dc825c661dca7cabefed39081b0979cabf8e9540c3e3aff3fda311d",
+      "generatedAt": "2026-10-31T18:36:33.219Z",
+      "output": {
+        "url": "/examples/ladder/terracotta-matte-build.png",
+        "sha256": "c7b3b19d8c3807ca9240dcf6409bc097f0de4a025f5e90d0ddabe0273c839e61",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "terracotta",
+      "texture": "matte",
+      "level": "full",
+      "intensity": 65,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#BF7153",
+              "texture": "matte",
+              "colorIntensity": 65
+            }
+          ]
+        }
+      ],
+      "recipeHash": "f7cd3d3bc338f27d43ee63ba53abc0aedf3efe5d5d17050ffbb9dc3e3939b373",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "ce30dc6735421bb2dacf38c809ca97b803deff288424d3612a39aa8a9275d948",
+      "taskHash": "2c0e11accbedfa11aea4b55ee19914515ce2789f52a6e00b9ce93dd79a0c1006",
+      "generatedAt": "2026-10-31T18:36:40.974Z",
+      "output": {
+        "url": "/examples/ladder/terracotta-matte-full.png",
+        "sha256": "f0844e5599e7d6306ea47974dd3551175aae16888df1c91d868609fdcf37495a",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "berry",
+      "texture": "satin",
+      "level": "light",
+      "intensity": 25,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#9D526C",
+              "texture": "satin",
+              "colorIntensity": 25,
+              "glowStrength": 10
+            }
+          ]
+        }
+      ],
+      "recipeHash": "570cde4163b0296d48760ccdc1c32920068d9e3b2012743951aa735dbfa046a5",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "61f583eb66a3b1a671f56a5e906e548dd12d8824f2567ead1db5749e402f6251",
+      "taskHash": "a1a43f7a04388afc1a436693d673dc8fb174bcefcf0df4b93bea5434e45d45aa",
+      "generatedAt": "2026-10-31T18:36:54.461Z",
+      "output": {
+        "url": "/examples/ladder/berry-satin-light.png",
+        "sha256": "9fcf85a15ab00efef738567527b0998e3fc8f41b33a8ecd90ba32f8989ba1d9e",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "berry",
+      "texture": "satin",
+      "level": "build",
+      "intensity": 45,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#9D526C",
+              "texture": "satin",
+              "colorIntensity": 45,
+              "glowStrength": 10
+            }
+          ]
+        }
+      ],
+      "recipeHash": "bf58dc31af76a4788ef361a91adf65234fd3331c9a95e47c5cd60bd380c034f1",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "aff48cd8fe83e59c737ef9332b300b7ea95a77e7f6fa88930897da6f04707981",
+      "taskHash": "fdeec680c062fb20f27a5e1353c23e167f585dd1729f6b84405bf4a8a0b40335",
+      "generatedAt": "2026-10-31T18:37:02.210Z",
+      "output": {
+        "url": "/examples/ladder/berry-satin-build.png",
+        "sha256": "d98b5f4855379197826a8ff472ac0de21c9457cd967acd981fe14e13ff77ec10",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "berry",
+      "texture": "satin",
+      "level": "full",
+      "intensity": 65,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#9D526C",
+              "texture": "satin",
+              "colorIntensity": 65,
+              "glowStrength": 10
+            }
+          ]
+        }
+      ],
+      "recipeHash": "3673e70527d921a62c2310b35ff7bdcd3aca8ce7cf08bc1f602643e4cd3602dc",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "f3c0f0adc246fa07685066805ec5aabc659c7c7cf7120ba2ec86764949d78d21",
+      "taskHash": "abee7d67710826b15591eb08d5011d5815e867c8db57da65dfd65550b17f558e",
+      "generatedAt": "2026-10-31T18:37:09.990Z",
+      "output": {
+        "url": "/examples/ladder/berry-satin-full.png",
+        "sha256": "aa093831da0f6691ded25575b44ab8a550aedb1e8984a9995d053d157359a467",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "berry",
+      "texture": "matte",
+      "level": "light",
+      "intensity": 25,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#9D526C",
+              "texture": "matte",
+              "colorIntensity": 25
+            }
+          ]
+        }
+      ],
+      "recipeHash": "7dd2a398caf79572e1bee1b6b931dbcbb58859a4ef368fe39be6355e563da31e",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "d4e2866b45c1f07c86c49849a39eb11d7c169431374bcef6934dbdb038c9f616",
+      "taskHash": "7c2e26d614f7f6639b135cac7031e3c251294354db99032d2a15be94817f8347",
+      "generatedAt": "2026-10-31T18:37:17.737Z",
+      "output": {
+        "url": "/examples/ladder/berry-matte-light.png",
+        "sha256": "22e52a891cc72f252d9a6b0e4bd97a9b510449bcb2d5bd307ecbc15f04523612",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "berry",
+      "texture": "matte",
+      "level": "build",
+      "intensity": 45,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#9D526C",
+              "texture": "matte",
+              "colorIntensity": 45
+            }
+          ]
+        }
+      ],
+      "recipeHash": "2a9b13162cc17b1eff8d990e18b93432900a9a04c28290386f4f00be4b95c6d2",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "fa84c680ca8892e71013e4f6bce6b7d4ab43ced4d53644188fff0362857b8f0b",
+      "taskHash": "826c8f522281092da35da1c8fadcbef14c29986e8f30b16b59c878a9388912a7",
+      "generatedAt": "2026-10-31T18:37:25.266Z",
+      "output": {
+        "url": "/examples/ladder/berry-matte-build.png",
+        "sha256": "21eb2920353ea0dd5cc9ac8ade5414f6a35050636b6fd18276874d129e87e1bf",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "berry",
+      "texture": "matte",
+      "level": "full",
+      "intensity": 65,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#9D526C",
+              "texture": "matte",
+              "colorIntensity": 65
+            }
+          ]
+        }
+      ],
+      "recipeHash": "cd04ed10ebe0a54042b6bd21c5792c19995521bf594c3d70b96123efab488159",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "823f9d0765bea0d000f7a9ac5cf0e77fb962c52bceb450a0590dbd7af1c70254",
+      "taskHash": "5a97761277210cba2c61d23fd58f62bdf53e32af769246488eb9b606242be31d",
+      "generatedAt": "2026-10-31T18:37:33.276Z",
+      "output": {
+        "url": "/examples/ladder/berry-matte-full.png",
+        "sha256": "143f7a98ed72e8e8777472eb6f0bc4fa4ab8dae9c46ed3e02cd641c14eb01bcc",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    }
+  ]
+}

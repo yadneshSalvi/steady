@@ -3,6 +3,7 @@ import type { MakeupEffect } from "../contracts";
 import { validateEffects } from "./recipes";
 import {
   ErrorResponseSchema,
+  CreditBalanceResponseSchema,
   FeatureCostsResponseSchema,
   FileResponseSchema,
   SubmitResponseSchema,
@@ -519,4 +520,28 @@ export async function getFeatureCosts(
       runTaskUrl: sku.run_task_url,
     })),
   };
+}
+
+/** Read-only account balance. Expired pools cannot fund a new preview. */
+export async function getCreditBalance(
+  options: YouCamOptions = {},
+): Promise<number> {
+  const body = await apiRequest(
+    "/s2s/v1.0/client/credit",
+    "GET",
+    undefined,
+    options,
+  );
+  const parsed = CreditBalanceResponseSchema.safeParse(body);
+  if (!parsed.success)
+    throw new YouCamError(
+      "invalid_response",
+      "The provider balance could not be verified.",
+    );
+  const now = Date.now();
+  return parsed.data.results.reduce(
+    (sum, pool) =>
+      sum + (pool.expiry == null || pool.expiry > now ? pool.amount : 0),
+    0,
+  );
 }

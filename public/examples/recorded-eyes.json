@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 1,
+  "evidenceClass": "recorded_live_youcam_on_synthetic_source",
+  "source": {
+    "assetId": "sample-portrait-v1",
+    "url": "/images/studio-portrait.jpg",
+    "sha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+    "width": 1024,
+    "height": 1280
+  },
+  "records": [
+    {
+      "routeId": "liner",
+      "level": "light",
+      "intensity": 25,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "eye_liner",
+          "pattern": {
+            "name": "HalfRim19"
+          },
+          "palettes": [
+            {
+              "color": "#3A2B2B",
+              "texture": "matte",
+              "colorIntensity": 25
+            }
+          ]
+        }
+      ],
+      "recipeHash": "f1074731c5cf53fb4cb473528a18fe8a8168f543744d1d5b789013cd0d7dfc1f",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "bd7f09e8f6ed85dbdb2a5ea5abd63fe459eb56879a3da91e55668fc1d040dfbb",
+      "taskHash": "4cb43edfe7e8ff143a41ab6cd73e768ea57048e3794bdc75276becb90fd112f2",
+      "generatedAt": "2026-10-31T18:49:18.972Z",
+      "output": {
+        "url": "/examples/eyes/liner-light.png",
+        "sha256": "aaf2de862fc759eb285b927e594dc1f783ef5936694081fce92e4a6523e42ac1",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "routeId": "liner",
+      "level": "full",
+      "intensity": 65,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "eye_liner",
+          "pattern": {
+            "name": "HalfRim19"
+          },
+          "palettes": [
+            {
+              "color": "#3A2B2B",
+              "texture": "matte",
+              "colorIntensity": 65
+            }
+          ]
+        }
+      ],
+      "recipeHash": "6d4d033011154ceb654f13e4578bb48fd141a5a7c244c9d44fd0501950dc7474",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "fe0182db92350ccbe178ac01c899294f8ee599caef8346f066b8c247f37a918a",
+      "taskHash": "f1bdfc719e23dfc6bcc230b381c1005f7e41dc729f489f994d37db64076cb4a8",
+      "generatedAt": "2026-10-31T18:49:26.775Z",
+      "output": {
+        "url": "/examples/eyes/liner-full.png",
+        "sha256": "50cfdf802b17adfed678cf845822cb29a215942c90b197588f36d8389e96343d",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "routeId": "shadow",
+      "level": "light",
+      "intensity": 25,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "eye_shadow",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#6B4A40",
+              "texture": "matte",
+              "colorIntensity": 25
+            }
+          ]
+        }
+      ],
+      "recipeHash": "16a85d579b4915e23a5cd7b953b4ba3b2727b057e8fe13c911158814104953dc",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "0ea36d54f294780576259c8fa895e09294b53f71f5fa3adf9c2de7bdb11b33f9",
+      "taskHash": "2dd06866d0ed458d34eb8a0ddf75c762eb0951b527494f7266035694cbecd3a9",
+      "generatedAt": "2026-10-31T18:51:04.224Z",
+      "output": {
+        "url": "/examples/eyes/shadow-light.png",
+        "sha256": "738d0d46a14c5deb71974c145d0e090cb688215093702d7ff579b91cb6172059",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "routeId": "shadow",
+      "level": "full",
+      "intensity": 65,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "eye_shadow",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#6B4A40",
+              "texture": "matte",
+              "colorIntensity": 65
+            }
+          ]
+        }
+      ],
+      "recipeHash": "0fc539be7171bad62b02d1041a7cf2bfea2a20c1657e1197390ede7b7cc2c9cd",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "97c204db2e8311b2b41847b3a808502a351bace793e294ef5ae18024958b5a45",
+      "taskHash": "e5ff1cf55b17a27150f3478bb494dbe4383cff49bb3fce7d0abfb8ecf38dc2fa",
+      "generatedAt": "2026-10-31T18:51:12.028Z",
+      "output": {
+        "url": "/examples/eyes/shadow-full.png",
+        "sha256": "a3a26122efc2ae4d9531fe95d87bb421ee2db4ccd8c473044fbae8b3e7a688e0",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    }
+  ]
+}

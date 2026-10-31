@@ -96,3 +96,14 @@ export const FeatureCostsResponseSchema = z.object({
     ),
   }),
 });
+
+/** GET /s2s/v1.0/client/credit returns independent, expiring credit pools. */
+export const CreditBalanceResponseSchema = z.object({
+  status: z.literal(200),
+  results: z.array(
+    z.object({
+      amount: z.number().finite().nonnegative(),
+      expiry: z.number().finite().nonnegative().nullable().optional(),
+    }),
+  ),
+});

@@ -1,0 +1,56 @@
+{
+  "metadata": {
+    "provenance": "sanitized_official_catalog_excerpt",
+    "observedAt": "2026-10-31",
+    "note": "Exact selected single-color catalog entries, not physical application or calibration evidence.",
+    "sources": [
+      "https://plugins-media.makeupar.com/wcm-saas/patterns/eyeliner.json",
+      "https://plugins-media.makeupar.com/wcm-saas/patterns/eyeshadow.json"
+    ],
+    "catalogSha256": {
+      "eye_liner": "85b1005ba28ee4792f4e75d9eefda57e111838a796cc7d11afd6eda56cf7d46a",
+      "eye_shadow": "9a3a1a146d8d7202592f7f8f80f60dcc054b5f6bda6e9d84e99a955705081c37"
+    },
+    "excerptSha256": "abc86d8c6aebdead79683d434639eab30bba417e810145e5f3ede5d9ddb16b7f"
+  },
+  "patterns": {
+    "eye_liner": {
+      "category": "1 color",
+      "label": "HalfRim19",
+      "thumbnail": "https://app-cdn-01.makeupar.com/console/SkuCustomImage/guest/261/b61bb241-51b6-4c3e-a918-b71652a54253.jpg",
+      "tags": [
+        {
+          "id": 22,
+          "name": "Half eye"
+        }
+      ],
+      "colorNum": 1,
+      "type": "Upper only",
+      "intensity": "Natural",
+      "style": ["Straight Liner"],
+      "description": "A thin upper line extends horizontally into a short, tapered tail, gently elongating the eye with clean, subtle definition."
+    },
+    "eye_shadow": {
+      "category": "1 color",
+      "label": "1color1",
+      "thumbnail": "https://app-cdn-01.makeupar.com/console/customer/guest/SkuCustomImage/188/0322c4f9-e54d-4a6b-8072-6bb76560121a.jpg",
+      "tags": [
+        {
+          "id": 12,
+          "name": "Artistic"
+        },
+        {
+          "id": 14,
+          "name": "Dream"
+        },
+        {
+          "id": 15,
+          "name": "Trend"
+        }
+      ],
+      "colorNum": 1,
+      "style": "Soft/Natural",
+      "description": "A single-shade look with soft color swept across the lid and gently diffused toward the crease. The sheer, simple wash adds a fresh hint of color and brightness for an effortless everyday look."
+    }
+  }
+}

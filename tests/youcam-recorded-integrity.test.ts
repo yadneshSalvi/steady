@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createSession } from "../src/lib/planner";
-import { SAMPLE_SETUP } from "../src/lib/catalog";
+import { EYE_SAMPLE_SETUP, SAMPLE_SETUP } from "../src/lib/catalog";
 
 const corruption = vi.hoisted(() => ({ target: "none" }));
 vi.mock("node:fs/promises", async () => {
@@ -18,10 +18,15 @@ vi.mock("node:fs/promises", async () => {
       const name = String(path);
       const affected =
         (corruption.target === "manifest" &&
-          name.endsWith("recorded-samples.json")) ||
+          name.endsWith("recorded-ladders.json")) ||
         (corruption.target === "source" &&
           name.endsWith("studio-portrait.jpg")) ||
-        (corruption.target === "output" && name.endsWith("rose-tap.png"));
+        (corruption.target === "output" &&
+          name.endsWith("rose-satin-light.png")) ||
+        (corruption.target === "eye_manifest" &&
+          name.endsWith("recorded-eyes.json")) ||
+        (corruption.target === "eye_output" &&
+          name.endsWith("shadow-light.png"));
       return affected ? Buffer.from("corrupted fixture bytes") : value;
     },
   };
@@ -31,9 +36,9 @@ beforeEach(() => {
   vi.resetModules();
   corruption.target = "none";
 });
-function sample() {
+function sample(eyes = false) {
   const session = createSession(
-    structuredClone(SAMPLE_SETUP),
+    structuredClone(eyes ? EYE_SAMPLE_SETUP : SAMPLE_SETUP),
     "integrity-test",
   );
   session.sourceAssetId = "sample-portrait-v1";
@@ -77,6 +82,26 @@ describe("recorded preview checksum boundaries", () => {
       ).toBe(true);
       expect(session.assets).toHaveLength(1);
       expect(session.outcome).toBeUndefined();
+    });
+  }
+  for (const target of ["eye_manifest", "source", "eye_output"]) {
+    it(`declines eye recordings when ${target} bytes changed`, async () => {
+      corruption.target = target;
+      const { attachRecordedSamplePreviews } =
+        await import("../src/lib/server/recorded-previews");
+      const session = sample(true);
+      await attachRecordedSamplePreviews(session);
+      expect(session.candidates).toHaveLength(2);
+      expect(
+        session.candidates.every(
+          (candidate) =>
+            !candidate.previewAsset &&
+            candidate.previewVariants?.every(
+              (variant) => !variant.previewAsset,
+            ),
+        ),
+      ).toBe(true);
+      expect(session.assets).toHaveLength(1);
     });
   }
 });

@@ -3,13 +3,17 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import sharp from "sharp";
 import { describe, expect, it } from "vitest";
-import { SAMPLE_SETUP } from "../src/lib/catalog";
+import { EYE_SAMPLE_SETUP, SAMPLE_SETUP } from "../src/lib/catalog";
 import type { LookId, StudioSession } from "../src/lib/contracts";
 import { applyCommand, createSession } from "../src/lib/planner";
 import { attachRecordedSamplePreviews } from "../src/lib/server/recorded-previews";
 import { RECORDED_MANIFEST_SHA256 } from "../src/lib/youcam/recorded-integrity";
 import { RecordedSamplesManifestSchema } from "../src/lib/youcam/recorded";
 import { makeRecipe, validateEffects } from "../src/lib/youcam/recipes";
+import { RecordedLadderManifestSchema } from "../src/lib/youcam/ladder-recorded";
+import { RECORDED_LADDER_MANIFEST_SHA256 } from "../src/lib/youcam/ladder-integrity";
+import { RecordedEyesManifestSchema } from "../src/lib/youcam/eye-recorded";
+import { RECORDED_EYES_MANIFEST_SHA256 } from "../src/lib/youcam/eye-integrity";
 
 const sha = (bytes: Uint8Array | string) =>
   createHash("sha256").update(bytes).digest("hex");
@@ -30,7 +34,11 @@ async function sample(
 ): Promise<StudioSession> {
   const data = await manifest();
   const session = createSession(
-    { ...structuredClone(SAMPLE_SETUP), lookId, includeLips },
+    {
+      ...structuredClone(lookId === "eyes" ? EYE_SAMPLE_SETUP : SAMPLE_SETUP),
+      lookId,
+      includeLips,
+    },
     "recorded-test",
   );
   session.sourceAssetId = data.source.assetId;
@@ -47,7 +55,7 @@ async function sample(
 }
 
 describe("recorded live YouCam examples (synthetic input, no physical outcome)", () => {
-  it("verifies all nine original outputs, current recipes, exact source bytes and pinned manifest checksum", async () => {
+  it("preserves all nine historical outputs, exact recipes, source bytes and pinned manifest checksum", async () => {
     const raw = await readFile(
       join(publicRoot, "examples/recorded-samples.json"),
     );
@@ -61,9 +69,7 @@ describe("recorded live YouCam examples (synthetic input, no physical outcome)",
       /task_id|src_file_id|https:\/\/|artifacts\/private|download_url/,
     );
     for (const record of data.records) {
-      expect(validateEffects(record.recipe)).toEqual(
-        makeRecipe(record.lookId, record.routeId, false),
-      );
+      expect(validateEffects(record.recipe)).toHaveLength(2);
       expect(sha(JSON.stringify(validateEffects(record.recipe)))).toBe(
         record.recipeHash,
       );
@@ -81,8 +87,39 @@ describe("recorded live YouCam examples (synthetic input, no physical outcome)",
     }
   });
 
+  it("verifies all 18 current intensity targets against exact source, recipe and output hashes", async () => {
+    const raw = await readFile(
+      join(publicRoot, "examples/recorded-ladders.json"),
+    );
+    expect(sha(raw)).toBe(RECORDED_LADDER_MANIFEST_SHA256);
+    const data = RecordedLadderManifestSchema.parse(JSON.parse(raw.toString()));
+    expect(data.records).toHaveLength(18);
+    expect(raw.toString()).not.toMatch(
+      /task_id|src_file_id|https:\/\/|artifacts\/private|download_url/,
+    );
+    expect(
+      sha(await readFile(join(publicRoot, data.source.url.slice(1)))),
+    ).toBe(data.source.sha256);
+    for (const record of data.records) {
+      expect(validateEffects(record.recipe)).toEqual(
+        makeRecipe(
+          record.lookId,
+          record.texture === "matte" ? "sweep" : "tap",
+          false,
+          record.intensity,
+        ),
+      );
+      expect(sha(JSON.stringify(validateEffects(record.recipe)))).toBe(
+        record.recipeHash,
+      );
+      expect(
+        sha(await readFile(join(publicRoot, record.output.url.slice(1)))),
+      ).toBe(record.output.sha256);
+    }
+  });
+
   it("attaches clearly recorded previews to each matching sample look without changing actions or outcomes", async () => {
-    for (const look of ["rose", "terracotta", "berry"] as const) {
+    for (const look of ["rose", "terracotta", "berry", "eyes"] as const) {
       const session = await sample(look);
       const actions = session.candidates.map((candidate) =>
         structuredClone(candidate.actions),
@@ -104,6 +141,63 @@ describe("recorded live YouCam examples (synthetic input, no physical outcome)",
       expect(session.completedActionIds).toEqual([]);
       expect(session.revision).toBe(revision);
     }
+  });
+
+  it("verifies the four eye recordings and attaches a changed target after liner-to-shadow repair", async () => {
+    const raw = await readFile(join(publicRoot, "examples/recorded-eyes.json"));
+    expect(sha(raw)).toBe(RECORDED_EYES_MANIFEST_SHA256);
+    const data = RecordedEyesManifestSchema.parse(JSON.parse(raw.toString()));
+    expect(raw.toString()).not.toMatch(
+      /task_id|src_file_id|https:\/\/|artifacts\/private|download_url/,
+    );
+    for (const record of data.records) {
+      expect(validateEffects(record.recipe)).toEqual(
+        makeRecipe("eyes", record.routeId, false, record.intensity),
+      );
+      expect(sha(JSON.stringify(validateEffects(record.recipe)))).toBe(
+        record.recipeHash,
+      );
+      expect(
+        sha(await readFile(join(publicRoot, record.output.url.slice(1)))),
+      ).toBe(record.output.sha256);
+    }
+    let session = await sample("eyes");
+    await attachRecordedSamplePreviews(session);
+    const liner = session.candidates.find(
+      (candidate) => candidate.routeId === "liner",
+    )!;
+    expect(liner.previewVariants?.map((variant) => variant.id)).toEqual([
+      "light",
+      "full",
+    ]);
+    session = applyCommand(session, {
+      type: "approve_candidate",
+      candidateId: liner.id,
+    });
+    session = applyCommand(session, { type: "start" });
+    const completed = structuredClone(session.activePlan!.actions[0]);
+    session = applyCommand(session, {
+      type: "complete_action",
+      actionId: completed.id,
+    });
+    session = applyCommand(session, {
+      type: "propose_adaptation",
+      reason: "movement",
+    });
+    await attachRecordedSamplePreviews(session);
+    expect(session.adaptation!.candidate.actions[0]).toEqual(completed);
+    expect(session.adaptation!.candidate.previewAsset?.url).toContain(
+      "shadow-full",
+    );
+    expect(session.adaptation!.candidate.previewAsset?.id).not.toBe(
+      liner.previewAsset?.id,
+    );
+    expect(
+      session.adaptation!.candidate.previewVariants?.every(
+        (variant) => variant.previewStatus === "ready",
+      ),
+    ).toBe(true);
+    expect(session.adaptation!.changesGoal).toBe(true);
   });
 
   it("never substitutes recorded images for personal, uploaded-source or lip-enabled requests", async () => {
