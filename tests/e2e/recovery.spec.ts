@@ -292,3 +292,98 @@ test("optional microphone detects a short synthetic utterance and executes a bou
     )
     .toBe(true);
 });
+
+test("a rate-limited session read preserves the owner and saved studio intent", async ({
+  page,
+  baseURL,
+}) => {
+  test.setTimeout(90_000);
+  const origin = baseURL || "http://localhost:3000";
+  await signInAnonymous(page.request, origin);
+  const created = await page.request.post("/api/sessions", {
+    headers: { Origin: origin },
+    data: { ...structuredClone(SAMPLE_SETUP), lookId: "berry", consent: true },
+  });
+  expect(created.status()).toBe(201);
+  let saved = (await created.json()) as StudioSession;
+  try {
+    for (const command of [
+      {
+        type: "select_preview_level",
+        candidateId: saved.candidates[0].id,
+        level: "build",
+      },
+      { type: "approve_candidate", candidateId: saved.candidates[0].id },
+    ] as const) {
+      const response = await page.request.post(
+        `/api/sessions/${saved.id}/events`,
+        {
+          headers: { Origin: origin },
+          data: { expectedRevision: saved.revision, command },
+        },
+      );
+      expect(response.status()).toBe(200);
+      saved = await response.json();
+    }
+    const cookieBefore = (await page.context().cookies()).find((cookie) =>
+      cookie.name.endsWith("session_token"),
+    );
+    expect(Boolean(cookieBefore?.value)).toBe(true);
+    let sessionReads = 0,
+      anonymousPosts = 0,
+      sessionPosts = 0,
+      previewPosts = 0;
+    await page.route(/\/api\/auth\/get-session(?:\?.*)?$/, async (route) => {
+      sessionReads++;
+      if (sessionReads === 1)
+        await route.fulfill({
+          status: 429,
+          headers: { "X-Retry-After": "0" },
+          json: { message: "Synthetic session read limit" },
+        });
+      else await route.continue();
+    });
+    await page.route(
+      /\/api\/(?:auth\/sign-in\/anonymous|sessions(?:\/.*)?)$/,
+      async (route) => {
+        if (route.request().method() !== "POST") return route.continue();
+        const path = new URL(route.request().url()).pathname;
+        if (path.endsWith("/anonymous")) anonymousPosts++;
+        else if (path.endsWith("/previews")) previewPosts++;
+        else sessionPosts++;
+        await route.abort("blockedbyclient");
+      },
+    );
+    const recovered = page.waitForResponse(
+      (response) =>
+        new URL(response.url()).pathname === `/api/sessions/${saved.id}` &&
+        response.request().method() === "GET",
+    );
+    await page.goto(`/studio/${saved.id}/mirror`);
+    expect((await recovered).status()).toBe(200);
+    await expect(
+      page.getByRole("button", { name: "Begin the walkthrough", exact: true }),
+    ).toBeVisible();
+    expect(sessionReads).toBe(2);
+    expect(anonymousPosts).toBe(0);
+    expect(sessionPosts).toBe(0);
+    expect(previewPosts).toBe(0);
+    const cookieAfter = (await page.context().cookies()).find(
+      (cookie) => cookie.name === cookieBefore!.name,
+    );
+    expect(Boolean(cookieAfter?.value)).toBe(true);
+    // Compare the actual cookie without exposing either token on failure.
+    expect(cookieAfter!.value === cookieBefore!.value).toBe(true);
+    const response = await page.request.get(`/api/sessions/${saved.id}`);
+    expect(response.status()).toBe(200);
+    const current = (await response.json()) as StudioSession;
+    expect(current).toEqual(saved);
+    expect(current.activePlan?.selectedPreviewVariantId).toBe("build");
+    expect(current.activePlan?.previewAsset?.recordedAt).toBeTruthy();
+  } finally {
+    const removed = await page.request.delete(`/api/sessions/${saved.id}`, {
+      headers: { Origin: origin },
+    });
+    expect(removed.status()).toBe(200);
+  }
+});
