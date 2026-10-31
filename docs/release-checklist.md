@@ -1,5 +1,26 @@
 # Release verification
 
+## November review round — local gates complete, deployment verification pending
+
+This round adds measured local checkpoints, exact intensity ladders, eye-goal adaptation, budget/retry hardening, and a shorter provenance system. The application source passed the checks below. The release lead will record the new commit, deployment ID, elevated-floor check, and canonical production smoke here after deployment; the October record below describes the previous deployed version.
+
+- [x] Migration 004 applied to the isolated local database and production Neon; additive and compatible with the previous deployed code.
+- [x] Local `pnpm lint`, TypeScript and production build pass; 19 generated pages and pinned model/runtime assets.
+- [x] Integrated unit/invariant/local PostgreSQL suite: 248/248 tests passed across 28 files. Database cases use a disposable schema and reject remote database URLs. This includes corrupted recording ledgers, preserved pre-review sessions, complete recorded-sample coverage, and deployment-cookie isolation.
+- [x] Entire browser suite against the final production build: 19/19 passed in 49.3 seconds, including the real private Blob upload, ownership and durable-erasure test. Both sample-mode entry points clear unsupported optional lips, and every supported sample setup has recorded targets. No paid preview submission occurred.
+- [x] Real MediaPipe IMAGE/VIDEO synthetic-camera path: baseline → intermediate → Full → uneven-light abstention → pose abstention → Full recovery; scalar-only checkpoint commands and no image upload.
+- [x] Warm synthetic-camera timing captured separately: five 1024×1280 checks took 37.4–45.0 ms in Chromium 156. Model startup, persistence, UI rendering, physical webcam behavior and participant use are excluded.
+- [x] Independent browser review at 1366×768 and 390×844: cheek and eye samples, target changes, same-product/appearance-changing repair, per-step history and reachable controls. Keyboard, 200% reflow and scoped Axe checks passed in the automated journey.
+- [x] Frozen pre-review compatibility: six saved sessions and five original version-1 technique definitions continue without changing confirmed instructions; seven regression tests pass.
+- [x] Eighteen cheek and four eye recordings added; exact source/recipe/output hashes verified. Historical nine recordings preserved. Observed spend 22 units; balance 1006→984. One invalid-pattern attempt definitively failed and was not charged.
+- [x] Repository formatting and final source/client credential scan pass. The scan compared 18 configured credential values across 216 candidate text files and found no matches or private artifact paths.
+- [x] Protected deployment with an elevated balance floor: 17/17 browser checks passed. A real personal upload followed by a fresh-preview request returned `503 LIVE_PREVIEWS_RESTING` with zero provider jobs; recorded samples remained usable. Owner/stranger access, rejected asset injection, and durable private-object erasure passed.
+- [ ] Canonical production deployment, fresh-profile sample/eye review, bounded fresh personal ladder, and final balance check.
+
+The source contains no human-study or calibrated cosmetic-accuracy claim. See [measurement evaluation](evaluation-measurement.md), [recording provenance](../public/examples/PROVENANCE.md), and [operations](operations.md) for the scope and recovery rules.
+
+## Previous deployed release — October 31, 2026
+
 This checklist records implementation checks without representing synthetic scenarios as participant outcomes.
 
 Production was verified on October 31, 2026 at [steady-taupe-pi.vercel.app](https://steady-taupe-pi.vercel.app), running Node 22.x. The verified application commit is `c26c9cb98e4674a64ea5bba7deb05caff5fc046d`; Vercel deployment `dpl_2UDBdqSU3QhVbupDmG7Q5RYRepoV` reached `READY`. Subsequent documentation-only commits do not change this deployed application record.

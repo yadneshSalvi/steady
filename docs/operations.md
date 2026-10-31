@@ -8,17 +8,33 @@ Do not overwrite development credentials with production values. Local developme
 
 `vercel.json` schedules `/api/cron/cleanup` daily at 03:17 UTC. Configure `CRON_SECRET`; the route checks its bearer token. Inspect Workflow state and sanitized logs after release. Logs contain internal job IDs and stable categories, never credentials, signed image URLs, raw model responses, selected images, or voice transcripts.
 
-The verified production studio is [steady-taupe-pi.vercel.app](https://steady-taupe-pi.vercel.app), running Node 22.x with migrations001–003 applied. The [release record](release-checklist.md) identifies the application commit and `READY` deployment. Public entry/configuration requests returned 200 and unauthenticated session/cleanup requests returned 401. The scheduled cleanup is configured; the deployment smoke checked its authorization boundary rather than running a scheduled deletion cycle.
+The production studio is [steady-taupe-pi.vercel.app](https://steady-taupe-pi.vercel.app). The historical October 31 release ran Node 22.x with migrations001–003 and the application deployment recorded in [release verification](release-checklist.md). Its public entry/configuration requests returned 200 and unauthenticated session/cleanup requests returned 401. That smoke checked cleanup authorization rather than running a scheduled deletion cycle.
 
-A production preview completed once through the deployed Workflow and retained its provider task, Workflow run ID, and private Blob output. The deployed Gemini helper also completed. Release logs showed the PostgreSQL driver's SSL-mode forward-compatibility warning for `sslmode=require`, with no corresponding request failures. Review explicit TLS-mode configuration before a driver upgrade; no TLS behavior was changed for this release.
+During the current review round, additive migration004 was applied to the production database. It adds shared balance-cache state, retry-attempt supersession, hashed-IP AI accounting, and release of confirmed pre-submission failures. At this documentation checkpoint, the earlier deployed application is still active; deployment and production verification of the reviewed code remain pending. Do not read the historical smoke as verification of the new application. The release owner records the final source revision, commands, deployment, and post-deployment checks in the release record.
+
+In the historical deployment smoke, a production preview completed once through Workflow and retained its provider task, Workflow run ID, and private Blob output. The deployed Gemini helper also completed. Those release logs showed the PostgreSQL driver's SSL-mode forward-compatibility warning for `sslmode=require`, with no corresponding request failures. Review explicit TLS-mode configuration before a driver upgrade; this review did not change TLS behavior.
 
 ## Provider access and budgets
 
 `YOUCAM_LIVE_ENABLED=false` prevents fresh paid preview tasks while the sample and manual studio remain usable. Enable deliberately after an integration check. The adapter uses `YOUCAM_API_KEY` and the Makeup VTO endpoint on `YOUCAM_API_BASE_URL`; provider credentials remain server-side.
 
-Default application guards are 16 new jobs per database day globally, 4 per anonymous owner, and 8 per hashed IP per day. `YOUCAM_SESSION_JOB_LIMIT` names the anonymous-owner allowance, not a newly opened studio: creating or deleting a studio cannot reset it. Zero is a valid configured limit. Reservations remain spent/reserved after an ambiguous submit; a known failure before submission can release one. A global request limiter allows 80 provider requests per five-minute window for STEADY. These are configurable abuse safeguards, not provider pricing promises.
+The reviewed code uses these configurable defaults:
 
-The account API reported one YouCam unit per Makeup VTO result on October 31, 2026. A read-only balance check after production verification confirmed 1,028 units remaining; this is a release-time snapshot, not a live balance. Record live calls in the private execution ledger. A comparison can request multiple methods, so check its candidate count. Never repeat a paid POST to recover an uncertain result.
+| Guard                               |   Default | Scope                                                                                |
+| ----------------------------------- | --------: | ------------------------------------------------------------------------------------ |
+| `YOUCAM_BALANCE_FLOOR`              | 200 units | Account-balance headroom retained before fresh work                                  |
+| `YOUCAM_DAILY_JOB_LIMIT`            |   12 jobs | Application/database day                                                             |
+| `YOUCAM_SESSION_JOB_LIMIT`          |    6 jobs | Anonymous owner/database day across all studios                                      |
+| `YOUCAM_IP_DAILY_JOB_LIMIT`         |    8 jobs | Hashed IP/database day                                                               |
+| `YOUCAM_ADAPTATION_DAILY_JOB_LIMIT` |    2 jobs | Additional ceiling per owner/day during application; also consumes the ordinary caps |
+
+Zero is a valid configured cap. The adaptation ceiling is bounded at two even if configured higher. During application only one fresh Light target is requested at a time. Initial method requests queue only the target levels that fit the available reservation/balance headroom and report deferred levels. Creating or deleting a studio cannot reset the owner allowance. A global limiter also allows 80 provider requests per five-minute window for STEADY. These are application safeguards, not provider pricing guarantees or a distributed quota shared with another application's database.
+
+Balance reads are shared through PostgreSQL within STEADY, keyed by a credential digest that never reaches the browser. Successful reads have a five-minute cache; failed reads have a 30-second cache and authorize no paid task. Held reservations are deducted above the floor. Reservation and submission boundaries both check availability. If the floor or balance-read guard blocks work, the app says fresh previews are resting and retains recorded targets and manual controls.
+
+A terminal failure or cancellation with neither a provider task ID nor `submission_started_at` releases its reservation and can be superseded by an explicit fresh attempt for the same recipe. A known provider task is resumed without a new paid submission. Once a POST may have happened, the reservation remains consumed/held and `unknown_submission` blocks automatic resubmission. Studio deletion does not delete the independent ledger.
+
+The account API reported one YouCam unit per successful Makeup VTO result on October 31, 2026. The earlier production-release check observed 1,028 units. In this review round, 18 cheek ladder and four eye outputs used **22 observed units**, with balance **1,006→984**. One initial eye-shadow request using unsupported `Shadow1color1` definitively failed and was uncharged; the corrected official label `1color1` produced the published shadow outputs. These are dated observations, not a live balance or a reason to retry an ambiguous POST. The full public catalog contains 31 successful outputs including nine unchanged legacy previews; [provenance](../public/examples/PROVENANCE.md) separates the batches.
 
 Inspect the adapter smoke's dry run before submitting:
 
@@ -29,7 +45,18 @@ NODE_OPTIONS=--conditions=react-server pnpm exec tsx scripts/smoke-youcam.ts --c
 
 The explicit live flag is required. Evidence and outputs go under ignored `artifacts/private/`. Keep task identifiers, temporary URLs, and personal inputs out of public evidence. Public recorded outputs must use the fictional portrait and exact source/recipe hashes.
 
-Gemini/OpenAI analysis is independent of YouCam credits and requires separate consent. Each provider has a 35-second default and 40-second maximum timeout, fitting sequential fallback into the 90-second route. Separate serialized usage buckets allow 60 selected-image requests and 360 short voice requests per owner per hour. The audit records purpose and consent version without retaining the inspiration/tool image or audio clip.
+`scripts/record-ladders.ts` and `scripts/record-eyes.ts` are explicit operator recording tools. Their default dry runs make no provider request; `--confirm-live` authorizes new work and `--publish-synthetic` publishes already verified successful bytes. They call the provider outside the web-job reservation flow, so inspect their planned recipes and account budget first. Preserve the nine original recipe-revision-two records; do not regenerate or relabel them as revision-three ladder targets. A failed or uncertain recording plan needs reconciliation rather than a blind rerun.
+
+Gemini/OpenAI analysis is independent of YouCam credits and requires separate consent. Each provider has a 35-second default and 40-second maximum timeout, fitting sequential fallback into the 90-second route. Request attempts are reserved transactionally in rolling one-hour buckets:
+
+| Category                | App | Anonymous owner | Hashed IP |
+| ----------------------- | --: | --------------: | --------: |
+| Selected-image analysis | 120 |              60 |        30 |
+| Short voice commands    | 720 |             360 |       180 |
+
+The corresponding variables are `AI_HOURLY_REQUEST_LIMIT`, `AI_OWNER_HOURLY_REQUEST_LIMIT`, `AI_IP_HOURLY_REQUEST_LIMIT`, and the equivalent `VOICE_` variables in `.env.example`. A rejected/missing same-origin or consent check cannot authorize a provider call. Limits count logical request attempts, including provider failures, rather than tokens or dollar spend. Audit rows record category/purpose, consent version, owner, and hashed IP without storing the inspiration/tool image or audio clip.
+
+The Facial Color Tones Analyzer is deferred. Its checked operation costs 20 units and the [documented output](https://docs.makeupar.com/reference/ai_skin_tone_analysis) contains color values without an undertone field. No tone task was added to this round, and no automatic undertone or shade-suitability claim is made.
 
 ## Retention and deletion
 
@@ -39,18 +66,26 @@ Daily cleanup retries soft-deleted studios, removes expired upload intents and i
 
 Anonymous ownership is browser-specific. Losing cookies does not expose data to another browser, but this release has no email-based recovery. Automatic expiration still applies. Local comfort settings are separate device preferences and can be reset in access settings.
 
+Ordinary camera frames, per-region application baselines, captured checkpoint images, landmarks, and heatmaps remain in browser memory. A tab marker records only that a baseline was captured. Automatic Check this step saves scalar measurement values, target identity/level, provenance, timing, and the reported-pass flag. Reload/cache eviction can remove local images while preserving those numbers. A sample review can recompute its visibly labeled simulation from public source/Light/target records; a personal review cannot reconstruct an actual capture from the virtual preview.
+
+Uploading a checkpoint still for an optional AI second opinion is a separate action with explicit consent and the private-asset retention policy above. Planning-source and final photos are also explicitly selected uploads; they are not the automatic in-memory application baseline. Restart a lost baseline only when the user confirms that the area remains clear of newly applied product. A pose or lighting mismatch should return to the original capture conditions or use personal judgment, not silently reset earlier progress.
+
 ## Recovery decisions
 
-| State                                 | Response                                                                                                 |
-| ------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| Revision conflict                     | Load the latest saved state, then repeat the intended choice.                                            |
-| Interrupted upload                    | Retry upload/finalization; intent ownership and idempotent finalization prevent cross-studio attachment. |
-| Source, recipe, or candidate changed  | Do not attach a stale result. Request or choose a matching preview.                                      |
-| Known provider task ID                | Query that task and recover its output; do not create a duplicate paid task.                             |
-| `unknown_submission` without an ID    | Stop automatic submission. Inspect provider records and the private ledger before any manual decision.   |
-| Preview failed or rendering paused    | Instructions remain available. Recorded samples require an exact fictional input match.                  |
-| Camera/model unavailable              | Hide the guide; use text, speech, the person's own mirror, and manual checkpoints.                       |
-| AI unavailable, invalid, or uncertain | Explain the limitation, preserve manual choices, and never mark physical completion.                     |
-| Delete workflow failed                | Keep access revoked and retry durable erasure or authenticated cleanup.                                  |
+| State                                 | Response                                                                                                   |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Revision conflict                     | Load the latest saved state, then repeat the intended choice.                                              |
+| Interrupted upload                    | Retry upload/finalization; intent ownership and idempotent finalization prevent cross-studio attachment.   |
+| Source, recipe, or candidate changed  | Do not attach a stale result. Request or choose a matching preview.                                        |
+| Known provider task ID                | Query that task and recover its output; do not create a duplicate paid task.                               |
+| `unknown_submission` without an ID    | Stop automatic submission. Inspect provider records and the private ledger before any manual decision.     |
+| Preview failed or rendering paused    | Instructions remain available. Recorded samples require an exact fictional input match.                    |
+| Partial preview batch                 | Show queued/deferred target counts; choose an existing ready level or try later within the remaining caps. |
+| Camera/model unavailable              | Hide the guide; use text, speech, the person's own mirror, and manual checkpoints.                         |
+| Pose, eye position, or light changed  | Return to the original baseline conditions and check again; keep applied pigment in the physical history.  |
+| Original local baseline unavailable   | Keep the current result or deliberately restart only an area confirmed clear of newly applied product.     |
+| Target too subtle                     | Report the specific abstention and offer the user's judgment; do not invent progress.                      |
+| AI unavailable, invalid, or uncertain | Explain the limitation, preserve manual choices, and never mark physical completion.                       |
+| Delete workflow failed                | Keep access revoked and retry durable erasure or authenticated cleanup.                                    |
 
 Do not overwrite completed physical history, represent a generated preview as an applied result, or refill allowances by deleting reservations. Durable job state and the private ledger are the source of truth for provider reconciliation.

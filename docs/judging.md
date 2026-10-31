@@ -1,23 +1,37 @@
 # Judge walkthrough
 
-Open the public production URL supplied with the submission. An anonymous, browser-bound owner keeps the studio private. **Explore the sample** needs no camera, personal photo, or fresh YouCam credits.
+Open [STEADY](https://steady-taupe-pi.vercel.app) in a fresh browser profile. **Quick sample** needs no camera, personal photo, account form, or provider credits.
 
-1. **Choose the goal.** Pick rose, terracotta, or berry. The sample uses a fictional adult and an explicit example movement/tool profile. Optional inspiration analysis interprets a selected image into a supported palette; **Use this interpretation** is required to change the goal.
-2. **Compare methods.** The default sample has three distinct methods. Read the movement, tool, and tradeoffs. Images labeled **Recorded YouCam previews** match this exact source and recipe. Fresh generation, when enabled, is a real paid provider operation.
-3. **Begin the mirror.** Each step has an action, a stopping cue, and Pause/Check/Make this easier controls. The sample does not pretend to track a fictional still. A personal studio can use its local camera and on-device regional guide; the image remains unretouched.
-4. **Take a checkpoint.** A personal studio can keep judgment manual, save a selected still, or separately consent to AI feedback. An observation does not mark completion; the person confirms the next action. The sample illustrates this judgment flow without claiming physical application.
-5. **Change the remaining method.** After confirming the first cheek, choose **Make this easier → A different movement**. Review the preserved step and changed remainder before acceptance. Reload: confirmed history and the selected method persist, and resuming checks whether the physical state still matches.
-6. **Keep the method.** Finish the sample, which remains labeled as a walkthrough without a physical outcome. Save and reuse it. Reuse opens a fresh studio with no inherited capture or completed action. A personal result can retain its actual final photo and the user's satisfaction, comfort, and assistance assessment.
-7. **Inspect controls and privacy.** Access settings offer device preferences and deletion. Deletion revokes access immediately and queues private object removal. Optional voice requires microphone consent; say **“Steady, pause”** after enabling it. Visible controls remain available.
+## Measured cheeks and a different movement
 
-## Optional live integrations
+1. Choose **Quick sample** on home. The fictional profile opens directly to three methods. Compare **Light**, **Build**, and **Full** on **Fingertip tapping**; leave Full chosen for the clearest intermediate checkpoint.
+2. Choose the method and begin the walkthrough. Actual MediaPipe IMAGE landmarks place a cheek guide on the source portrait. The target crop and stopping-level controls sit beside the instruction.
+3. Choose **Measure the sample**. The app compares the recorded Light image with the source and the Full target. Rose satin is approximately 38% toward Full. Inspect the progress, heatmap, matching crop, and details. The **Simulated checkpoint** chip explains the input.
+4. **Continue the sample** explicitly confirms the first step. Choose **Make this easier → A different movement**. The cream brush proposal keeps the completed cheek and the same cream product while changing the remaining movement. Accept and choose **Continue sample**.
+5. Measure the other cheek. Guidance uses the new broad-pass movement. Finish and review both checkpoints, their numbers, and their individual targets. Save, reuse, or delete the method.
+6. Optional: choose **A softer version** during a remaining step. Light becomes the stopping point. Measuring the Light fixture against that same valid Light target gives 100%; confirmed steps retain their original history.
+7. Optional: before continuing a step, choose **I made a pass · check again** twice. The fixed sample image remains unchanged. Two consecutive reported build measurements gaining less than 10 percentage points toward the same current target offer an easier method. Changing the target or receiving a later at-target, over, or insufficient measurement dismisses that offer.
 
-The workbench helper has a labeled fictional sample with a sponge, broad brush, and cream blush. Suggestions remain unselected until confirmed. Sample suggestions remain example inventory rather than claiming the person owns those tools. Image-analysis consent covers Google Gemini and OpenAI fallback separately from YouCam preview consent.
+The sample never requests fresh previews. Its three cheek families and both textures have exact 25/45/65 recordings, including adaptation targets. Some subtle selected targets correctly abstain; the measurement report lists these cases.
 
-For a fresh YouCam demonstration, use an authorized adult photo in a personal studio, confirm compatible tools/products and comfortable movements, and request previews. The job is reserved and persisted before submission, continues durably, and stores its result privately. Availability and abuse limits depend on server configuration. Never present the virtual image as an actual outcome.
+## Change the look while keeping eye emphasis
 
-## Evaluate the demonstrated behavior
+1. On home, choose **Explore the eye sample** below the look cards.
+2. Compare **Fine upper liner** and **Soft tapped shadow**: different YouCam effect recipes, each with Light/Full recordings. Choose liner Full and begin.
+3. Measure the first upper-lid region: liner Light is about 39% of Full on the left eye. Confirm that step.
+4. Choose **Make this easier → A different movement**. The proposal changes the remaining eye from precise short strokes to low-precision tapping with shadow. It explains that the completed eye retains liner; no completed action is erased.
+5. Accept, continue the sample, and measure the remaining eye: shadow Light is about 44% of Full. Review retains each checkpoint's original target and action. **Stop eye steps** remains available without marking remaining actions complete.
 
-The central behavior is a real change of physical method that respects declared constraints and preserves completed work. Exact preview provenance, meaningful alternatives, explicit confirmations, private state, model-assisted interpretation, and camera/provider recovery are observable in the application.
+## Personal studio and optional integrations
 
-There was no participant or artist study. Synthetic fixtures, actual API calls, tests, and browser inspection demonstrate engineering behavior; they do not establish measured accessibility benefits, clinical efficacy, or independently applied makeup. This catalog covers broad cheek color and optional lips. Fine eyeliner, mascara, arbitrary reference transfer, hand tracking, and calibrated cosmetic-quality scoring are outside this release.
+**Find your way** opens the four-step setup. The planner reports feasibility as comfort and inventory are selected. An incompatible setup is blocked with specific changes; editing a choosing/ready studio preserves its photo. AI inspiration and tool suggestions stay optional and unselected until accepted.
+
+For a fresh preview, use an authorized adult photo and explicitly choose **Generate fresh ladder** on one method: up to 3 one-unit cheek tasks or 2 eye tasks. The server may accept a partial ladder within the remaining allowance and explains what is waiting. Full is prioritized. A softer version during application is limited to one Light task and a separate daily allowance. Sample sessions cannot call this paid path.
+
+In the local mirror, hold still before applying to capture a baseline automatically. Checkpoints use landmarks detected on the exact captured bitmap. Return to the original pose/light when prompted. A baseline survives repairs of the same region; after memory loss, replacement requires explicitly confirming that area has no newly applied product. Only measured numbers are saved automatically. A separately consented still can be stored and sent to Gemini/OpenAI for a second opinion that receives the local measurement.
+
+Pause, visible controls, instruction reading, and manual judgment remain available. Optional voice uses six exact wake-word commands. Deletion revokes access immediately and queues private object removal. **What this method needs** supplies tool/product/texture references, a copyable shade, and a printable brand-free note.
+
+## Evidence to assess
+
+The release demonstrates finite planning, preservation of confirmed work, real provider targets, local pixel measurement, provenance, private state, and recovery. [Measurement evaluation](evaluation-measurement.md) distinguishes synthetic checks from unverified hardware and physical application. [Engineering evaluation](evaluation.md) and [release verification](release-checklist.md) record the actual test and deployment gates. No participant benefit, clinical result, or artist validation is claimed.
