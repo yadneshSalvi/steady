@@ -1,0 +1,12 @@
+node_modules/
+.next/
+.vercel/
+.workflow-data/
+src/app/.well-known/
+public/
+plans/
+artifacts/
+test-results/
+playwright-report/
+pnpm-lock.yaml
+.env*

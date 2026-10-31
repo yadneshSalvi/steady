@@ -29,3 +29,12 @@ test-results/
 # Local machine files
 .DS_Store
 *.log
+
+# Reproducible browser runtime copied from the pinned npm package
+/public/vision/
+/.workflow-data/
+/src/app/.well-known/workflow/
+.vercel
+.env*
+/.swc
+!.env.example

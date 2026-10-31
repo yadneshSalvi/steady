@@ -1,0 +1,87 @@
+{
+  "metadata": {
+    "provenance": "sanitized_official_schema_examples",
+    "recordedAt": "2026-10-31",
+    "note": "Contract fixtures, not successful live requests. Identifiers, transport destinations and URLs are placeholders. No task was submitted to create these fixtures.",
+    "sources": [
+      "https://docs.makeupar.com/reference/makeup_vto",
+      "https://docs.makeupar.com/_bundle/reference/makeup_vto.json?download=",
+      "https://docs.makeupar.com/_bundle/reference/file.json?download=",
+      "https://docs.makeupar.com/_bundle/reference/unit_system.json?download=",
+      "https://plugins-media.makeupar.com/wcm-saas/patterns/blush.json",
+      "https://plugins-media.makeupar.com/wcm-saas/shapes/lipshape.json"
+    ]
+  },
+  "file": {
+    "status": 200,
+    "data": {
+      "files": [
+        {
+          "file_id": "sanitized-file-id",
+          "file_name": "steady-image.jpg",
+          "content_type": "image/jpeg",
+          "requests": [
+            {
+              "url": "https://storage.example.test/upload",
+              "method": "PUT",
+              "headers": {
+                "Content-Type": "image/jpeg",
+                "Content-Length": 5,
+                "x-upload-contract": "preserve-me"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "submitted": { "status": 200, "data": { "task_id": "sanitized-task-id" } },
+  "running": { "status": 200, "data": { "task_status": "running" } },
+  "success": {
+    "status": 200,
+    "data": {
+      "task_status": "success",
+      "results": { "url": "https://storage.example.test/result.jpg" }
+    }
+  },
+  "successOverviewArray": {
+    "status": 200,
+    "data": {
+      "task_status": "success",
+      "results": [{ "download_url": "https://storage.example.test/result.jpg" }]
+    }
+  },
+  "engineError": {
+    "status": 200,
+    "data": {
+      "task_status": "error",
+      "error": "error_decode_image",
+      "error_message": "Sanitized provider detail"
+    }
+  },
+  "creditError": {
+    "status": 400,
+    "error": "The operation could not be completed",
+    "error_code": "CreditInsufficiency"
+  },
+  "authError": { "status": 401, "error_code": "InvalidApiKey" },
+  "costs": {
+    "status": 200,
+    "result": {
+      "next_token": null,
+      "skus": [
+        {
+          "description": "AI Skin Analysis for SD 1~4 concerns",
+          "amount": 9,
+          "unit": "result_image",
+          "proc_unit": 1,
+          "run_task_url": "https://yce-api-01.makeupar.com/s2s/v2.0/task/skin-analysis"
+        }
+      ]
+    }
+  },
+  "catalogSubset": {
+    "blush": { "label": "1color1", "colorNum": 1 },
+    "lipshape": { "label": "original" }
+  }
+}

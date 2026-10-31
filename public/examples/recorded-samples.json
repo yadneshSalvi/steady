@@ -1,0 +1,354 @@
+{
+  "schemaVersion": 1,
+  "recipeRevision": 2,
+  "evidenceClass": "recorded_live_youcam_on_synthetic_source",
+  "source": {
+    "assetId": "sample-portrait-v1",
+    "url": "/images/studio-portrait.jpg",
+    "sha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+    "width": 1024,
+    "height": 1280,
+    "provenance": "synthetic_inspiration"
+  },
+  "records": [
+    {
+      "lookId": "rose",
+      "routeId": "tap",
+      "includeLips": false,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#BE6680",
+              "texture": "satin",
+              "colorIntensity": 64,
+              "glowStrength": 18
+            }
+          ]
+        }
+      ],
+      "recipeHash": "748a1ca0e4947ce274969251ea950423c14fc80c8716dde902d57e5ff494cece",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "819a4cbc9a0a7e0fd5912f370a014d9ed14bb34a69c90eaf4cb0c8ed08a4b630",
+      "taskHash": "8587282ae34cfdfec23386ce1191693c5697a2701979f43d4be62478d0c7c5c8",
+      "generatedAt": "2026-10-31T11:32:32.384Z",
+      "output": {
+        "url": "/examples/previews/rose-tap.png",
+        "sha256": "30ebd922e737797dd6b67781592bcfbf886a0519f089d76daf296026594cd2a1",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "rose",
+      "routeId": "sweep",
+      "includeLips": false,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#BE6680",
+              "texture": "matte",
+              "colorIntensity": 75
+            }
+          ]
+        }
+      ],
+      "recipeHash": "46b25e8ebe7bdfc06da92b851fd8a0126688f50c08e12bcca9d9ab9a11d22933",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "3f05e5c9f89c20a5043290e3165da8917260a3757850b3ffe7d1e649b49eabb6",
+      "taskHash": "73805dad1a3ede63ee3d75f098adab0d57990d92779a1dc3c739a7d146b5bd07",
+      "generatedAt": "2026-10-31T11:32:57.236Z",
+      "output": {
+        "url": "/examples/previews/rose-sweep.png",
+        "sha256": "1dbc5855470e13f16a0dc892f9286c0978640b3f69ff5f22807b49af06b83405",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "rose",
+      "routeId": "sponge",
+      "includeLips": false,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#BE6680",
+              "texture": "satin",
+              "colorIntensity": 60,
+              "glowStrength": 10
+            }
+          ]
+        }
+      ],
+      "recipeHash": "84c9df1fb681da048313bd24081371123acddbf5f9d192c775ab9fb879432aa4",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "d00a26479b18ab5b4118c6cdbafed3081032cab701b25b2f9123d1f7b1c57e99",
+      "taskHash": "ef221d67b1ee0540c8d1546ce7ac94a3667c212b373db03764e9839d5d6da3b0",
+      "generatedAt": "2026-10-31T11:34:04.507Z",
+      "output": {
+        "url": "/examples/previews/rose-sponge.png",
+        "sha256": "c2f813e528f253ad9e4d01e9ce3c1fd3d7dfa0c198637998bc147dcfc74dc4fd",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "terracotta",
+      "routeId": "tap",
+      "includeLips": false,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#BF7153",
+              "texture": "satin",
+              "colorIntensity": 64,
+              "glowStrength": 18
+            }
+          ]
+        }
+      ],
+      "recipeHash": "f99b06fa2f70a61236f271945ba20405ca332372073796c815600793298d2b6f",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "aca363339cd9c50b329b071df186f6ecacf05938d5f564f903d65c9608a1e82f",
+      "taskHash": "5b15fb29852f09b05b9767f2e2d2386f8d8505f7ff7ded3ebf8e6b064da0046a",
+      "generatedAt": "2026-10-31T11:35:58.760Z",
+      "output": {
+        "url": "/examples/previews/terracotta-tap.png",
+        "sha256": "a66fc06ca15969c4203864f50a3c415384cd080d1c987cd690821ff481588346",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "terracotta",
+      "routeId": "sweep",
+      "includeLips": false,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#BF7153",
+              "texture": "matte",
+              "colorIntensity": 75
+            }
+          ]
+        }
+      ],
+      "recipeHash": "e84986788c5ef47c3b00099290ec2db0efb936d50f241c01363bcc1cb01b447d",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "637598c8cacd6de0006dde7cf9fc5a015b641b91d292bfdff5337a160caa324b",
+      "taskHash": "baff0387f27ca33024d5d1f571e26a8685e01b6ac0e3130914e9365a100cd30d",
+      "generatedAt": "2026-10-31T11:36:37.539Z",
+      "output": {
+        "url": "/examples/previews/terracotta-sweep.png",
+        "sha256": "b143baa4d87f74687221a7b6952c246392d6e0e321bc5184fccc4def16344aca",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "terracotta",
+      "routeId": "sponge",
+      "includeLips": false,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#BF7153",
+              "texture": "satin",
+              "colorIntensity": 60,
+              "glowStrength": 10
+            }
+          ]
+        }
+      ],
+      "recipeHash": "b02cad2683c3f764a7714f66c8da52d49666140ce0fa7d8a720271726116b239",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "1a4fce8245b903238cdd076d12c1cd6a7f1fd1da92873fddb1dcec2b465ad3d8",
+      "taskHash": "ac1f68c5fd6147a83ab0fda27c6bf1f5f1bbe7a984a2bddd4741017f07009c97",
+      "generatedAt": "2026-10-31T11:34:17.405Z",
+      "output": {
+        "url": "/examples/previews/terracotta-sponge.png",
+        "sha256": "4f24fb4311fca94df48a1b50daa90af75581b19c77acfee65418f8320160ad8e",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "berry",
+      "routeId": "tap",
+      "includeLips": false,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#9D526C",
+              "texture": "satin",
+              "colorIntensity": 64,
+              "glowStrength": 18
+            }
+          ]
+        }
+      ],
+      "recipeHash": "68f3fc2ff8217b7536e3ad1e5e3517522c032152b821903188d1fd276428465c",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "b0cdc7c3e9936acbc17934391e6ca7a3c4c299889e81a945722795c44aa8db5d",
+      "taskHash": "959a311b0b0bc7a01f08910b1aebbd0473e20e24e194535a4f6104ac48932409",
+      "generatedAt": "2026-10-31T11:36:17.851Z",
+      "output": {
+        "url": "/examples/previews/berry-tap.png",
+        "sha256": "5356cf365ed9f396fc179d2c19d23852733d237b89a285c53f7f071613c7423c",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "berry",
+      "routeId": "sweep",
+      "includeLips": false,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#9D526C",
+              "texture": "matte",
+              "colorIntensity": 75
+            }
+          ]
+        }
+      ],
+      "recipeHash": "9e5af4a12fe86555499a500e0725c81da1a1aeafbc0c89b9e870b24937435539",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "06abb4c036d4e32bc53d6294d3c800498d4cb827b12f74ee2d25e7a72b976baf",
+      "taskHash": "bd2eb58db61cb9c8b15b4049d95e20803caf248013453dfba62bbcd72bd5a4d8",
+      "generatedAt": "2026-10-31T11:36:57.542Z",
+      "output": {
+        "url": "/examples/previews/berry-sweep.png",
+        "sha256": "f465c440c2347bfbd1698b29656f75daa52dc1811b8d4ad22f52f4d77d6b5e7a",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "lookId": "berry",
+      "routeId": "sponge",
+      "includeLips": false,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": {
+            "name": "1color1"
+          },
+          "palettes": [
+            {
+              "color": "#9D526C",
+              "texture": "satin",
+              "colorIntensity": 60,
+              "glowStrength": 10
+            }
+          ]
+        }
+      ],
+      "recipeHash": "afb390c66cfcd996d3588e69f1283e03a5b89f8d965a7068b671e2e625b54396",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "0ffc9fdca414d439ed9bc4415782accc325b0db60f991fde9afc29e5fdcd686a",
+      "taskHash": "0ae28831e6ed6344508512f9fe3ea141096fbf5a20492b147b6ac1aab5f93a2a",
+      "generatedAt": "2026-10-31T11:34:30.288Z",
+      "output": {
+        "url": "/examples/previews/berry-sponge.png",
+        "sha256": "da916ddd8772524f189f4285bd1e9bea32b94d0023293decd69f1ac80291fe9c",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    }
+  ]
+}

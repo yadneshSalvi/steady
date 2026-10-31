@@ -1,0 +1,54 @@
+[
+  {
+    "file": "studio-portrait.jpg",
+    "provenance": "synthetic_demo_subject",
+    "generator": "OpenAI gpt-image-2",
+    "generated_on": "2026-10-31",
+    "workflow": "imagegen bundled CLI generate-batch",
+    "dimensions": [
+      1024,
+      1280
+    ],
+    "sha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+    "prompt": "Use case: photorealistic-natural. Asset type: portrait for an accessible makeup studio application, clearly labeled as a fictional AI demo subject. Create a completely fictional adult South Asian woman aged about 32, shoulders-up centered front-facing portrait, looking directly into camera, face unobstructed and symmetric framing with both cheeks and complete hairline visible. Dark brown hair pulled comfortably back behind ears, no fringe over face, cream cotton top, plain warm taupe studio background. Bare skin, NO makeup: natural lips, no blush, no eyeliner, no eyeshadow, no foundation. Authentic visible skin texture, faint freckles, pores and ordinary under-eye texture; do not retouch, airbrush or beautify. Gentle relaxed closed-mouth expression. Beautiful editorial portrait, soft broad frontal daylight with even exposure and accurate natural medium-brown skin color; understated, humane, calm. Face occupies about 60 percent of image height; include whole head with margin and shoulders. No text, no logo, no jewelry blocking face, no hands, no objects. No resemblance to celebrities or any real identifiable person."
+  },
+  {
+    "file": "inspiration-terracotta.jpg",
+    "provenance": "synthetic_inspiration",
+    "generator": "OpenAI gpt-image-2",
+    "generated_on": "2026-10-31",
+    "workflow": "imagegen bundled CLI generate-batch",
+    "dimensions": [
+      1024,
+      1280
+    ],
+    "sha256": "f6a78734861cad54c06ad4db797dbea35870090d81513c05fe194ff75427bd03",
+    "prompt": "Use case: photorealistic-natural. Asset type: labeled synthetic makeup inspiration portrait for a calm personal studio. Completely fictional adult Black woman aged about 38 with deep brown skin, short natural textured hair, shoulders-up centered portrait, a subtle warm terracotta cheek makeup look with soft broad blended edges and natural lips. Authentic pores and skin texture, not retouched, no beauty smoothing, understated makeup. Warm ivory blouse and soft clay studio backdrop. Excellent independent beauty editorial photography with diffused daylight, friendly self-possessed expression, unobstructed cheeks and face; refined, calm, no exaggerated fashion pose. Full head and hair visible with margin, portrait crop. No text, no logos, no objects, no resemblance to a celebrity or identifiable real person."
+  },
+  {
+    "file": "inspiration-berry.jpg",
+    "provenance": "synthetic_inspiration",
+    "generator": "OpenAI gpt-image-2",
+    "generated_on": "2026-10-31",
+    "workflow": "imagegen bundled CLI generate-batch",
+    "dimensions": [
+      1024,
+      1280
+    ],
+    "sha256": "53c7c6879800b5c1c61618d080417ae326020dceacfa2327ed01ef6a9303eaa6",
+    "prompt": "Use case: photorealistic-natural. Asset type: labeled synthetic makeup inspiration portrait for a calm personal studio. Completely fictional adult woman aged about 48 with light neutral skin and shoulder-length dark brown hair tucked behind ears, shoulders-up centered front-facing portrait, a soft berry cheek makeup look with broad diffused edges and understated berry lip tint. Authentic visible skin texture, ordinary fine smile lines, not retouched or airbrushed. Deep forest-green simple cotton shirt, pale warm cream studio background. Beautiful independent editorial photography with soft broad daylight, peaceful confident expression. Both cheeks unobstructed, full head visible with margin, no hands or distracting objects. No text, no logos, no resemblance to any celebrity or real identifiable person."
+  },
+  {
+    "file": "workbench-sample.jpg",
+    "provenance": "synthetic_workbench_example",
+    "generator": "OpenAI gpt-image-2",
+    "generated_on": "2026-10-31",
+    "workflow": "imagegen bundled CLI generate",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "sha256": "d0e996c7098a5ff89712f1c8b4462b7a2d971d2783b637a7faaa569423822821",
+    "prompt": "Use case: photorealistic-natural. Asset type: fictional demonstration workbench photo for a personal makeup studio, labeled as an AI-created example. Create a clean editorial overhead photograph of three separated makeup objects laid on warm cream linen: a salmon pink teardrop makeup sponge, a broad soft round blush brush with a cream handle and dark bristles, and a small open glass pot of rose cream blush with its simple unbranded lid beside it. Print only the exact words \"CREAM BLUSH\" on the lid in readable dark letters. No other text, no brands, no hands, no faces, no logos. Make all three shapes unambiguous, fully visible, spaced apart, with true-to-life surface texture and gentle daylight. Calm refined beauty studio palette of cream, forest green shadow accents, blush pink and taupe. Landscape 3:2 framing. The photo is a fictional object-recognition demonstration, not a real product advertisement."
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "metadata": {
+    "provenance": "live_read_only_adapter_result",
+    "recordedAt": "2026-10-31T11:18:08.072Z",
+    "operation": "GET /s2s/v2.0/credit/feature-cost",
+    "billableTasksSubmitted": 0,
+    "pagesRead": 4,
+    "note": "Sanitized feature-cost metadata only. This does not establish remaining balance, an image generation, or any physical outcome."
+  },
+  "makeupSkus": [
+    {
+      "description": "AI Makeup Virtual Try-On V1.0",
+      "amount": 1,
+      "unit": "result_image",
+      "procUnit": 1,
+      "runTaskPath": "/s2s/v2.0/task/makeup-vto"
+    }
+  ]
+}
