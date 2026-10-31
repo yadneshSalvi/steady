@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "updatedAt": "2026-10-31T21:22:11.221564+00:00",
+  "applicationCommit": "836b18762500d2fca63d30fe4716aeefad4c3815",
+  "deploymentId": "dpl_FWdtp8MKFsB9LTYCJfM2DXDXVsNX",
+  "canonicalUrl": "https://steady-taupe-pi.vercel.app",
+  "deploymentState": "READY",
+  "localUnitTests": {
+    "passed": 265,
+    "total": 265,
+    "files": 29,
+    "localPostgresCases": 13,
+    "authCases": 17
+  },
+  "localBrowser": {
+    "passed": 20,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "retries": 0,
+    "durationSeconds": 64.117728
+  },
+  "recoveryAssertions": {
+    "forcedFirstSessionReadStatus": 429,
+    "sessionGetRequests": 2,
+    "ownerCookieUnchanged": true,
+    "completeSavedBerryBuildStudioUnchanged": true,
+    "anonymousPosts": 0,
+    "studioOrEventPosts": 0,
+    "previewPosts": 0
+  },
+  "gates": {
+    "build": "pass",
+    "lint": "pass, zero warnings",
+    "typecheck": "pass",
+    "format": "pass",
+    "diffWhitespace": "pass"
+  },
+  "independentInAppBrowser": {
+    "savedStudioReopenedAfterDeployment": true,
+    "priorLeftCheckpointPercent": 38,
+    "priorRightCheckpointPercent": 37,
+    "selectedFullTargetPreserved": true,
+    "simulatedHeatmapsRendered": true,
+    "newGenerationRequired": false
+  },
+  "canonicalBrowser": {
+    "status": "passed",
+    "passed": 20,
+    "failed": 0,
+    "skipped": 0,
+    "workers": 1,
+    "retries": 0,
+    "durationSeconds": 110.81,
+    "freshIsolatedAppContexts": true,
+    "sharedProtectionOrOwnerCookies": false,
+    "normalFreshAvailability": true,
+    "realPrivateUploadIsolationAndErasurePassed": true,
+    "paidYouCamSubmissions": 0
+  },
+  "paidYouCamSubmissionsInFollowUp": 0,
+  "limits": [
+    "These are software and synthetic-image checks, not a human usability or physical makeup study.",
+    "The recovery regression injects one HTTP 429 then uses the real session and saved studio APIs. It does not claim to benchmark real-world outage frequency."
+  ],
+  "credentialScan": {
+    "textFiles": 222,
+    "clientChunks": 37,
+    "knownValuesChecked": 27,
+    "findings": 0
+  }
+}

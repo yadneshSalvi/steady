@@ -1,5 +1,18 @@
 # Release verification
 
+## Session recovery follow-up — released and verified
+
+A failed session lookup previously fell through to anonymous sign-in, which could block an existing owner from reopening a private studio. The client now preserves that identity on network errors, unsuccessful HTTP responses, and malformed session data. It permits anonymous sign-in only after an HTTP 200 response containing literal JSON `null`. A session-read 429 can retry the GET once after a supported `X-Retry-After` or `Retry-After` delay of at most 60 seconds; an uncertain sign-in POST is never automatically repeated. Existing studio setup, preview, and provider behavior is unchanged.
+
+- [x] Seventeen focused auth regressions pass. The complete local unit/PostgreSQL suite passes 265/265 tests across 29 files, including 13 database cases in a disposable local schema.
+- [x] Production build, lint with zero warnings, TypeScript, formatting, and whitespace checks pass. Private execution artifacts are excluded from the product lint target.
+- [x] The complete browser suite passes 20/20 tests in 64.117728 seconds against the optimized local build, with no failures, skips, or retries. The new recovery regression forces one session-read 429, then verifies exactly two session GETs, an unchanged owner cookie and complete saved Berry/Build studio, and zero recovery-phase anonymous, studio-mutation, or preview POSTs. The suite also verifies actual private upload/isolation/erasure without paid YouCam submissions.
+- [x] Application `836b18762500d2fca63d30fe4716aeefad4c3815` deployed as `dpl_FWdtp8MKFsB9LTYCJfM2DXDXVsNX`; canonical production reached READY with normal availability. The complete deployed suite passed **20/20 in 110.81 seconds**, using one worker, no retries and fresh isolated app contexts. The session recovery case and real private upload/isolation/erasure passed with zero paid YouCam submissions.
+- [x] Independent in-app browser verification reopened the prior saved studio after deployment: its 38% left and 37% right simulated checkpoints, heatmaps and selected Full target remained intact. No new generation was needed.
+- [x] Final source/client credential scan found zero matches across 222 text files, including 37 client chunks, against 27 configured values. Environment files, private artifacts and plans remain ignored.
+
+[Sanitized follow-up evidence](evidence/session-recovery-release.json) records the exact checks. This supersedes the feature release’s application build below; its feature, protected-floor and bounded live-provider evidence remains valid. Later documentation-only commits do not change this deployed application.
+
 ## November review round — released and verified
 
 This round adds measured local checkpoints, exact intensity ladders, eye-goal adaptation, budget/retry hardening, and a shorter provenance system. On November 1, 2026 IST (October 31 UTC), application commit `8fc4712f451c6288019100ff8482389151adc54e` was deployed to [steady-taupe-pi.vercel.app](https://steady-taupe-pi.vercel.app). Deployment `dpl_CQg5WmKoS1X23LsiYFLtYtAGTWVZ` reached `READY` with the normal balance floor. The October record below describes the previous release; subsequent documentation-only commits do not alter this application build.

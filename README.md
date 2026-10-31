@@ -40,6 +40,8 @@ pnpm test:e2e                    # against the local running application
 
 The sample uses hash-verified recordings and never creates a fresh YouCam task. Fresh personal previews show a unit estimate and use durable reservations, a cached account-balance floor, and application/owner/IP limits. See [operations](docs/operations.md) for database integration checks and the separate private-upload browser test.
 
+The final review release passes **265 unit/integration tests and 20 browser tests**, including the complete suite on canonical production. An injected session-read failure preserves the browser owner and saved studio without any sign-in, studio-mutation or preview POST. [Release verification](docs/release-checklist.md) records deployment identity and the separate bounded live-provider checks.
+
 ## Evidence and limits
 
 The measurement is experimental image-color change relative to a chosen virtual target, not product quantity, physical completion, or clinical assessment. Unchanged recorded Full targets measure 100%; lighter recordings produce intermediate values. Synthetic tests cover normalization, pose changes, abstention, and actual IMAGE/VIDEO model execution. No participant or makeup-artist study is claimed. Physical camera diversity and real application benefit remain unverified.
