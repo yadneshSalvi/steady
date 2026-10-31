@@ -1,0 +1,2877 @@
+{
+  "sourceCommit": "d8ef475",
+  "generatedFrom": "Unmodified pre-review planner, catalog, contracts and recipes",
+  "techniques": [
+    {
+      "id": "cream-cheek-fingertip-tap",
+      "version": 1,
+      "validation": "draft",
+      "regionKind": "cheek",
+      "lookIds": ["rose", "terracotta", "berry"],
+      "routeId": "tap",
+      "tool": "fingertips",
+      "product": "cream_blush",
+      "motion": "tapping",
+      "title": "Fingertip tapping",
+      "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+      "alternatives": ["powder-cheek-wide-brush", "cream-cheek-sponge-tap"]
+    },
+    {
+      "id": "powder-cheek-wide-brush",
+      "version": 1,
+      "validation": "draft",
+      "regionKind": "cheek",
+      "lookIds": ["rose", "terracotta", "berry"],
+      "routeId": "sweep",
+      "tool": "wide_brush",
+      "product": "powder_blush",
+      "motion": "blending",
+      "title": "Wide-brush blending",
+      "stoppingCue": "Stop when you choose to keep the edge and color, or pause if the motion is uncomfortable.",
+      "alternatives": ["cream-cheek-fingertip-tap", "cream-cheek-sponge-tap"]
+    },
+    {
+      "id": "cream-cheek-sponge-tap",
+      "version": 1,
+      "validation": "draft",
+      "regionKind": "cheek",
+      "lookIds": ["rose", "terracotta", "berry"],
+      "routeId": "sponge",
+      "tool": "sponge",
+      "product": "cream_blush",
+      "motion": "tapping",
+      "title": "Sponge tapping",
+      "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+      "alternatives": ["cream-cheek-fingertip-tap", "powder-cheek-wide-brush"]
+    },
+    {
+      "id": "lip-color-fingertip-tap",
+      "version": 1,
+      "validation": "draft",
+      "regionKind": "lips",
+      "lookIds": ["rose", "terracotta", "berry"],
+      "tool": "fingertips",
+      "product": "lip_color",
+      "motion": "tapping",
+      "title": "Tap on lip color",
+      "stoppingCue": "Stop when you choose to keep the tint, or pause if the motion is uncomfortable.",
+      "alternatives": ["lip-color-brush-short-strokes"]
+    },
+    {
+      "id": "lip-color-brush-short-strokes",
+      "version": 1,
+      "validation": "draft",
+      "regionKind": "lips",
+      "lookIds": ["rose", "terracotta", "berry"],
+      "tool": "lip_brush",
+      "product": "lip_color",
+      "motion": "short_strokes",
+      "title": "Brush on lip color",
+      "stoppingCue": "Stop when you choose to keep the tint, or pause if the motion is uncomfortable.",
+      "alternatives": ["lip-color-fingertip-tap"]
+    }
+  ],
+  "instructions": [
+    {
+      "id": "cream-cheek-fingertip-tap",
+      "left_cheek": "Use your clean fingertips to tap cream blush over your left cheek. Pause to look at the color and edge.",
+      "right_cheek": "Use your clean fingertips to tap cream blush over your right cheek. Pause to look at the color and edge.",
+      "lips": "Use your clean fingertips to tap cream blush over your right cheek. Pause to look at the color and edge."
+    },
+    {
+      "id": "powder-cheek-wide-brush",
+      "left_cheek": "Use your wide blush brush to blend powder blush over your left cheek with broad movements. Pause to look at the color and edge.",
+      "right_cheek": "Use your wide blush brush to blend powder blush over your right cheek with broad movements. Pause to look at the color and edge.",
+      "lips": "Use your wide blush brush to blend powder blush over your right cheek with broad movements. Pause to look at the color and edge."
+    },
+    {
+      "id": "cream-cheek-sponge-tap",
+      "left_cheek": "Use your makeup sponge to tap cream blush over your left cheek. Pause to look at the color and edge.",
+      "right_cheek": "Use your makeup sponge to tap cream blush over your right cheek. Pause to look at the color and edge.",
+      "lips": "Use your makeup sponge to tap cream blush over your right cheek. Pause to look at the color and edge."
+    },
+    {
+      "id": "lip-color-fingertip-tap",
+      "left_cheek": "Use your clean fingertip to tap your lip color onto your lips. Pause to look at the tint.",
+      "right_cheek": "Use your clean fingertip to tap your lip color onto your lips. Pause to look at the tint.",
+      "lips": "Use your clean fingertip to tap your lip color onto your lips. Pause to look at the tint."
+    },
+    {
+      "id": "lip-color-brush-short-strokes",
+      "left_cheek": "Use your lip brush to apply your lip color with short strokes within your lips. Pause to look at the tint.",
+      "right_cheek": "Use your lip brush to apply your lip color with short strokes within your lips. Pause to look at the tint.",
+      "lips": "Use your lip brush to apply your lip color with short strokes within your lips. Pause to look at the tint."
+    }
+  ],
+  "sessions": [
+    {
+      "id": "frozen-pre-review-test",
+      "revision": 5,
+      "schemaVersion": 1,
+      "stage": "paused",
+      "mode": "sample",
+      "createdAt": "2026-10-31T18:58:48.361Z",
+      "updatedAt": "2026-10-31T18:58:48.372Z",
+      "lookId": "rose",
+      "includeLips": false,
+      "preferences": {
+        "movements": {
+          "tapping": "comfortable",
+          "blending": "comfortable",
+          "short_strokes": "comfortable"
+        },
+        "hand": "either",
+        "pace": "my_pace",
+        "audio": false,
+        "mirror": true
+      },
+      "tools": ["fingertips", "wide_brush", "sponge", "lip_brush"],
+      "products": ["cream_blush", "powder_blush", "lip_color"],
+      "assets": [],
+      "candidates": [
+        {
+          "id": "rose-tap-v1",
+          "routeId": "tap",
+          "name": "Fingertip tapping",
+          "tagline": "Cream blush · fingertip tapping",
+          "description": "Rose color family using your fingertips and the tapping movement you confirmed comfortable.",
+          "tools": ["fingertips"],
+          "attributes": ["Rose color family", "Soft cheek color"],
+          "tradeoffs": [
+            "Uses fingertips rather than a separate cheek tool.",
+            "Requires cream blush; no separate cheek tool."
+          ],
+          "actions": [
+            {
+              "id": "rose-tap-v1:left_cheek",
+              "techniqueId": "cream-cheek-fingertip-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your left cheek",
+              "instruction": "Use your clean fingertips to tap cream blush over your left cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "left_cheek",
+              "motion": "tapping",
+              "tool": "fingertips",
+              "product": "cream_blush",
+              "dependsOn": [],
+              "alternativeIds": [
+                "powder-cheek-wide-brush",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-tap-v1:right_cheek",
+              "techniqueId": "cream-cheek-fingertip-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your right cheek",
+              "instruction": "Use your clean fingertips to tap cream blush over your right cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "right_cheek",
+              "motion": "tapping",
+              "tool": "fingertips",
+              "product": "cream_blush",
+              "dependsOn": ["rose-tap-v1:left_cheek"],
+              "alternativeIds": [
+                "powder-cheek-wide-brush",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            }
+          ],
+          "previewStatus": "not_requested",
+          "recipe": [
+            {
+              "category": "skin_smooth",
+              "skinSmoothStrength": 0,
+              "skinSmoothColorIntensity": 0
+            },
+            {
+              "category": "blush",
+              "pattern": {
+                "name": "1color1"
+              },
+              "palettes": [
+                {
+                  "color": "#BE6680",
+                  "texture": "satin",
+                  "colorIntensity": 64,
+                  "glowStrength": 18
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "rose-sweep-v1",
+          "routeId": "sweep",
+          "name": "Wide-brush blending",
+          "tagline": "Powder blush · broad blending",
+          "description": "Rose color family using your wide blush brush and the broad blending movement you confirmed comfortable.",
+          "tools": ["wide_brush"],
+          "attributes": ["Rose color family", "Soft cheek color"],
+          "tradeoffs": [
+            "Uses a wide brush and powder rather than tapping cream blush.",
+            "Requires powder blush and a wide blush brush."
+          ],
+          "actions": [
+            {
+              "id": "rose-sweep-v1:left_cheek",
+              "techniqueId": "powder-cheek-wide-brush",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your left cheek",
+              "instruction": "Use your wide blush brush to blend powder blush over your left cheek with broad movements. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the edge and color, or pause if the motion is uncomfortable.",
+              "region": "left_cheek",
+              "motion": "blending",
+              "tool": "wide_brush",
+              "product": "powder_blush",
+              "dependsOn": [],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-sweep-v1:right_cheek",
+              "techniqueId": "powder-cheek-wide-brush",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your right cheek",
+              "instruction": "Use your wide blush brush to blend powder blush over your right cheek with broad movements. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the edge and color, or pause if the motion is uncomfortable.",
+              "region": "right_cheek",
+              "motion": "blending",
+              "tool": "wide_brush",
+              "product": "powder_blush",
+              "dependsOn": ["rose-sweep-v1:left_cheek"],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            }
+          ],
+          "previewStatus": "not_requested",
+          "recipe": [
+            {
+              "category": "skin_smooth",
+              "skinSmoothStrength": 0,
+              "skinSmoothColorIntensity": 0
+            },
+            {
+              "category": "blush",
+              "pattern": {
+                "name": "1color1"
+              },
+              "palettes": [
+                {
+                  "color": "#BE6680",
+                  "texture": "matte",
+                  "colorIntensity": 75
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "rose-sponge-v1",
+          "routeId": "sponge",
+          "name": "Sponge tapping",
+          "tagline": "Cream blush · sponge tapping",
+          "description": "Rose color family using your makeup sponge and the tapping movement you confirmed comfortable.",
+          "tools": ["sponge"],
+          "attributes": ["Rose color family", "Soft cheek color"],
+          "tradeoffs": [
+            "Uses a sponge rather than direct fingertip application.",
+            "Requires cream blush and a makeup sponge."
+          ],
+          "actions": [
+            {
+              "id": "rose-sponge-v1:left_cheek",
+              "techniqueId": "cream-cheek-sponge-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your left cheek",
+              "instruction": "Use your makeup sponge to tap cream blush over your left cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "left_cheek",
+              "motion": "tapping",
+              "tool": "sponge",
+              "product": "cream_blush",
+              "dependsOn": [],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "powder-cheek-wide-brush"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-sponge-v1:right_cheek",
+              "techniqueId": "cream-cheek-sponge-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your right cheek",
+              "instruction": "Use your makeup sponge to tap cream blush over your right cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "right_cheek",
+              "motion": "tapping",
+              "tool": "sponge",
+              "product": "cream_blush",
+              "dependsOn": ["rose-sponge-v1:left_cheek"],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "powder-cheek-wide-brush"
+              ],
+              "evidencePolicy": "user_judgment"
+            }
+          ],
+          "previewStatus": "not_requested",
+          "recipe": [
+            {
+              "category": "skin_smooth",
+              "skinSmoothStrength": 0,
+              "skinSmoothColorIntensity": 0
+            },
+            {
+              "category": "blush",
+              "pattern": {
+                "name": "1color1"
+              },
+              "palettes": [
+                {
+                  "color": "#BE6680",
+                  "texture": "satin",
+                  "colorIntensity": 60,
+                  "glowStrength": 10
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "conflicts": [],
+      "completedActionIds": ["rose-tap-v1:left_cheek"],
+      "observations": [
+        {
+          "id": "frozen-pre-review-test:observation:3",
+          "actionId": "rose-tap-v1:left_cheek",
+          "state": "insufficient_evidence",
+          "reason": "No actual checkpoint was selected. You can choose a capture or use your own judgment.",
+          "method": "user_judgment_only_v1",
+          "createdAt": "2026-10-31T18:58:48.372Z"
+        }
+      ],
+      "events": [
+        {
+          "id": "frozen-pre-review-test:event:0",
+          "type": "session_created",
+          "at": "2026-10-31T18:58:48.361Z",
+          "provenance": "system"
+        },
+        {
+          "id": "frozen-pre-review-test:event:1",
+          "type": "approve_candidate",
+          "at": "2026-10-31T18:58:48.372Z",
+          "provenance": "user_confirmed"
+        },
+        {
+          "id": "frozen-pre-review-test:event:2",
+          "type": "sample_walkthrough_started",
+          "at": "2026-10-31T18:58:48.372Z",
+          "provenance": "user_confirmed"
+        },
+        {
+          "id": "frozen-pre-review-test:event:3",
+          "type": "checkpoint",
+          "at": "2026-10-31T18:58:48.372Z",
+          "actionId": "rose-tap-v1:left_cheek",
+          "provenance": "user_confirmed"
+        },
+        {
+          "id": "frozen-pre-review-test:event:4",
+          "type": "sample_action_confirmed",
+          "at": "2026-10-31T18:58:48.372Z",
+          "actionId": "rose-tap-v1:left_cheek",
+          "provenance": "user_confirmed"
+        },
+        {
+          "id": "frozen-pre-review-test:event:5",
+          "type": "pause",
+          "at": "2026-10-31T18:58:48.372Z",
+          "provenance": "user_confirmed"
+        }
+      ],
+      "goalChanged": false,
+      "savedMethod": false,
+      "resumeRequired": true,
+      "activePlan": {
+        "id": "rose-tap-v1",
+        "routeId": "tap",
+        "name": "Fingertip tapping",
+        "tagline": "Cream blush · fingertip tapping",
+        "description": "Rose color family using your fingertips and the tapping movement you confirmed comfortable.",
+        "tools": ["fingertips"],
+        "attributes": ["Rose color family", "Soft cheek color"],
+        "tradeoffs": [
+          "Uses fingertips rather than a separate cheek tool.",
+          "Requires cream blush; no separate cheek tool."
+        ],
+        "actions": [
+          {
+            "id": "rose-tap-v1:left_cheek",
+            "techniqueId": "cream-cheek-fingertip-tap",
+            "techniqueVersion": 1,
+            "validation": "draft",
+            "title": "Your left cheek",
+            "instruction": "Use your clean fingertips to tap cream blush over your left cheek. Pause to look at the color and edge.",
+            "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+            "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+            "region": "left_cheek",
+            "motion": "tapping",
+            "tool": "fingertips",
+            "product": "cream_blush",
+            "dependsOn": [],
+            "alternativeIds": [
+              "powder-cheek-wide-brush",
+              "cream-cheek-sponge-tap"
+            ],
+            "evidencePolicy": "user_judgment"
+          },
+          {
+            "id": "rose-tap-v1:right_cheek",
+            "techniqueId": "cream-cheek-fingertip-tap",
+            "techniqueVersion": 1,
+            "validation": "draft",
+            "title": "Your right cheek",
+            "instruction": "Use your clean fingertips to tap cream blush over your right cheek. Pause to look at the color and edge.",
+            "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+            "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+            "region": "right_cheek",
+            "motion": "tapping",
+            "tool": "fingertips",
+            "product": "cream_blush",
+            "dependsOn": ["rose-tap-v1:left_cheek"],
+            "alternativeIds": [
+              "powder-cheek-wide-brush",
+              "cream-cheek-sponge-tap"
+            ],
+            "evidencePolicy": "user_judgment"
+          }
+        ],
+        "previewStatus": "not_requested",
+        "recipe": [
+          {
+            "category": "skin_smooth",
+            "skinSmoothStrength": 0,
+            "skinSmoothColorIntensity": 0
+          },
+          {
+            "category": "blush",
+            "pattern": {
+              "name": "1color1"
+            },
+            "palettes": [
+              {
+                "color": "#BE6680",
+                "texture": "satin",
+                "colorIntensity": 64,
+                "glowStrength": 18
+              }
+            ]
+          }
+        ]
+      },
+      "selectedCandidateId": "rose-tap-v1"
+    },
+    {
+      "id": "frozen-pre-review-test",
+      "revision": 5,
+      "schemaVersion": 1,
+      "stage": "paused",
+      "mode": "sample",
+      "createdAt": "2026-10-31T18:58:48.372Z",
+      "updatedAt": "2026-10-31T18:58:48.373Z",
+      "lookId": "rose",
+      "includeLips": false,
+      "preferences": {
+        "movements": {
+          "tapping": "comfortable",
+          "blending": "comfortable",
+          "short_strokes": "comfortable"
+        },
+        "hand": "either",
+        "pace": "my_pace",
+        "audio": false,
+        "mirror": true
+      },
+      "tools": ["fingertips", "wide_brush", "sponge", "lip_brush"],
+      "products": ["cream_blush", "powder_blush", "lip_color"],
+      "assets": [],
+      "candidates": [
+        {
+          "id": "rose-tap-v1",
+          "routeId": "tap",
+          "name": "Fingertip tapping",
+          "tagline": "Cream blush · fingertip tapping",
+          "description": "Rose color family using your fingertips and the tapping movement you confirmed comfortable.",
+          "tools": ["fingertips"],
+          "attributes": ["Rose color family", "Soft cheek color"],
+          "tradeoffs": [
+            "Uses fingertips rather than a separate cheek tool.",
+            "Requires cream blush; no separate cheek tool."
+          ],
+          "actions": [
+            {
+              "id": "rose-tap-v1:left_cheek",
+              "techniqueId": "cream-cheek-fingertip-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your left cheek",
+              "instruction": "Use your clean fingertips to tap cream blush over your left cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "left_cheek",
+              "motion": "tapping",
+              "tool": "fingertips",
+              "product": "cream_blush",
+              "dependsOn": [],
+              "alternativeIds": [
+                "powder-cheek-wide-brush",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-tap-v1:right_cheek",
+              "techniqueId": "cream-cheek-fingertip-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your right cheek",
+              "instruction": "Use your clean fingertips to tap cream blush over your right cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "right_cheek",
+              "motion": "tapping",
+              "tool": "fingertips",
+              "product": "cream_blush",
+              "dependsOn": ["rose-tap-v1:left_cheek"],
+              "alternativeIds": [
+                "powder-cheek-wide-brush",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            }
+          ],
+          "previewStatus": "not_requested",
+          "recipe": [
+            {
+              "category": "skin_smooth",
+              "skinSmoothStrength": 0,
+              "skinSmoothColorIntensity": 0
+            },
+            {
+              "category": "blush",
+              "pattern": {
+                "name": "1color1"
+              },
+              "palettes": [
+                {
+                  "color": "#BE6680",
+                  "texture": "satin",
+                  "colorIntensity": 64,
+                  "glowStrength": 18
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "rose-sweep-v1",
+          "routeId": "sweep",
+          "name": "Wide-brush blending",
+          "tagline": "Powder blush · broad blending",
+          "description": "Rose color family using your wide blush brush and the broad blending movement you confirmed comfortable.",
+          "tools": ["wide_brush"],
+          "attributes": ["Rose color family", "Soft cheek color"],
+          "tradeoffs": [
+            "Uses a wide brush and powder rather than tapping cream blush.",
+            "Requires powder blush and a wide blush brush."
+          ],
+          "actions": [
+            {
+              "id": "rose-sweep-v1:left_cheek",
+              "techniqueId": "powder-cheek-wide-brush",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your left cheek",
+              "instruction": "Use your wide blush brush to blend powder blush over your left cheek with broad movements. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the edge and color, or pause if the motion is uncomfortable.",
+              "region": "left_cheek",
+              "motion": "blending",
+              "tool": "wide_brush",
+              "product": "powder_blush",
+              "dependsOn": [],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-sweep-v1:right_cheek",
+              "techniqueId": "powder-cheek-wide-brush",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your right cheek",
+              "instruction": "Use your wide blush brush to blend powder blush over your right cheek with broad movements. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the edge and color, or pause if the motion is uncomfortable.",
+              "region": "right_cheek",
+              "motion": "blending",
+              "tool": "wide_brush",
+              "product": "powder_blush",
+              "dependsOn": ["rose-sweep-v1:left_cheek"],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            }
+          ],
+          "previewStatus": "not_requested",
+          "recipe": [
+            {
+              "category": "skin_smooth",
+              "skinSmoothStrength": 0,
+              "skinSmoothColorIntensity": 0
+            },
+            {
+              "category": "blush",
+              "pattern": {
+                "name": "1color1"
+              },
+              "palettes": [
+                {
+                  "color": "#BE6680",
+                  "texture": "matte",
+                  "colorIntensity": 75
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "rose-sponge-v1",
+          "routeId": "sponge",
+          "name": "Sponge tapping",
+          "tagline": "Cream blush · sponge tapping",
+          "description": "Rose color family using your makeup sponge and the tapping movement you confirmed comfortable.",
+          "tools": ["sponge"],
+          "attributes": ["Rose color family", "Soft cheek color"],
+          "tradeoffs": [
+            "Uses a sponge rather than direct fingertip application.",
+            "Requires cream blush and a makeup sponge."
+          ],
+          "actions": [
+            {
+              "id": "rose-sponge-v1:left_cheek",
+              "techniqueId": "cream-cheek-sponge-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your left cheek",
+              "instruction": "Use your makeup sponge to tap cream blush over your left cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "left_cheek",
+              "motion": "tapping",
+              "tool": "sponge",
+              "product": "cream_blush",
+              "dependsOn": [],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "powder-cheek-wide-brush"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-sponge-v1:right_cheek",
+              "techniqueId": "cream-cheek-sponge-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your right cheek",
+              "instruction": "Use your makeup sponge to tap cream blush over your right cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "right_cheek",
+              "motion": "tapping",
+              "tool": "sponge",
+              "product": "cream_blush",
+              "dependsOn": ["rose-sponge-v1:left_cheek"],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "powder-cheek-wide-brush"
+              ],
+              "evidencePolicy": "user_judgment"
+            }
+          ],
+          "previewStatus": "not_requested",
+          "recipe": [
+            {
+              "category": "skin_smooth",
+              "skinSmoothStrength": 0,
+              "skinSmoothColorIntensity": 0
+            },
+            {
+              "category": "blush",
+              "pattern": {
+                "name": "1color1"
+              },
+              "palettes": [
+                {
+                  "color": "#BE6680",
+                  "texture": "satin",
+                  "colorIntensity": 60,
+                  "glowStrength": 10
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "conflicts": [],
+      "completedActionIds": ["rose-sweep-v1:left_cheek"],
+      "observations": [
+        {
+          "id": "frozen-pre-review-test:observation:3",
+          "actionId": "rose-sweep-v1:left_cheek",
+          "state": "insufficient_evidence",
+          "reason": "No actual checkpoint was selected. You can choose a capture or use your own judgment.",
+          "method": "user_judgment_only_v1",
+          "createdAt": "2026-10-31T18:58:48.373Z"
+        }
+      ],
+      "events": [
+        {
+          "id": "frozen-pre-review-test:event:0",
+          "type": "session_created",
+          "at": "2026-10-31T18:58:48.372Z",
+          "provenance": "system"
+        },
+        {
+          "id": "frozen-pre-review-test:event:1",
+          "type": "approve_candidate",
+          "at": "2026-10-31T18:58:48.373Z",
+          "provenance": "user_confirmed"
+        },
+        {
+          "id": "frozen-pre-review-test:event:2",
+          "type": "sample_walkthrough_started",
+          "at": "2026-10-31T18:58:48.373Z",
+          "provenance": "user_confirmed"
+        },
+        {
+          "id": "frozen-pre-review-test:event:3",
+          "type": "checkpoint",
+          "at": "2026-10-31T18:58:48.373Z",
+          "actionId": "rose-sweep-v1:left_cheek",
+          "provenance": "user_confirmed"
+        },
+        {
+          "id": "frozen-pre-review-test:event:4",
+          "type": "sample_action_confirmed",
+          "at": "2026-10-31T18:58:48.373Z",
+          "actionId": "rose-sweep-v1:left_cheek",
+          "provenance": "user_confirmed"
+        },
+        {
+          "id": "frozen-pre-review-test:event:5",
+          "type": "pause",
+          "at": "2026-10-31T18:58:48.373Z",
+          "provenance": "user_confirmed"
+        }
+      ],
+      "goalChanged": false,
+      "savedMethod": false,
+      "resumeRequired": true,
+      "activePlan": {
+        "id": "rose-sweep-v1",
+        "routeId": "sweep",
+        "name": "Wide-brush blending",
+        "tagline": "Powder blush · broad blending",
+        "description": "Rose color family using your wide blush brush and the broad blending movement you confirmed comfortable.",
+        "tools": ["wide_brush"],
+        "attributes": ["Rose color family", "Soft cheek color"],
+        "tradeoffs": [
+          "Uses a wide brush and powder rather than tapping cream blush.",
+          "Requires powder blush and a wide blush brush."
+        ],
+        "actions": [
+          {
+            "id": "rose-sweep-v1:left_cheek",
+            "techniqueId": "powder-cheek-wide-brush",
+            "techniqueVersion": 1,
+            "validation": "draft",
+            "title": "Your left cheek",
+            "instruction": "Use your wide blush brush to blend powder blush over your left cheek with broad movements. Pause to look at the color and edge.",
+            "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+            "stoppingCue": "Stop when you choose to keep the edge and color, or pause if the motion is uncomfortable.",
+            "region": "left_cheek",
+            "motion": "blending",
+            "tool": "wide_brush",
+            "product": "powder_blush",
+            "dependsOn": [],
+            "alternativeIds": [
+              "cream-cheek-fingertip-tap",
+              "cream-cheek-sponge-tap"
+            ],
+            "evidencePolicy": "user_judgment"
+          },
+          {
+            "id": "rose-sweep-v1:right_cheek",
+            "techniqueId": "powder-cheek-wide-brush",
+            "techniqueVersion": 1,
+            "validation": "draft",
+            "title": "Your right cheek",
+            "instruction": "Use your wide blush brush to blend powder blush over your right cheek with broad movements. Pause to look at the color and edge.",
+            "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+            "stoppingCue": "Stop when you choose to keep the edge and color, or pause if the motion is uncomfortable.",
+            "region": "right_cheek",
+            "motion": "blending",
+            "tool": "wide_brush",
+            "product": "powder_blush",
+            "dependsOn": ["rose-sweep-v1:left_cheek"],
+            "alternativeIds": [
+              "cream-cheek-fingertip-tap",
+              "cream-cheek-sponge-tap"
+            ],
+            "evidencePolicy": "user_judgment"
+          }
+        ],
+        "previewStatus": "not_requested",
+        "recipe": [
+          {
+            "category": "skin_smooth",
+            "skinSmoothStrength": 0,
+            "skinSmoothColorIntensity": 0
+          },
+          {
+            "category": "blush",
+            "pattern": {
+              "name": "1color1"
+            },
+            "palettes": [
+              {
+                "color": "#BE6680",
+                "texture": "matte",
+                "colorIntensity": 75
+              }
+            ]
+          }
+        ]
+      },
+      "selectedCandidateId": "rose-sweep-v1"
+    },
+    {
+      "id": "frozen-pre-review-test",
+      "revision": 5,
+      "schemaVersion": 1,
+      "stage": "paused",
+      "mode": "sample",
+      "createdAt": "2026-10-31T18:58:48.373Z",
+      "updatedAt": "2026-10-31T18:58:48.373Z",
+      "lookId": "rose",
+      "includeLips": false,
+      "preferences": {
+        "movements": {
+          "tapping": "comfortable",
+          "blending": "comfortable",
+          "short_strokes": "comfortable"
+        },
+        "hand": "either",
+        "pace": "my_pace",
+        "audio": false,
+        "mirror": true
+      },
+      "tools": ["fingertips", "wide_brush", "sponge", "lip_brush"],
+      "products": ["cream_blush", "powder_blush", "lip_color"],
+      "assets": [],
+      "candidates": [
+        {
+          "id": "rose-tap-v1",
+          "routeId": "tap",
+          "name": "Fingertip tapping",
+          "tagline": "Cream blush · fingertip tapping",
+          "description": "Rose color family using your fingertips and the tapping movement you confirmed comfortable.",
+          "tools": ["fingertips"],
+          "attributes": ["Rose color family", "Soft cheek color"],
+          "tradeoffs": [
+            "Uses fingertips rather than a separate cheek tool.",
+            "Requires cream blush; no separate cheek tool."
+          ],
+          "actions": [
+            {
+              "id": "rose-tap-v1:left_cheek",
+              "techniqueId": "cream-cheek-fingertip-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your left cheek",
+              "instruction": "Use your clean fingertips to tap cream blush over your left cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "left_cheek",
+              "motion": "tapping",
+              "tool": "fingertips",
+              "product": "cream_blush",
+              "dependsOn": [],
+              "alternativeIds": [
+                "powder-cheek-wide-brush",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-tap-v1:right_cheek",
+              "techniqueId": "cream-cheek-fingertip-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your right cheek",
+              "instruction": "Use your clean fingertips to tap cream blush over your right cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "right_cheek",
+              "motion": "tapping",
+              "tool": "fingertips",
+              "product": "cream_blush",
+              "dependsOn": ["rose-tap-v1:left_cheek"],
+              "alternativeIds": [
+                "powder-cheek-wide-brush",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            }
+          ],
+          "previewStatus": "not_requested",
+          "recipe": [
+            {
+              "category": "skin_smooth",
+              "skinSmoothStrength": 0,
+              "skinSmoothColorIntensity": 0
+            },
+            {
+              "category": "blush",
+              "pattern": {
+                "name": "1color1"
+              },
+              "palettes": [
+                {
+                  "color": "#BE6680",
+                  "texture": "satin",
+                  "colorIntensity": 64,
+                  "glowStrength": 18
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "rose-sweep-v1",
+          "routeId": "sweep",
+          "name": "Wide-brush blending",
+          "tagline": "Powder blush · broad blending",
+          "description": "Rose color family using your wide blush brush and the broad blending movement you confirmed comfortable.",
+          "tools": ["wide_brush"],
+          "attributes": ["Rose color family", "Soft cheek color"],
+          "tradeoffs": [
+            "Uses a wide brush and powder rather than tapping cream blush.",
+            "Requires powder blush and a wide blush brush."
+          ],
+          "actions": [
+            {
+              "id": "rose-sweep-v1:left_cheek",
+              "techniqueId": "powder-cheek-wide-brush",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your left cheek",
+              "instruction": "Use your wide blush brush to blend powder blush over your left cheek with broad movements. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the edge and color, or pause if the motion is uncomfortable.",
+              "region": "left_cheek",
+              "motion": "blending",
+              "tool": "wide_brush",
+              "product": "powder_blush",
+              "dependsOn": [],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-sweep-v1:right_cheek",
+              "techniqueId": "powder-cheek-wide-brush",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your right cheek",
+              "instruction": "Use your wide blush brush to blend powder blush over your right cheek with broad movements. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the edge and color, or pause if the motion is uncomfortable.",
+              "region": "right_cheek",
+              "motion": "blending",
+              "tool": "wide_brush",
+              "product": "powder_blush",
+              "dependsOn": ["rose-sweep-v1:left_cheek"],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            }
+          ],
+          "previewStatus": "not_requested",
+          "recipe": [
+            {
+              "category": "skin_smooth",
+              "skinSmoothStrength": 0,
+              "skinSmoothColorIntensity": 0
+            },
+            {
+              "category": "blush",
+              "pattern": {
+                "name": "1color1"
+              },
+              "palettes": [
+                {
+                  "color": "#BE6680",
+                  "texture": "matte",
+                  "colorIntensity": 75
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "rose-sponge-v1",
+          "routeId": "sponge",
+          "name": "Sponge tapping",
+          "tagline": "Cream blush · sponge tapping",
+          "description": "Rose color family using your makeup sponge and the tapping movement you confirmed comfortable.",
+          "tools": ["sponge"],
+          "attributes": ["Rose color family", "Soft cheek color"],
+          "tradeoffs": [
+            "Uses a sponge rather than direct fingertip application.",
+            "Requires cream blush and a makeup sponge."
+          ],
+          "actions": [
+            {
+              "id": "rose-sponge-v1:left_cheek",
+              "techniqueId": "cream-cheek-sponge-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your left cheek",
+              "instruction": "Use your makeup sponge to tap cream blush over your left cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "left_cheek",
+              "motion": "tapping",
+              "tool": "sponge",
+              "product": "cream_blush",
+              "dependsOn": [],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "powder-cheek-wide-brush"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-sponge-v1:right_cheek",
+              "techniqueId": "cream-cheek-sponge-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your right cheek",
+              "instruction": "Use your makeup sponge to tap cream blush over your right cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "right_cheek",
+              "motion": "tapping",
+              "tool": "sponge",
+              "product": "cream_blush",
+              "dependsOn": ["rose-sponge-v1:left_cheek"],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "powder-cheek-wide-brush"
+              ],
+              "evidencePolicy": "user_judgment"
+            }
+          ],
+          "previewStatus": "not_requested",
+          "recipe": [
+            {
+              "category": "skin_smooth",
+              "skinSmoothStrength": 0,
+              "skinSmoothColorIntensity": 0
+            },
+            {
+              "category": "blush",
+              "pattern": {
+                "name": "1color1"
+              },
+              "palettes": [
+                {
+                  "color": "#BE6680",
+                  "texture": "satin",
+                  "colorIntensity": 60,
+                  "glowStrength": 10
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "conflicts": [],
+      "completedActionIds": ["rose-sponge-v1:left_cheek"],
+      "observations": [
+        {
+          "id": "frozen-pre-review-test:observation:3",
+          "actionId": "rose-sponge-v1:left_cheek",
+          "state": "insufficient_evidence",
+          "reason": "No actual checkpoint was selected. You can choose a capture or use your own judgment.",
+          "method": "user_judgment_only_v1",
+          "createdAt": "2026-10-31T18:58:48.373Z"
+        }
+      ],
+      "events": [
+        {
+          "id": "frozen-pre-review-test:event:0",
+          "type": "session_created",
+          "at": "2026-10-31T18:58:48.373Z",
+          "provenance": "system"
+        },
+        {
+          "id": "frozen-pre-review-test:event:1",
+          "type": "approve_candidate",
+          "at": "2026-10-31T18:58:48.373Z",
+          "provenance": "user_confirmed"
+        },
+        {
+          "id": "frozen-pre-review-test:event:2",
+          "type": "sample_walkthrough_started",
+          "at": "2026-10-31T18:58:48.373Z",
+          "provenance": "user_confirmed"
+        },
+        {
+          "id": "frozen-pre-review-test:event:3",
+          "type": "checkpoint",
+          "at": "2026-10-31T18:58:48.373Z",
+          "actionId": "rose-sponge-v1:left_cheek",
+          "provenance": "user_confirmed"
+        },
+        {
+          "id": "frozen-pre-review-test:event:4",
+          "type": "sample_action_confirmed",
+          "at": "2026-10-31T18:58:48.373Z",
+          "actionId": "rose-sponge-v1:left_cheek",
+          "provenance": "user_confirmed"
+        },
+        {
+          "id": "frozen-pre-review-test:event:5",
+          "type": "pause",
+          "at": "2026-10-31T18:58:48.373Z",
+          "provenance": "user_confirmed"
+        }
+      ],
+      "goalChanged": false,
+      "savedMethod": false,
+      "resumeRequired": true,
+      "activePlan": {
+        "id": "rose-sponge-v1",
+        "routeId": "sponge",
+        "name": "Sponge tapping",
+        "tagline": "Cream blush · sponge tapping",
+        "description": "Rose color family using your makeup sponge and the tapping movement you confirmed comfortable.",
+        "tools": ["sponge"],
+        "attributes": ["Rose color family", "Soft cheek color"],
+        "tradeoffs": [
+          "Uses a sponge rather than direct fingertip application.",
+          "Requires cream blush and a makeup sponge."
+        ],
+        "actions": [
+          {
+            "id": "rose-sponge-v1:left_cheek",
+            "techniqueId": "cream-cheek-sponge-tap",
+            "techniqueVersion": 1,
+            "validation": "draft",
+            "title": "Your left cheek",
+            "instruction": "Use your makeup sponge to tap cream blush over your left cheek. Pause to look at the color and edge.",
+            "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+            "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+            "region": "left_cheek",
+            "motion": "tapping",
+            "tool": "sponge",
+            "product": "cream_blush",
+            "dependsOn": [],
+            "alternativeIds": [
+              "cream-cheek-fingertip-tap",
+              "powder-cheek-wide-brush"
+            ],
+            "evidencePolicy": "user_judgment"
+          },
+          {
+            "id": "rose-sponge-v1:right_cheek",
+            "techniqueId": "cream-cheek-sponge-tap",
+            "techniqueVersion": 1,
+            "validation": "draft",
+            "title": "Your right cheek",
+            "instruction": "Use your makeup sponge to tap cream blush over your right cheek. Pause to look at the color and edge.",
+            "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+            "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+            "region": "right_cheek",
+            "motion": "tapping",
+            "tool": "sponge",
+            "product": "cream_blush",
+            "dependsOn": ["rose-sponge-v1:left_cheek"],
+            "alternativeIds": [
+              "cream-cheek-fingertip-tap",
+              "powder-cheek-wide-brush"
+            ],
+            "evidencePolicy": "user_judgment"
+          }
+        ],
+        "previewStatus": "not_requested",
+        "recipe": [
+          {
+            "category": "skin_smooth",
+            "skinSmoothStrength": 0,
+            "skinSmoothColorIntensity": 0
+          },
+          {
+            "category": "blush",
+            "pattern": {
+              "name": "1color1"
+            },
+            "palettes": [
+              {
+                "color": "#BE6680",
+                "texture": "satin",
+                "colorIntensity": 60,
+                "glowStrength": 10
+              }
+            ]
+          }
+        ]
+      },
+      "selectedCandidateId": "rose-sponge-v1"
+    },
+    {
+      "id": "frozen-pre-review-test",
+      "revision": 1,
+      "schemaVersion": 1,
+      "stage": "ready",
+      "mode": "sample",
+      "createdAt": "2026-10-31T18:58:48.373Z",
+      "updatedAt": "2026-10-31T18:58:48.377Z",
+      "lookId": "rose",
+      "includeLips": true,
+      "preferences": {
+        "movements": {
+          "tapping": "comfortable",
+          "blending": "comfortable",
+          "short_strokes": "comfortable"
+        },
+        "hand": "either",
+        "pace": "my_pace",
+        "audio": false,
+        "mirror": true
+      },
+      "tools": ["fingertips", "wide_brush", "sponge", "lip_brush"],
+      "products": ["cream_blush", "powder_blush", "lip_color"],
+      "assets": [],
+      "candidates": [
+        {
+          "id": "rose-tap-lip-color-fingertip-tap-v1",
+          "routeId": "tap",
+          "name": "Fingertip tapping",
+          "tagline": "Cream blush · fingertip tapping",
+          "description": "Rose color family using your fingertips and the tapping movement you confirmed comfortable.",
+          "tools": ["fingertips"],
+          "attributes": [
+            "Rose color family",
+            "Soft cheek color",
+            "Optional lip tint"
+          ],
+          "tradeoffs": [
+            "Uses fingertips rather than a separate cheek tool.",
+            "Requires cream blush; no separate cheek tool.",
+            "Lip color uses fingertips and tapping."
+          ],
+          "actions": [
+            {
+              "id": "rose-tap-lip-color-fingertip-tap-v1:left_cheek",
+              "techniqueId": "cream-cheek-fingertip-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your left cheek",
+              "instruction": "Use your clean fingertips to tap cream blush over your left cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "left_cheek",
+              "motion": "tapping",
+              "tool": "fingertips",
+              "product": "cream_blush",
+              "dependsOn": [],
+              "alternativeIds": [
+                "powder-cheek-wide-brush",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-tap-lip-color-fingertip-tap-v1:right_cheek",
+              "techniqueId": "cream-cheek-fingertip-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your right cheek",
+              "instruction": "Use your clean fingertips to tap cream blush over your right cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "right_cheek",
+              "motion": "tapping",
+              "tool": "fingertips",
+              "product": "cream_blush",
+              "dependsOn": ["rose-tap-lip-color-fingertip-tap-v1:left_cheek"],
+              "alternativeIds": [
+                "powder-cheek-wide-brush",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-tap-lip-color-fingertip-tap-v1:lips",
+              "techniqueId": "lip-color-fingertip-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Tap on lip color",
+              "instruction": "Use your clean fingertip to tap your lip color onto your lips. Pause to look at the tint.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the tint, or pause if the motion is uncomfortable.",
+              "region": "lips",
+              "motion": "tapping",
+              "tool": "fingertips",
+              "product": "lip_color",
+              "dependsOn": ["rose-tap-lip-color-fingertip-tap-v1:right_cheek"],
+              "alternativeIds": ["lip-color-brush-short-strokes"],
+              "evidencePolicy": "user_judgment"
+            }
+          ],
+          "previewStatus": "not_requested",
+          "recipe": [
+            {
+              "category": "skin_smooth",
+              "skinSmoothStrength": 0,
+              "skinSmoothColorIntensity": 0
+            },
+            {
+              "category": "blush",
+              "pattern": {
+                "name": "1color1"
+              },
+              "palettes": [
+                {
+                  "color": "#BE6680",
+                  "texture": "satin",
+                  "colorIntensity": 64,
+                  "glowStrength": 18
+                }
+              ]
+            },
+            {
+              "category": "lip_color",
+              "shape": {
+                "name": "original"
+              },
+              "morphology": {
+                "fullness": 0,
+                "wrinkless": 0
+              },
+              "style": {
+                "type": "full"
+              },
+              "palettes": [
+                {
+                  "color": "#A54F68",
+                  "texture": "matte",
+                  "colorIntensity": 32
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "rose-sweep-lip-color-brush-short-strokes-v1",
+          "routeId": "sweep",
+          "name": "Wide-brush blending",
+          "tagline": "Powder blush · broad blending",
+          "description": "Rose color family using your wide blush brush and the broad blending movement you confirmed comfortable.",
+          "tools": ["wide_brush", "lip_brush"],
+          "attributes": [
+            "Rose color family",
+            "Soft cheek color",
+            "Optional lip tint"
+          ],
+          "tradeoffs": [
+            "Uses a wide brush and powder rather than tapping cream blush.",
+            "Requires powder blush and a wide blush brush.",
+            "Lip color uses lip brush and short strokes."
+          ],
+          "actions": [
+            {
+              "id": "rose-sweep-lip-color-brush-short-strokes-v1:left_cheek",
+              "techniqueId": "powder-cheek-wide-brush",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your left cheek",
+              "instruction": "Use your wide blush brush to blend powder blush over your left cheek with broad movements. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the edge and color, or pause if the motion is uncomfortable.",
+              "region": "left_cheek",
+              "motion": "blending",
+              "tool": "wide_brush",
+              "product": "powder_blush",
+              "dependsOn": [],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-sweep-lip-color-brush-short-strokes-v1:right_cheek",
+              "techniqueId": "powder-cheek-wide-brush",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your right cheek",
+              "instruction": "Use your wide blush brush to blend powder blush over your right cheek with broad movements. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the edge and color, or pause if the motion is uncomfortable.",
+              "region": "right_cheek",
+              "motion": "blending",
+              "tool": "wide_brush",
+              "product": "powder_blush",
+              "dependsOn": [
+                "rose-sweep-lip-color-brush-short-strokes-v1:left_cheek"
+              ],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-sweep-lip-color-brush-short-strokes-v1:lips",
+              "techniqueId": "lip-color-brush-short-strokes",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Brush on lip color",
+              "instruction": "Use your lip brush to apply your lip color with short strokes within your lips. Pause to look at the tint.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the tint, or pause if the motion is uncomfortable.",
+              "region": "lips",
+              "motion": "short_strokes",
+              "tool": "lip_brush",
+              "product": "lip_color",
+              "dependsOn": [
+                "rose-sweep-lip-color-brush-short-strokes-v1:right_cheek"
+              ],
+              "alternativeIds": ["lip-color-fingertip-tap"],
+              "evidencePolicy": "user_judgment"
+            }
+          ],
+          "previewStatus": "not_requested",
+          "recipe": [
+            {
+              "category": "skin_smooth",
+              "skinSmoothStrength": 0,
+              "skinSmoothColorIntensity": 0
+            },
+            {
+              "category": "blush",
+              "pattern": {
+                "name": "1color1"
+              },
+              "palettes": [
+                {
+                  "color": "#BE6680",
+                  "texture": "matte",
+                  "colorIntensity": 75
+                }
+              ]
+            },
+            {
+              "category": "lip_color",
+              "shape": {
+                "name": "original"
+              },
+              "morphology": {
+                "fullness": 0,
+                "wrinkless": 0
+              },
+              "style": {
+                "type": "full"
+              },
+              "palettes": [
+                {
+                  "color": "#A54F68",
+                  "texture": "matte",
+                  "colorIntensity": 32
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "rose-sponge-lip-color-brush-short-strokes-v1",
+          "routeId": "sponge",
+          "name": "Sponge tapping",
+          "tagline": "Cream blush · sponge tapping",
+          "description": "Rose color family using your makeup sponge and the tapping movement you confirmed comfortable.",
+          "tools": ["sponge", "lip_brush"],
+          "attributes": [
+            "Rose color family",
+            "Soft cheek color",
+            "Optional lip tint"
+          ],
+          "tradeoffs": [
+            "Uses a sponge rather than direct fingertip application.",
+            "Requires cream blush and a makeup sponge.",
+            "Lip color uses lip brush and short strokes."
+          ],
+          "actions": [
+            {
+              "id": "rose-sponge-lip-color-brush-short-strokes-v1:left_cheek",
+              "techniqueId": "cream-cheek-sponge-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your left cheek",
+              "instruction": "Use your makeup sponge to tap cream blush over your left cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "left_cheek",
+              "motion": "tapping",
+              "tool": "sponge",
+              "product": "cream_blush",
+              "dependsOn": [],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "powder-cheek-wide-brush"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-sponge-lip-color-brush-short-strokes-v1:right_cheek",
+              "techniqueId": "cream-cheek-sponge-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your right cheek",
+              "instruction": "Use your makeup sponge to tap cream blush over your right cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "right_cheek",
+              "motion": "tapping",
+              "tool": "sponge",
+              "product": "cream_blush",
+              "dependsOn": [
+                "rose-sponge-lip-color-brush-short-strokes-v1:left_cheek"
+              ],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "powder-cheek-wide-brush"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-sponge-lip-color-brush-short-strokes-v1:lips",
+              "techniqueId": "lip-color-brush-short-strokes",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Brush on lip color",
+              "instruction": "Use your lip brush to apply your lip color with short strokes within your lips. Pause to look at the tint.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the tint, or pause if the motion is uncomfortable.",
+              "region": "lips",
+              "motion": "short_strokes",
+              "tool": "lip_brush",
+              "product": "lip_color",
+              "dependsOn": [
+                "rose-sponge-lip-color-brush-short-strokes-v1:right_cheek"
+              ],
+              "alternativeIds": ["lip-color-fingertip-tap"],
+              "evidencePolicy": "user_judgment"
+            }
+          ],
+          "previewStatus": "not_requested",
+          "recipe": [
+            {
+              "category": "skin_smooth",
+              "skinSmoothStrength": 0,
+              "skinSmoothColorIntensity": 0
+            },
+            {
+              "category": "blush",
+              "pattern": {
+                "name": "1color1"
+              },
+              "palettes": [
+                {
+                  "color": "#BE6680",
+                  "texture": "satin",
+                  "colorIntensity": 60,
+                  "glowStrength": 10
+                }
+              ]
+            },
+            {
+              "category": "lip_color",
+              "shape": {
+                "name": "original"
+              },
+              "morphology": {
+                "fullness": 0,
+                "wrinkless": 0
+              },
+              "style": {
+                "type": "full"
+              },
+              "palettes": [
+                {
+                  "color": "#A54F68",
+                  "texture": "matte",
+                  "colorIntensity": 32
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "conflicts": [],
+      "completedActionIds": [],
+      "observations": [],
+      "events": [
+        {
+          "id": "frozen-pre-review-test:event:0",
+          "type": "session_created",
+          "at": "2026-10-31T18:58:48.373Z",
+          "provenance": "system"
+        },
+        {
+          "id": "frozen-pre-review-test:event:1",
+          "type": "approve_candidate",
+          "at": "2026-10-31T18:58:48.377Z",
+          "provenance": "user_confirmed"
+        }
+      ],
+      "goalChanged": false,
+      "savedMethod": false,
+      "resumeRequired": false,
+      "activePlan": {
+        "id": "rose-tap-lip-color-fingertip-tap-v1",
+        "routeId": "tap",
+        "name": "Fingertip tapping",
+        "tagline": "Cream blush · fingertip tapping",
+        "description": "Rose color family using your fingertips and the tapping movement you confirmed comfortable.",
+        "tools": ["fingertips"],
+        "attributes": [
+          "Rose color family",
+          "Soft cheek color",
+          "Optional lip tint"
+        ],
+        "tradeoffs": [
+          "Uses fingertips rather than a separate cheek tool.",
+          "Requires cream blush; no separate cheek tool.",
+          "Lip color uses fingertips and tapping."
+        ],
+        "actions": [
+          {
+            "id": "rose-tap-lip-color-fingertip-tap-v1:left_cheek",
+            "techniqueId": "cream-cheek-fingertip-tap",
+            "techniqueVersion": 1,
+            "validation": "draft",
+            "title": "Your left cheek",
+            "instruction": "Use your clean fingertips to tap cream blush over your left cheek. Pause to look at the color and edge.",
+            "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+            "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+            "region": "left_cheek",
+            "motion": "tapping",
+            "tool": "fingertips",
+            "product": "cream_blush",
+            "dependsOn": [],
+            "alternativeIds": [
+              "powder-cheek-wide-brush",
+              "cream-cheek-sponge-tap"
+            ],
+            "evidencePolicy": "user_judgment"
+          },
+          {
+            "id": "rose-tap-lip-color-fingertip-tap-v1:right_cheek",
+            "techniqueId": "cream-cheek-fingertip-tap",
+            "techniqueVersion": 1,
+            "validation": "draft",
+            "title": "Your right cheek",
+            "instruction": "Use your clean fingertips to tap cream blush over your right cheek. Pause to look at the color and edge.",
+            "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+            "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+            "region": "right_cheek",
+            "motion": "tapping",
+            "tool": "fingertips",
+            "product": "cream_blush",
+            "dependsOn": ["rose-tap-lip-color-fingertip-tap-v1:left_cheek"],
+            "alternativeIds": [
+              "powder-cheek-wide-brush",
+              "cream-cheek-sponge-tap"
+            ],
+            "evidencePolicy": "user_judgment"
+          },
+          {
+            "id": "rose-tap-lip-color-fingertip-tap-v1:lips",
+            "techniqueId": "lip-color-fingertip-tap",
+            "techniqueVersion": 1,
+            "validation": "draft",
+            "title": "Tap on lip color",
+            "instruction": "Use your clean fingertip to tap your lip color onto your lips. Pause to look at the tint.",
+            "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+            "stoppingCue": "Stop when you choose to keep the tint, or pause if the motion is uncomfortable.",
+            "region": "lips",
+            "motion": "tapping",
+            "tool": "fingertips",
+            "product": "lip_color",
+            "dependsOn": ["rose-tap-lip-color-fingertip-tap-v1:right_cheek"],
+            "alternativeIds": ["lip-color-brush-short-strokes"],
+            "evidencePolicy": "user_judgment"
+          }
+        ],
+        "previewStatus": "not_requested",
+        "recipe": [
+          {
+            "category": "skin_smooth",
+            "skinSmoothStrength": 0,
+            "skinSmoothColorIntensity": 0
+          },
+          {
+            "category": "blush",
+            "pattern": {
+              "name": "1color1"
+            },
+            "palettes": [
+              {
+                "color": "#BE6680",
+                "texture": "satin",
+                "colorIntensity": 64,
+                "glowStrength": 18
+              }
+            ]
+          },
+          {
+            "category": "lip_color",
+            "shape": {
+              "name": "original"
+            },
+            "morphology": {
+              "fullness": 0,
+              "wrinkless": 0
+            },
+            "style": {
+              "type": "full"
+            },
+            "palettes": [
+              {
+                "color": "#A54F68",
+                "texture": "matte",
+                "colorIntensity": 32
+              }
+            ]
+          }
+        ]
+      },
+      "selectedCandidateId": "rose-tap-lip-color-fingertip-tap-v1"
+    },
+    {
+      "id": "frozen-pre-review-test",
+      "revision": 1,
+      "schemaVersion": 1,
+      "stage": "ready",
+      "mode": "sample",
+      "createdAt": "2026-10-31T18:58:48.377Z",
+      "updatedAt": "2026-10-31T18:58:48.377Z",
+      "lookId": "rose",
+      "includeLips": true,
+      "preferences": {
+        "movements": {
+          "tapping": "comfortable",
+          "blending": "comfortable",
+          "short_strokes": "comfortable"
+        },
+        "hand": "either",
+        "pace": "my_pace",
+        "audio": false,
+        "mirror": true
+      },
+      "tools": ["fingertips", "wide_brush", "sponge", "lip_brush"],
+      "products": ["cream_blush", "powder_blush", "lip_color"],
+      "assets": [],
+      "candidates": [
+        {
+          "id": "rose-tap-lip-color-fingertip-tap-v1",
+          "routeId": "tap",
+          "name": "Fingertip tapping",
+          "tagline": "Cream blush · fingertip tapping",
+          "description": "Rose color family using your fingertips and the tapping movement you confirmed comfortable.",
+          "tools": ["fingertips"],
+          "attributes": [
+            "Rose color family",
+            "Soft cheek color",
+            "Optional lip tint"
+          ],
+          "tradeoffs": [
+            "Uses fingertips rather than a separate cheek tool.",
+            "Requires cream blush; no separate cheek tool.",
+            "Lip color uses fingertips and tapping."
+          ],
+          "actions": [
+            {
+              "id": "rose-tap-lip-color-fingertip-tap-v1:left_cheek",
+              "techniqueId": "cream-cheek-fingertip-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your left cheek",
+              "instruction": "Use your clean fingertips to tap cream blush over your left cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "left_cheek",
+              "motion": "tapping",
+              "tool": "fingertips",
+              "product": "cream_blush",
+              "dependsOn": [],
+              "alternativeIds": [
+                "powder-cheek-wide-brush",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-tap-lip-color-fingertip-tap-v1:right_cheek",
+              "techniqueId": "cream-cheek-fingertip-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your right cheek",
+              "instruction": "Use your clean fingertips to tap cream blush over your right cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "right_cheek",
+              "motion": "tapping",
+              "tool": "fingertips",
+              "product": "cream_blush",
+              "dependsOn": ["rose-tap-lip-color-fingertip-tap-v1:left_cheek"],
+              "alternativeIds": [
+                "powder-cheek-wide-brush",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-tap-lip-color-fingertip-tap-v1:lips",
+              "techniqueId": "lip-color-fingertip-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Tap on lip color",
+              "instruction": "Use your clean fingertip to tap your lip color onto your lips. Pause to look at the tint.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the tint, or pause if the motion is uncomfortable.",
+              "region": "lips",
+              "motion": "tapping",
+              "tool": "fingertips",
+              "product": "lip_color",
+              "dependsOn": ["rose-tap-lip-color-fingertip-tap-v1:right_cheek"],
+              "alternativeIds": ["lip-color-brush-short-strokes"],
+              "evidencePolicy": "user_judgment"
+            }
+          ],
+          "previewStatus": "not_requested",
+          "recipe": [
+            {
+              "category": "skin_smooth",
+              "skinSmoothStrength": 0,
+              "skinSmoothColorIntensity": 0
+            },
+            {
+              "category": "blush",
+              "pattern": {
+                "name": "1color1"
+              },
+              "palettes": [
+                {
+                  "color": "#BE6680",
+                  "texture": "satin",
+                  "colorIntensity": 64,
+                  "glowStrength": 18
+                }
+              ]
+            },
+            {
+              "category": "lip_color",
+              "shape": {
+                "name": "original"
+              },
+              "morphology": {
+                "fullness": 0,
+                "wrinkless": 0
+              },
+              "style": {
+                "type": "full"
+              },
+              "palettes": [
+                {
+                  "color": "#A54F68",
+                  "texture": "matte",
+                  "colorIntensity": 32
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "rose-sweep-lip-color-brush-short-strokes-v1",
+          "routeId": "sweep",
+          "name": "Wide-brush blending",
+          "tagline": "Powder blush · broad blending",
+          "description": "Rose color family using your wide blush brush and the broad blending movement you confirmed comfortable.",
+          "tools": ["wide_brush", "lip_brush"],
+          "attributes": [
+            "Rose color family",
+            "Soft cheek color",
+            "Optional lip tint"
+          ],
+          "tradeoffs": [
+            "Uses a wide brush and powder rather than tapping cream blush.",
+            "Requires powder blush and a wide blush brush.",
+            "Lip color uses lip brush and short strokes."
+          ],
+          "actions": [
+            {
+              "id": "rose-sweep-lip-color-brush-short-strokes-v1:left_cheek",
+              "techniqueId": "powder-cheek-wide-brush",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your left cheek",
+              "instruction": "Use your wide blush brush to blend powder blush over your left cheek with broad movements. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the edge and color, or pause if the motion is uncomfortable.",
+              "region": "left_cheek",
+              "motion": "blending",
+              "tool": "wide_brush",
+              "product": "powder_blush",
+              "dependsOn": [],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-sweep-lip-color-brush-short-strokes-v1:right_cheek",
+              "techniqueId": "powder-cheek-wide-brush",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your right cheek",
+              "instruction": "Use your wide blush brush to blend powder blush over your right cheek with broad movements. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the edge and color, or pause if the motion is uncomfortable.",
+              "region": "right_cheek",
+              "motion": "blending",
+              "tool": "wide_brush",
+              "product": "powder_blush",
+              "dependsOn": [
+                "rose-sweep-lip-color-brush-short-strokes-v1:left_cheek"
+              ],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-sweep-lip-color-brush-short-strokes-v1:lips",
+              "techniqueId": "lip-color-brush-short-strokes",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Brush on lip color",
+              "instruction": "Use your lip brush to apply your lip color with short strokes within your lips. Pause to look at the tint.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the tint, or pause if the motion is uncomfortable.",
+              "region": "lips",
+              "motion": "short_strokes",
+              "tool": "lip_brush",
+              "product": "lip_color",
+              "dependsOn": [
+                "rose-sweep-lip-color-brush-short-strokes-v1:right_cheek"
+              ],
+              "alternativeIds": ["lip-color-fingertip-tap"],
+              "evidencePolicy": "user_judgment"
+            }
+          ],
+          "previewStatus": "not_requested",
+          "recipe": [
+            {
+              "category": "skin_smooth",
+              "skinSmoothStrength": 0,
+              "skinSmoothColorIntensity": 0
+            },
+            {
+              "category": "blush",
+              "pattern": {
+                "name": "1color1"
+              },
+              "palettes": [
+                {
+                  "color": "#BE6680",
+                  "texture": "matte",
+                  "colorIntensity": 75
+                }
+              ]
+            },
+            {
+              "category": "lip_color",
+              "shape": {
+                "name": "original"
+              },
+              "morphology": {
+                "fullness": 0,
+                "wrinkless": 0
+              },
+              "style": {
+                "type": "full"
+              },
+              "palettes": [
+                {
+                  "color": "#A54F68",
+                  "texture": "matte",
+                  "colorIntensity": 32
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "rose-sponge-lip-color-brush-short-strokes-v1",
+          "routeId": "sponge",
+          "name": "Sponge tapping",
+          "tagline": "Cream blush · sponge tapping",
+          "description": "Rose color family using your makeup sponge and the tapping movement you confirmed comfortable.",
+          "tools": ["sponge", "lip_brush"],
+          "attributes": [
+            "Rose color family",
+            "Soft cheek color",
+            "Optional lip tint"
+          ],
+          "tradeoffs": [
+            "Uses a sponge rather than direct fingertip application.",
+            "Requires cream blush and a makeup sponge.",
+            "Lip color uses lip brush and short strokes."
+          ],
+          "actions": [
+            {
+              "id": "rose-sponge-lip-color-brush-short-strokes-v1:left_cheek",
+              "techniqueId": "cream-cheek-sponge-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your left cheek",
+              "instruction": "Use your makeup sponge to tap cream blush over your left cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "left_cheek",
+              "motion": "tapping",
+              "tool": "sponge",
+              "product": "cream_blush",
+              "dependsOn": [],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "powder-cheek-wide-brush"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-sponge-lip-color-brush-short-strokes-v1:right_cheek",
+              "techniqueId": "cream-cheek-sponge-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your right cheek",
+              "instruction": "Use your makeup sponge to tap cream blush over your right cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "right_cheek",
+              "motion": "tapping",
+              "tool": "sponge",
+              "product": "cream_blush",
+              "dependsOn": [
+                "rose-sponge-lip-color-brush-short-strokes-v1:left_cheek"
+              ],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "powder-cheek-wide-brush"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-sponge-lip-color-brush-short-strokes-v1:lips",
+              "techniqueId": "lip-color-brush-short-strokes",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Brush on lip color",
+              "instruction": "Use your lip brush to apply your lip color with short strokes within your lips. Pause to look at the tint.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the tint, or pause if the motion is uncomfortable.",
+              "region": "lips",
+              "motion": "short_strokes",
+              "tool": "lip_brush",
+              "product": "lip_color",
+              "dependsOn": [
+                "rose-sponge-lip-color-brush-short-strokes-v1:right_cheek"
+              ],
+              "alternativeIds": ["lip-color-fingertip-tap"],
+              "evidencePolicy": "user_judgment"
+            }
+          ],
+          "previewStatus": "not_requested",
+          "recipe": [
+            {
+              "category": "skin_smooth",
+              "skinSmoothStrength": 0,
+              "skinSmoothColorIntensity": 0
+            },
+            {
+              "category": "blush",
+              "pattern": {
+                "name": "1color1"
+              },
+              "palettes": [
+                {
+                  "color": "#BE6680",
+                  "texture": "satin",
+                  "colorIntensity": 60,
+                  "glowStrength": 10
+                }
+              ]
+            },
+            {
+              "category": "lip_color",
+              "shape": {
+                "name": "original"
+              },
+              "morphology": {
+                "fullness": 0,
+                "wrinkless": 0
+              },
+              "style": {
+                "type": "full"
+              },
+              "palettes": [
+                {
+                  "color": "#A54F68",
+                  "texture": "matte",
+                  "colorIntensity": 32
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "conflicts": [],
+      "completedActionIds": [],
+      "observations": [],
+      "events": [
+        {
+          "id": "frozen-pre-review-test:event:0",
+          "type": "session_created",
+          "at": "2026-10-31T18:58:48.377Z",
+          "provenance": "system"
+        },
+        {
+          "id": "frozen-pre-review-test:event:1",
+          "type": "approve_candidate",
+          "at": "2026-10-31T18:58:48.377Z",
+          "provenance": "user_confirmed"
+        }
+      ],
+      "goalChanged": false,
+      "savedMethod": false,
+      "resumeRequired": false,
+      "activePlan": {
+        "id": "rose-sweep-lip-color-brush-short-strokes-v1",
+        "routeId": "sweep",
+        "name": "Wide-brush blending",
+        "tagline": "Powder blush · broad blending",
+        "description": "Rose color family using your wide blush brush and the broad blending movement you confirmed comfortable.",
+        "tools": ["wide_brush", "lip_brush"],
+        "attributes": [
+          "Rose color family",
+          "Soft cheek color",
+          "Optional lip tint"
+        ],
+        "tradeoffs": [
+          "Uses a wide brush and powder rather than tapping cream blush.",
+          "Requires powder blush and a wide blush brush.",
+          "Lip color uses lip brush and short strokes."
+        ],
+        "actions": [
+          {
+            "id": "rose-sweep-lip-color-brush-short-strokes-v1:left_cheek",
+            "techniqueId": "powder-cheek-wide-brush",
+            "techniqueVersion": 1,
+            "validation": "draft",
+            "title": "Your left cheek",
+            "instruction": "Use your wide blush brush to blend powder blush over your left cheek with broad movements. Pause to look at the color and edge.",
+            "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+            "stoppingCue": "Stop when you choose to keep the edge and color, or pause if the motion is uncomfortable.",
+            "region": "left_cheek",
+            "motion": "blending",
+            "tool": "wide_brush",
+            "product": "powder_blush",
+            "dependsOn": [],
+            "alternativeIds": [
+              "cream-cheek-fingertip-tap",
+              "cream-cheek-sponge-tap"
+            ],
+            "evidencePolicy": "user_judgment"
+          },
+          {
+            "id": "rose-sweep-lip-color-brush-short-strokes-v1:right_cheek",
+            "techniqueId": "powder-cheek-wide-brush",
+            "techniqueVersion": 1,
+            "validation": "draft",
+            "title": "Your right cheek",
+            "instruction": "Use your wide blush brush to blend powder blush over your right cheek with broad movements. Pause to look at the color and edge.",
+            "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+            "stoppingCue": "Stop when you choose to keep the edge and color, or pause if the motion is uncomfortable.",
+            "region": "right_cheek",
+            "motion": "blending",
+            "tool": "wide_brush",
+            "product": "powder_blush",
+            "dependsOn": [
+              "rose-sweep-lip-color-brush-short-strokes-v1:left_cheek"
+            ],
+            "alternativeIds": [
+              "cream-cheek-fingertip-tap",
+              "cream-cheek-sponge-tap"
+            ],
+            "evidencePolicy": "user_judgment"
+          },
+          {
+            "id": "rose-sweep-lip-color-brush-short-strokes-v1:lips",
+            "techniqueId": "lip-color-brush-short-strokes",
+            "techniqueVersion": 1,
+            "validation": "draft",
+            "title": "Brush on lip color",
+            "instruction": "Use your lip brush to apply your lip color with short strokes within your lips. Pause to look at the tint.",
+            "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+            "stoppingCue": "Stop when you choose to keep the tint, or pause if the motion is uncomfortable.",
+            "region": "lips",
+            "motion": "short_strokes",
+            "tool": "lip_brush",
+            "product": "lip_color",
+            "dependsOn": [
+              "rose-sweep-lip-color-brush-short-strokes-v1:right_cheek"
+            ],
+            "alternativeIds": ["lip-color-fingertip-tap"],
+            "evidencePolicy": "user_judgment"
+          }
+        ],
+        "previewStatus": "not_requested",
+        "recipe": [
+          {
+            "category": "skin_smooth",
+            "skinSmoothStrength": 0,
+            "skinSmoothColorIntensity": 0
+          },
+          {
+            "category": "blush",
+            "pattern": {
+              "name": "1color1"
+            },
+            "palettes": [
+              {
+                "color": "#BE6680",
+                "texture": "matte",
+                "colorIntensity": 75
+              }
+            ]
+          },
+          {
+            "category": "lip_color",
+            "shape": {
+              "name": "original"
+            },
+            "morphology": {
+              "fullness": 0,
+              "wrinkless": 0
+            },
+            "style": {
+              "type": "full"
+            },
+            "palettes": [
+              {
+                "color": "#A54F68",
+                "texture": "matte",
+                "colorIntensity": 32
+              }
+            ]
+          }
+        ]
+      },
+      "selectedCandidateId": "rose-sweep-lip-color-brush-short-strokes-v1"
+    },
+    {
+      "id": "frozen-pre-review-test",
+      "revision": 1,
+      "schemaVersion": 1,
+      "stage": "ready",
+      "mode": "sample",
+      "createdAt": "2026-10-31T18:58:48.377Z",
+      "updatedAt": "2026-10-31T18:58:48.378Z",
+      "lookId": "rose",
+      "includeLips": true,
+      "preferences": {
+        "movements": {
+          "tapping": "comfortable",
+          "blending": "comfortable",
+          "short_strokes": "comfortable"
+        },
+        "hand": "either",
+        "pace": "my_pace",
+        "audio": false,
+        "mirror": true
+      },
+      "tools": ["fingertips", "wide_brush", "sponge", "lip_brush"],
+      "products": ["cream_blush", "powder_blush", "lip_color"],
+      "assets": [],
+      "candidates": [
+        {
+          "id": "rose-tap-lip-color-fingertip-tap-v1",
+          "routeId": "tap",
+          "name": "Fingertip tapping",
+          "tagline": "Cream blush · fingertip tapping",
+          "description": "Rose color family using your fingertips and the tapping movement you confirmed comfortable.",
+          "tools": ["fingertips"],
+          "attributes": [
+            "Rose color family",
+            "Soft cheek color",
+            "Optional lip tint"
+          ],
+          "tradeoffs": [
+            "Uses fingertips rather than a separate cheek tool.",
+            "Requires cream blush; no separate cheek tool.",
+            "Lip color uses fingertips and tapping."
+          ],
+          "actions": [
+            {
+              "id": "rose-tap-lip-color-fingertip-tap-v1:left_cheek",
+              "techniqueId": "cream-cheek-fingertip-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your left cheek",
+              "instruction": "Use your clean fingertips to tap cream blush over your left cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "left_cheek",
+              "motion": "tapping",
+              "tool": "fingertips",
+              "product": "cream_blush",
+              "dependsOn": [],
+              "alternativeIds": [
+                "powder-cheek-wide-brush",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-tap-lip-color-fingertip-tap-v1:right_cheek",
+              "techniqueId": "cream-cheek-fingertip-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your right cheek",
+              "instruction": "Use your clean fingertips to tap cream blush over your right cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "right_cheek",
+              "motion": "tapping",
+              "tool": "fingertips",
+              "product": "cream_blush",
+              "dependsOn": ["rose-tap-lip-color-fingertip-tap-v1:left_cheek"],
+              "alternativeIds": [
+                "powder-cheek-wide-brush",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-tap-lip-color-fingertip-tap-v1:lips",
+              "techniqueId": "lip-color-fingertip-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Tap on lip color",
+              "instruction": "Use your clean fingertip to tap your lip color onto your lips. Pause to look at the tint.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the tint, or pause if the motion is uncomfortable.",
+              "region": "lips",
+              "motion": "tapping",
+              "tool": "fingertips",
+              "product": "lip_color",
+              "dependsOn": ["rose-tap-lip-color-fingertip-tap-v1:right_cheek"],
+              "alternativeIds": ["lip-color-brush-short-strokes"],
+              "evidencePolicy": "user_judgment"
+            }
+          ],
+          "previewStatus": "not_requested",
+          "recipe": [
+            {
+              "category": "skin_smooth",
+              "skinSmoothStrength": 0,
+              "skinSmoothColorIntensity": 0
+            },
+            {
+              "category": "blush",
+              "pattern": {
+                "name": "1color1"
+              },
+              "palettes": [
+                {
+                  "color": "#BE6680",
+                  "texture": "satin",
+                  "colorIntensity": 64,
+                  "glowStrength": 18
+                }
+              ]
+            },
+            {
+              "category": "lip_color",
+              "shape": {
+                "name": "original"
+              },
+              "morphology": {
+                "fullness": 0,
+                "wrinkless": 0
+              },
+              "style": {
+                "type": "full"
+              },
+              "palettes": [
+                {
+                  "color": "#A54F68",
+                  "texture": "matte",
+                  "colorIntensity": 32
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "rose-sweep-lip-color-brush-short-strokes-v1",
+          "routeId": "sweep",
+          "name": "Wide-brush blending",
+          "tagline": "Powder blush · broad blending",
+          "description": "Rose color family using your wide blush brush and the broad blending movement you confirmed comfortable.",
+          "tools": ["wide_brush", "lip_brush"],
+          "attributes": [
+            "Rose color family",
+            "Soft cheek color",
+            "Optional lip tint"
+          ],
+          "tradeoffs": [
+            "Uses a wide brush and powder rather than tapping cream blush.",
+            "Requires powder blush and a wide blush brush.",
+            "Lip color uses lip brush and short strokes."
+          ],
+          "actions": [
+            {
+              "id": "rose-sweep-lip-color-brush-short-strokes-v1:left_cheek",
+              "techniqueId": "powder-cheek-wide-brush",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your left cheek",
+              "instruction": "Use your wide blush brush to blend powder blush over your left cheek with broad movements. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the edge and color, or pause if the motion is uncomfortable.",
+              "region": "left_cheek",
+              "motion": "blending",
+              "tool": "wide_brush",
+              "product": "powder_blush",
+              "dependsOn": [],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-sweep-lip-color-brush-short-strokes-v1:right_cheek",
+              "techniqueId": "powder-cheek-wide-brush",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your right cheek",
+              "instruction": "Use your wide blush brush to blend powder blush over your right cheek with broad movements. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the edge and color, or pause if the motion is uncomfortable.",
+              "region": "right_cheek",
+              "motion": "blending",
+              "tool": "wide_brush",
+              "product": "powder_blush",
+              "dependsOn": [
+                "rose-sweep-lip-color-brush-short-strokes-v1:left_cheek"
+              ],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "cream-cheek-sponge-tap"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-sweep-lip-color-brush-short-strokes-v1:lips",
+              "techniqueId": "lip-color-brush-short-strokes",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Brush on lip color",
+              "instruction": "Use your lip brush to apply your lip color with short strokes within your lips. Pause to look at the tint.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the tint, or pause if the motion is uncomfortable.",
+              "region": "lips",
+              "motion": "short_strokes",
+              "tool": "lip_brush",
+              "product": "lip_color",
+              "dependsOn": [
+                "rose-sweep-lip-color-brush-short-strokes-v1:right_cheek"
+              ],
+              "alternativeIds": ["lip-color-fingertip-tap"],
+              "evidencePolicy": "user_judgment"
+            }
+          ],
+          "previewStatus": "not_requested",
+          "recipe": [
+            {
+              "category": "skin_smooth",
+              "skinSmoothStrength": 0,
+              "skinSmoothColorIntensity": 0
+            },
+            {
+              "category": "blush",
+              "pattern": {
+                "name": "1color1"
+              },
+              "palettes": [
+                {
+                  "color": "#BE6680",
+                  "texture": "matte",
+                  "colorIntensity": 75
+                }
+              ]
+            },
+            {
+              "category": "lip_color",
+              "shape": {
+                "name": "original"
+              },
+              "morphology": {
+                "fullness": 0,
+                "wrinkless": 0
+              },
+              "style": {
+                "type": "full"
+              },
+              "palettes": [
+                {
+                  "color": "#A54F68",
+                  "texture": "matte",
+                  "colorIntensity": 32
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "rose-sponge-lip-color-brush-short-strokes-v1",
+          "routeId": "sponge",
+          "name": "Sponge tapping",
+          "tagline": "Cream blush · sponge tapping",
+          "description": "Rose color family using your makeup sponge and the tapping movement you confirmed comfortable.",
+          "tools": ["sponge", "lip_brush"],
+          "attributes": [
+            "Rose color family",
+            "Soft cheek color",
+            "Optional lip tint"
+          ],
+          "tradeoffs": [
+            "Uses a sponge rather than direct fingertip application.",
+            "Requires cream blush and a makeup sponge.",
+            "Lip color uses lip brush and short strokes."
+          ],
+          "actions": [
+            {
+              "id": "rose-sponge-lip-color-brush-short-strokes-v1:left_cheek",
+              "techniqueId": "cream-cheek-sponge-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your left cheek",
+              "instruction": "Use your makeup sponge to tap cream blush over your left cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "left_cheek",
+              "motion": "tapping",
+              "tool": "sponge",
+              "product": "cream_blush",
+              "dependsOn": [],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "powder-cheek-wide-brush"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-sponge-lip-color-brush-short-strokes-v1:right_cheek",
+              "techniqueId": "cream-cheek-sponge-tap",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Your right cheek",
+              "instruction": "Use your makeup sponge to tap cream blush over your right cheek. Pause to look at the color and edge.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+              "region": "right_cheek",
+              "motion": "tapping",
+              "tool": "sponge",
+              "product": "cream_blush",
+              "dependsOn": [
+                "rose-sponge-lip-color-brush-short-strokes-v1:left_cheek"
+              ],
+              "alternativeIds": [
+                "cream-cheek-fingertip-tap",
+                "powder-cheek-wide-brush"
+              ],
+              "evidencePolicy": "user_judgment"
+            },
+            {
+              "id": "rose-sponge-lip-color-brush-short-strokes-v1:lips",
+              "techniqueId": "lip-color-brush-short-strokes",
+              "techniqueVersion": 1,
+              "validation": "draft",
+              "title": "Brush on lip color",
+              "instruction": "Use your lip brush to apply your lip color with short strokes within your lips. Pause to look at the tint.",
+              "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+              "stoppingCue": "Stop when you choose to keep the tint, or pause if the motion is uncomfortable.",
+              "region": "lips",
+              "motion": "short_strokes",
+              "tool": "lip_brush",
+              "product": "lip_color",
+              "dependsOn": [
+                "rose-sponge-lip-color-brush-short-strokes-v1:right_cheek"
+              ],
+              "alternativeIds": ["lip-color-fingertip-tap"],
+              "evidencePolicy": "user_judgment"
+            }
+          ],
+          "previewStatus": "not_requested",
+          "recipe": [
+            {
+              "category": "skin_smooth",
+              "skinSmoothStrength": 0,
+              "skinSmoothColorIntensity": 0
+            },
+            {
+              "category": "blush",
+              "pattern": {
+                "name": "1color1"
+              },
+              "palettes": [
+                {
+                  "color": "#BE6680",
+                  "texture": "satin",
+                  "colorIntensity": 60,
+                  "glowStrength": 10
+                }
+              ]
+            },
+            {
+              "category": "lip_color",
+              "shape": {
+                "name": "original"
+              },
+              "morphology": {
+                "fullness": 0,
+                "wrinkless": 0
+              },
+              "style": {
+                "type": "full"
+              },
+              "palettes": [
+                {
+                  "color": "#A54F68",
+                  "texture": "matte",
+                  "colorIntensity": 32
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "conflicts": [],
+      "completedActionIds": [],
+      "observations": [],
+      "events": [
+        {
+          "id": "frozen-pre-review-test:event:0",
+          "type": "session_created",
+          "at": "2026-10-31T18:58:48.377Z",
+          "provenance": "system"
+        },
+        {
+          "id": "frozen-pre-review-test:event:1",
+          "type": "approve_candidate",
+          "at": "2026-10-31T18:58:48.378Z",
+          "provenance": "user_confirmed"
+        }
+      ],
+      "goalChanged": false,
+      "savedMethod": false,
+      "resumeRequired": false,
+      "activePlan": {
+        "id": "rose-sponge-lip-color-brush-short-strokes-v1",
+        "routeId": "sponge",
+        "name": "Sponge tapping",
+        "tagline": "Cream blush · sponge tapping",
+        "description": "Rose color family using your makeup sponge and the tapping movement you confirmed comfortable.",
+        "tools": ["sponge", "lip_brush"],
+        "attributes": [
+          "Rose color family",
+          "Soft cheek color",
+          "Optional lip tint"
+        ],
+        "tradeoffs": [
+          "Uses a sponge rather than direct fingertip application.",
+          "Requires cream blush and a makeup sponge.",
+          "Lip color uses lip brush and short strokes."
+        ],
+        "actions": [
+          {
+            "id": "rose-sponge-lip-color-brush-short-strokes-v1:left_cheek",
+            "techniqueId": "cream-cheek-sponge-tap",
+            "techniqueVersion": 1,
+            "validation": "draft",
+            "title": "Your left cheek",
+            "instruction": "Use your makeup sponge to tap cream blush over your left cheek. Pause to look at the color and edge.",
+            "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+            "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+            "region": "left_cheek",
+            "motion": "tapping",
+            "tool": "sponge",
+            "product": "cream_blush",
+            "dependsOn": [],
+            "alternativeIds": [
+              "cream-cheek-fingertip-tap",
+              "powder-cheek-wide-brush"
+            ],
+            "evidencePolicy": "user_judgment"
+          },
+          {
+            "id": "rose-sponge-lip-color-brush-short-strokes-v1:right_cheek",
+            "techniqueId": "cream-cheek-sponge-tap",
+            "techniqueVersion": 1,
+            "validation": "draft",
+            "title": "Your right cheek",
+            "instruction": "Use your makeup sponge to tap cream blush over your right cheek. Pause to look at the color and edge.",
+            "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+            "stoppingCue": "Stop when you choose to keep this amount of color, or pause if the motion is uncomfortable.",
+            "region": "right_cheek",
+            "motion": "tapping",
+            "tool": "sponge",
+            "product": "cream_blush",
+            "dependsOn": [
+              "rose-sponge-lip-color-brush-short-strokes-v1:left_cheek"
+            ],
+            "alternativeIds": [
+              "cream-cheek-fingertip-tap",
+              "powder-cheek-wide-brush"
+            ],
+            "evidencePolicy": "user_judgment"
+          },
+          {
+            "id": "rose-sponge-lip-color-brush-short-strokes-v1:lips",
+            "techniqueId": "lip-color-brush-short-strokes",
+            "techniqueVersion": 1,
+            "validation": "draft",
+            "title": "Brush on lip color",
+            "instruction": "Use your lip brush to apply your lip color with short strokes within your lips. Pause to look at the tint.",
+            "detail": "Follow your product and tool labels for preparation. Pause whenever you want to check the color or change the method.",
+            "stoppingCue": "Stop when you choose to keep the tint, or pause if the motion is uncomfortable.",
+            "region": "lips",
+            "motion": "short_strokes",
+            "tool": "lip_brush",
+            "product": "lip_color",
+            "dependsOn": [
+              "rose-sponge-lip-color-brush-short-strokes-v1:right_cheek"
+            ],
+            "alternativeIds": ["lip-color-fingertip-tap"],
+            "evidencePolicy": "user_judgment"
+          }
+        ],
+        "previewStatus": "not_requested",
+        "recipe": [
+          {
+            "category": "skin_smooth",
+            "skinSmoothStrength": 0,
+            "skinSmoothColorIntensity": 0
+          },
+          {
+            "category": "blush",
+            "pattern": {
+              "name": "1color1"
+            },
+            "palettes": [
+              {
+                "color": "#BE6680",
+                "texture": "satin",
+                "colorIntensity": 60,
+                "glowStrength": 10
+              }
+            ]
+          },
+          {
+            "category": "lip_color",
+            "shape": {
+              "name": "original"
+            },
+            "morphology": {
+              "fullness": 0,
+              "wrinkless": 0
+            },
+            "style": {
+              "type": "full"
+            },
+            "palettes": [
+              {
+                "color": "#A54F68",
+                "texture": "matte",
+                "colorIntensity": 32
+              }
+            ]
+          }
+        ]
+      },
+      "selectedCandidateId": "rose-sponge-lip-color-brush-short-strokes-v1"
+    }
+  ]
+}

@@ -26,9 +26,38 @@ export const REGION_LANDMARKS: Record<Region, number[]> = {
   left_cheek: [280, 330, 425, 411, 352, 345],
   right_cheek: [50, 101, 205, 187, 123, 116],
   lips: [61, 40, 37, 0, 267, 270, 291, 321, 314, 17, 84, 91],
+  // Upper-lid skin between the crease-side row and upper eye contour. These
+  // polygons are image regions, never contact/pressure or anatomical safety zones.
+  left_eye: [
+    467, 260, 259, 257, 258, 286, 414, 362, 398, 384, 385, 386, 387, 388, 466,
+    263,
+  ],
+  right_eye: [
+    247, 30, 29, 27, 28, 56, 190, 133, 173, 157, 158, 159, 160, 161, 246, 33,
+  ],
 };
-export function faceEligible(points: Point[]): boolean {
+
+export const EYE_LANDMARKS = {
+  left_eye: [
+    263, 249, 390, 373, 374, 380, 381, 382, 362, 398, 384, 385, 386, 387, 388,
+    466,
+  ],
+  right_eye: [
+    33, 7, 163, 144, 145, 153, 154, 155, 133, 173, 157, 158, 159, 160, 161, 246,
+  ],
+} as const;
+export function faceEligible(points: readonly Point[]): boolean {
   if (points.length < 468) return false;
+  for (let index = 0; index < 468; index++) {
+    const point = points[index];
+    if (
+      !point ||
+      !Number.isFinite(point.x) ||
+      !Number.isFinite(point.y) ||
+      (point.z !== undefined && !Number.isFinite(point.z))
+    )
+      return false;
+  }
   const left = points[234],
     right = points[454],
     nose = points[1],
