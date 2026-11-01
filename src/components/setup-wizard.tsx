@@ -8,7 +8,6 @@ import {
   Camera,
   Check,
   ChevronDown,
-  Circle,
   Hand,
   Paintbrush,
   Sparkles,
@@ -41,7 +40,7 @@ import {
 } from "@/lib/client";
 import { planCandidates } from "@/lib/planner/compiler";
 import { uploadPhoto } from "@/lib/upload-client";
-import { Button, Notice, SampleBadge } from "./ui";
+import { Button, Notice, SampleBadge, SpongeIcon } from "./ui";
 import { StillCapture } from "./camera";
 import { PhotoAssist } from "./photo-assist";
 
@@ -580,7 +579,7 @@ export function SetupWizard() {
                         {tool === "fingertips" ? (
                           <Hand size={28} strokeWidth={1.2} aria-hidden />
                         ) : tool === "sponge" ? (
-                          <Circle size={26} strokeWidth={1.2} aria-hidden />
+                          <SpongeIcon size={28} strokeWidth={1.2} />
                         ) : (
                           <Paintbrush size={28} strokeWidth={1.2} aria-hidden />
                         )}

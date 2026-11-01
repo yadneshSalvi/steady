@@ -164,6 +164,9 @@ export function GuidedMirror({ id }: { id: string }) {
       !adapting &&
       !checkpointOpen,
   });
+  // Crop insets once the face guide is ready; show the whole image only if it failed.
+  const guideLandmarks =
+    measurement.source?.landmarks ?? (measurement.error ? [] : undefined);
   const blocked =
     studio.busy || uploading || analyzing || measurement.measuring;
   const requestedPlan = session?.adaptation?.candidate ?? session?.activePlan;
@@ -489,7 +492,9 @@ export function GuidedMirror({ id }: { id: string }) {
         checkpointAssetId ||
         (await uploadPhoto(checkpointFile, id, "checkpoint")).id;
       setCheckpointAssetId(assetId);
-      const current = await studio.refresh();
+      // A concurrent poll can supersede this read (null); the server's
+      // revision check still guards the request, so keep the known session.
+      const current = (await studio.refresh()) ?? session;
       if (!current || current.stage !== "applying")
         throw new Error(
           "The studio is paused. Continue when you’re ready, then request a fresh checkpoint.",
@@ -761,7 +766,7 @@ export function GuidedMirror({ id }: { id: string }) {
             <div className="mirror-target-inset">
               <RegionTarget
                 asset={plan.previewAsset}
-                landmarks={measurement.source?.landmarks ?? []}
+                landmarks={guideLandmarks}
                 region={action.region}
                 level={plan.selectedPreviewVariantId ?? "full"}
               />
@@ -829,7 +834,7 @@ export function GuidedMirror({ id }: { id: string }) {
                     {session.adaptation.candidate.previewAsset && action ? (
                       <RegionTarget
                         asset={session.adaptation.candidate.previewAsset}
-                        landmarks={measurement.source?.landmarks ?? []}
+                        landmarks={guideLandmarks}
                         region={action.region}
                         level={
                           session.adaptation.candidate

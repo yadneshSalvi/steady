@@ -32,15 +32,22 @@ export function RegionTarget({
   level,
 }: {
   asset: StudioAsset;
-  landmarks: readonly Point[];
+  /** undefined while the face guide loads: keep the frame, not the whole face. */
+  landmarks: readonly Point[] | undefined;
   region: Region;
   level: PreviewLevel;
 }) {
-  const crop = regionCrop(landmarks, region, 0.28);
+  const crop = landmarks ? regionCrop(landmarks, region, 0.28) : null;
   return (
     <figure className="region-target">
       <div>
-        {crop ? (
+        {!landmarks ? (
+          <span
+            className="region-target-loading"
+            role="img"
+            aria-label={`${level} YouCam target for ${region.replaceAll("_", " ")}`}
+          />
+        ) : crop ? (
           <RegionImage
             src={asset.url}
             width={asset.width}

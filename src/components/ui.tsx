@@ -232,3 +232,31 @@ export function ActionList({
     </ol>
   );
 }
+
+/** A makeup sponge: teardrop with pores, so it never reads as a radio button. */
+export function SpongeIcon({
+  size = 24,
+  strokeWidth = 1.5,
+}: {
+  size?: number;
+  strokeWidth?: number;
+}) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M12 2.8c-2.9 0-5.6 5.2-5.6 9.5a5.6 5.6 0 0 0 11.2 0c0-4.3-2.7-9.5-5.6-9.5Z" />
+      <path d="M8.2 15.6c2.4 1.4 5.2 1.4 7.6 0" />
+      <path d="M10.4 8.6h.01M13.4 10.4h.01M10.8 12.4h.01" />
+      <path d="M7 21.2h10" />
+    </svg>
+  );
+}

@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   ArrowRight,
-  Circle,
   Hand,
   ImageIcon,
   LoaderCircle,
@@ -24,6 +23,7 @@ import {
   LoadingState,
   Notice,
   SampleBadge,
+  SpongeIcon,
   StepProgress,
 } from "./ui";
 import { useStudioSession } from "./use-studio-session";
@@ -95,14 +95,9 @@ function MethodPreview({ candidate }: { candidate: CandidatePlan }) {
 
 function MethodIcon({ candidate }: { candidate: CandidatePlan }) {
   const tool = candidate.tools[0];
+  if (tool === "sponge") return <SpongeIcon size={32} strokeWidth={1.3} />;
   const Icon =
-    tool === "fingertips"
-      ? Hand
-      : tool === "sponge"
-        ? Circle
-        : tool === "liner_pen"
-          ? PenLine
-          : Paintbrush;
+    tool === "fingertips" ? Hand : tool === "liner_pen" ? PenLine : Paintbrush;
   return <Icon size={32} strokeWidth={1.3} aria-hidden />;
 }
 
