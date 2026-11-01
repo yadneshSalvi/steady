@@ -99,8 +99,8 @@ export default function HomePage() {
           {[
             {
               id: "ladder",
-              width: 520,
-              height: 182,
+              width: 934,
+              height: 328,
               title: "Choose your finish",
               alt: "STEADY sample methods with Light, Build and Full preview targets",
             },
@@ -122,7 +122,7 @@ export default function HomePage() {
             <figure key={frame.id}>
               <div className="r3-product-frame">
                 <Image
-                  src={`/images/product-${frame.id}.webp`}
+                  src={`/images/product-${frame.id}-r4.webp`}
                   alt={frame.alt}
                   width={frame.width}
                   height={frame.height}

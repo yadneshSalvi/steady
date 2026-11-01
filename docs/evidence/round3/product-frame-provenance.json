@@ -1,39 +1,39 @@
 {
-  "description": "Actual rendered STEADY sample interface crops from the local R3 browser workflow. No compositing or cosmetic retouching. WebP derivatives preserve each crop’s dimensions and aspect ratio.",
-  "environment": "local development; captures precede optimized release",
+  "description": "Actual rendered STEADY sample interface crops from the local browser workflow (round 4: production build of the recorded sample path, pointer moved off the UI). No compositing or cosmetic retouching. WebP derivatives preserve each crop’s dimensions and aspect ratio.",
+  "environment": "local production build (next start); recorded sample path; paid routes blocked",
   "frames": [
     {
       "id": "ladder",
       "source": "docs/evidence/round3/product-source/product-ladder.png",
-      "destination": "public/images/product-ladder.webp",
-      "width": 520,
-      "height": 182,
-      "sourceBytes": 84368,
-      "webpBytes": 8840,
-      "sourceSha256": "8f7b6439ef797e0520871e783efa7769bc02c57bca2f316be0303c34df84307e",
-      "webpSha256": "0c59184e38f19c023d94187b29246c373b86cf9e96bf30665c83fe64839c6895"
+      "destination": "public/images/product-ladder-r4.webp",
+      "width": 934,
+      "height": 328,
+      "sourceBytes": 319664,
+      "webpBytes": 20442,
+      "sourceSha256": "91f42d2abbe47548c29a26e02acd19b5a916d04f88c94e0a439c230b547588b6",
+      "webpSha256": "1ca892feb91f582b9527e3395293d78245a780b57679fbb1f0daa26173716719"
     },
     {
       "id": "mirror",
       "source": "docs/evidence/round3/product-source/product-mirror.png",
-      "destination": "public/images/product-mirror.webp",
+      "destination": "public/images/product-mirror-r4.webp",
       "width": 1328,
       "height": 637,
-      "sourceBytes": 667360,
-      "webpBytes": 53070,
-      "sourceSha256": "1de57d7ec603e2f2843c6f3e38e46418d444f6472cbac6595d342b7be6fa8afc",
-      "webpSha256": "800168274d2a063b02f8ccb16afa98fdec7d4381657013837aaef7990a3ebe2f"
+      "sourceBytes": 667237,
+      "webpBytes": 40164,
+      "sourceSha256": "f01c3e92a33ad440c81e4e97d3421864dd6e898277882b1669e37c18ff6e3cbd",
+      "webpSha256": "4edf0b0e96c55b87dbee6a4cf54cb465ac475f2c750bea1f61363e87e5962a75"
     },
     {
       "id": "checkpoint",
       "source": "docs/evidence/round3/product-source/product-checkpoint.png",
-      "destination": "public/images/product-checkpoint.webp",
+      "destination": "public/images/product-checkpoint-r4.webp",
       "width": 1328,
       "height": 637,
-      "sourceBytes": 679441,
-      "webpBytes": 52126,
-      "sourceSha256": "2f22ad9e9f66254214b728c9d8cf6bed5513b5a016bbe0abffeb01e628ece822",
-      "webpSha256": "cd6f84cf03bfccfa06e05358a1873cda7307c92c5db9426351451538c9962a28"
+      "sourceBytes": 685500,
+      "webpBytes": 40000,
+      "sourceSha256": "d23eab6d52ccf3d3bf211a3c9c471a48cff683c42947bc0e06d53b7e6da0885c",
+      "webpSha256": "f5a644eb8a3edd98baa0c35e9d3a343a2ff5f0238e29d475ea4bf32f0fc2e3f7"
     }
   ]
 }

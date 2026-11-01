@@ -30,7 +30,7 @@ The account owner authorized this integration demonstration and publication of t
 
 ## Product interface frames
 
-The three landing frames in `public/images/product-*.webp` are actual crops of STEADY's round-three local sample workflow: the stopping-point ladder, guided mirror, and measured checkpoint. They contain the fictional portrait and recorded YouCam outputs documented above. They are interface screenshots, not physical application evidence.
+The three landing frames in `public/images/product-*-r4.webp` are actual crops of STEADY's round-four local sample workflow (production build): the stopping-point ladder, guided mirror, and measured checkpoint. They contain the fictional portrait and recorded YouCam outputs documented above. They are interface screenshots, not physical application evidence.
 
 The original PNGs are retained in `docs/evidence/round3/product-source/`. WebP conversion preserves each crop's dimensions and aspect ratio, with no compositing or cosmetic retouching. Exact source and derivative hashes, dimensions, and byte counts are recorded in [product-frame-provenance.json](evidence/round3/product-frame-provenance.json).
 
