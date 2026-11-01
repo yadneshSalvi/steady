@@ -84,30 +84,29 @@ test("sample studio completes, adapts, saves, reuses and deletes through the UI"
       await page.waitForURL(/\/studio\/[^/]+\/looks$/);
       sessionId = new URL(page.url()).pathname.split("/")[2];
       await expect(
-        page.getByRole("button", { name: "Choose this method", exact: true }),
+        page.getByRole("button", { name: "Choose", exact: true }),
       ).toHaveCount(3);
       await expect(
         page.getByRole("heading", { level: 1 }),
-      ).toHaveAccessibleName("Three ways. Entirely yours.");
-      const firstMethod = page.getByRole("article").first();
-      await firstMethod.getByRole("button", { name: /Stop at Build/ }).click();
+      ).toHaveAccessibleName("Methods");
+      const target = page.getByRole("region", {
+        name: "Your shared color target",
+      });
+      await target.getByRole("button", { name: /Stop at Build/ }).click();
       await expect(
-        firstMethod.getByRole("button", { name: /Stop at Build/ }),
+        target.getByRole("button", { name: /Stop at Build/ }),
       ).toHaveAttribute("aria-pressed", "true");
       await expect(
-        page.getByRole("button", { name: /Generate fresh/ }),
+        page.getByRole("button", { name: /Generate previews|Retry previews/ }),
       ).toHaveCount(0);
-      await page
-        .getByRole("button", { name: "Recorded YouCam", exact: true })
-        .first()
-        .click();
       await expect(
-        page.getByRole("dialog", { name: "Recorded YouCam" }),
-      ).toContainText("real YouCam render");
-      await page.keyboard.press("Escape");
+        target.getByRole("img", { name: /^build YouCam target/ }),
+      ).toBeVisible();
+      await expect(page.locator(".sample-badge")).toHaveCount(1);
+      await expect(page.locator(".provenance")).toHaveCount(0);
       await checkAccessibility(page);
       await page
-        .getByRole("button", { name: "Choose this method", exact: true })
+        .getByRole("button", { name: "Choose", exact: true })
         .first()
         .click();
       await page.waitForURL(/\/mirror$/);
@@ -156,6 +155,16 @@ test("sample studio completes, adapts, saves, reuses and deletes through the UI"
         expect(bounds!.y).toBeGreaterThanOrEqual(0);
         expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(844);
       }
+      const guide = (await page
+        .locator(".static-face-guide polygon")
+        .boundingBox())!;
+      const inset = (await page.locator(".mirror-target-inset").boundingBox())!;
+      expect(
+        guide.x < inset.x + inset.width &&
+          guide.x + guide.width > inset.x &&
+          guide.y < inset.y + inset.height &&
+          guide.y + guide.height > inset.y,
+      ).toBe(false);
       await screenshot(page, testInfo, "mobile-mirror");
       await page.setViewportSize({ width: 1265, height: 712 });
     });
@@ -221,7 +230,7 @@ test("sample studio completes, adapts, saves, reuses and deletes through the UI"
         .focus();
       await page.keyboard.press("Enter");
       const continueSample = page.getByRole("button", {
-        name: "Continue the sample",
+        name: "Done with this step",
         exact: true,
       });
       await expect(continueSample).toBeVisible();
@@ -241,8 +250,12 @@ test("sample studio completes, adapts, saves, reuses and deletes through the UI"
           .first(),
       ).toBeVisible();
       await expect(
-        page.getByRole("button", { name: "Simulated checkpoint", exact: true }),
+        page.getByRole("img", {
+          name: "Measured region of the recorded sample checkpoint",
+          exact: true,
+        }),
       ).toBeVisible();
+      await expect(page.locator(".sample-badge")).toHaveCount(1);
       const measured = await sessionFrom(page, sessionId);
       expect(measured.observations.at(-1)?.measurement?.provenance).toBe(
         "simulated",
@@ -290,23 +303,18 @@ test("sample studio completes, adapts, saves, reuses and deletes through the UI"
         .getByRole("button", { name: "Measure the sample", exact: true })
         .click();
       await page
-        .getByRole("button", { name: "Continue the sample", exact: true })
-        .click();
-      await page
-        .getByRole("link", { name: "View my result", exact: true })
+        .getByRole("button", { name: "Done with this step", exact: true })
         .click();
       await page.waitForURL(/\/review$/);
       await expect(
         page.getByRole("heading", { level: 1 }),
-      ).toHaveAccessibleName("A little closer to your way.");
+      ).toHaveAccessibleName("Review");
+      await page.getByRole("button", { name: "Finish", exact: true }).click();
       await page
-        .getByRole("button", { name: "Finish the walkthrough", exact: true })
-        .click();
-      await page
-        .getByRole("button", { name: "Save this sample method", exact: true })
+        .getByRole("button", { name: "Save my method", exact: true })
         .click();
       await expect(
-        page.getByRole("button", { name: "Sample method saved", exact: true }),
+        page.getByRole("button", { name: "Method saved", exact: true }),
       ).toBeDisabled();
       const completed = await sessionFrom(page, sessionId);
       expect(completed.stage).toBe("completed");
@@ -325,7 +333,7 @@ test("sample studio completes, adapts, saves, reuses and deletes through the UI"
       await page.waitForURL(/\/methods$/);
       await expect(
         page.getByRole("heading", { level: 1 }),
-      ).toHaveAccessibleName("Ways that feel like you.");
+      ).toHaveAccessibleName("Your methods");
       await expect(
         page.getByRole("link", { name: "Use this method", exact: true }),
       ).toHaveCount(1);
@@ -350,7 +358,7 @@ test("sample studio completes, adapts, saves, reuses and deletes through the UI"
       await page.goto("/settings/access");
       await expect(
         page.getByRole("heading", { level: 1 }),
-      ).toHaveAccessibleName("A studio that moves with you.");
+      ).toHaveAccessibleName("Settings");
       await expect(
         page.getByRole("button", { name: "Save my preferences", exact: true }),
       ).toBeVisible();
@@ -365,7 +373,7 @@ test("sample studio completes, adapts, saves, reuses and deletes through the UI"
       await page.waitForURL(/\/methods$/);
       await expect(
         page.getByRole("heading", {
-          name: "A little space for your favorites.",
+          name: "No saved methods",
           exact: true,
         }),
       ).toBeVisible();
@@ -392,32 +400,28 @@ test("a resting budget disables fresh work while recorded stopping points and me
 }) => {
   const fixture = await installStudioFixture(page, { missingFull: true });
   await page.goto(`/studio/${fixture.id}/looks`);
-  await expect(page.locator(".preview-explainer")).toContainText(
-    "Fresh previews are resting",
-  );
+  await expect(
+    page.getByRole("status").filter({ hasText: "Fresh previews are paused." }),
+  ).toBeVisible();
   await expect(
     page.getByRole("button", {
-      name: "Generate fresh ladder · up to 1 unit",
+      name: "Generate previews · ≤1 unit",
       exact: true,
     }),
   ).toBeDisabled();
   const candidate = page.getByRole("article").first();
-  await candidate.getByRole("button", { name: /Stop at Light/ }).click();
+  const target = page.getByRole("region", { name: "Your shared color target" });
+  await target.getByRole("button", { name: /Stop at Light/ }).click();
   await expect(
-    candidate.getByRole("img", { name: /^light YouCam target/ }),
+    target.getByRole("img", { name: /^light YouCam target/ }),
   ).toBeVisible();
-  await expect(
-    candidate.getByRole("button", { name: "Recorded YouCam", exact: true }),
-  ).toBeVisible();
-  await candidate
-    .getByRole("button", { name: "Choose this method", exact: true })
-    .click();
+  await candidate.getByRole("button", { name: "Choose", exact: true }).click();
   await page.waitForURL(/\/mirror$/);
   await page
     .getByRole("button", { name: "Begin my method", exact: true })
     .click();
   await expect(
-    page.getByRole("button", { name: "Check this step", exact: true }),
+    page.getByRole("button", { name: "Measure this step", exact: true }),
   ).toBeVisible();
   expect(fixture.snapshot().activePlan?.selectedPreviewVariantId).toBe("light");
   expect(fixture.blockedRequests).toEqual([]);
@@ -460,13 +464,16 @@ test("one available method keeps its full heading and a useful desktop compositi
     expect(session.candidates).toHaveLength(1);
     await page.goto(`/studio/${session.id}/looks`);
     await expect(page.getByRole("heading", { level: 1 })).toHaveAccessibleName(
-      "A way to make it your own.",
+      "Methods",
     );
     const card = page.getByRole("article");
     await expect(card).toHaveCount(1);
     await page.evaluate(() => document.fonts.ready);
-    const image = await card.locator(".candidate-visual").boundingBox();
-    const details = await card.locator(".candidate-body").boundingBox();
+    const stage = page.locator(".method-target-stage");
+    const image = await stage.locator(".candidate-visual").boundingBox();
+    const details = await stage
+      .locator(".method-target-controls")
+      .boundingBox();
     expect(image).not.toBeNull();
     expect(details).not.toBeNull();
     expect(details!.x).toBeGreaterThanOrEqual(image!.x + image!.width - 1);
@@ -475,10 +482,12 @@ test("one available method keeps its full heading and a useful desktop compositi
 
     await page.setViewportSize({ width: 390, height: 844 });
     await expect(page.getByRole("heading", { level: 1 })).toHaveAccessibleName(
-      "A way to make it your own.",
+      "Methods",
     );
-    const mobileImage = await card.locator(".candidate-visual").boundingBox();
-    const mobileDetails = await card.locator(".candidate-body").boundingBox();
+    const mobileImage = await stage.locator(".candidate-visual").boundingBox();
+    const mobileDetails = await stage
+      .locator(".method-target-controls")
+      .boundingBox();
     expect(mobileImage).not.toBeNull();
     expect(mobileDetails).not.toBeNull();
     expect(mobileDetails!.y).toBeGreaterThanOrEqual(

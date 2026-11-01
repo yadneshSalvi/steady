@@ -10,9 +10,7 @@ import {
   ChevronDown,
   Circle,
   Hand,
-  Heart,
   Paintbrush,
-  ShieldCheck,
   Sparkles,
   WandSparkles,
 } from "lucide-react";
@@ -43,13 +41,7 @@ import {
 } from "@/lib/client";
 import { planCandidates } from "@/lib/planner/compiler";
 import { uploadPhoto } from "@/lib/upload-client";
-import {
-  Button,
-  DraftNote,
-  Notice,
-  ProvenanceLabel,
-  SampleDisclosure,
-} from "./ui";
+import { Button, Notice, SampleBadge } from "./ui";
 import { StillCapture } from "./camera";
 import { PhotoAssist } from "./photo-assist";
 
@@ -69,18 +61,6 @@ const products: ProductId[] = [
   "eye_liner",
   "eye_shadow",
 ];
-const motionDetails: Record<Motion, string> = {
-  tapping: "Light, gentle pressing",
-  blending: "Broad, sweeping movements",
-  short_strokes: "Small, controlled lines",
-};
-const toolDetails: Record<ToolId, string> = {
-  fingertips: "Clean fingertips",
-  sponge: "Your makeup sponge",
-  wide_brush: "A soft, broad makeup brush",
-  lip_brush: "Your small lip brush",
-  liner_pen: "An eyeliner pen or eye pencil",
-};
 
 export function ComfortChoices({
   motion,
@@ -143,7 +123,6 @@ export function MovementFields({
               )}
               <div>
                 <strong>{MOTION_LABELS[motion]}</strong>
-                <p>{motionDetails[motion]}</p>
               </div>
             </div>
             <ComfortChoices
@@ -162,7 +141,6 @@ export function MovementFields({
       <div className="preference-row">
         <div>
           <span className="label">Your preferred hand</span>
-          <p className="small muted">Optional. Either is welcome.</p>
         </div>
         <div
           className="segmented-control"
@@ -191,8 +169,7 @@ export function MovementFields({
       {includePace ? (
         <div className="preference-row">
           <div>
-            <span className="label">A pace that’s yours</span>
-            <p className="small muted">Every step waits for you.</p>
+            <span className="label">Breaks</span>
           </div>
           <div
             className="segmented-control"
@@ -263,7 +240,7 @@ export function SetupWizard() {
     initialSample ? "sample" : "personal",
   );
   const [file, setFile] = useState<File | null>(null);
-  const [consent, setConsent] = useState(false);
+  const [consent, setConsent] = useState(initialSample);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
@@ -283,7 +260,7 @@ export function SetupWizard() {
     tools: selectedTools,
     products: selectedProducts,
     mode,
-    consent,
+    consent: mode === "sample" || consent,
   };
   const feasibility = planCandidates(currentSetup);
   const retainedPhoto = pendingSession?.assets.find(
@@ -413,17 +390,15 @@ export function SetupWizard() {
     setMode("sample");
     setIncludeLips(false);
     setFile(null);
-    setConsent(false);
+    setConsent(true);
     return true;
   }
 
   async function enterStudio() {
     if (busy) return;
-    if (!consent) {
+    if (mode === "personal" && !consent) {
       setError(
-        mode === "sample"
-          ? "Please confirm that you understand this is a synthetic sample walkthrough."
-          : "Please confirm permission to process this selected photo before continuing.",
+        "Please confirm permission to process this selected photo before continuing.",
       );
       return;
     }
@@ -468,490 +443,330 @@ export function SetupWizard() {
     }
   }
 
+  const headings = [
+    "Choose a color",
+    "How do you like to move?",
+    "Your tools",
+    "Your photo",
+  ];
   return (
-    <div className="wrap page-wrap">
-      <div className="setup-layout">
-        <aside className="setup-aside">
-          <p className="eyebrow">Your personal studio</p>
-          <h1>
-            Let’s begin
-            <br /> with <em>you.</em>
+    <div className="wrap page-wrap r3-setup">
+      <nav aria-label="Setup progress">
+        <ol className="setup-steps">
+          {steps.map((name, index) => (
+            <li key={name} className={index < step ? "is-done" : ""}>
+              <button
+                onClick={() => goTo(index)}
+                aria-label={`${name}, step ${index + 1} of 4`}
+                disabled={index > step || busy}
+                aria-current={index === step ? "step" : undefined}
+              >
+                <span className="setup-step-icon">
+                  {index < step ? <Check size={14} aria-hidden /> : index + 1}
+                </span>
+                <span>{name}</span>
+              </button>
+            </li>
+          ))}
+        </ol>
+      </nav>
+      <div className="setup-form" key={step}>
+        <div className="page-intro">
+          {mode === "sample" ? <SampleBadge /> : null}
+          <h1 ref={headingRef} tabIndex={-1}>
+            {headings[step]}
           </h1>
-          <p>
-            A look you love, the tools you have, and the movements that feel
-            right.
-          </p>
-          <ol className="setup-steps">
-            {steps.map((name, index) => (
-              <li key={name} className={index < step ? "is-done" : ""}>
+        </div>
+        {reuseName ? (
+          <Notice>
+            {query.get("edit")
+              ? "Your setup, ready to adjust"
+              : `A fresh start with ${reuseName}`}
+          </Notice>
+        ) : null}
+        {step === 0 ? (
+          <>
+            <div
+              className="look-choices"
+              role="group"
+              aria-label="Choose your color inspiration"
+            >
+              {LOOKS.map((look) => (
                 <button
-                  onClick={() => goTo(index)}
-                  aria-label={`${name}, step ${index + 1} of 4`}
-                  disabled={index > step || busy}
-                  aria-current={index === step ? "step" : undefined}
+                  className="look-choice"
+                  aria-pressed={lookId === look.id}
+                  key={look.id}
+                  onClick={() => {
+                    setLookId(look.id);
+                    if (look.id === "eyes") setIncludeLips(false);
+                  }}
                 >
-                  <span className="setup-step-icon">
-                    {index < step ? (
-                      <Check size={13} aria-hidden />
-                    ) : (
-                      `0${index + 1}`
-                    )}
+                  <span className="look-choice-art">
+                    <span
+                      className="paint-smear"
+                      style={{ background: look.color }}
+                    />
                   </span>
-                  <span>{name}</span>
+                  <span className="look-choice-name">{look.title}</span>
+                  {lookId === look.id ? (
+                    <span className="selected-check">
+                      <Check size={14} aria-hidden />
+                    </span>
+                  ) : null}
                 </button>
-              </li>
-            ))}
-          </ol>
-          <div className="setup-privacy">
-            <ShieldCheck size={18} aria-hidden />
-            <span>
-              Live camera stays on your device. Only photos you choose are
-              uploaded.
-            </span>
-          </div>
-        </aside>
-        <div>
-          <div className="setup-form" key={step}>
-            <div className="setup-form-header">
-              <p className="eyebrow">{steps[step]}</p>
-              <span>0{step + 1} / 04</span>
+              ))}
             </div>
-            {mode === "sample" ? (
-              <div className="sample-banner">
-                <SampleDisclosure />
-              </div>
-            ) : reuseName ? (
-              <div className="sample-banner">
-                <Notice
-                  title={
-                    query.get("edit")
-                      ? "Your setup, ready to adjust"
-                      : `A fresh start with ${reuseName}`
-                  }
-                >
-                  {query.get("edit")
-                    ? "Your starting photo stays with this studio. Adjust your choices and compare the methods again."
-                    : "Confirm your tools and movements for this new studio."}
-                </Notice>
+            {lookId !== "eyes" && mode !== "sample" ? (
+              <div className="form-field">
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={includeLips}
+                    onChange={(event) => setIncludeLips(event.target.checked)}
+                  />
+                  <span>Add a touch of lip color</span>
+                </label>
               </div>
             ) : null}
-            {step === 0 ? (
-              <>
-                <h2 ref={headingRef} tabIndex={-1}>
-                  A little color.
-                  <br /> <em>A little more you.</em>
-                </h2>
-                <p className="setup-lede">
-                  Choose the feeling you’d like to keep. These color studies are
-                  starting points; your methods come next.
-                </p>
-                <div
-                  className="look-choices"
-                  role="group"
-                  aria-label="Choose your color inspiration"
-                >
-                  {LOOKS.map((look) => (
-                    <button
-                      className="look-choice"
-                      aria-pressed={lookId === look.id}
-                      key={look.id}
-                      onClick={() => {
-                        setLookId(look.id);
-                        if (look.id === "eyes") setIncludeLips(false);
-                      }}
-                    >
-                      <span className="look-choice-art">
-                        <span
-                          className="paint-smear"
-                          style={{ background: look.color }}
-                        />
-                      </span>
-                      <span className="look-choice-name">{look.title}</span>
-                      <span className="look-choice-sub">{look.subtitle}</span>
-                      {lookId === look.id ? (
-                        <span className="selected-check">
-                          <Check size={14} aria-hidden />
-                        </span>
-                      ) : null}
-                    </button>
-                  ))}
-                </div>
-                <div className="look-detail">
-                  <strong>{currentLook.description}</strong>
-                  <br /> {currentLook.attributes.join(" · ")}
-                </div>
-                {lookId !== "eyes" ? (
-                  <div className="form-field">
-                    <label className="checkbox-label">
+            <PhotoAssist
+              kind="inspiration"
+              onLook={(result) => {
+                setLookId(result.lookId);
+                if (result.lookId === "eyes") setIncludeLips(false);
+              }}
+            />
+          </>
+        ) : null}
+        {step === 1 ? (
+          <>
+            <MovementFields
+              preferences={preferences}
+              onChange={setPreferences}
+            />
+            <details
+              className="method-details"
+              open={practiceOpen}
+              onToggle={(event) => setPracticeOpen(event.currentTarget.open)}
+            >
+              <summary>
+                Try a movement <ChevronDown size={17} aria-hidden />
+              </summary>
+              <p>Rehearse on the back of your hand, without product.</p>
+            </details>
+          </>
+        ) : null}
+        {step === 2 ? (
+          <>
+            <fieldset className="field-group">
+              <legend>Tools</legend>
+              <div className="option-grid">
+                {tools
+                  .filter((tool) =>
+                    lookId === "eyes"
+                      ? ["fingertips", "sponge", "liner_pen"].includes(tool)
+                      : tool !== "liner_pen" &&
+                        (includeLips || tool !== "lip_brush"),
+                  )
+                  .map((tool) => (
+                    <label className="tool-option" key={tool}>
                       <input
                         type="checkbox"
-                        checked={includeLips}
-                        disabled={mode === "sample"}
-                        onChange={(event) =>
-                          setIncludeLips(event.target.checked)
+                        checked={selectedTools.includes(tool)}
+                        onChange={() =>
+                          toggle(tool, selectedTools, setSelectedTools)
                         }
                       />
-                      <span>
-                        <strong>Add a touch of lip color</strong>
-                        <br />{" "}
-                        {mode === "sample"
-                          ? "Lip color is available with your own photo. Recorded samples cover cheeks or eyes."
-                          : "Optional. A lip method needs your own lip product and a comfortable movement."}
+                      <span className="tool-option-icon">
+                        {tool === "fingertips" ? (
+                          <Hand size={28} strokeWidth={1.2} aria-hidden />
+                        ) : tool === "sponge" ? (
+                          <Circle size={26} strokeWidth={1.2} aria-hidden />
+                        ) : (
+                          <Paintbrush size={28} strokeWidth={1.2} aria-hidden />
+                        )}
                       </span>
+                      <strong>{TOOL_LABELS[tool]}</strong>
                     </label>
-                  </div>
-                ) : null}
-                <PhotoAssist
-                  kind="inspiration"
-                  onLook={(result) => {
-                    setLookId(result.lookId);
-                    if (result.lookId === "eyes") setIncludeLips(false);
-                  }}
-                />
-              </>
-            ) : null}
-            {step === 1 ? (
-              <>
-                <h2 ref={headingRef} tabIndex={-1}>
-                  How do you
-                  <br /> <em>like to move?</em>
-                </h2>
-                <p className="setup-lede">
-                  You know your movements best. Choose what feels comfortable
-                  today, and change your mind whenever you need.
-                </p>
-                <MovementFields
-                  preferences={preferences}
-                  onChange={setPreferences}
-                />
-                <details
-                  className="method-details"
-                  open={practiceOpen}
-                  onToggle={(event) =>
-                    setPracticeOpen(event.currentTarget.open)
+                  ))}
+              </div>
+            </fieldset>
+            <fieldset className="field-group">
+              <legend>Products</legend>
+              <div className="option-grid">
+                {products
+                  .filter((product) =>
+                    lookId === "eyes"
+                      ? ["eye_liner", "eye_shadow"].includes(product)
+                      : !["eye_liner", "eye_shadow"].includes(product) &&
+                        (includeLips || product !== "lip_color"),
+                  )
+                  .map((product) => (
+                    <label className="tool-option" key={product}>
+                      <input
+                        type="checkbox"
+                        checked={selectedProducts.includes(product)}
+                        onChange={() =>
+                          toggle(product, selectedProducts, setSelectedProducts)
+                        }
+                      />
+                      <span className="tool-option-icon">
+                        <span
+                          className="product-dot"
+                          style={{
+                            display: "block",
+                            width: 25,
+                            height: 25,
+                            background:
+                              product === "lip_color"
+                                ? currentLook.lipColor
+                                : currentLook.color,
+                            borderRadius:
+                              product === "powder_blush" ? "50%" : "7px",
+                          }}
+                        />
+                      </span>
+                      <strong>{PRODUCT_LABELS[product]}</strong>
+                    </label>
+                  ))}
+              </div>
+            </fieldset>
+            <PhotoAssist
+              kind="tools"
+              allowSampleInventory={
+                !pendingSession || pendingSession.mode === "sample"
+              }
+              onTools={(newTools, newProducts, source) => {
+                if (source === "sample" && !chooseSampleMode()) return;
+                setSelectedTools((current) => [
+                  ...new Set([...current, ...newTools]),
+                ]);
+                setSelectedProducts((current) => [
+                  ...new Set([...current, ...newProducts]),
+                ]);
+              }}
+            />
+          </>
+        ) : null}
+        {step === 3 ? (
+          <>
+            <div
+              className="mode-choice"
+              role="group"
+              aria-label="Session photo mode"
+            >
+              <Button
+                variant="secondary"
+                className={mode === "personal" ? "is-selected" : ""}
+                onClick={() => {
+                  if (mode === "sample") {
+                    setPreferences(freshPreferences());
+                    setSelectedTools([]);
+                    setSelectedProducts([]);
+                    goTo(1);
                   }
-                >
-                  <summary>
-                    Not sure? Try it away from your face.{" "}
-                    <ChevronDown size={17} aria-hidden />
-                  </summary>
-                  <p className="field-note">
-                    With a clean tool and no product, rehearse a gentle tap, a
-                    broad sweep, or a short line on the back of your hand.
-                    Choose “Feels good” only if that movement feels comfortable
-                    to you. This is your assessment.
-                  </p>
-                </details>
-                <p className="field-note">
-                  “Not sure” is a real answer. A method requiring that movement
-                  will wait for your confirmation.
-                </p>
-              </>
-            ) : null}
-            {step === 2 ? (
-              <>
-                <h2 ref={headingRef} tabIndex={-1}>
-                  Your everyday
-                  <br /> <em>workbench.</em>
-                </h2>
-                <p className="setup-lede">
-                  Choose only what you have with you. There’s no shopping list
-                  to get started.
-                </p>
-                <fieldset className="field-group">
-                  <legend>Your tools</legend>
-                  <div className="option-grid">
-                    {tools
-                      .filter((tool) =>
-                        lookId === "eyes"
-                          ? ["fingertips", "sponge", "liner_pen"].includes(tool)
-                          : tool !== "liner_pen",
-                      )
-                      .map((tool) => (
-                        <label className="tool-option" key={tool}>
-                          <input
-                            type="checkbox"
-                            checked={selectedTools.includes(tool)}
-                            onChange={() =>
-                              toggle(tool, selectedTools, setSelectedTools)
-                            }
-                          />
-                          <span className="tool-option-icon">
-                            {tool === "fingertips" ? (
-                              <Hand size={28} strokeWidth={1.2} aria-hidden />
-                            ) : tool === "sponge" ? (
-                              <Circle size={26} strokeWidth={1.2} aria-hidden />
-                            ) : (
-                              <Paintbrush
-                                size={28}
-                                strokeWidth={1.2}
-                                aria-hidden
-                              />
-                            )}
-                          </span>
-                          <span>
-                            <strong>{TOOL_LABELS[tool]}</strong>
-                            <small>{toolDetails[tool]}</small>
-                          </span>
-                        </label>
-                      ))}
-                  </div>
-                </fieldset>
-                <fieldset className="field-group" style={{ marginTop: 28 }}>
-                  <legend>Your products</legend>
-                  <div className="option-grid">
-                    {products
-                      .filter((product) =>
-                        lookId === "eyes"
-                          ? ["eye_liner", "eye_shadow"].includes(product)
-                          : !["eye_liner", "eye_shadow"].includes(product),
-                      )
-                      .map((product) => (
-                        <label className="tool-option" key={product}>
-                          <input
-                            type="checkbox"
-                            checked={selectedProducts.includes(product)}
-                            onChange={() =>
-                              toggle(
-                                product,
-                                selectedProducts,
-                                setSelectedProducts,
-                              )
-                            }
-                          />
-                          <span className="tool-option-icon">
-                            <span
-                              className="product-dot"
-                              style={{
-                                display: "block",
-                                width: 25,
-                                height: 25,
-                                background:
-                                  product === "lip_color"
-                                    ? currentLook.lipColor
-                                    : currentLook.color,
-                                borderRadius:
-                                  product === "powder_blush" ? "50%" : "7px",
-                                border: "1px solid #0002",
-                              }}
-                            />
-                          </span>
-                          <span>
-                            <strong>{PRODUCT_LABELS[product]}</strong>
-                            <small>Confirm your own product</small>
-                          </span>
-                        </label>
-                      ))}
-                  </div>
-                </fieldset>
-                <details className="method-details">
-                  <summary>
-                    Can I use a different tool?{" "}
-                    <ChevronDown size={17} aria-hidden />
-                  </summary>
-                  <p className="field-note">
-                    Select the closest supported tool only if it is the tool you
-                    have. The planner won’t substitute an unconfirmed tool. You
-                    can revisit this setup if your workbench changes.
-                  </p>
-                </details>
-                <PhotoAssist
-                  kind="tools"
-                  allowSampleInventory={
-                    !pendingSession || pendingSession.mode === "sample"
-                  }
-                  onTools={(newTools, newProducts, source) => {
-                    if (source === "sample") {
-                      if (!chooseSampleMode()) return;
-                    }
-                    setSelectedTools((current) => [
-                      ...new Set([...current, ...newTools]),
-                    ]);
-                    setSelectedProducts((current) => [
-                      ...new Set([...current, ...newProducts]),
-                    ]);
-                  }}
-                />
-                <p className="field-note">
-                  Use products in the areas and ways their manufacturer
-                  recommends. Recognition suggests an identity; you confirm the
-                  item and its availability.
-                </p>
-              </>
-            ) : null}
-            {step === 3 ? (
-              <>
-                <h2 ref={headingRef} tabIndex={-1}>
-                  Make room
-                  <br /> <em>for your face.</em>
-                </h2>
-                <p className="setup-lede">
-                  A clear starting photo gives your virtual previews a
-                  reference. Your live mirror stays natural and unretouched.
-                </p>
-                <div
-                  className="mode-choice"
-                  role="group"
-                  aria-label="Session photo mode"
-                >
-                  <Button
-                    variant="secondary"
-                    className={mode === "personal" ? "is-selected" : ""}
-                    onClick={() => {
-                      if (mode === "sample") {
-                        setPreferences(freshPreferences());
-                        setSelectedTools([]);
-                        setSelectedProducts([]);
-                        goTo(1);
-                      }
-                      setMode("personal");
-                      setConsent(false);
-                    }}
-                    disabled={!!pendingSession}
-                  >
-                    <Camera size={16} aria-hidden />
-                    Use my photo
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    className={mode === "sample" ? "is-selected" : ""}
-                    onClick={() => {
-                      chooseSampleMode();
-                    }}
-                    disabled={!!pendingSession}
-                  >
-                    <Sparkles size={16} aria-hidden />
-                    Use the sample
-                  </Button>
-                </div>
-                {mode === "sample" ? (
-                  <p className="field-note">
-                    Recorded samples cover cheeks or eyes. Optional lip color is
-                    available with your own photo.
-                  </p>
-                ) : null}
-                {mode === "personal" && retainedPhoto && !file ? (
-                  <div className="retained-photo">
-                    <Image
-                      src={retainedPhoto.url}
-                      alt="Your saved starting photo"
-                      width={160}
-                      height={200}
-                      unoptimized
-                    />
-                    <p>Your starting photo is kept.</p>
-                    <ProvenanceLabel kind="actual_capture" />
-                  </div>
-                ) : null}
-                {mode === "personal" ? (
-                  <StillCapture
-                    file={file}
-                    onSelected={setFile}
-                    maxBytes={maxBytes}
-                    label="Choose your starting photo"
-                  />
-                ) : (
-                  <div className="sample-photo">
-                    <Image
-                      src="/images/studio-portrait.jpg"
-                      alt="AI-created adult sample portrait"
-                      width={1000}
-                      height={1200}
-                    />
-                    <ProvenanceLabel kind="synthetic_inspiration" />
-                  </div>
-                )}
-                <div className="form-field">
-                  <label className="checkbox-label">
-                    <input
-                      type="checkbox"
-                      checked={consent}
-                      onChange={(event) => setConsent(event.target.checked)}
-                    />
-                    <span>
-                      {mode === "personal" ? (
-                        <>
-                          <strong>
-                            I’m 18 or older and this is my photo, or I have
-                            permission to use it.
-                          </strong>
-                          <br /> I agree to store this selected still privately
-                          and send it to YouCam for the virtual previews I
-                          request. Live video is not uploaded. I can delete my
-                          session in settings.
-                        </>
-                      ) : (
-                        <>
-                          <strong>
-                            I understand this is a synthetic sample walkthrough.
-                          </strong>
-                        </>
-                      )}
-                    </span>
-                  </label>
-                </div>
-                <DraftNote />
-              </>
-            ) : null}
-            {step >= 1 ? (
-              <div
-                className={`setup-feasibility ${feasibility.candidates.length ? "is-ready" : ""}`}
-                role="status"
+                  setMode("personal");
+                  setConsent(false);
+                }}
+                disabled={!!pendingSession}
               >
-                <strong>
-                  {feasibility.candidates.length
-                    ? `${feasibility.candidates.length} method${feasibility.candidates.length === 1 ? "" : "s"} fit your choices`
-                    : "A method needs your choices"}
-                </strong>
-                <p>
-                  {feasibility.candidates.length
-                    ? "Your movements, tools and products work together. You can keep adjusting them."
-                    : step === 1
-                      ? "Confirm a movement, then match it with your tools and products."
-                      : "Confirm a comfortable movement and its matching tool and product before adding a photo."}
-                </p>
-              </div>
-            ) : null}
-            {error ? (
-              <div style={{ marginTop: 22 }}>
-                <Notice kind="error">{error}</Notice>
-              </div>
-            ) : null}
-            <p className="sr-only" role="status">
-              {status}
-            </p>
-            <div className="setup-navigation">
-              {step > 0 ? (
-                <Button
-                  variant="quiet"
-                  onClick={() => goTo(step - 1)}
-                  disabled={busy}
-                >
-                  <ArrowLeft size={17} aria-hidden />
-                  Back
-                </Button>
-              ) : (
-                <span />
-              )}
-              {step < 3 ? (
-                <Button onClick={next}>
-                  Continue <ArrowRight size={18} aria-hidden />
-                </Button>
-              ) : (
-                <Button onClick={() => void enterStudio()} busy={busy}>
-                  {busy ? "Opening your studio…" : "Find my methods"}
-                  <ArrowRight size={18} aria-hidden />
-                </Button>
-              )}
+                <Camera size={16} aria-hidden />
+                Use my photo
+              </Button>
+              <Button
+                variant="secondary"
+                className={mode === "sample" ? "is-selected" : ""}
+                onClick={() => {
+                  chooseSampleMode();
+                }}
+                disabled={!!pendingSession}
+              >
+                <Sparkles size={16} aria-hidden />
+                Use the sample
+              </Button>
             </div>
+            {mode === "personal" && retainedPhoto && !file ? (
+              <div className="retained-photo">
+                <Image
+                  src={retainedPhoto.url}
+                  alt="Your saved starting photo"
+                  width={160}
+                  height={200}
+                  unoptimized
+                />
+                <p>Your starting photo is kept.</p>
+              </div>
+            ) : null}
+            {mode === "personal" ? (
+              <StillCapture
+                file={file}
+                onSelected={setFile}
+                maxBytes={maxBytes}
+                label="Choose your starting photo"
+              />
+            ) : (
+              <div className="sample-photo">
+                <Image
+                  src="/images/studio-portrait.jpg"
+                  alt="AI-created adult sample portrait"
+                  width={1024}
+                  height={1280}
+                  sizes="(max-width: 740px) 80vw, 240px"
+                />
+              </div>
+            )}
+            {mode === "personal" ? (
+              <div className="form-field">
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={consent}
+                    onChange={(event) => setConsent(event.target.checked)}
+                  />
+                  <span>
+                    I’m 18+, have photo permission, and allow private storage
+                    and YouCam previews.
+                  </span>
+                </label>
+              </div>
+            ) : null}
+          </>
+        ) : null}
+        {error ? <Notice kind="error">{error}</Notice> : null}
+        <p className="sr-only" role="status">
+          {status}
+        </p>
+        <div className="setup-navigation">
+          {step > 0 ? (
+            <Button
+              variant="quiet"
+              onClick={() => goTo(step - 1)}
+              disabled={busy}
+            >
+              <ArrowLeft size={17} aria-hidden />
+              Back
+            </Button>
+          ) : (
+            <span />
+          )}
+          <div className="setup-next">
+            {step >= 1 ? (
+              <span className="setup-feasibility" role="status">
+                {feasibility.candidates.length
+                  ? `${feasibility.candidates.length} ${feasibility.candidates.length === 1 ? "method fits" : "methods fit"}`
+                  : "No method fits yet"}
+              </span>
+            ) : null}
+            {step < 3 ? (
+              <Button onClick={next}>
+                Continue <ArrowRight size={18} aria-hidden />
+              </Button>
+            ) : (
+              <Button onClick={() => void enterStudio()} busy={busy}>
+                {busy ? "Opening studio…" : "Find my methods"}
+                <ArrowRight size={18} aria-hidden />
+              </Button>
+            )}
           </div>
-          <p
-            className="local-pref-note"
-            style={{ display: "flex", gap: 7, alignItems: "center" }}
-          >
-            <Heart size={14} aria-hidden />
-            No timer. No perfect answer. There’s room to change things.
-          </p>
         </div>
       </div>
     </div>

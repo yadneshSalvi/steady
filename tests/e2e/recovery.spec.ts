@@ -55,8 +55,7 @@ test("a stage conflict preserves its specific recovery message", async ({
   });
   await page.goto(`/studio/${fixture.id}/looks`);
   await page
-    .getByRole("article")
-    .first()
+    .getByRole("region", { name: "Your shared color target" })
     .getByRole("button", { name: /Stop at Build/ })
     .click();
   await expect(
@@ -91,14 +90,19 @@ test("setup explains an unknown movement and incompatible tools before asking fo
   await page.getByRole("checkbox", { name: /^Fingertips/ }).check();
   await page.getByRole("checkbox", { name: /^Powder blush/ }).check();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
-  await expect(page.getByText(/No method fits yet/)).toBeVisible();
+  await expect(
+    page.getByRole("alert").filter({ hasText: "No method fits yet" }),
+  ).toContainText("Pair a comfortable movement with its tool and product");
+  await expect(page.locator(".setup-feasibility")).toHaveText(
+    "No method fits yet",
+  );
   await expect(
     page.getByLabel("Choose your starting photo", { exact: true }),
   ).toHaveCount(0);
   await page.getByRole("checkbox", { name: /^Powder blush/ }).uncheck();
   await page.getByRole("checkbox", { name: /^Cream blush/ }).check();
   await expect(page.locator(".setup-feasibility")).toContainText(
-    "1 method fit your choices",
+    "1 method fits",
   );
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await expect(
@@ -124,22 +128,22 @@ test("sign-in burst limit ends the spinner and preserves a retryable setup", asy
   await page.goto("/studio/new?mode=sample");
   for (let step = 0; step < 3; step += 1)
     await page.getByRole("button", { name: "Continue", exact: true }).click();
-  const consent = page.getByRole("checkbox", {
-    name: /I understand this is a synthetic/,
-  });
-  await consent.check();
+  await expect(page.locator(".sample-badge")).toHaveCount(1);
+  await expect(
+    page.getByRole("checkbox", { name: /I understand this is a synthetic/ }),
+  ).toHaveCount(0);
   await page
     .getByRole("button", { name: "Find my methods", exact: true })
     .click();
   await expect(
     page.getByText(/Please wait 10 seconds, then try again/),
   ).toBeVisible();
-  await expect(consent).toBeChecked();
+  await expect(page.locator(".sample-badge")).toHaveCount(1);
   await expect(
     page.getByRole("button", { name: "Find my methods", exact: true }),
   ).toBeEnabled();
   await expect(
-    page.getByRole("button", { name: "Opening your studio…", exact: true }),
+    page.getByRole("button", { name: "Opening studio…", exact: true }),
   ).toHaveCount(0);
   expect(attempts).toBe(1);
   await page
@@ -175,7 +179,7 @@ async function readyStudio(page: Page, mode: "sample" | "personal") {
   return session.id;
 }
 
-test("camera denial keeps manual checkpoint and physical confirmation available", async ({
+test("camera denial keeps direct confirmation and optional checkpoint upload available", async ({
   page,
 }) => {
   await page.addInitScript(() =>
@@ -189,26 +193,28 @@ test("camera denial keeps manual checkpoint and physical confirmation available"
   const id = await readyStudio(page, "personal");
   await page.getByRole("button", { name: "Open my camera" }).click();
   await expect(page.locator(".camera-permission-error")).toContainText(
-    "Text guidance and manual checkpoints remain available",
+    "Camera access is off.",
   );
   await page.getByRole("button", { name: "Begin my method" }).click();
   await page
-    .getByRole("button", { name: "Check this step", exact: true })
+    .getByRole("button", { name: "Measure this step", exact: true })
     .click();
-  await page.getByRole("button", { name: "Use my judgment" }).click();
   await expect(
-    page.getByRole("button", { name: "I’m ready for the next step" }),
+    page.getByLabel("Add a checkpoint photo", { exact: true }),
   ).toBeVisible();
-  await page
-    .getByRole("button", { name: "I’m ready for the next step" })
-    .click();
+  await expect(
+    page.getByRole("button", { name: "Done with this step" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Done with this step" }).click();
   await expect(page.locator(".step-label")).toHaveText("Step 02 of 02");
   const state = (await (
     await page.request.get(`/api/sessions/${id}`)
   ).json()) as StudioSession;
   expect(state.completedActionIds).toHaveLength(1);
-  expect(state.observations[0].method).toBe("user_judgment_only_v1");
-  expect(state.observations[0].assetId).toBeUndefined();
+  expect(state.observations).toEqual([]);
+  expect(state.assets.every((asset) => asset.purpose !== "checkpoint")).toBe(
+    true,
+  );
   expect(state.outcome).toBeUndefined();
 });
 
@@ -255,19 +261,20 @@ test("optional microphone detects a short synthetic utterance and executes a bou
   });
   const id = await readyStudio(page, "sample");
   await page.getByRole("button", { name: "Begin the walkthrough" }).click();
-  await page.getByText("Voice controls · optional", { exact: true }).click();
+  await page.getByRole("button", { name: /^Comfort & controls/ }).click();
+  await page.getByText("Voice controls", { exact: true }).click();
   await expect(
     page.getByRole("button", { name: "Enable voice controls" }),
   ).toBeDisabled();
-  await page
-    .getByLabel(
-      "I agree to send short microphone clips to Deepgram while voice controls are on.",
-    )
-    .check();
+  await page.getByLabel("Send short mic clips to Deepgram while on.").check();
   await page.getByRole("button", { name: "Enable voice controls" }).click();
   await expect(page.locator(".voice-controls")).toContainText(
     "Listening · say",
   );
+  await page
+    .getByRole("button", { name: "Close controls", exact: true })
+    .click();
+  await expect(page.getByLabel("Microphone on", { exact: true })).toBeVisible();
   await page.evaluate(() =>
     (
       window as Window & { __steadyTone?: () => Promise<void> }
@@ -281,6 +288,17 @@ test("optional microphone detects a short synthetic utterance and executes a bou
   ).json()) as StudioSession;
   expect(state.stage).toBe("paused");
   expect(state.completedActionIds).toHaveLength(0);
+  await page.getByRole("button", { name: /^Comfort & controls/ }).click();
+  if (
+    !(await page
+      .locator(".voice-controls")
+      .evaluate((element) => (element as HTMLDetailsElement).open))
+  ) {
+    await page.locator(".voice-controls summary").click();
+  }
+  await expect(page.locator(".voice-controls")).toContainText(
+    "Voice controls · on",
+  );
   await page.getByRole("button", { name: "Turn microphone off" }).click();
   await expect
     .poll(() =>

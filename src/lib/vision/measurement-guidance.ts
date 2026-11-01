@@ -11,6 +11,7 @@ export function secondarySpatialGuidance(
     MeasurementResult,
     "region" | "verdict" | "lagging" | "regionalProgress"
   >,
+  action?: Pick<PlanAction, "motion">,
 ): string | null {
   if (
     measurement.verdict !== "build" ||
@@ -39,9 +40,15 @@ export function secondarySpatialGuidance(
   )
     return null;
   if (Math.abs(inner.progress - outer.progress) < 0.12) return null;
-  const [lighter, other] =
+  const [lighter] =
     inner.progress < outer.progress ? [inner, outer] : [outer, inner];
-  return `The ${lighter.subregion} part is also lighter: about ${Math.round(lighter.progress * 100)}% toward the target, compared with ${Math.round(other.progress * 100)}% on the ${other.subregion} part.`;
+  return lighter.subregion === "outer"
+    ? action?.motion === "blending"
+      ? "One more broad pass toward your ear."
+      : action?.motion === "tapping"
+        ? "Tap gently toward your ear."
+        : "Work gently toward your ear."
+    : "Work gently toward the center of the guide.";
 }
 
 export function checkpointGuidance(
@@ -57,39 +64,34 @@ export function checkpointGuidance(
       "Keep the original baseline position and check again in even light."
     );
   if (action.region === "left_eye" || action.region === "right_eye") {
-    if (measurement.verdict === "at_target")
-      return "You’re at your chosen eye intensity. You can keep it and finish this step.";
-    if (measurement.verdict === "over")
-      return "Deeper than your eye preview. Stop adding color. Keep it, or use an eye-safe remover according to its directions if you choose to remove it.";
-    const movement =
-      action.product === "eye_liner"
-        ? "one short stroke on the skin above your upper lashes"
-        : "a few gentle taps on the upper lid with your eye-labeled shadow";
-    return `About ${Math.round((measurement.progress ?? 0) * 100)}% of your ${measurement.targetLevel} eye target. If you want more definition, try ${movement}, then check again. Keep product away from the eye and waterline; stop whenever the movement feels uncomfortable.`;
+    if (measurement.verdict === "at_target") return "Keep this eye intensity.";
+    if (measurement.verdict === "over") return "Stop adding color.";
+    return action.product === "eye_liner"
+      ? "Add one short stroke above your upper lashes."
+      : "Tap gently across the upper lid.";
   }
   if (measurement.verdict === "at_target")
-    return "You’re at your preview’s intensity. Keep it, or gently soften the edge with a clean tool.";
+    return "Keep this intensity, or soften the edge.";
   if (measurement.verdict === "over")
-    return "Deeper than your preview. If you want to soften it, gently tap with a clean sponge or suitable brush to lift excess color.";
-  const area =
-    measurement.lagging === "outer"
-      ? "The outer part is lighter; work gently toward your ear."
-      : measurement.lagging === "inner"
-        ? "The inner part is lighter; keep the movement inside the guide."
-        : measurement.lagging === "upper"
-          ? "The upper part is lighter; keep the movement inside the guide."
-          : measurement.lagging === "lower"
-            ? "The lower part is lighter; keep the movement inside the guide."
-            : "Build gradually within the guide.";
-  const motion =
-    action.motion === "blending"
-      ? "Try one light, broad pass"
-      : action.motion === "short_strokes"
-        ? "Try one short, gentle stroke"
-        : action.tool === "sponge"
-          ? "Try one gentle sponge pass"
-          : "Try a few light taps";
-  return `About ${Math.round((measurement.progress ?? 0) * 100)}% of your ${measurement.targetLevel} target. ${area} ${motion}, then check again if you want more color.`;
+    return "Stop adding color and soften with a clean tool.";
+  if (measurement.lagging === "upper") return "Work up along the cheekbone.";
+  if (measurement.lagging === "outer")
+    return action.motion === "blending"
+      ? "One more broad pass toward your ear."
+      : action.motion === "tapping"
+        ? "Tap gently toward your ear."
+        : "Add short strokes toward your ear.";
+  if (measurement.lagging === "inner")
+    return "Work gently toward the center of the guide.";
+  if (measurement.lagging === "lower")
+    return "Work gently along the lower edge of the guide.";
+  return action.motion === "blending"
+    ? "Add one light, broad pass inside the guide."
+    : action.motion === "short_strokes"
+      ? "Add one short, gentle stroke inside the guide."
+      : action.tool === "sponge"
+        ? "Add one gentle sponge pass inside the guide."
+        : "Add a few light taps inside the guide.";
 }
 
 export function stalledCheckpoint(

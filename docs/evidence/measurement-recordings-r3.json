@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-11-01T12:17:29.081Z",
+  "evidenceClass": "recorded_provider_render_engineering_test",
+  "sourceSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+  "manifestSha256": "b7bc1b755bb7f36f012eea7b5e1b536ae1b2156a55701c0be50cdd0dd45f5342",
+  "scope": "One fictional portrait, actual unchanged provider output bytes, unchanged eye masks/guards; no participant or physical-makeup validation.",
+  "providerUsage": {
+    "startingBalance": 952,
+    "endingBalance": 948,
+    "observedUnits": 4,
+    "successfulTasks": 4,
+    "adoptedOutputs": 2,
+    "successfulNonAdoptedOutputs": 2,
+    "budgetClosed": true
+  },
+  "nonAdoptedTrials": [
+    {
+      "id": "shadow-light-warm-v3",
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "eye_shadow",
+          "pattern": {
+            "name": "1color20"
+          },
+          "palettes": [
+            {
+              "color": "#805036",
+              "texture": "matte",
+              "colorIntensity": 35
+            }
+          ]
+        }
+      ],
+      "recipeHash": "805b7e1c97018a25ccd2142723ee189d2b0d01521ca305d2ba8089ef1ddc27d8",
+      "outputSha256": "ab70927db75585ccd890b83280011a091ab70f87144a60a047735288f919fda2",
+      "attempts": 1,
+      "state": "succeeded",
+      "reason": "The unchanged-mask Full ΔE00 remained below the R3 strength aim, despite passing the measurement guard."
+    },
+    {
+      "id": "shadow-full-warm-v3",
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "eye_shadow",
+          "pattern": {
+            "name": "1color20"
+          },
+          "palettes": [
+            {
+              "color": "#805036",
+              "texture": "matte",
+              "colorIntensity": 65
+            }
+          ]
+        }
+      ],
+      "recipeHash": "af3e3a4584c4da89d747607d65d385563d5a5b89d21a25359f17b931ef0ec014",
+      "outputSha256": "f7bd76f6c0e1f887cc7826600ca1d0764045da708c424c198ab6862f53a7a289",
+      "attempts": 1,
+      "state": "succeeded",
+      "reason": "The unchanged-mask Full ΔE00 remained below the R3 strength aim, despite passing the measurement guard."
+    }
+  ],
+  "adoptedRecords": [
+    {
+      "id": "shadow-light-warm-v4",
+      "level": "light",
+      "intensity": 35,
+      "outputUrl": "/examples/round3/shadow-light-warm-v4.png",
+      "outputSha256": "5b32bfac3ccd441e0c00f1978f0cdde61ef4debb2a6f3564f462d93caffabf89",
+      "recipeHash": "37b4bb78154773a86eedd6337c7b0f9cd394d48d0796c618e51ee3e7237cb09d",
+      "attempts": 1
+    },
+    {
+      "id": "shadow-full-warm-v4",
+      "level": "full",
+      "intensity": 65,
+      "outputUrl": "/examples/round3/shadow-full-warm-v4.png",
+      "outputSha256": "3fcf430d70fc2525f78cc1ff22f9e6050f62370f7f4cb7b34fb963dbcffe4f5d",
+      "recipeHash": "8e4754c058e1fa5fd24c89eafdd77516d57bb509864aae91de2f450d4d172603",
+      "attempts": 1
+    }
+  ],
+  "eyeMeasurements": [
+    {
+      "region": "left_eye",
+      "targetValid": true,
+      "targetDeltaE00": 4.433600585990866,
+      "targetMagnitude": 5.0333810069264615,
+      "selectedLightValid": true,
+      "selectedLightDeltaE00": 2.6177912845102598,
+      "selectedLightMagnitude": 2.8990973046827926,
+      "light": {
+        "version": 1,
+        "geometryVersion": "landmark-polygon-v1",
+        "region": "left_eye",
+        "verdict": "build",
+        "progress": 0.5649756772060074,
+        "deltaA": -0.03514025602297366,
+        "deltaE00": 2.6177912845102598,
+        "uniformity": 0.9595484352207286,
+        "lagging": null,
+        "method": "linear-rgb-lab-ciede2000-v1",
+        "validPixels": 1395,
+        "heldOutDeltaE00": 0,
+        "spatialLightingDeltaE00": 0
+      },
+      "full": {
+        "version": 1,
+        "geometryVersion": "landmark-polygon-v1",
+        "region": "left_eye",
+        "verdict": "at_target",
+        "progress": 1,
+        "deltaA": -0.7230107370313714,
+        "deltaE00": 4.433600585990866,
+        "uniformity": 1,
+        "lagging": null,
+        "method": "linear-rgb-lab-ciede2000-v1",
+        "validPixels": 1395,
+        "heldOutDeltaE00": 0,
+        "spatialLightingDeltaE00": 0
+      }
+    },
+    {
+      "region": "right_eye",
+      "targetValid": true,
+      "targetDeltaE00": 4.707444477078467,
+      "targetMagnitude": 5.441362536366042,
+      "selectedLightValid": true,
+      "selectedLightDeltaE00": 2.7620441154088313,
+      "selectedLightMagnitude": 3.1037785211425155,
+      "light": {
+        "version": 1,
+        "geometryVersion": "landmark-polygon-v1",
+        "region": "right_eye",
+        "verdict": "build",
+        "progress": 0.5619193100169905,
+        "deltaA": -0.0354184464650551,
+        "deltaE00": 2.7620441154088313,
+        "uniformity": 0.981641000569569,
+        "lagging": null,
+        "method": "linear-rgb-lab-ciede2000-v1",
+        "validPixels": 1505,
+        "heldOutDeltaE00": 0,
+        "spatialLightingDeltaE00": 0
+      },
+      "full": {
+        "version": 1,
+        "geometryVersion": "landmark-polygon-v1",
+        "region": "right_eye",
+        "verdict": "at_target",
+        "progress": 1,
+        "deltaA": -0.5236143610913278,
+        "deltaE00": 4.707444477078467,
+        "uniformity": 1,
+        "lagging": null,
+        "method": "linear-rgb-lab-ciede2000-v1",
+        "validPixels": 1505,
+        "heldOutDeltaE00": 0,
+        "spatialLightingDeltaE00": 0
+      }
+    }
+  ],
+  "belowEyeAudit": {
+    "method": "Exact source-defined fixed-patch RGB comparison; no retouching or normalization.",
+    "patches": [
+      {
+        "region": "left_eye",
+        "pixels": 1150,
+        "changedRGBPixels": {
+          "light": 0,
+          "full": 0
+        }
+      },
+      {
+        "region": "right_eye",
+        "pixels": 1103,
+        "changedRGBPixels": {
+          "light": 0,
+          "full": 0
+        }
+      }
+    ]
+  },
+  "defaultRoseSatinFirstPass": [
+    {
+      "version": 1,
+      "geometryVersion": "blush-centroid-oval-v3",
+      "region": "left_cheek",
+      "verdict": "build",
+      "progress": 0.3796168411146896,
+      "deltaA": 2.197758106282837,
+      "deltaE00": 2.8711106615406736,
+      "uniformity": 0.39086376441651904,
+      "lagging": "upper",
+      "method": "linear-rgb-lab-ciede2000-v1",
+      "validPixels": 5543,
+      "heldOutDeltaE00": 0,
+      "spatialLightingDeltaE00": 0,
+      "regionalProgress": [
+        {
+          "subregion": "outer",
+          "progress": 0.22663436564115216,
+          "pixels": 2740
+        },
+        {
+          "subregion": "upper",
+          "progress": 0.20879730038827113,
+          "pixels": 2817
+        },
+        {
+          "subregion": "inner",
+          "progress": 0.5362073162526829,
+          "pixels": 2803
+        },
+        {
+          "subregion": "lower",
+          "progress": 0.5640129803344133,
+          "pixels": 2726
+        }
+      ]
+    },
+    {
+      "version": 1,
+      "geometryVersion": "blush-centroid-oval-v3",
+      "region": "right_cheek",
+      "verdict": "build",
+      "progress": 0.38591841632031193,
+      "deltaA": 2.498473598635311,
+      "deltaE00": 3.142105861784614,
+      "uniformity": 0.45529720884236147,
+      "lagging": "upper",
+      "method": "linear-rgb-lab-ciede2000-v1",
+      "validPixels": 5510,
+      "heldOutDeltaE00": 0,
+      "spatialLightingDeltaE00": 0,
+      "regionalProgress": [
+        {
+          "subregion": "outer",
+          "progress": 0.2616986558369811,
+          "pixels": 2740
+        },
+        {
+          "subregion": "upper",
+          "progress": 0.22829703193032325,
+          "pixels": 2733
+        },
+        {
+          "subregion": "inner",
+          "progress": 0.5236800238653879,
+          "pixels": 2770
+        },
+        {
+          "subregion": "lower",
+          "progress": 0.5440601961781154,
+          "pixels": 2777
+        }
+      ]
+    }
+  ],
+  "providerRequestsForThisEvaluation": 0
+}

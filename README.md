@@ -4,10 +4,13 @@
 
 **[Open the studio](https://steady-taupe-pi.vercel.app)** · **Quick sample** opens the camera-free walkthrough in one click. Choose a method, compare Light / Build / Full, and measure a compact recorded blush pass against your target. See which part needs more color through a translucent heatmap and measured spatial guidance. **Explore the eye sample** demonstrates fine liner changing to warm, softly tapped shadow while keeping eye emphasis.
 
+Round three passes local release checks: **479 unit/database tests** and **28 optimized browser tests**. Production verification is pending; the live release remains round two until that check completes.
+
 ## What the studio does
 
 - Offers three cheek color families, optional lip color, and Defined eyes. Every method requires a comfortable movement and confirmed tools and products.
-- Keeps the chosen YouCam region crop beside the instruction. Cheek targets have three intensities; eye targets have Light and Full. Personal studios explicitly generate the chosen method's missing previews.
+- Shows one shared color target with compact method choices. Cheek targets have Light, Build and Full; eye targets have Light and Full. The mirror keeps the active region target in an inset. Personal studios explicitly generate a missing selected target.
+- Uses **Done with this step** to advance, whether or not you measure. Early finishing lives inside **Make this easier**. Measurement replaces the instruction card, with the heatmap aligned over the mirror guide.
 - Captures a local baseline, detects landmarks on the exact checkpoint bitmap, and shows measured progress, a regional heatmap, and a method-specific next step. Changed pose, uneven light, occlusion signals, or an indistinct target produce a reason to pause the measurement.
 - Prefers another tool or movement using the same product. A cream brush can replace fingertip taps; fine liner can become softly tapped shadow. Appearance or product changes are explained before acceptance.
 - Saves private studios, measured numbers, and explicit confirmations. Local measurement frames stay in browser memory. A selected image is uploaded only through a separate consented photo or AI action.
@@ -38,15 +41,15 @@ pnpm start                       # stop the development server first
 pnpm test:e2e                    # against the local running application
 ```
 
-The sample uses hash-verified recordings and never creates a fresh YouCam task. Fresh personal previews show a unit estimate and use durable reservations, a cached account-balance floor, and application/owner/IP limits. See [operations](docs/operations.md) for database integration checks and the separate private-upload browser test.
+The sample uses hash-verified recordings and never creates a fresh YouCam task. Fresh personal previews use durable reservations, a cached account-balance floor, and application/owner/IP limits. See [operations](docs/operations.md) for database integration checks and the separate private-upload browser test.
 
-R2 is released and verified on [canonical production](https://steady-taupe-pi.vercel.app). **366 local unit/integration tests** pass, and **all 24 browser tests** pass against both the optimized local build and deployed application, including private upload/isolation/erasure. The canonical run took 129.390367 seconds with no retries or paid YouCam submissions. [Release verification](docs/release-checklist.md) records the deployed commit and preserves earlier evidence. An injected session-read failure preserves the browser owner and saved studio without any sign-in, studio-mutation or preview POST.
+The round-three local release passes formatting, zero-warning lint, TypeScript, the optimized build, **479 unit/database tests across 39 files**, and **28 browser tests in 106.252090 seconds**. Browser checks include private upload/isolation/erasure, both desktop viewports, mobile access, direct step completion, and preserved session ownership. No fresh YouCam submission was made by the automated browser suite. [Release verification](docs/release-checklist.md) records exact results and preserves the earlier deployed releases.
 
 ## Evidence and limits
 
 The measurement is experimental image-color change relative to a chosen virtual target, not product quantity, physical completion, or clinical assessment. Unchanged recorded Full targets measure 100%; lighter recordings produce intermediate values. Synthetic tests cover normalization, pose changes, abstention, and actual IMAGE/VIDEO model execution. No participant or makeup-artist study is claimed. Physical camera diversity and real application benefit remain unverified.
 
-[Evidence & limits](https://steady-taupe-pi.vercel.app/evidence) centralizes provenance and limitations. The [measurement report](docs/evaluation-measurement.md) gives exact fixture results, abstention cases, timing scope, and reproducible checks. The app does not infer disability, diagnose conditions, score beauty, or transfer arbitrary references.
+[Evidence & limits](https://steady-taupe-pi.vercel.app/evidence) centralizes provenance and limitations. The interface uses one plain **Sample** marker on each sample working screen or saved-method card, concise consent when a selected still or audio leaves the device, and one **Built with YouCam** footer credit. Per-image disclosure chips and repeated guidance notes are removed. Source, recipe, output and measurement identities remain recorded; alt text stays descriptive. The [measurement report](docs/evaluation-measurement.md) gives exact fixture results, abstention cases, timing scope, and reproducible checks. The app does not infer disability, diagnose conditions, score beauty, or transfer arbitrary references.
 
 ## Project guides
 

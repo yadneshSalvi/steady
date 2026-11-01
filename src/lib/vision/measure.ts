@@ -1,7 +1,8 @@
-import type { Region } from "@/lib/contracts";
+import type { GeometryVersion, Region } from "@/lib/contracts";
 import {
   EYE_LANDMARKS,
   faceEligible,
+  geometryVersionForRegion,
   regionPolygon,
   type Point,
 } from "./geometry";
@@ -50,6 +51,7 @@ interface TargetPart {
 /** Cacheable statistics derived from the actual source and preview pixels. */
 export interface MeasurementTarget {
   version: typeof MEASUREMENT_VERSION;
+  geometryVersion: GeometryVersion;
   region: Region;
   valid: boolean;
   reason?: MeasurementReason;
@@ -95,6 +97,8 @@ export interface MeasurementRegionalProgress {
 
 export interface MeasurementResult {
   version: typeof MEASUREMENT_VERSION;
+  /** Exact mask used; optional for older local objects and test mocks. */
+  geometryVersion?: GeometryVersion;
   region: Region;
   verdict: MeasurementVerdict;
   /** Projection onto the source→preview Lab change, clamped to 0…1.5. */
@@ -117,6 +121,9 @@ export interface MeasurementResult {
 export function summarizeMeasurement(result: MeasurementResult) {
   return {
     version: result.version,
+    ...(result.geometryVersion
+      ? { geometryVersion: result.geometryVersion }
+      : {}),
     region: result.region,
     verdict: result.verdict,
     progress: result.progress,
@@ -318,8 +325,9 @@ export function regionCrop(
   points: readonly Point[],
   region: Region,
   padding = 0.3,
+  geometryVersion: GeometryVersion = geometryVersionForRegion(region),
 ) {
-  const polygon = regionPolygon(points, region);
+  const polygon = regionPolygon(points, region, geometryVersion);
   if (!polygon.length) return null;
   const box = bounds(polygon);
   const x = clamp(box.x - box.width * padding),
@@ -639,6 +647,7 @@ function analyzePair(
   before: MeasurementFrame,
   after: MeasurementFrame,
   region: Region,
+  geometryVersion: GeometryVersion,
 ): PairAnalysis {
   const diagnostics = emptyDiagnostics();
   const stop = (reason: MeasurementReason): PairAnalysis => ({
@@ -783,13 +792,13 @@ function analyzePair(
 
   const regionBefore = samplePolygon(
     before.image,
-    regionPolygon(before.landmarks, region),
+    regionPolygon(before.landmarks, region, geometryVersion),
     UNITY,
     regionExclusions(before.landmarks, region),
   );
   const regionAfter = samplePolygon(
     after.image,
-    regionPolygon(after.landmarks, region),
+    regionPolygon(after.landmarks, region, geometryVersion),
     gains,
     regionExclusions(after.landmarks, region),
   );
@@ -843,14 +852,21 @@ export function createMeasurementTarget(
   source: MeasurementFrame,
   preview: MeasurementFrame,
   region: Region,
+  requestedGeometryVersion: GeometryVersion = geometryVersionForRegion(region),
 ): MeasurementTarget {
+  const geometryVersion = geometryVersionForRegion(
+    region,
+    requestedGeometryVersion,
+  );
   const comparison = analyzePair(
     source,
     { ...preview, landmarks: source.landmarks },
     region,
+    geometryVersion,
   );
   const target: MeasurementTarget = {
     version: MEASUREMENT_VERSION,
+    geometryVersion,
     region,
     valid: false,
     sourceLab: ZERO,
@@ -936,6 +952,9 @@ export function measureCheckpoint({
 }): MeasurementResult {
   const result: MeasurementResult = {
     version: MEASUREMENT_VERSION,
+    ...(target.geometryVersion
+      ? { geometryVersion: target.geometryVersion }
+      : {}),
     region: target.region,
     verdict: "insufficient",
     progress: null,
@@ -949,6 +968,7 @@ export function measureCheckpoint({
   };
   if (
     !target.valid ||
+    !target.geometryVersion ||
     target.version !== MEASUREMENT_VERSION ||
     !target.deltaLab.every(Number.isFinite) ||
     !Number.isFinite(target.deltaE00)
@@ -966,7 +986,12 @@ export function measureCheckpoint({
     result.reason = "target_too_subtle";
     return result;
   }
-  const comparison = analyzePair(baseline, checkpoint, target.region);
+  const comparison = analyzePair(
+    baseline,
+    checkpoint,
+    target.region,
+    target.geometryVersion,
+  );
   result.diagnostics = comparison.diagnostics;
   if (comparison.reason || !comparison.before || !comparison.after) {
     result.reason = comparison.reason ?? "too_few_pixels";
@@ -994,7 +1019,11 @@ export function measureCheckpoint({
         ? "over"
         : "at_target";
   const cells = targetParts(cellStatistics(before), cellStatistics(after));
-  const polygon = regionPolygon(checkpoint.landmarks, target.region);
+  const polygon = regionPolygon(
+    checkpoint.landmarks,
+    target.region,
+    target.geometryVersion,
+  );
   for (const cell of cells) {
     const desired = target.cells.find((part) => part.id === cell.id);
     if (!desired || magnitude(desired.deltaLab) < LIMITS.minTargetLab) continue;

@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { Region } from "@/lib/contracts";
 import {
   faceEligible,
+  BLUSH_CENTROID_OFFSETS,
   CHEEK_OVAL_ANCHORS,
   REGION_LANDMARKS,
   type Point,
@@ -58,10 +59,13 @@ function landmarks(): Point[] {
   for (const region of ["left_cheek", "right_cheek"] as const) {
     const side = region === "left_cheek" ? 1 : -1;
     const centerX = region === "left_cheek" ? 0.69 : 0.31;
+    const offset = BLUSH_CENTROID_OFFSETS[region];
+    const anchorX = centerX - offset.major * side * 0.1;
+    const anchorY = 0.555 - offset.minor * 0.085;
     const anchors = CHEEK_OVAL_ANCHORS[region];
-    set(anchors.medialApple, centerX - side * (0.1 / 1.8), 0.555);
-    set(anchors.lateralCheekbone, centerX + side * (0.1 / 1.8), 0.555);
-    set(anchors.lowerApple, centerX, 0.655);
+    set(anchors.medialApple, anchorX - side * (0.1 / 1.8), anchorY);
+    set(anchors.lateralCheekbone, anchorX + side * (0.1 / 1.8), anchorY);
+    set(anchors.lowerApple, anchorX, anchorY + 0.1);
   }
   [
     [108, 0.43, 0.2],

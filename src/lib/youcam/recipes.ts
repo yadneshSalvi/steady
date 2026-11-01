@@ -167,7 +167,7 @@ const PALETTES: Record<
   terracotta: { cheek: "#BF7153", lip: "#A35D46" },
   berry: { cheek: "#9D526C", lip: "#853E5D" },
 };
-export const RECIPE_REVISION = 4;
+export const RECIPE_REVISION = 5;
 export const PREVIEW_LEVELS = [
   { id: "light", label: "Light", intensity: 25 },
   { id: "build", label: "Build", intensity: 45 },
@@ -184,7 +184,7 @@ export const EYE_RECIPES = {
   shadow: {
     category: "eye_shadow",
     pattern: round2Catalog.patterns.eye_shadow.label,
-    color: "#805036",
+    color: "#68402B",
   },
 } as const;
 
@@ -193,9 +193,9 @@ export function makeRecipe(
   lookId: LookId,
   routeId: CandidatePlan["routeId"],
   includeLips: boolean,
-  intensity?: 25 | 45 | 65,
+  intensity?: 25 | 35 | 45 | 65,
 ): MakeupEffect[] {
-  const chosenIntensity = intensity ?? (routeId === "shadow" ? 45 : 65);
+  const chosenIntensity = intensity ?? 65;
   if (lookId === "eyes") {
     if (includeLips || (routeId !== "liner" && routeId !== "shadow"))
       throw new InvalidRecipeError();
@@ -275,8 +275,8 @@ export function makePreviewVariants(
     ({ id }) => lookId !== "eyes" || id !== "build",
   ).map(({ id, intensity }) => {
     const chosenIntensity =
-      lookId === "eyes" && routeId === "shadow" && id === "full"
-        ? 45
+      lookId === "eyes" && routeId === "shadow" && id === "light"
+        ? 35
         : intensity;
     return {
       id,
@@ -285,6 +285,36 @@ export function makePreviewVariants(
       previewStatus: "not_requested",
     };
   });
+}
+
+/** Reproduces the immutable R2 eye contract, including shadow25/45. */
+export function makeRound2EyeRecipe(
+  routeId: "liner" | "shadow",
+  intensity: 25 | 45 | 65 = routeId === "shadow" ? 45 : 65,
+): MakeupEffect[] {
+  return validateEffects([
+    {
+      category: "skin_smooth",
+      skinSmoothStrength: 0,
+      skinSmoothColorIntensity: 0,
+    },
+    {
+      category: routeId === "liner" ? "eye_liner" : "eye_shadow",
+      pattern: {
+        name:
+          routeId === "liner"
+            ? eyeCatalog.patterns.eye_liner.label
+            : round2Catalog.patterns.eye_shadow.label,
+      },
+      palettes: [
+        {
+          color: routeId === "liner" ? "#3A2B2B" : "#805036",
+          texture: "matte",
+          colorIntensity: intensity,
+        },
+      ],
+    },
+  ]);
 }
 
 /** Reproduces the immutable R1 request contract; never used for new plans. */

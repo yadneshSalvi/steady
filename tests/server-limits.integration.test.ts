@@ -12,7 +12,11 @@ import {
   vi,
 } from "vitest";
 import { EYE_SAMPLE_SETUP, SAMPLE_SETUP } from "../src/lib/catalog";
-import type { PreviewLevel, StudioSession } from "../src/lib/contracts";
+import type {
+  PreviewLevel,
+  SetupInput,
+  StudioSession,
+} from "../src/lib/contracts";
 import {
   applicationPreviewTarget,
   applyCommand,
@@ -90,9 +94,10 @@ let admin: Pool | undefined;
 async function seedSession(
   mode: "personal" | "sample" = "personal",
   owner = "owner-a",
+  setup: SetupInput = SAMPLE_SETUP,
 ) {
   const session = createSession(
-    { ...structuredClone(SAMPLE_SETUP), mode, consent: true },
+    { ...structuredClone(setup), mode, consent: true },
     randomUUID(),
   );
   session.sourceAssetId = randomUUID();
@@ -180,6 +185,23 @@ async function completeFixturePreview(jobId: string) {
   );
   await setPreviewStatus(jobId, "ready");
   return assetId;
+}
+
+function commandFixture(
+  session: StudioSession,
+  command: Parameters<typeof mutateSession>[3],
+) {
+  return mutateSession("owner-a", session.id, session.revision, command);
+}
+
+function queueApplicationFixture(session: StudioSession) {
+  return queuePreviews(
+    "owner-a",
+    session.id,
+    session.revision,
+    "ip-a",
+    applicationPreviewTarget(session),
+  );
 }
 
 describe.skipIf(!connectionString)(
@@ -1121,6 +1143,373 @@ describe.skipIf(!connectionString)(
         expect(state.submit).not.toHaveBeenCalled();
       },
     );
+
+    it("confirms and advances without requiring any measurement or checkpoint request", async () => {
+      let session = await seedSession();
+      session = await commandFixture(session, {
+        type: "approve_candidate",
+        candidateId: session.candidates[0].id,
+      });
+      session = await commandFixture(session, { type: "start" });
+      const actions = structuredClone(session.activePlan!.actions);
+      session = await commandFixture(session, {
+        type: "complete_action",
+        actionId: actions[0].id,
+      });
+      expect(session.stage).toBe("applying");
+      expect(currentAction(session)?.id).toBe(actions[1].id);
+      expect(session.observations).toEqual([]);
+      session = await commandFixture(session, {
+        type: "complete_action",
+        actionId: actions[1].id,
+      });
+      const saved = await ownedSession("owner-a", session.id);
+      expect(saved.stage).toBe("reviewing");
+      expect(saved.completedActionIds).toEqual(
+        actions.map((action) => action.id),
+      );
+      expect(saved.observations).toEqual([]);
+      expect(saved.activePlan!.actions).toEqual(actions);
+      expect(saved.outcome).toBeUndefined();
+      expect(
+        saved.events.filter(
+          (event) => event.type === "physical_action_user_confirmed",
+        ),
+      ).toHaveLength(2);
+      expect(
+        (await state.pool!.query("SELECT count(*) FROM provider_jobs")).rows[0]
+          .count,
+      ).toBe("0");
+    });
+
+    it("revokes only a dropped proposal's unsubmitted job immediately and releases its reservation", async () => {
+      const session = await adaptedFixture(true);
+      const queued = await queueApplicationFixture(session);
+      const jobId = queued.jobs[0].id;
+      const history = physicalHistory(queued.session);
+      await expect(
+        mutateSession("owner-b", session.id, queued.session.revision, {
+          type: "decline_adaptation",
+        }),
+      ).rejects.toMatchObject({ code: "SESSION_NOT_FOUND" });
+      const declined = await commandFixture(queued.session, {
+        type: "decline_adaptation",
+      });
+      expect(declined.stage).toBe("paused");
+      expect(declined.adaptation).toBeUndefined();
+      expect(declined.previewBatch).toBeUndefined();
+      expect(physicalHistory(declined)).toBe(history);
+      expect(
+        (
+          await state.pool!.query(
+            "SELECT state,cancel_requested,error_code FROM provider_jobs WHERE id=$1",
+            [jobId],
+          )
+        ).rows[0],
+      ).toMatchObject({
+        state: "cancelled",
+        cancel_requested: true,
+        error_code: "target_orphaned",
+      });
+      expect(
+        (
+          await state.pool!.query(
+            "SELECT released FROM quota_reservations WHERE id=$1",
+            [jobId],
+          )
+        ).rows[0].released,
+      ).toBe(true);
+      await expect(uploadSourceStep(jobId)).resolves.toBe(false);
+      expect(state.upload).not.toHaveBeenCalled();
+      expect(state.submit).not.toHaveBeenCalled();
+    });
+
+    it("keeps a pending target owned when its proposal is accepted, then projects its existing output", async () => {
+      const session = await adaptedFixture(true);
+      const queued = await queueApplicationFixture(session);
+      const jobId = queued.jobs[0].id;
+      const history = physicalHistory(queued.session);
+      const accepted = await commandFixture(queued.session, {
+        type: "accept_adaptation",
+        proposalId: queued.session.adaptation!.id,
+      });
+      expect(accepted.activePlan).toMatchObject({
+        previewJobId: jobId,
+        previewStatus: "queued",
+      });
+      expect(
+        (
+          await state.pool!.query(
+            "SELECT state,cancel_requested FROM provider_jobs WHERE id=$1",
+            [jobId],
+          )
+        ).rows[0],
+      ).toMatchObject({ state: "queued", cancel_requested: false });
+      expect(
+        (
+          await state.pool!.query(
+            "SELECT released FROM quota_reservations WHERE id=$1",
+            [jobId],
+          )
+        ).rows[0].released,
+      ).toBe(false);
+      const assetId = await completeFixturePreview(jobId);
+      const saved = await ownedSession("owner-a", session.id);
+      expect(saved.activePlan).toMatchObject({
+        previewStatus: "ready",
+        previewAsset: { id: assetId },
+      });
+      expect(saved.candidates[0].previewAsset?.id).toBe(assetId);
+      expect(physicalHistory(saved)).toBe(history);
+      expect(state.submit).not.toHaveBeenCalled();
+    });
+
+    it("resumes a known orphaned task only after a new exact target explicitly reclaims ownership", async () => {
+      const session = await adaptedFixture(true);
+      const queued = await queueApplicationFixture(session);
+      const jobId = queued.jobs[0].id;
+      await state.pool!.query(
+        "UPDATE provider_jobs SET state='waiting',provider_task_id='fixture-known-task',submission_started_at=now() WHERE id=$1",
+        [jobId],
+      );
+      const identity = (
+        await state.pool!.query(
+          "SELECT input,request_hash,provider_task_id,source_asset_id FROM provider_jobs WHERE id=$1",
+          [jobId],
+        )
+      ).rows[0];
+      let current = await commandFixture(queued.session, {
+        type: "decline_adaptation",
+      });
+      expect(
+        (
+          await state.pool!.query(
+            "SELECT released FROM quota_reservations WHERE id=$1",
+            [jobId],
+          )
+        ).rows[0].released,
+      ).toBe(false);
+      current = await commandFixture(current, {
+        type: "propose_adaptation",
+        reason: "movement",
+        routeId: "shadow",
+      });
+      const history = physicalHistory(current);
+      vi.stubEnv("YOUCAM_ADAPTATION_DAILY_JOB_LIMIT", "0");
+      const resumed = await queueApplicationFixture(current);
+      expect(resumed.jobs).toHaveLength(1);
+      expect(resumed.jobs[0]).toMatchObject({
+        id: jobId,
+        state: "waiting",
+        provider_task_id: "fixture-known-task",
+        cancel_requested: false,
+      });
+      expect(
+        (
+          await state.pool!.query(
+            "SELECT input,request_hash,provider_task_id,source_asset_id FROM provider_jobs WHERE id=$1",
+            [jobId],
+          )
+        ).rows[0],
+      ).toEqual(identity);
+      expect(
+        (await state.pool!.query("SELECT count(*) FROM quota_reservations"))
+          .rows[0].count,
+      ).toBe("1");
+      const assetId = await completeFixturePreview(jobId);
+      const saved = await ownedSession("owner-a", session.id);
+      expect(saved.adaptation!.candidate.previewAsset?.id).toBe(assetId);
+      expect(physicalHistory(saved)).toBe(history);
+      expect(state.submit).not.toHaveBeenCalled();
+    });
+
+    it("retains ambiguous orphan spend and can reclaim a late persisted task ID without another submission", async () => {
+      const session = await adaptedFixture(true);
+      const queued = await queueApplicationFixture(session);
+      const jobId = queued.jobs[0].id;
+      await state.pool!.query(
+        "UPDATE provider_jobs SET state='submitting',submission_started_at=now() WHERE id=$1",
+        [jobId],
+      );
+      let current = await commandFixture(queued.session, {
+        type: "decline_adaptation",
+      });
+      current = await commandFixture(current, {
+        type: "propose_adaptation",
+        reason: "movement",
+        routeId: "shadow",
+      });
+      const uncertain = await queueApplicationFixture(current);
+      expect(uncertain.jobs).toEqual([]);
+      expect(uncertain.session.adaptation!.candidate.previewRetryable).toBe(
+        false,
+      );
+      expect(
+        (
+          await state.pool!.query(
+            "SELECT released FROM quota_reservations WHERE id=$1",
+            [jobId],
+          )
+        ).rows[0].released,
+      ).toBe(false);
+      await state.pool!.query(
+        "UPDATE provider_jobs SET provider_task_id='fixture-known-task' WHERE id=$1",
+        [jobId],
+      );
+      await setPreviewStatus(jobId, "processing");
+      current = await ownedSession("owner-a", session.id);
+      expect(current.adaptation!.candidate.previewRetryable).toBe(true);
+      const resumed = await queueApplicationFixture(current);
+      expect(resumed.jobs.map((job) => job.id)).toEqual([jobId]);
+      expect(resumed.jobs[0].provider_task_id).toBe("fixture-known-task");
+      expect(
+        (await state.pool!.query("SELECT count(*) FROM provider_jobs")).rows[0]
+          .count,
+      ).toBe("1");
+      expect(
+        (await state.pool!.query("SELECT count(*) FROM quota_reservations"))
+          .rows[0].count,
+      ).toBe("1");
+      expect(state.submit).not.toHaveBeenCalled();
+    });
+
+    it("does not cancel an exact target still owned by another current candidate after declining a proposal", async () => {
+      let session = await seedSession("personal", "owner-a", EYE_SAMPLE_SETUP);
+      const shadow = session.candidates.find(
+        (candidate) => candidate.routeId === "shadow",
+      )!;
+      const initial = await queuePreviews(
+        "owner-a",
+        session.id,
+        session.revision,
+        "ip-a",
+        { candidateId: shadow.id, variantId: "full" },
+      );
+      session = await commandFixture(initial.session, {
+        type: "approve_candidate",
+        candidateId: session.candidates[0].id,
+      });
+      session = await commandFixture(session, { type: "start" });
+      session = await commandFixture(session, {
+        type: "complete_action",
+        actionId: currentAction(session)!.id,
+      });
+      session = await commandFixture(session, {
+        type: "propose_adaptation",
+        reason: "movement",
+        routeId: "shadow",
+      });
+      const rebound = await queueApplicationFixture(session);
+      expect(rebound.jobs.map((job) => job.id)).toEqual([initial.jobs[0].id]);
+      const history = physicalHistory(rebound.session);
+      const declined = await commandFixture(rebound.session, {
+        type: "decline_adaptation",
+      });
+      expect(
+        (
+          await state.pool!.query(
+            "SELECT state,cancel_requested FROM provider_jobs WHERE id=$1",
+            [initial.jobs[0].id],
+          )
+        ).rows[0],
+      ).toMatchObject({ state: "queued", cancel_requested: false });
+      expect(
+        (
+          await state.pool!.query(
+            "SELECT released FROM quota_reservations WHERE id=$1",
+            [initial.jobs[0].id],
+          )
+        ).rows[0].released,
+      ).toBe(false);
+      expect(physicalHistory(declined)).toBe(history);
+      expect(state.submit).not.toHaveBeenCalled();
+    });
+
+    it.each(["user_cancelled", "provider_failed"] as const)(
+      "does not reclaim a %s task when a later proposal requests its recipe",
+      async (ending) => {
+        const session = await adaptedFixture(true);
+        const queued = await queueApplicationFixture(session);
+        const jobId = queued.jobs[0].id;
+        await state.pool!.query(
+          "UPDATE provider_jobs SET state='waiting',provider_task_id='fixture-known-task',submission_started_at=now() WHERE id=$1",
+          [jobId],
+        );
+        if (ending === "user_cancelled")
+          await cancelSessionPreviews("owner-a", session.id);
+        else
+          await failJob(
+            jobId,
+            "provider_task_failed",
+            "Definitive fixture provider failure.",
+          );
+        let current = await ownedSession("owner-a", session.id);
+        current = await commandFixture(current, { type: "decline_adaptation" });
+        current = await commandFixture(current, {
+          type: "propose_adaptation",
+          reason: "movement",
+          routeId: "shadow",
+        });
+        const result = await queueApplicationFixture(current);
+        expect(result.jobs).toEqual([]);
+        expect(result.session.adaptation!.candidate.previewRetryable).toBe(
+          false,
+        );
+        expect(
+          (
+            await state.pool!.query(
+              "SELECT error_code FROM provider_jobs WHERE id=$1",
+              [jobId],
+            )
+          ).rows[0].error_code,
+        ).not.toBe("target_orphaned");
+        expect(
+          (await state.pool!.query("SELECT count(*) FROM provider_jobs"))
+            .rows[0].count,
+        ).toBe("1");
+        expect(
+          (
+            await state.pool!.query(
+              "SELECT released FROM quota_reservations WHERE id=$1",
+              [jobId],
+            )
+          ).rows[0].released,
+        ).toBe(false);
+        expect(state.submit).not.toHaveBeenCalled();
+      },
+    );
+
+    it("serializes a proposal decline against its pending generation request without leaving unowned spend", async () => {
+      const session = await adaptedFixture(true);
+      const results = await Promise.allSettled([
+        queueApplicationFixture(session),
+        commandFixture(session, { type: "decline_adaptation" }),
+      ]);
+      expect(
+        results.filter((result) => result.status === "fulfilled"),
+      ).toHaveLength(1);
+      expect(
+        results.find((result) => result.status === "rejected"),
+      ).toMatchObject({ reason: { code: "REVISION_CONFLICT" } });
+      const current = await ownedSession("owner-a", session.id);
+      if (current.adaptation)
+        await commandFixture(current, { type: "decline_adaptation" });
+      expect(
+        (
+          await state.pool!.query(
+            "SELECT count(*) FROM provider_jobs WHERE state <> 'cancelled'",
+          )
+        ).rows[0].count,
+      ).toBe("0");
+      expect(
+        (
+          await state.pool!.query(
+            "SELECT count(*) FROM quota_reservations WHERE NOT released",
+          )
+        ).rows[0].count,
+      ).toBe("0");
+      expect(state.submit).not.toHaveBeenCalled();
+    });
 
     it("keeps uncertain pending spend reserved after a balance-cache refresh", async () => {
       state.credit.mockResolvedValue(201);

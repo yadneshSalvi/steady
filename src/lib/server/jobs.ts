@@ -47,14 +47,19 @@ export interface ProviderJob {
   superseded_at?: Date | null;
 }
 export function canResumeKnownTask(job: ProviderJob): boolean {
+  // Dropping a proposal cancels its application ownership, not the provider
+  // task. A later explicit exact-recipe request may reclaim that known task.
+  const orphaned =
+    job.error_code === "target_orphaned" && job.state === "cancelled";
   return Boolean(
     job.provider_task_id &&
-    !job.cancel_requested &&
-    (job.state === "unknown_submission" ||
-      (job.state === "failed" &&
-        ["polling_timeout", "workflow_interrupted"].includes(
-          job.error_code || "",
-        ))),
+    (orphaned ||
+      (!job.cancel_requested &&
+        (job.state === "unknown_submission" ||
+          (job.state === "failed" &&
+            ["polling_timeout", "workflow_interrupted"].includes(
+              job.error_code || "",
+            ))))),
   );
 }
 export function configuredLimit(name: string, fallback: number): number {
@@ -176,7 +181,8 @@ export function projectJobIntoSession(
         target.previewStatus = "cancelled";
         target.previewError = "Preview stopped. Your chosen method is saved.";
         target.previewRetryable =
-          !job.provider_task_id && !job.submission_started_at;
+          canResumeKnownTask(job) ||
+          (!job.provider_task_id && !job.submission_started_at);
         delete target.previewAsset;
       } else if (job.state === "succeeded") {
         target.previewStatus = "ready";
@@ -248,7 +254,7 @@ function legacyPreviewVariant(candidate: CandidatePlan): PreviewVariant {
       ? palette.colorIntensity
       : undefined;
   const intensity =
-    ([20, 25, 45, 65] as const).find((value) => value === amount) ??
+    ([20, 25, 35, 45, 65] as const).find((value) => value === amount) ??
     ({ light: 25, build: 45, full: 65 } as const)[id];
   return {
     id,
@@ -452,10 +458,11 @@ export async function queuePreviews(
       if (prior && !retryUnsubmitted) {
         if (canResumeKnownTask(prior)) {
           await client.query(
-            "UPDATE provider_jobs SET state='waiting',error_code=NULL,error_message=NULL,workflow_run_id=NULL,updated_at=now() WHERE id=$1 AND provider_task_id IS NOT NULL",
+            "UPDATE provider_jobs SET state='waiting',cancel_requested=false,error_code=NULL,error_message=NULL,workflow_run_id=NULL,updated_at=now() WHERE id=$1 AND provider_task_id IS NOT NULL",
             [prior.id],
           );
           prior.state = "waiting";
+          prior.cancel_requested = false;
           prior.error_code = null;
           prior.error_message = null;
           prior.workflow_run_id = null;
@@ -664,6 +671,32 @@ export async function failWorkflowRun(
   });
   await setPreviewStatus(jobId, "failed");
 }
+/** The caller owns the studio row lock. Keep its surviving exact bindings;
+ * revoke only live work whose proposal/plan no longer owns the request. */
+export async function reconcilePreviewOwnership(
+  client: PoolClient,
+  ownerId: string,
+  session: StudioSession,
+): Promise<number> {
+  const rows = await client.query<ProviderJob>(
+    "SELECT * FROM provider_jobs WHERE session_id=$1 AND owner_id=$2 AND superseded_at IS NULL AND NOT cancel_requested AND (state NOT IN ('succeeded','failed','cancelled') OR (state='failed' AND error_code IN ('polling_timeout','workflow_interrupted'))) ORDER BY id FOR UPDATE",
+    [session.id, ownerId],
+  );
+  const orphaned = rows.rows.filter((job) => !jobMatchesSession(session, job));
+  if (!orphaned.length) return 0;
+  const ids = orphaned.map((job) => job.id);
+  await client.query(
+    "UPDATE provider_jobs SET cancel_requested=true,state='cancelled',error_code='target_orphaned',error_message='This target is no longer selected. Your confirmed steps are saved.',updated_at=now() WHERE id=ANY($1::uuid[])",
+    [ids],
+  );
+  await client.query(
+    "UPDATE quota_reservations q SET released=true WHERE id=ANY($1::uuid[]) AND EXISTS(SELECT 1 FROM provider_jobs j WHERE j.id=q.id AND j.provider_task_id IS NULL AND j.submission_started_at IS NULL)",
+    [ids],
+  );
+  delete session.previewBatch;
+  return ids.length;
+}
+
 export async function cancelSessionPreviews(
   ownerId: string,
   sessionId: string,

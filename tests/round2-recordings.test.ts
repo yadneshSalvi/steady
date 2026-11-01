@@ -9,6 +9,7 @@ import { createSession } from "@/lib/planner";
 import { attachRecordedSamplePreviews } from "@/lib/server/recorded-previews";
 import {
   makeLegacyEyeRecipe,
+  makeRound2EyeRecipe,
   selectPreviewLevel,
   validateEffects,
 } from "@/lib/youcam/recipes";
@@ -135,14 +136,24 @@ describe("R2 recording provenance and exact simulated-frame selection", () => {
     },
   );
 
-  it("binds new shadow plans to the warm25/45 catalog while an approved historical65 target stays exact", async () => {
+  it("binds frozen R2 shadow25/45 plans while an approved historical65 target stays exact", async () => {
     const session = await sample("eyes");
     const shadow = session.candidates.find(
       (candidate) => candidate.routeId === "shadow",
     )!;
-    expect(shadow.previewAsset?.url).toBe(
-      "/examples/round2/shadow-full-warm-v2.png",
-    );
+    shadow.recipe = makeRound2EyeRecipe("shadow", 45);
+    shadow.previewVariants = ([25, 45] as const).map((intensity) => ({
+      id: intensity === 25 ? "light" : "full",
+      intensity,
+      recipe: makeRound2EyeRecipe("shadow", intensity),
+      previewStatus: "not_requested",
+    }));
+    delete shadow.previewAsset;
+    shadow.previewStatus = "not_requested";
+    await attachRecordedSamplePreviews(session);
+    expect(shadow).toMatchObject({
+      previewAsset: { url: "/examples/round2/shadow-full-warm-v2.png" },
+    });
     expect(shadow.previewVariants?.map((variant) => variant.intensity)).toEqual(
       [25, 45],
     );

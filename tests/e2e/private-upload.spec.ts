@@ -79,7 +79,9 @@ test("synthetic personal photo stays private and deletion erases its owned objec
     await page
       .getByLabel("Choose your starting photo", { exact: true })
       .setInputFiles(resolve("public/images/studio-portrait.jpg"));
-    await page.getByRole("checkbox", { name: /18 or older/ }).check();
+    await page
+      .getByRole("checkbox", { name: /I’m 18\+, have photo permission/ })
+      .check();
     const creation = page.waitForResponse(
       (response) =>
         response.url().endsWith("/api/sessions") &&

@@ -3,6 +3,7 @@ import { SAMPLE_SETUP } from "@/lib/catalog";
 import type { StoredMeasurement, StudioSession } from "@/lib/contracts";
 import { createSession } from "@/lib/planner";
 import {
+  checkpointGuidance,
   sameStoredMeasurement,
   stalledCheckpoint,
 } from "@/lib/vision/measurement-guidance";
@@ -61,6 +62,37 @@ function sessionWith(
 }
 
 describe("measurement geometry and recorded-frame identity", () => {
+  it("gives one short direction without repeating the visible percentage", () => {
+    const action = createSession(
+      structuredClone(SAMPLE_SETUP),
+      "short-directions",
+    ).candidates[0].actions[0];
+    expect(checkpointGuidance(measured({ lagging: "upper" }), action)).toBe(
+      "Work up along the cheekbone.",
+    );
+    expect(
+      checkpointGuidance(measured({ lagging: "outer" }), {
+        ...action,
+        motion: "blending",
+      }),
+    ).toBe("One more broad pass toward your ear.");
+    const directions = [
+      checkpointGuidance(measured({ lagging: "upper" }), action),
+      checkpointGuidance(measured({ lagging: "outer" }), {
+        ...action,
+        motion: "tapping",
+      }),
+      checkpointGuidance(measured({ region: "left_eye" }), {
+        ...action,
+        region: "left_eye",
+        product: "eye_shadow",
+      }),
+    ];
+    for (const direction of directions) {
+      expect(direction).not.toContain("%");
+      expect(direction.trim().split(/\s+/).length).toBeLessThanOrEqual(12);
+    }
+  });
   it("compares both geometry scope and exact simulated checkpoint identity", () => {
     const base = measured({
       geometryVersion: "cheekbone-oval-v2",
@@ -138,6 +170,7 @@ describe("measurement geometry and recorded-frame identity", () => {
       undefined,
       "landmark-polygon-v1",
       "cheekbone-oval-v2",
+      "blush-centroid-oval-v3",
     ] as const) {
       const session = sessionWith(
         measured({ geometryVersion }),

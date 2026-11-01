@@ -1,138 +1,107 @@
-import Link from "next/link";
-import { BackLink, ProvenanceLabel } from "@/components/ui";
+import { BackLink } from "@/components/ui";
 
 export const metadata = { title: "Evidence & limits · STEADY" };
 
 export default function EvidencePage() {
   return (
-    <div className="wrap page-wrap evidence-page">
+    <div className="wrap page-wrap evidence-page r3-evidence">
       <BackLink href="/">Your studio</BackLink>
       <div className="page-intro">
-        <p className="eyebrow">A clear view of the guidance</p>
-        <h1>
-          Evidence,
-          <br />
-          <em>with its edges.</em>
-        </h1>
-        <p>
-          STEADY helps you compare a color target, try a method, and decide your
-          next step. You keep the final say.
-        </p>
+        <h1>Evidence &amp; limits</h1>
       </div>
       <section>
-        <h2>Read the image labels</h2>
-        <div className="evidence-labels">
-          <ProvenanceLabel kind="synthetic_inspiration" />
-          <ProvenanceLabel kind="virtual_preview" recordedAt="recorded" />
-          <ProvenanceLabel kind="virtual_preview" />
-          <ProvenanceLabel kind="actual_capture" />
-          <ProvenanceLabel kind="simulated_checkpoint" />
-        </div>
+        <h2>Images in STEADY</h2>
+        <dl className="r3-evidence-images">
+          <div>
+            <dt>Sample portrait</dt>
+            <dd>A fictional, AI-generated adult.</dd>
+          </div>
+          <div>
+            <dt>Previews</dt>
+            <dd>YouCam renders; the sample reuses recorded ones.</dd>
+          </div>
+          <div>
+            <dt>Sample checkpoints</dt>
+            <dd>Recorded YouCam images represent simulated makeup passes.</dd>
+          </div>
+          <div>
+            <dt>Your photos</dt>
+            <dd>Private; live video stays in your browser.</dd>
+          </div>
+        </dl>
+      </section>
+      <section>
+        <h2>What a checkpoint measures</h2>
         <p>
-          Each chip opens the same explanation wherever that image appears. A
-          recorded result is reused only when its source and exact recipe match.
-          A generated preview never becomes a physical result.
+          STEADY compares regional image color against your baseline and chosen
+          target. Untouched skin patches correct global exposure and color
+          changes. A separate patch checks for inconsistent lighting. Progress
+          measures image color, never product quantity, beauty, or completed
+          application.
+        </p>
+        <p>
+          Unreliable tracking, pose, visibility, or reference lighting can
+          prevent measurement. Region-only lighting changes can still resemble
+          pigment. Camera processing, skin appearance, texture, and products
+          also affect readings. These engineering thresholds aren’t calibrated
+          cosmetic assessments. Reloading clears local frames; STEADY asks
+          before capturing another baseline.
         </p>
       </section>
       <section>
-        <h2>What the checkpoint measures</h2>
+        <h2>What the sample demonstrates</h2>
         <p>
-          The browser compares the region’s image color with a baseline captured
-          at the start of that step. It corrects global color and exposure using
-          untouched skin patches, checks a separate patch for lighting
-          disagreement, then compares the change with the chosen YouCam target.
-          Progress is an image-color comparison, not the amount of product on
-          your skin, a beauty score, or proof that a step is complete.
-        </p>
-        <p>
-          Pose changes, unreliable face detection, too few visible pixels,
-          occlusion indicators, inconsistent reference light, and a target too
-          subtle to measure produce a specific request for a clearer view. A
-          region-only lighting change can still resemble pigment. Camera
-          processing, skin appearance, texture, and products can affect the
-          result; the thresholds are engineering heuristics rather than a
-          calibrated cosmetic assessment.
-        </p>
-        <p>
-          Your original baseline stays in memory when tracking is interrupted.
-          The studio does not silently take a new baseline over product already
-          applied. On reload, the local frames are gone and the studio asks you
-          to choose how to continue.
-        </p>
-      </section>
-      <section>
-        <h2>Why the sample is useful</h2>
-        <p>
-          The fictional portrait, a recorded checkpoint, and the selected target
-          go through the same pixel calculation. The guide comes from the actual
-          local MediaPipe model. This gives a camera-free demonstration of
-          measurement, target choice, and adaptation. It does not stand in for a
-          person applying makeup.
+          Recorded images use the same pixel calculation as local checkpoints.
+          The guide comes from the actual local MediaPipe model. This
+          demonstrates target choice, measurement, and method adaptation. It
+          does not demonstrate a person applying makeup. Historical sessions
+          retain their original targets and measurement versions.
         </p>
       </section>
       <section>
         <h2>Methods and decisions</h2>
         <p>
-          The planner checks your confirmed movements, products, and tools
-          against a finite technique library. During adaptation it preserves
-          completed actions and ranks alternatives that keep the product family
-          first. Method content is AI-assisted draft guidance; no makeup-artist
-          review or participant study is claimed. Follow the intended use of
-          your own products and tools, and skip or stop any movement you do not
-          want to perform.
-        </p>
-        <p>
-          Choosing Light, Build, or Full sets a visual stopping point. It is not
-          a calibrated dose, a promised physical finish, or a claim of
-          accessibility benefit. A final result is recorded only from your own
-          selected photo and assessment.
+          The planner checks confirmed movements, products, and tools against
+          finite methods. Adaptation preserves confirmed steps and prefers the
+          existing product family. Instructions are AI-assisted drafts, without
+          makeup-artist or participant validation. Follow product directions;
+          skip or stop movements you don’t want. Light, Build, and Full are
+          visual targets, not calibrated doses. Your chosen photo and assessment
+          describe your physical result.
         </p>
       </section>
       <section>
-        <h2>What leaves the device</h2>
+        <h2>What leaves your device</h2>
         <p>
-          Live frames, baseline frames, checkpoint pixels, and face coordinates
-          stay in browser memory. Session history stores only the checkpoint’s
-          scalar measurements, target identity, and your decisions. Starting
-          photos and fresh YouCam previews are private server assets. A selected
-          checkpoint goes to an AI provider only when you request a second
-          opinion with consent.
-        </p>
-        <p>
-          The optional vision assistant receives the measured numbers as
-          context. It may abstain, and cannot advance your step. Optional voice
-          controls send short recordings for transcription only while enabled.
-          You can review and delete your studio in{" "}
-          <Link href="/settings/access#your-data">
-            Your photos &amp; privacy
-          </Link>
-          .
+          Live frames, baselines, checkpoint pixels, and face coordinates stay
+          locally. Session history saves measurements, target identity, and your
+          choices. Chosen starting photos and requested previews use private
+          server storage. Consented second-opinion stills reach Gemini or OpenAI
+          with measured context. Their suggestions cannot advance a step.
+          Enabled voice controls send short recordings to Deepgram. Deletion
+          queues private photos for removal; provider retention remains
+          separate.
         </p>
       </section>
       <section>
-        <h2>How we evaluate it</h2>
+        <h2>How we evaluate</h2>
         <p>
-          Evaluation separates deterministic software tests, synthetic image
-          experiments, actual provider renders, and browser workflow checks.
-          These demonstrate implementation behavior. No real-person outcome,
-          clinical finding, speed improvement, or independent-application rate
-          is claimed.
+          Software tests, synthetic experiments, provider renders, and browser
+          checks stay separate. No physical-application outcome, participant
+          benefit, or time saving is established. Reproducible methods and
+          actual denominators are published below.
         </p>
-        <p>
-          Reproduction details and actual denominators are in the public{" "}
+        <nav className="r3-evidence-links" aria-label="Evaluation documents">
           <a href="https://github.com/yadneshSalvi/steady/blob/main/docs/evaluation-measurement.md">
-            measurement evaluation
+            Measurement
           </a>
-          ,{" "}
           <a href="https://github.com/yadneshSalvi/steady/blob/main/docs/evaluation.md">
-            engineering evaluation
+            Engineering
           </a>
-          , and{" "}
           <a href="https://github.com/yadneshSalvi/steady/blob/main/docs/evaluation-ai.md">
             AI evaluation
           </a>
-          .
-        </p>
+        </nav>
       </section>
     </div>
   );

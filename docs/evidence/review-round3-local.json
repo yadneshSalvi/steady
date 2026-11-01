@@ -1,0 +1,317 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-11-01T12:31:07.595Z",
+  "status": "complete local verification; canonical release pending",
+  "evidenceClass": "synthetic_recordings_and_software_engineering_checks",
+  "scope": "Optimized local build, fresh isolated Chromium contexts, actual recorded pixels, and disposable-schema local PostgreSQL. No participant or physical webcam validation.",
+  "staticGates": {
+    "format": "passed",
+    "lint": "passed with zero warnings",
+    "typecheck": "passed",
+    "whitespace": "passed",
+    "productionBuild": "passed;19 generated pages"
+  },
+  "localUnitGate": {
+    "passed": 479,
+    "failed": 0,
+    "skipped": 0,
+    "files": 39,
+    "isolatedPostgreSqlCases": 35
+  },
+  "optimizedBrowserGate": {
+    "origin": "http://localhost:3000",
+    "environment": "optimized-local",
+    "startTime": "2026-11-01T12:28:39.908Z",
+    "passed": 28,
+    "failed": 0,
+    "flaky": 0,
+    "skipped": 0,
+    "durationMs": 106252.09,
+    "durationSeconds": 106.25209,
+    "wrapperElapsedSeconds": 106.723,
+    "workers": 1,
+    "retries": 0,
+    "privateUploadIsolationInjectionRejectionAndErasureEnabled": true,
+    "applicationStorageState": "fresh contexts; no owner cookies shared",
+    "providerSubmissions": "blocked or mocked; zero fresh YouCam jobs",
+    "floorProbeExecuted": false,
+    "floorProbeReason": "Normal live configuration; private-file checks still executed."
+  },
+  "workflows": [
+    "Direct Done twice without any measurement; zero observations; automatic Review navigation.",
+    "Measure left cheek; confirm; adapt only the right cheek; measure and confirm; save with immutable left action/measurement.",
+    "Strong warm eye target and local checkpoint at both native desktop sizes.",
+    "Held stale GET success and error cannot overwrite newer target acceptance.",
+    "Private owner isolation, injected asset rejection, durable erasure, and exact QA cleanup.",
+    "Synthetic camera keeps one connected video/track and original baseline through Check again and Close."
+  ],
+  "viewportAcceptance": {
+    "nativeDesktop": [
+      [1440, 900],
+      [1366, 768]
+    ],
+    "mobile": [390, 844],
+    "methodsTargetAndChooseAboveFold": true,
+    "mirrorInstructionDoneAndMeasureAboveFold": true,
+    "checkpointResultAndDoneAboveFold": true,
+    "eyeLevelButtonsInsideInstructionScroll": true,
+    "mobileGuideAndTargetInsetDoNotOverlap": true,
+    "keyboardZoomReflowAndScopedAxePassed": true
+  },
+  "renderedCopy": {
+    "scope": "Visible non-empty authored DOM text nodes inside main at settled default states; all below-fold text still counted. Header/footer, numeric data and alt/aria preserved separately. No vocabulary blacklist and no exclusion solely for aria-hidden.",
+    "rawAudit": "round3/local-rendered-copy-audit.json",
+    "captures": {
+      "1440x900": [
+        {
+          "screen": "landing",
+          "profile": "public",
+          "target": 21,
+          "limit": 23.1,
+          "authoredCount": 23,
+          "withinLimit": true
+        },
+        {
+          "screen": "methods",
+          "profile": "sample",
+          "target": 32,
+          "limit": 35.2,
+          "authoredCount": 24,
+          "withinLimit": true
+        },
+        {
+          "screen": "checkpoint",
+          "profile": "sample",
+          "target": 37,
+          "limit": 40.7,
+          "authoredCount": 24,
+          "withinLimit": true
+        },
+        {
+          "screen": "review",
+          "profile": "sample",
+          "target": 31,
+          "limit": 34.1,
+          "authoredCount": 31,
+          "withinLimit": true
+        },
+        {
+          "screen": "saved-methods",
+          "profile": "one-saved-sample",
+          "target": 8,
+          "limit": 8.8,
+          "authoredCount": 8,
+          "withinLimit": true
+        },
+        {
+          "screen": "setup-color",
+          "profile": "sample-setup",
+          "target": 12,
+          "limit": 13.200000000000001,
+          "authoredCount": 12,
+          "withinLimit": true
+        },
+        {
+          "screen": "setup-movements",
+          "profile": "sample-setup",
+          "target": 30,
+          "limit": 33,
+          "authoredCount": 29,
+          "withinLimit": true
+        },
+        {
+          "screen": "setup-tools",
+          "profile": "sample-setup",
+          "target": 18,
+          "limit": 19.8,
+          "authoredCount": 17,
+          "withinLimit": true
+        },
+        {
+          "screen": "setup-photo",
+          "profile": "personal-empty-upload",
+          "target": 19,
+          "limit": 20.900000000000002,
+          "authoredCount": 16,
+          "withinLimit": true
+        },
+        {
+          "screen": "settings",
+          "profile": "two-sample-studios",
+          "target": 50,
+          "limit": 55.00000000000001,
+          "authoredCount": 53,
+          "withinLimit": true
+        },
+        {
+          "screen": "evidence",
+          "profile": "public",
+          "target": 23,
+          "limit": 25.3,
+          "authoredCount": 25,
+          "withinLimit": true
+        }
+      ],
+      "1366x768": [
+        {
+          "screen": "landing",
+          "profile": "public",
+          "target": 21,
+          "limit": 23.1,
+          "authoredCount": 23,
+          "withinLimit": true
+        },
+        {
+          "screen": "methods",
+          "profile": "sample",
+          "target": 32,
+          "limit": 35.2,
+          "authoredCount": 24,
+          "withinLimit": true
+        },
+        {
+          "screen": "checkpoint",
+          "profile": "sample",
+          "target": 37,
+          "limit": 40.7,
+          "authoredCount": 24,
+          "withinLimit": true
+        },
+        {
+          "screen": "review",
+          "profile": "sample",
+          "target": 31,
+          "limit": 34.1,
+          "authoredCount": 31,
+          "withinLimit": true
+        },
+        {
+          "screen": "saved-methods",
+          "profile": "one-saved-sample",
+          "target": 8,
+          "limit": 8.8,
+          "authoredCount": 8,
+          "withinLimit": true
+        },
+        {
+          "screen": "setup-color",
+          "profile": "sample-setup",
+          "target": 12,
+          "limit": 13.200000000000001,
+          "authoredCount": 12,
+          "withinLimit": true
+        },
+        {
+          "screen": "setup-movements",
+          "profile": "sample-setup",
+          "target": 30,
+          "limit": 33,
+          "authoredCount": 29,
+          "withinLimit": true
+        },
+        {
+          "screen": "setup-tools",
+          "profile": "sample-setup",
+          "target": 18,
+          "limit": 19.8,
+          "authoredCount": 17,
+          "withinLimit": true
+        },
+        {
+          "screen": "setup-photo",
+          "profile": "personal-empty-upload",
+          "target": 19,
+          "limit": 20.900000000000002,
+          "authoredCount": 16,
+          "withinLimit": true
+        },
+        {
+          "screen": "settings",
+          "profile": "two-sample-studios",
+          "target": 50,
+          "limit": 55.00000000000001,
+          "authoredCount": 53,
+          "withinLimit": true
+        },
+        {
+          "screen": "evidence",
+          "profile": "public",
+          "target": 23,
+          "limit": 25.3,
+          "authoredCount": 25,
+          "withinLimit": true
+        }
+      ]
+    }
+  },
+  "screenshots": {
+    "before": 34,
+    "after": 34,
+    "states": 17,
+    "viewports": 2,
+    "nativeDimensionsVerified": true,
+    "settledFiniteAnimationsAndVisibleImages": true,
+    "earlyTransitionCaptures": "Rejected and preserved privately; replaced before acceptance."
+  },
+  "productFrames": {
+    "count": 3,
+    "totalWebpBytes": 114036,
+    "provenance": "round3/product-frame-provenance.json",
+    "actualRenderedCrops": true,
+    "compositing": false
+  },
+  "recordingGate": {
+    "successfulOneAttemptTasks": 4,
+    "observedUnits": 4,
+    "balanceBefore": 952,
+    "balanceAfter": 948,
+    "adoptedPublicOutputs": 2,
+    "successfulNonAdoptedPrivateTrials": 2,
+    "historicalPngsUnchanged": 39,
+    "historicalManifestsUnchanged": 4,
+    "manifestSha256": "b7bc1b755bb7f36f012eea7b5e1b536ae1b2156a55701c0be50cdd0dd45f5342",
+    "budgetClosed": true,
+    "additionalPaidReleaseSmoke": 0
+  },
+  "measurement": {
+    "geometryVersion": "blush-centroid-oval-v3",
+    "centroidEvidence": "measurement-centroid-r3.json",
+    "recordingEvidence": "measurement-recordings-r3.json",
+    "roseSatinFullPercent": [37.9617, 38.5918],
+    "strongShadowLightToFullPercent": [56.4976, 56.1919],
+    "strongShadowFullDeltaE00": [4.4336, 4.7074],
+    "belowEyePixels": [1150, 1103],
+    "belowEyeChangedPixels": [0, 0]
+  },
+  "syntheticCamera": {
+    "evidence": "round3/synthetic-camera-optimized-local.json",
+    "evidenceClass": "synthetic_canvas_camera_engineering_test",
+    "samples": 6,
+    "warmElapsedMs": {
+      "min": 35.60000002384186,
+      "max": 56.10000002384186
+    },
+    "scope": "Warmed capture, exact IMAGE inference, PNG encoding and pixel calculation; excludes model startup, JPEG encoding, persistence and UI rendering. No physical webcam or participant."
+  },
+  "cleanup": {
+    "scope": "Exactly tagged QA owners only; independent browser-review studios preserved.",
+    "providerJobs": 0,
+    "ownersDeleted": 11,
+    "residualStudiosRemoved": 3,
+    "remaining": {
+      "owners": 0,
+      "sessions": 0,
+      "active_sessions": 0,
+      "private_assets": 0,
+      "upload_intents": 0,
+      "provider_jobs": 0,
+      "reservations": 0
+    }
+  },
+  "limits": [
+    "Generated portraits and provider renders do not establish physical makeup completion, user benefit, clinical accuracy, or cosmetic safety.",
+    "One fictional source underlies the centroid/recorded-pixel diagnostics; no human or hardware-camera generalization is claimed.",
+    "Below-eye equality describes only the defined fixture pixels and does not mean natural shadows are removed.",
+    "Browser timing is warmed engineering processing; model startup, persistence, UI rendering and hardware camera behavior are outside its scope."
+  ]
+}

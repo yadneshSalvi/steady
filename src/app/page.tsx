@@ -1,17 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowDown,
-  ArrowUpRight,
-  Check,
-  Hand,
-  Heart,
-  MoveUpRight,
-  ShieldCheck,
-  Sparkles,
-  WandSparkles,
-} from "lucide-react";
-import { ButtonLink, ProvenanceLabel } from "@/components/ui";
+import { ArrowUpRight, Hand, MoveUpRight } from "lucide-react";
+import { ButtonLink } from "@/components/ui";
 import { QuickSample } from "@/components/quick-sample";
 
 function CheekSketch() {
@@ -58,46 +48,21 @@ function CheekSketch() {
 
 export default function HomePage() {
   return (
-    <>
+    <div className="r3-home">
       <section className="hero wrap" aria-labelledby="hero-title">
         <div className="hero-copy">
-          <div className="eyebrow">
-            <span className="tiny-sun" aria-hidden>
-              ✳
-            </span>{" "}
-            A more personal makeup studio
-          </div>
           <h1 id="hero-title">
             Beauty, at
             <br /> your <em>own pace.</em>
           </h1>
           <p className="hero-description">
-            The look you love. A way that feels like you.
-            <br className="desktop-break" /> Find makeup methods for your
-            movements,
-            <br className="desktop-break" /> your tools, and your everyday.
+            Makeup methods for your movements and tools.
           </p>
           <div className="hero-actions">
             <ButtonLink href="/studio/new">
               Find your way <ArrowUpRight size={21} aria-hidden />
             </ButtonLink>
             <QuickSample />
-          </div>
-          <div className="hero-assurance">
-            <span>
-              <Check size={15} aria-hidden /> Your pace, always
-            </span>
-            <span>
-              <Check size={15} aria-hidden /> No account to create
-            </span>
-          </div>
-          <div className="hero-bottom-note">
-            <span className="little-line" />
-            <span>
-              There’s more than one way
-              <br /> to make a look your own.
-            </span>
-            <ArrowDown size={20} strokeWidth={1.3} aria-hidden />
           </div>
         </div>
         <div className="hero-visual">
@@ -110,30 +75,11 @@ export default function HomePage() {
               sizes="(max-width: 740px) 100vw, 52vw"
               className="hero-portrait"
             />
-            <div className="portrait-provenance">
-              <ProvenanceLabel kind="synthetic_inspiration" />
-            </div>
-            <div className="portrait-caption">
-              <span>A soft start. A look that’s yours.</span>
-            </div>
-            <span className="portrait-edition">THE EVERYDAY STUDIO / 01</span>
           </div>
           <div className="method-note">
-            <div className="method-note-icon">
-              <Hand size={23} strokeWidth={1.3} aria-hidden />
-            </div>
-            <div>
-              <span className="eyebrow small-eyebrow">
-                Made for your movements
-              </span>
-              <strong>
-                A softer touch.
-                <br /> A different way.
-              </strong>
-            </div>
-            <span className="note-line" aria-hidden />
+            <Hand size={24} strokeWidth={1.3} aria-hidden />
+            <strong>A softer touch.</strong>
             <CheekSketch />
-            <span className="note-signature">Beautifully, your way.</span>
           </div>
           <span className="hero-star" aria-hidden>
             ✳
@@ -141,116 +87,68 @@ export default function HomePage() {
         </div>
       </section>
 
-      <div className="philosophy-strip">
-        <span>Your expression.</span>
-        <span className="strip-dot" aria-hidden>
-          ✳
-        </span>
-        <span>Your movements.</span>
-        <span className="strip-dot" aria-hidden>
-          ✳
-        </span>
-        <span>Your kind of beautiful.</span>
-      </div>
-
-      <section
-        className="how-section wrap"
-        id="how-it-works"
-        aria-labelledby="how-title"
-      >
+      <section className="r3-product-section wrap" aria-labelledby="how-title">
         <div className="section-heading">
-          <div>
-            <p className="eyebrow">A little guidance, a lot of you</p>
-            <h2 id="how-title">
-              One look.
-              <br /> <em>More than one way.</em>
-            </h2>
-          </div>
-          <p>
-            A favorite look shouldn’t come with only one set of instructions. We
-            start with what feels comfortable to you, then work from there.
-          </p>
+          <h2 id="how-title">
+            One look.
+            <br />
+            <em>More than one way.</em>
+          </h2>
         </div>
-        <div className="process-grid">
-          <article>
-            <span className="process-number">01 /</span>
-            <div className="process-illustration process-illustration--look">
-              <span />
-              <span />
-              <span />
-              <Sparkles size={32} strokeWidth={1.1} aria-hidden />
-            </div>
-            <h3>Choose your feeling.</h3>
-            <p>
-              A soft flush, a little warmth, a touch of color. Choose what you
-              want to express.
-            </p>
-          </article>
-          <article>
-            <span className="process-number">02 /</span>
-            <div className="process-illustration process-illustration--hands">
-              <Hand size={64} strokeWidth={0.9} aria-hidden />
-              <span className="motion-arc" />
-            </div>
-            <h3>Find your movement.</h3>
-            <p>
-              Tell us which movements feel good and which tools you have. You
-              set the boundaries.
-            </p>
-          </article>
-          <article>
-            <span className="process-number">03 /</span>
-            <div className="process-illustration process-illustration--mirror">
-              <CheekSketch />
-              <span className="illustration-spark" aria-hidden>
-                ✳
-              </span>
-            </div>
-            <h3>Make it your own.</h3>
-            <p>
-              One step at a time, with room to pause, try another method, or
-              love where you’ve landed.
-            </p>
-          </article>
+        <div className="r3-product-grid">
+          {[
+            {
+              id: "ladder",
+              width: 520,
+              height: 182,
+              title: "Choose your finish",
+              alt: "STEADY sample methods with Light, Build and Full preview targets",
+            },
+            {
+              id: "mirror",
+              width: 1328,
+              height: 637,
+              title: "Follow your guide",
+              alt: "STEADY sample mirror with a cheek placement oval",
+            },
+            {
+              id: "checkpoint",
+              width: 1328,
+              height: 637,
+              title: "See your progress",
+              alt: "STEADY simulated sample measurement with target progress and a regional heatmap",
+            },
+          ].map((frame) => (
+            <figure key={frame.id}>
+              <div className="r3-product-frame">
+                <Image
+                  src={`/images/product-${frame.id}.webp`}
+                  alt={frame.alt}
+                  width={frame.width}
+                  height={frame.height}
+                  sizes="(max-width: 740px) 100vw, 32vw"
+                />
+              </div>
+              <figcaption>
+                <h3>{frame.title}</h3>
+              </figcaption>
+            </figure>
+          ))}
         </div>
       </section>
 
       <section className="look-section wrap" aria-labelledby="looks-title">
         <div className="section-heading">
-          <div>
-            <p className="eyebrow">A starting point, not a rule</p>
-            <h2 id="looks-title">
-              What feels like <em>you?</em>
-            </h2>
-          </div>
-          <Link href="/studio/new" className="text-link">
-            Explore your looks <ArrowUpRight size={19} aria-hidden />
-          </Link>
+          <h2 id="looks-title">
+            Choose your <em>color.</em>
+          </h2>
         </div>
         <div className="inspiration-grid">
           {[
-            {
-              id: "rose",
-              title: "The soft rose",
-              description: "A fresh flush. An easy kind of color.",
-              color: "#bd797e",
-              name: "Rose",
-            },
-            {
-              id: "terracotta",
-              title: "A little warmth",
-              description: "Earthy cheeks. A golden-hour feeling.",
-              color: "#ac6549",
-              name: "Terracotta",
-            },
-            {
-              id: "berry",
-              title: "The berry mood",
-              description: "A richer hue. Your own quiet statement.",
-              color: "#864d68",
-              name: "Berry",
-            },
-          ].map((look, index) => (
+            { id: "rose", name: "Rose", color: "#bd797e" },
+            { id: "terracotta", name: "Terracotta", color: "#ac6549" },
+            { id: "berry", name: "Berry", color: "#864d68" },
+          ].map((look) => (
             <Link
               href={`/studio/new?look=${look.id}`}
               className={`inspiration-card inspiration-card--${look.id}`}
@@ -265,66 +163,31 @@ export default function HomePage() {
                   className="paint-smear-second"
                   style={{ backgroundColor: look.color }}
                 />
-                <span className="look-art-number">0{index + 1}</span>
-                <span className="look-art-name">{look.name}</span>
-                <span className="look-art-tag">COLOR INSPIRATION</span>
                 <span className="look-art-arrow">
                   <MoveUpRight size={22} aria-hidden />
                 </span>
               </div>
-              <h3>{look.title}</h3>
-              <p>{look.description}</p>
+              <h3>{look.name}</h3>
             </Link>
           ))}
         </div>
-        <div className="eye-sample-callout">
-          <div>
-            <p className="eyebrow">Defined eyes</p>
-            <h3>
-              Keep the emphasis.
-              <br />
-              <em>Change the movement.</em>
-            </h3>
-            <p>
-              Explore a fine upper line, then adapt it to softly tapped shadow.
-            </p>
-          </div>
+        <div className="r3-eye-link">
           <QuickSample eyes />
         </div>
       </section>
 
       <section className="manifesto">
         <div className="wrap manifesto-inner">
-          <div className="manifesto-symbol" aria-hidden>
+          <span className="manifesto-symbol" aria-hidden>
             ✳
-          </div>
-          <p className="eyebrow">Room to do things differently</p>
+          </span>
           <h2>
             No perfect technique.
-            <br /> Just <em>your next step.</em>
+            <br />
+            Just <em>your next step.</em>
           </h2>
-          <p>
-            Tap instead of sweep. Switch a tool. Take a break.
-            <br className="desktop-break" /> Your method can change as you go.
-          </p>
-          <ButtonLink href="/studio/new">
-            Let’s find your way <ArrowUpRight size={20} aria-hidden />
-          </ButtonLink>
-          <div className="manifesto-footnotes">
-            <span>
-              <ShieldCheck size={18} aria-hidden /> Live camera stays on your
-              device
-            </span>
-            <span>
-              <Heart size={18} aria-hidden /> Your judgment comes first
-            </span>
-            <span>
-              <WandSparkles size={18} aria-hidden /> Preview and reality,
-              clearly labeled
-            </span>
-          </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

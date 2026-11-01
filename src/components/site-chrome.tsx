@@ -46,7 +46,7 @@ export function SiteHeader() {
             <SlidersHorizontal size={17} aria-hidden />
             <span>Your settings</span>
           </Link>
-          {inStudio ? null : (
+          {inStudio || pathname === "/" ? null : (
             <Link className="header-cta" href="/studio/new">
               Enter your studio <ArrowUpRight size={17} aria-hidden />
             </Link>
@@ -59,16 +59,12 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="site-footer">
-      <div>
-        <Brand />
-        <p>A little guidance. Entirely your expression.</p>
-      </div>
+    <footer className="site-footer r3-footer">
+      <Brand />
       <div className="footer-links">
         <Link href="/evidence">Evidence &amp; limits</Link>
-        <Link href="/settings/access#your-data">Your photos & privacy</Link>
-        <Link href="/settings/access">Access & comfort</Link>
-        <span>Made to move with you.</span>
+        <Link href="/settings/access#your-data">Privacy</Link>
+        <span>Built with YouCam</span>
       </div>
     </footer>
   );

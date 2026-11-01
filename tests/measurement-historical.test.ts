@@ -31,7 +31,7 @@ function load(url: string): Promise<MeasurementFrame> {
   return loading;
 }
 
-describe("all 31 frozen R1 recordings under the shared R2 geometry", () => {
+describe("all 31 frozen R1 recordings under exact v1, v2 and current v3 geometry", () => {
   it("binds the historical catalog to the exact source and all 31 unchanged PNG bytes", () => {
     const hash = (path: string) =>
       createHash("sha256").update(readFileSync(path)).digest("hex");
@@ -48,45 +48,67 @@ describe("all 31 frozen R1 recordings under the shared R2 geometry", () => {
   });
 
   it.each(
-    records.records.map((record) => ({
-      record,
-      label: `${record.catalog}/${record.lookId}/${record.routeId}/${record.level}`,
-    })),
-  )("re-measures both anatomical regions for $label", async ({ record }) => {
-    const source = await load(records.source.url),
-      checkpoint = await load(record.output.url);
-    const regions =
-      record.catalog === "eyes-r1"
-        ? (["left_eye", "right_eye"] as const)
-        : (["left_cheek", "right_cheek"] as const);
-    for (const region of regions) {
-      const target = createMeasurementTarget(source, checkpoint, region);
-      const measured = measureCheckpoint({
-        baseline: source,
-        checkpoint,
-        target,
-      });
-      const subtle =
-        (record.catalog === "cheek-ladder" &&
-          record.lookId === "terracotta" &&
-          record.texture === "satin" &&
-          record.level === "light" &&
-          region === "left_cheek") ||
-        (record.catalog === "eyes-r1" &&
-          record.routeId === "liner" &&
-          record.level === "light" &&
-          region === "left_eye");
-      if (subtle) {
-        expect(target.valid).toBe(false);
-        expect(target.reason).toBe("target_too_subtle");
-        expect(measured.verdict).toBe("insufficient");
-        expect(measured.progress).toBeNull();
-        continue;
+    records.records.flatMap((record) =>
+      (
+        [
+          "landmark-polygon-v1",
+          "cheekbone-oval-v2",
+          "blush-centroid-oval-v3",
+        ] as const
+      ).map((geometryVersion) => ({
+        record,
+        geometryVersion,
+        label: `${geometryVersion}/${record.catalog}/${record.lookId}/${record.routeId}/${record.level}`,
+      })),
+    ),
+  )(
+    "re-measures both anatomical regions for $label",
+    async ({ record, geometryVersion }) => {
+      const source = await load(records.source.url),
+        checkpoint = await load(record.output.url);
+      const regions =
+        record.catalog === "eyes-r1"
+          ? (["left_eye", "right_eye"] as const)
+          : (["left_cheek", "right_cheek"] as const);
+      for (const region of regions) {
+        const target = createMeasurementTarget(
+          source,
+          checkpoint,
+          region,
+          geometryVersion,
+        );
+        const measured = measureCheckpoint({
+          baseline: source,
+          checkpoint,
+          target,
+        });
+        const subtle =
+          (record.catalog === "cheek-ladder" &&
+            record.lookId === "terracotta" &&
+            (geometryVersion === "landmark-polygon-v1"
+              ? record.level === "light" ||
+                (record.texture === "satin" &&
+                  record.level === "build" &&
+                  region === "left_cheek")
+              : record.texture === "satin" &&
+                record.level === "light" &&
+                region === "left_cheek")) ||
+          (record.catalog === "eyes-r1" &&
+            record.routeId === "liner" &&
+            record.level === "light" &&
+            region === "left_eye");
+        if (subtle) {
+          expect(target.valid).toBe(false);
+          expect(target.reason).toBe("target_too_subtle");
+          expect(measured.verdict).toBe("insufficient");
+          expect(measured.progress).toBeNull();
+          continue;
+        }
+        expect(target.valid, target.reason).toBe(true);
+        expect(measured.verdict, measured.reason).toBe("at_target");
+        expect(Math.abs(measured.progress! - 1)).toBeLessThanOrEqual(0.15);
+        expect(measured.heatmap.length).toBeGreaterThan(0);
       }
-      expect(target.valid, target.reason).toBe(true);
-      expect(measured.verdict, measured.reason).toBe("at_target");
-      expect(Math.abs(measured.progress! - 1)).toBeLessThanOrEqual(0.15);
-      expect(measured.heatmap.length).toBeGreaterThan(0);
-    }
-  });
+    },
+  );
 });

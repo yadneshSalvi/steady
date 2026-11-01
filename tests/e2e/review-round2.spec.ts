@@ -10,28 +10,35 @@ const viewports = [
   { width: 390, height: 844 },
 ];
 
-test("hero provenance remains compact, readable and clear of the movement card at all review sizes", async ({
+test("plain hero keeps its title, portrait and movement card readable at all review sizes", async ({
   page,
 }, testInfo) => {
   await page.goto("/");
   await page.evaluate(() => document.fonts.ready);
   for (const viewport of viewports) {
     await page.setViewportSize(viewport);
-    const chip = page.locator(".portrait-provenance .provenance");
-    await expect(chip).toBeVisible();
-    const bounds = await chip.boundingBox();
+    const title = page.getByRole("heading", { level: 1 });
+    await expect(title).toHaveText("Beauty, at your own pace.");
+    await expect(page.locator(".provenance")).toHaveCount(0);
+    const bounds = await page.locator(".hero-visual").boundingBox();
     const card = await page.locator(".method-note").boundingBox();
     expect(bounds).not.toBeNull();
     expect(card).not.toBeNull();
-    expect(bounds!.width).toBeLessThan(220);
     expect(bounds!.x).toBeGreaterThanOrEqual(0);
     expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(viewport.width);
-    const overlaps =
-      bounds!.x < card!.x + card!.width &&
-      bounds!.x + bounds!.width > card!.x &&
-      bounds!.y < card!.y + card!.height &&
-      bounds!.y + bounds!.height > card!.y;
-    expect(overlaps).toBe(false);
+    expect(card!.x).toBeGreaterThanOrEqual(0);
+    expect(card!.x + card!.width).toBeLessThanOrEqual(viewport.width);
+    const titleBounds = (await title.boundingBox())!;
+    const overlapsTitle =
+      card!.x < titleBounds.x + titleBounds.width &&
+      card!.x + card!.width > titleBounds.x &&
+      card!.y < titleBounds.y + titleBounds.height &&
+      card!.y + card!.height > titleBounds.y;
+    expect(overlapsTitle).toBe(false);
+    await expect(page.locator(".hero-portrait")).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "Find your way", exact: true }),
+    ).toBeVisible();
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth),
     ).toBe(viewport.width);
@@ -84,9 +91,7 @@ test("actual partial sample keeps its full translucent cheek heatmap and opens a
         exact: true,
       }),
     });
-    await tap
-      .getByRole("button", { name: "Choose this method", exact: true })
-      .click();
+    await tap.getByRole("button", { name: "Choose", exact: true }).click();
     await page.waitForURL(/\/mirror$/);
     await page
       .getByRole("button", { name: "Begin the walkthrough", exact: true })
@@ -107,41 +112,38 @@ test("actual partial sample keeps its full translucent cheek heatmap and opens a
       name: "Your checkpoint",
       exact: true,
     });
+    await expect.poll(async () => (await saved()).observations.length).toBe(1);
+    const measured = (await saved()).observations.at(-1)!.measurement!;
     await expect(checkpoint.getByRole("progressbar")).toHaveAttribute(
       "aria-valuenow",
-      "38",
+      String(Math.round(measured.progress! * 100)),
     );
     await expect(checkpoint.locator(".measurement-guidance")).toContainText(
-      "upper part is lighter",
+      "Work up along the cheekbone.",
     );
+    await checkpoint.getByText("Measurement details", { exact: true }).click();
     await expect(
       checkpoint.locator(".measurement-spatial-guidance"),
-    ).toContainText("outer part is also lighter");
-    await expect(
-      checkpoint.locator(".measurement-spatial-guidance"),
-    ).toContainText("23%");
-    await expect(
-      checkpoint.locator(".measurement-spatial-guidance"),
-    ).toContainText("53%");
-    await expect(checkpoint.getByLabel("Heatmap color scale")).toContainText(
-      "full target",
+    ).toContainText("toward your ear.");
+    await checkpoint.getByText("Measurement details", { exact: true }).click();
+    await expect(page.locator(".heatmap-target-marker")).toHaveText(
+      "100% target",
     );
     const firstPass = round2.records.find(
       (record) => record.id === "blush-rose-satin",
     )!;
     await expect(
-      checkpoint.locator(".measurement-still image"),
+      page.locator(".mirror-checkpoint-image image"),
     ).toHaveAttribute("href", firstPass.output.url);
-    const measured = (await saved()).observations.at(-1)!.measurement!;
-    expect(measured.geometryVersion).toBe("cheekbone-oval-v2");
+    expect(measured.geometryVersion).toBe("blush-centroid-oval-v3");
     expect(measured.sampleCheckpointId).toBe(firstPass.output.sha256);
     expect(measured.lagging).toBe("upper");
-    expect(measured.progress).toBeGreaterThan(0.36);
-    expect(measured.progress).toBeLessThan(0.4);
+    expect(measured.progress).toBeGreaterThan(0.2);
+    expect(measured.progress).toBeLessThan(0.65);
 
     for (const viewport of viewports) {
       await page.setViewportSize(viewport);
-      const visual = checkpoint.locator(".measurement-still > svg");
+      const visual = page.locator(".mirror-checkpoint-image");
       const outline = visual.locator(
         '[aria-label="Measured color change heatmap"] > polygon',
       );
@@ -183,7 +185,7 @@ test("actual partial sample keeps its full translucent cheek heatmap and opens a
       });
     }
     for (let pass = 1; pass <= 2; pass++) {
-      await checkpoint
+      await page
         .getByRole("button", {
           name: "I made a pass · check again",
           exact: true,
@@ -196,12 +198,15 @@ test("actual partial sample keeps its full translucent cheek heatmap and opens a
     await checkpoint
       .getByRole("button", { name: "Close checkpoint", exact: true })
       .click();
-    const stalled = page
-      .locator(".notice")
-      .filter({ hasText: "A broader tool may help" });
+    const stalled = page.locator(".notice").filter({
+      has: page.getByRole("button", {
+        name: "Try a broader tool",
+        exact: true,
+      }),
+    });
     await expect(stalled).toBeVisible();
     await stalled
-      .getByRole("button", { name: "Make this easier", exact: true })
+      .getByRole("button", { name: "Try a broader tool", exact: true })
       .click();
     await expect(
       page.getByRole("button", { name: "Use this change", exact: true }),

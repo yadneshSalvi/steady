@@ -46,21 +46,24 @@ test("recorded eye sample keeps a completed liner eye while repairing the remain
       }),
     });
     await expect(liner).toHaveCount(1);
+    const targetStage = page.getByRole("region", {
+      name: "Your shared color target",
+    });
     await expect(
-      liner.getByRole("button", { name: /Stop at Build/ }),
+      targetStage.getByRole("button", { name: /Stop at Build/ }),
     ).toHaveCount(0);
     await expect(
-      liner.getByRole("button", { name: /Stop at Light/ }),
+      targetStage.getByRole("button", { name: /Stop at Light/ }),
     ).toBeVisible();
     await expect(
-      liner.getByRole("button", { name: "Recorded YouCam", exact: true }),
+      targetStage.getByRole("img", { name: /^full YouCam target/ }),
     ).toBeVisible();
+    await expect(page.locator(".sample-badge")).toHaveCount(1);
+    await expect(page.locator(".provenance")).toHaveCount(0);
     await expect(
-      page.getByRole("button", { name: /Generate fresh/ }),
+      page.getByRole("button", { name: /Generate previews|Generate target/ }),
     ).toHaveCount(0);
-    await liner
-      .getByRole("button", { name: "Choose this method", exact: true })
-      .click();
+    await liner.getByRole("button", { name: "Choose", exact: true }).click();
     await page.waitForURL(/\/mirror$/);
     const original = await saved();
     expect(
@@ -77,11 +80,11 @@ test("recorded eye sample keeps a completed liner eye while repairing the remain
       .getByRole("button", { name: "Measure the sample", exact: true })
       .click();
     await expect(
-      page.getByRole("button", { name: "Continue the sample", exact: true }),
+      page.getByRole("button", { name: "Done with this step", exact: true }),
     ).toBeVisible();
     expect((await saved()).completedActionIds).toEqual([]);
     await page
-      .getByRole("button", { name: "Continue the sample", exact: true })
+      .getByRole("button", { name: "Done with this step", exact: true })
       .click();
     await expect(page.locator(".step-label")).toHaveText("Step 02 of 02");
     await page
@@ -109,7 +112,7 @@ test("recorded eye sample keeps a completed liner eye while repairing the remain
       originalTarget,
     );
     expect(proposed.adaptation?.candidate.previewAsset?.url).toMatch(
-      /\/round2\/shadow-full-warm-v2\.png$/,
+      /\/round3\/shadow-full-warm-v4\.png$/,
     );
     await expect(page.getByText(/two sides may differ/)).toBeVisible();
     expect(
@@ -136,24 +139,16 @@ test("recorded eye sample keeps a completed liner eye while repairing the remain
       ),
     ).toBe(true);
     expect(adapted.activePlan?.previewAsset?.url).toMatch(
-      /\/round2\/shadow-full-warm-v2\.png$/,
+      /\/round3\/shadow-full-warm-v4\.png$/,
     );
     await page
       .getByRole("button", { name: "Measure the sample", exact: true })
       .click();
     await page
-      .getByRole("button", { name: "Continue the sample", exact: true })
-      .click();
-    await expect(
-      page.getByRole("link", { name: "View my result", exact: true }),
-    ).toBeVisible();
-    await page
-      .getByRole("link", { name: "View my result", exact: true })
+      .getByRole("button", { name: "Done with this step", exact: true })
       .click();
     await page.waitForURL(/\/review$/);
-    await page
-      .getByRole("button", { name: "Finish the walkthrough", exact: true })
-      .click();
+    await page.getByRole("button", { name: "Finish", exact: true }).click();
     await expect.poll(async () => (await saved()).stage).toBe("completed");
     const result = await saved();
     expect(result.completedActionIds).toHaveLength(2);

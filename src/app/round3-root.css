@@ -1,0 +1,295 @@
+/* Round-three layouts owned by the landing, collection and settings surfaces. */
+.r3-home .hero {
+  gap: 48px;
+  min-height: 688px;
+  padding-block: 48px 64px;
+}
+.r3-home .hero h1 {
+  margin: 0 0 24px;
+}
+.r3-home .hero-description {
+  max-width: 464px;
+  line-height: 1.6;
+}
+.r3-home .hero-actions {
+  margin-top: 32px;
+  gap: 24px;
+}
+.r3-home .quick-sample .text-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 12px 0;
+  border: 0;
+  border-bottom: 1px solid #aab7a7;
+  border-radius: 0;
+  background: transparent;
+  color: var(--forest);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.r3-home .quick-sample .text-link:hover {
+  border-color: var(--forest);
+}
+.r3-home .method-note {
+  min-height: 144px;
+  width: 224px;
+  padding: 24px;
+  grid-template-columns: 24px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.r3-home .method-note > svg:first-child {
+  color: var(--clay);
+  margin-top: 4px;
+}
+.r3-home .method-note strong {
+  margin-top: 0;
+  font-size: 26px;
+}
+.r3-home .method-note .cheek-sketch {
+  right: 24px;
+  bottom: 8px;
+  width: 64px;
+  height: 64px;
+}
+.r3-product-section {
+  padding-block: 64px 80px;
+  border-top: 1px solid var(--line);
+}
+.r3-product-section .section-heading {
+  margin-bottom: 40px;
+}
+.r3-product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+.r3-product-grid figure {
+  margin: 0;
+  min-width: 0;
+}
+.r3-product-frame {
+  overflow: hidden;
+  border: 1px solid #d8d6c9;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px #35452b0a;
+}
+.r3-product-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.r3-product-grid figcaption {
+  padding-top: 16px;
+}
+.r3-product-grid h3 {
+  font-family: var(--serif);
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1.15;
+}
+.r3-home .look-section {
+  padding-bottom: 64px;
+}
+.r3-home .inspiration-card h3 {
+  margin: 16px 0 0;
+}
+.r3-eye-link {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+.r3-home .manifesto-inner {
+  padding-block: 64px;
+}
+.r3-home .manifesto h2 {
+  margin: 0;
+}
+.r3-footer {
+  padding-block: 32px;
+}
+.r3-footer .footer-links {
+  gap: 24px;
+}
+.r3-footer .footer-links > span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.r3-collection {
+  max-width: 1080px;
+}
+.r3-collection .page-intro,
+.r3-settings .page-intro,
+.r3-evidence .page-intro {
+  margin-bottom: 32px;
+}
+.r3-collection .page-intro h1,
+.r3-settings .page-intro h1,
+.r3-evidence .page-intro h1 {
+  font-family: var(--serif);
+  font-size: clamp(44px, 4.6vw, 64px);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 0;
+}
+.r3-collection .methods-layout {
+  display: block;
+  margin-top: 0;
+}
+.r3-collection .method-card {
+  padding-block: 32px;
+}
+.r3-collection .method-card-heading > svg {
+  color: #758c5f;
+}
+.r3-collection .method-card-heading .sample-badge {
+  margin-bottom: 8px;
+}
+.r3-look-label {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 16px;
+  font-size: 13px;
+}
+.r3-look-label i {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid #0000000d;
+}
+.r3-collection .method-card > .button-row {
+  margin-top: 24px;
+}
+.r3-collection .recent-sessions {
+  margin-top: 40px;
+}
+.r3-settings .settings-layout {
+  gap: 48px;
+  margin-top: 32px;
+}
+.r3-settings .settings-section > h2 {
+  font-family: var(--serif);
+  font-size: 36px;
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+.r3-settings .settings-section > .field-note {
+  margin-bottom: 24px;
+}
+.r3-settings .settings-save {
+  padding-block: 24px;
+}
+.r3-settings .privacy-list {
+  margin-block: 24px;
+}
+.r3-settings .privacy-list p {
+  margin-top: 8px;
+}
+.r3-evidence {
+  max-width: 1040px;
+}
+.r3-evidence section {
+  padding-block: 32px;
+}
+.r3-evidence h2 {
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+.r3-evidence p {
+  max-width: 880px;
+  margin: 16px 0 0;
+  line-height: 1.75;
+}
+.r3-evidence-images {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px 40px;
+  margin: 24px 0 0;
+}
+.r3-evidence-images dt {
+  font-size: 14px;
+  font-weight: 650;
+  margin-bottom: 8px;
+}
+.r3-evidence-images dd {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.r3-evidence-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 24px;
+  font-size: 14px;
+}
+@media (max-width: 900px) {
+  .r3-home .hero {
+    gap: 32px;
+    min-height: 0;
+  }
+  .r3-home .method-note {
+    left: -24px;
+  }
+  .r3-product-grid {
+    gap: 16px;
+  }
+  .r3-product-grid h3 {
+    font-size: 26px;
+  }
+  .r3-settings .settings-layout {
+    gap: 24px;
+  }
+}
+@media (max-width: 740px) {
+  .r3-home .hero {
+    padding-block: 32px 48px;
+    gap: 40px;
+  }
+  .r3-home .method-note {
+    left: 8px;
+    bottom: 24px;
+    width: 192px;
+    min-height: 128px;
+    padding: 16px;
+  }
+  .r3-home .method-note strong {
+    font-size: 24px;
+  }
+  .r3-product-section {
+    padding-block: 40px;
+  }
+  .r3-product-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .r3-product-grid h3 {
+    font-size: 30px;
+  }
+  .r3-home .look-section {
+    padding-bottom: 40px;
+  }
+  .r3-home .manifesto-inner {
+    padding-block: 48px;
+  }
+  .r3-footer {
+    align-items: flex-start;
+  }
+  .r3-footer .footer-links {
+    gap: 16px;
+  }
+  .r3-evidence-images {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .r3-settings .settings-layout {
+    gap: 32px;
+  }
+}

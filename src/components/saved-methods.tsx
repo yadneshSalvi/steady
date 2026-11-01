@@ -1,23 +1,17 @@
 "use client";
 
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Bookmark,
-  ChevronDown,
-  Hand,
-} from "lucide-react";
+import { ArrowRight, ArrowUpRight, Bookmark, ChevronDown } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { LOOKS, TOOL_LABELS } from "@/lib/catalog";
+import { LOOKS } from "@/lib/catalog";
 import { listMethods, listSessions } from "@/lib/client";
 import type { SavedMethod, StudioSession } from "@/lib/contracts";
 import {
   ActionList,
   ButtonLink,
-  DraftNote,
   EmptyState,
   ErrorState,
   LoadingState,
+  SampleBadge,
 } from "./ui";
 
 function sessionHref(session: StudioSession) {
@@ -55,37 +49,24 @@ export function SavedMethods() {
     });
   }, [load]);
 
-  if (loading)
-    return (
-      <LoadingState>Bringing your methods back to the workbench…</LoadingState>
-    );
+  if (loading) return <LoadingState>Opening your methods…</LoadingState>;
   if (error) return <ErrorState message={error} retry={() => void load()} />;
   const inProgress = sessions.filter(
     (session) => !["completed", "stopped"].includes(session.stage),
   );
 
   return (
-    <div className="wrap page-wrap collection-page">
+    <div className="wrap page-wrap collection-page r3-collection">
       <div className="page-intro page-intro--wide">
-        <div>
-          <p className="eyebrow">Your personal collection</p>
-          <h1>
-            Ways that
-            <br /> <em>feel like you.</em>
-          </h1>
-          <p>
-            Your saved methods, with the tools and choices that made them yours.
-            Start fresh whenever you use one again.
-          </p>
-        </div>
-        <ButtonLink href="/studio/new">
+        <h1>Your methods</h1>
+        <ButtonLink href="/studio/new" variant="secondary">
           Find another way <ArrowUpRight size={18} aria-hidden />
         </ButtonLink>
       </div>
       <div className="methods-layout">
         <div>
           {methods.length ? (
-            methods.map((method) => {
+            methods.map((method, index) => {
               const source = sessions.find(
                 (session) => session.id === method.sessionId,
               );
@@ -95,51 +76,19 @@ export function SavedMethods() {
                 <article className="method-card" key={method.sessionId}>
                   <div className="method-card-heading">
                     <div>
-                      <p
-                        className="eyebrow"
-                        style={{
-                          fontSize: 10,
-                          color: "#637254",
-                          marginBottom: 9,
-                        }}
-                      >
-                        {source?.mode === "sample"
-                          ? "Saved sample method"
-                          : "Your saved method"}
-                      </p>
+                      {source?.mode === "sample" ? <SampleBadge /> : null}
                       <h2>{method.name}</h2>
                     </div>
-                    <Bookmark
-                      size={24}
-                      strokeWidth={1.2}
-                      aria-hidden
-                      style={{ color: "#758c5f" }}
-                    />
+                    <Bookmark size={24} strokeWidth={1.2} aria-hidden />
                   </div>
-                  <div className="tag-row">
-                    <span
-                      className="pill"
-                      style={{ background: `${look.color}22` }}
-                    >
-                      {look.title}
-                    </span>
-                    {method.tools.map((tool) => (
-                      <span className="pill" key={tool}>
-                        {TOOL_LABELS[tool]}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="small muted">
-                    {method.actions.length} steps ·{" "}
-                    {source?.mode === "sample"
-                      ? "Synthetic walkthrough, no physical outcome"
-                      : method.outcome
-                        ? "Includes your recorded assessment"
-                        : "Method only"}
-                  </p>
+                  <span className="r3-look-label">
+                    <i style={{ background: look.color }} aria-hidden />
+                    {look.title}
+                  </span>
                   <div className="button-row">
                     <ButtonLink
                       href={`/studio/new?from=${encodeURIComponent(method.sessionId)}`}
+                      variant={index === 0 ? "primary" : "secondary"}
                     >
                       Use this method <ArrowRight size={16} aria-hidden />
                     </ButtonLink>
@@ -161,20 +110,19 @@ export function SavedMethods() {
             })
           ) : (
             <EmptyState
-              title="A little space for your favorites."
+              title="No saved methods"
               action={
                 <ButtonLink href="/studio/new">
                   Find your first method <ArrowRight size={17} aria-hidden />
                 </ButtonLink>
               }
             >
-              After a session, save a method you’d like to return to. Its steps
-              and tools will be here, ready for another day.
+              Save a method after a session to find it here.
             </EmptyState>
           )}
           {inProgress.length ? (
             <section className="recent-sessions">
-              <h2>Pick up where you paused.</h2>
+              <h2>In progress</h2>
               {inProgress.map((session) => (
                 <div className="session-row" key={session.id}>
                   <div>
@@ -189,8 +137,8 @@ export function SavedMethods() {
                       {session.stage === "choosing"
                         ? "Choose a method"
                         : session.stage === "reviewing"
-                          ? "Ready for your assessment"
-                          : `${session.completedActionIds.length} confirmed steps · saved`}
+                          ? "Ready to review"
+                          : `${session.completedActionIds.length} steps done`}
                     </small>
                   </div>
                   <ButtonLink href={sessionHref(session)} variant="secondary">
@@ -201,23 +149,7 @@ export function SavedMethods() {
             </section>
           ) : null}
         </div>
-        <aside className="methods-aside">
-          <Hand size={31} strokeWidth={1.1} aria-hidden />
-          <h2>
-            Today can
-            <br /> <em>be different.</em>
-          </h2>
-          <p>
-            Reusing a method starts a new session. Confirm today’s movements and
-            tools, choose a fresh photo, and begin with no steps marked
-            complete.
-          </p>
-          <ButtonLink href="/settings/access" variant="secondary">
-            Your comfort settings <ArrowRight size={15} aria-hidden />
-          </ButtonLink>
-        </aside>
       </div>
-      <DraftNote />
     </div>
   );
 }

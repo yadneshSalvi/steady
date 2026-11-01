@@ -11,6 +11,11 @@ import {
 } from "../youcam/ladder-recorded";
 import { RECORDED_EYES_MANIFEST_SHA256 } from "../youcam/eye-integrity";
 import { RECORDED_ROUND2_MANIFEST_SHA256 } from "../youcam/round2-integrity";
+import { RECORDED_ROUND3_MANIFEST_SHA256 } from "../youcam/round3-integrity";
+import {
+  RecordedRound3ManifestSchema,
+  type RecordedRound3Manifest,
+} from "../youcam/round3-recorded";
 import {
   RecordedRound2ManifestSchema,
   round2CheckpointAssetId,
@@ -67,6 +72,33 @@ let catalog: Promise<RecordedSamplesManifest | undefined> | undefined;
 let ladders: Promise<RecordedLadderManifest | undefined> | undefined;
 let eyes: Promise<RecordedEyesManifest | undefined> | undefined;
 let round2: Promise<RecordedRound2Manifest | undefined> | undefined;
+let round3: Promise<RecordedRound3Manifest | undefined> | undefined;
+
+async function verifiedRound3(): Promise<RecordedRound3Manifest | undefined> {
+  try {
+    const root = join(process.cwd(), "public");
+    const [raw, source] = await Promise.all([
+      readFile(join(root, "examples/recorded-round3.json")),
+      readFile(join(root, "images/studio-portrait.jpg")),
+    ]);
+    if (hash(raw) !== RECORDED_ROUND3_MANIFEST_SHA256) return undefined;
+    const manifest = RecordedRound3ManifestSchema.parse(
+      JSON.parse(raw.toString("utf8")),
+    );
+    if (hash(source) !== manifest.source.sha256) return undefined;
+    const verified = await Promise.all(
+      manifest.records.map(
+        async (record) =>
+          recipeHash(record.recipe) === record.recipeHash &&
+          hash(await readFile(join(root, record.output.url.slice(1)))) ===
+            record.output.sha256,
+      ),
+    );
+    return verified.every(Boolean) ? manifest : undefined;
+  } catch {
+    return undefined;
+  }
+}
 
 async function verifiedRound2(): Promise<RecordedRound2Manifest | undefined> {
   try {
@@ -185,14 +217,20 @@ export async function attachRecordedSamplePreviews(
     round2 ??= verifiedRound2();
     const adopted = await round2;
     if (!adopted) round2 = undefined;
+    round3 ??= verifiedRound3();
+    const adopted3 = await round3;
+    if (!adopted3) round3 = undefined;
     const targetRecords = [
       ...ladder.records,
       ...(adopted?.records.filter(
         (record) => record.purpose === "shadow_target",
       ) ?? []),
+      ...(adopted3?.records ?? []),
     ];
     const attachCheckpoint = (
-      record: RecordedRound2Manifest["records"][number],
+      record:
+        | RecordedRound2Manifest["records"][number]
+        | RecordedRound3Manifest["records"][number],
     ) => {
       const id = round2CheckpointAssetId(record.output.sha256);
       if (!session.assets.some((asset) => asset.id === id))

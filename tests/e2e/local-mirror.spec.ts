@@ -7,6 +7,7 @@ import { installStudioFixture, ladder } from "./support/studio-fixture";
 type FrameOptions = { rotate?: number; uneven?: boolean };
 type FixtureWindow = Window & {
   __steadyFrame?: (url: string, options?: FrameOptions) => Promise<void>;
+  __steadyCameraRequests?: number;
 };
 
 async function syntheticCamera(page: Page) {
@@ -24,6 +25,8 @@ async function syntheticCamera(page: Page) {
       Object.defineProperty(navigator.mediaDevices, "getUserMedia", {
         configurable: true,
         value: async () => {
+          (window as FixtureWindow).__steadyCameraRequests =
+            ((window as FixtureWindow).__steadyCameraRequests ?? 0) + 1;
           const canvas = document.createElement("canvas");
           canvas.width = 1024;
           canvas.height = 1280;
@@ -145,6 +148,32 @@ test("real IMAGE and VIDEO models measure synthetic Light→Full pixels and abst
     { timeout: 60_000 },
   );
   await expect(page.locator(".face-guide polygon")).toBeVisible();
+  const originalVideo = await page.locator("video").elementHandle();
+  const originalTrack = await page
+    .locator("video")
+    .evaluate(
+      (video) =>
+        (
+          (video as HTMLVideoElement).srcObject as MediaStream
+        ).getVideoTracks()[0].id,
+    );
+  const assertSameCamera = async () => {
+    expect(await originalVideo!.evaluate((video) => video.isConnected)).toBe(
+      true,
+    );
+    expect(
+      await page.locator("video").evaluate((video) => {
+        const media = video as HTMLVideoElement;
+        const track = (media.srcObject as MediaStream).getVideoTracks()[0];
+        return { id: track.id, state: track.readyState, paused: media.paused };
+      }),
+    ).toEqual({ id: originalTrack, state: "live", paused: false });
+    expect(
+      await page.evaluate(
+        () => (window as FixtureWindow).__steadyCameraRequests,
+      ),
+    ).toBe(1);
+  };
   const light = ladder.records.find(
     (record) =>
       record.lookId === "rose" &&
@@ -163,7 +192,7 @@ test("real IMAGE and VIDEO models measure synthetic Light→Full pixels and abst
   let observationCount = 0;
   async function check() {
     await page
-      .getByRole("button", { name: "Check this step", exact: true })
+      .getByRole("button", { name: "Measure this step", exact: true })
       .click();
     observationCount++;
     await expect
@@ -171,7 +200,7 @@ test("real IMAGE and VIDEO models measure synthetic Light→Full pixels and abst
       .toBe(observationCount);
     await expect(
       page.getByRole("button", {
-        name: "I’m ready for the next step",
+        name: "Done with this step",
         exact: true,
       }),
     ).toBeVisible();
@@ -200,11 +229,28 @@ test("real IMAGE and VIDEO models measure synthetic Light→Full pixels and abst
     page.locator('[aria-label="Measured color change heatmap"]'),
   ).toHaveCount(0);
   await page.getByRole("button", { name: "Show heatmap", exact: true }).click();
+  await assertSameCamera();
+  await page
+    .getByRole("button", { name: "I made a pass · check again", exact: true })
+    .click();
+  observationCount++;
+  await expect
+    .poll(() => fixture.snapshot().observations.length)
+    .toBe(observationCount);
+  const checkedAgain = fixture.snapshot().observations.at(-1)!.measurement!;
+  expect(checkedAgain.reportedPass).toBe(true);
+  expect(checkedAgain.verdict).toBe("build");
+  expect(checkedAgain.progress).toBeCloseTo(measuredLight.progress!, 1);
+  await assertSameCamera();
   await page.screenshot({
     path: testInfo.outputPath("synthetic-light-checkpoint.png"),
     fullPage: true,
   });
   await close();
+  await expect(page.locator(".baseline-status")).toContainText(
+    "Baseline captured",
+  );
+  await assertSameCamera();
 
   await setFrame(page, full.output.url);
   const measuredFull = await check();
@@ -232,7 +278,14 @@ test("real IMAGE and VIDEO models measure synthetic Light→Full pixels and abst
   const recovered = await check();
   expect(recovered.verdict).toBe("at_target");
   expect(Math.abs(recovered.progress! - 1)).toBeLessThanOrEqual(0.15);
-  const measurements = [measuredLight, measuredFull, relit, turned, recovered];
+  const measurements = [
+    measuredLight,
+    checkedAgain,
+    measuredFull,
+    relit,
+    turned,
+    recovered,
+  ];
   const timingPath = testInfo.outputPath("synthetic-camera-measurements.json");
   await writeFile(
     timingPath,

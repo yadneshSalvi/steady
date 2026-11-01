@@ -65,7 +65,11 @@ export const measurementSchema = z
   .object({
     version: z.literal(1),
     geometryVersion: z
-      .enum(["landmark-polygon-v1", "cheekbone-oval-v2"])
+      .enum([
+        "landmark-polygon-v1",
+        "cheekbone-oval-v2",
+        "blush-centroid-oval-v3",
+      ])
       .optional(),
     sampleCheckpointId: z
       .string()

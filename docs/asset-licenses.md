@@ -8,7 +8,7 @@ Exact prompts, dimensions, dates, and checksums are in [the provenance record](.
 
 ## Recorded YouCam outputs
 
-The application ships **39 actual YouCam Makeup VTO outputs** for the same fictional baseline:
+The application ships **41 actual YouCam Makeup VTO outputs** for the same fictional baseline:
 
 | Catalog                                      | Outputs | Manifest                                                          |
 | -------------------------------------------- | ------: | ----------------------------------------------------------------- |
@@ -16,14 +16,23 @@ The application ships **39 actual YouCam Makeup VTO outputs** for the same ficti
 | Cheek intensity ladder, recipe revision 3    |      18 | [recorded-ladders.json](../public/examples/recorded-ladders.json) |
 | Defined-eyes liner/shadow targets            |       4 | [recorded-eyes.json](../public/examples/recorded-eyes.json)       |
 | R2 compact blush passes and warm eye targets |       8 | [recorded-round2.json](../public/examples/recorded-round2.json)   |
+| R3 stronger warm upper-lid targets           |       2 | [recorded-round3.json](../public/examples/recorded-round3.json)   |
 
 They are recorded virtual previews, not fresh requests or physically applied outcomes. The manifests retain source, full effect recipe, recipe/request/task/output digests, timestamps, dimensions, and provenance. Raw task IDs and temporary provider URLs remain private. [The complete recorded-output provenance](../public/examples/PROVENANCE.md) distinguishes the legacy and current recipes, exact source, successful batches, and one failed uncharged shadow request.
 
 The loader verifies the pinned manifest checksum, original source bytes, normalized recipes, and output hashes before attachment. Personal uploads, unsupported sources, and lip-enabled recipes do not fall back to these examples. Output colors were not edited to exaggerate the provider effect.
 
-All original 31 images and their three manifests retain their published identities. The nine initial method-specific intensities are not relabeled as Light/Build/Full. Cheek targets use 25/45/65; historical eye targets and current liner use 25/65. R2 adds six `Circle2` blush passes at 45 and warmer `1color20` shadow targets at 25/45. Both smoothing fields are zero in every shipped request. A compact pass or lighter eye render may serve as a **simulated checkpoint**; that reuse does not turn it into an actual capture or evidence of successful makeup application. Public thumbnail encodings are display derivatives; measurement and provenance retain the full original output bytes.
+All 39 earlier PNGs and their four manifests retain their published identities. The nine initial method-specific intensities are not relabeled as Light/Build/Full. Cheek targets use 25/45/65; historical eye targets and current liner use 25/65. R2 retains six `Circle2` blush passes at 45 and `1color20`/`#805036` shadow targets at 25/45. Current R3 shadow targets use the same upper-lid `1color20` pattern with deeper warm `#68402B`, matte Light 35 and Full 65, under new `round3/shadow-{light,full}-warm-v4.png` URLs. Both smoothing fields are zero in every shipped request. A compact pass or lighter eye render may serve as a **simulated checkpoint**; that reuse does not turn it into an actual capture or evidence of successful makeup application. Public thumbnail encodings are display derivatives; measurement and provenance retain the full original output bytes.
+
+R3 used four successful requests, each submitted once, and **four observed units (952→948)** on November 1, 2026 UTC. The first successful `1color20`/`#805036` matte 35/65 trials were not adopted because the Full change missed the requested strength aim. Their original bytes and ledger remain private: Light SHA-256 `ab70927db75585ccd890b83280011a091ab70f87144a60a047735288f919fda2`, Full `f7bd76f6c0e1f887cc7826600ca1d0764045da708c424c198ab6862f53a7a289`. Only the approved `#68402B` pair is published. The [R3 scalar evidence](evidence/measurement-recordings-r3.json) records exact adopted/trial identities and unchanged-mask/below-eye checks. These trials were successful provider outputs, not participant outcomes or failed provider tasks; the R3 recording budget is closed.
 
 The account owner authorized this integration demonstration and publication of the fictional sample's outputs. Provider service terms still apply; no real-person endorsement, artist review, physical accessibility benefit, or exclusive ownership of provider technology is implied.
+
+## Product interface frames
+
+The three landing frames in `public/images/product-*.webp` are actual crops of STEADY's round-three local sample workflow: the stopping-point ladder, guided mirror, and measured checkpoint. They contain the fictional portrait and recorded YouCam outputs documented above. They are interface screenshots, not physical application evidence.
+
+The original PNGs are retained in `docs/evidence/round3/product-source/`. WebP conversion preserves each crop's dimensions and aspect ratio, with no compositing or cosmetic retouching. Exact source and derivative hashes, dimensions, and byte counts are recorded in [product-frame-provenance.json](evidence/round3/product-frame-provenance.json).
 
 ## Fonts and icons
 

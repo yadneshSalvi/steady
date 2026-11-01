@@ -5,13 +5,10 @@ import {
   Check,
   CircleHelp,
   LoaderCircle,
-  Sparkles,
   TriangleAlert,
 } from "lucide-react";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
-import type { PlanAction, Provenance } from "@/lib/contracts";
-import { PRODUCT_LABELS, TOOL_LABELS } from "@/lib/catalog";
-import { ProvenanceChip } from "./provenance-chip";
+import type { PlanAction } from "@/lib/contracts";
 
 export function Button({
   children,
@@ -108,7 +105,6 @@ export function LoadingState({
       <span className="loading-mark" aria-hidden>
         <LoaderCircle size={28} className="spin" />
       </span>
-      <h1 className="serif">A little space for you.</h1>
       <p>{children}</p>
     </div>
   );
@@ -161,31 +157,8 @@ export function EmptyState({
   );
 }
 
-export function ProvenanceLabel({
-  kind,
-  className = "",
-  recordedAt,
-}: {
-  kind: Provenance | "simulated_checkpoint";
-  className?: string;
-  recordedAt?: string;
-}) {
-  return (
-    <ProvenanceChip
-      kind={
-        kind === "simulated_checkpoint"
-          ? "simulated"
-          : kind === "synthetic_inspiration"
-            ? "synthetic"
-            : kind === "actual_capture"
-              ? "photo"
-              : recordedAt
-                ? "recorded"
-                : "fresh"
-      }
-      className={className}
-    />
-  );
+export function SampleBadge() {
+  return <span className="sample-badge">Sample</span>;
 }
 
 export function StepProgress({
@@ -253,29 +226,9 @@ export function ActionList({
           <div>
             <strong>{action.title}</strong>
             <p>{action.instruction}</p>
-            <span className="small muted">
-              {TOOL_LABELS[action.tool]} · {PRODUCT_LABELS[action.product]}
-            </span>
           </div>
         </li>
       ))}
     </ol>
-  );
-}
-
-export function DraftNote({ short = false }: { short?: boolean }) {
-  return (
-    <p className={`draft-note ${short ? "draft-note--short" : ""}`}>
-      <Sparkles size={14} aria-hidden />
-      <Link href="/evidence">Guidance &amp; evidence</Link>
-    </p>
-  );
-}
-
-export function SampleDisclosure() {
-  return (
-    <div className="sample-disclosure">
-      <ProvenanceChip kind="synthetic" />
-    </div>
   );
 }

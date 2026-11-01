@@ -96,16 +96,10 @@ function CheckpointEntry({
         compact
       />
       {!local && session.mode === "personal" ? (
-        <p className="small muted">
-          The numbers are saved. This browser no longer holds the checkpoint
-          image.
-        </p>
+        <p className="small muted">Image no longer on this device.</p>
       ) : null}
       {!local && session.mode === "sample" && !currentGeometry ? (
-        <p className="small muted">
-          These saved readings used the earlier cheek guide. Their numbers are
-          preserved without reconstructing a new heatmap.
-        </p>
+        <p className="small muted">Measured with an earlier guide.</p>
       ) : null}
     </article>
   );
@@ -132,12 +126,7 @@ export function CheckpointHistory({ session }: { session: StudioSession }) {
       className="review-checkpoints"
       aria-label="Your measured checkpoints"
     >
-      <p className="eyebrow">From baseline to your chosen target</p>
-      <h2>
-        Your checkpoints,
-        <br />
-        <em>one step at a time.</em>
-      </h2>
+      <h2>Your checkpoints</h2>
       {entries.map(({ observation, action }) => (
         <CheckpointEntry
           key={observation.id}

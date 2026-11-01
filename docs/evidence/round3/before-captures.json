@@ -1,0 +1,314 @@
+{
+  "sourceCommit": "6e34fe92ab848c5678974997906410a3e13f6d78",
+  "applicationCommit": "88f47f29649fa8339580b460cb425fd05e63895d",
+  "environment": "canonical production before Round 3",
+  "capture": "Codex in-app browser at requested CSS viewports. Larger captures were repainted with an explicit compositor visible size; some STAGECRAFT full-page viewport crops omit the 15px scrollbar. No resizing or UI edits.",
+  "screenshots": [
+    {
+      "file": "before/adaptation-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "file": "before/adaptation-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "before/checkpoint-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "file": "before/checkpoint-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "before/evidence-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "file": "before/evidence-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "before/eye-checkpoint-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "file": "before/eye-checkpoint-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "before/eye-methods-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "file": "before/eye-methods-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "before/eye-mirror-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "file": "before/eye-mirror-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "before/landing-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "file": "before/landing-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "before/methods-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "file": "before/methods-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "before/mirror-ready-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "file": "before/mirror-ready-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "before/mirror-step-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "file": "before/mirror-step-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "before/review-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "file": "before/review-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "before/saved-methods-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "file": "before/saved-methods-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "before/settings-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "file": "before/settings-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "before/setup-color-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "file": "before/setup-color-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "before/setup-movements-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "file": "before/setup-movements-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "before/setup-photo-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "file": "before/setup-photo-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "file": "before/setup-tools-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      }
+    },
+    {
+      "file": "before/setup-tools-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    }
+  ]
+}

@@ -108,7 +108,7 @@ export interface CandidatePlan {
 
 export interface PreviewVariant {
   id: PreviewLevel;
-  intensity: 20 | 25 | 45 | 65;
+  intensity: 20 | 25 | 35 | 45 | 65;
   recipe: MakeupEffect[];
   previewStatus: PreviewStatus;
   previewAsset?: StudioAsset;
@@ -117,10 +117,13 @@ export interface PreviewVariant {
   previewRetryable?: boolean;
 }
 
+export type GeometryVersion =
+  "landmark-polygon-v1" | "cheekbone-oval-v2" | "blush-centroid-oval-v3";
+
 /** Scalar local observations only: frames and face coordinates are never stored. */
 export interface StoredMeasurement {
   version: 1;
-  geometryVersion?: "landmark-polygon-v1" | "cheekbone-oval-v2";
+  geometryVersion?: GeometryVersion;
   /** Exact public recording bytes used by a simulated checkpoint. */
   sampleCheckpointId?: string;
   region: Region;

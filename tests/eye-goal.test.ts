@@ -353,11 +353,11 @@ describe("official eye recipe and catalog integrity", () => {
     },
   );
 
-  it("uses the adopted warm upper-lid shadow at Light25 and Full45 for new plans", () => {
+  it("uses the adopted deeper upper-lid shadow at Light35 and Full65 for new plans", () => {
     const variants = makePreviewVariants("eyes", "shadow", false);
     expect(variants.map(({ id, intensity }) => ({ id, intensity }))).toEqual([
-      { id: "light", intensity: 25 },
-      { id: "full", intensity: 45 },
+      { id: "light", intensity: 35 },
+      { id: "full", intensity: 65 },
     ]);
     expect(makeRecipe("eyes", "shadow", false)).toEqual(variants[1].recipe);
     for (const variant of variants)
@@ -366,7 +366,7 @@ describe("official eye recipe and catalog integrity", () => {
         pattern: { name: "1color20" },
         palettes: [
           {
-            color: "#805036",
+            color: "#68402B",
             texture: "matte",
             colorIntensity: variant.intensity,
           },

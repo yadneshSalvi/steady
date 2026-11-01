@@ -128,17 +128,19 @@ async function installAdaptationFixture(page: Page, eyes: boolean) {
   let polls = 0;
   let completion: "hold" | "ready" | "failed" = "hold";
   let output: StudioAsset | undefined;
+  let pendingTarget:
+    { candidateId: string; variantId: PreviewLevel } | undefined;
   const targetPlan = () => session.adaptation?.candidate ?? session.activePlan!;
   const transition = (status: PreviewStatus) => {
-    const plan = targetPlan();
-    const level = plan.selectedPreviewVariantId ?? "full";
+    if (!pendingTarget) return;
+    const level = pendingTarget.variantId;
     const copies = [
       ...session.candidates,
       session.activePlan,
       session.adaptation?.candidate,
     ];
     for (const copy of copies) {
-      if (!copy || copy.id !== plan.id) continue;
+      if (!copy || copy.id !== pendingTarget.candidateId) continue;
       const variant = copy.previewVariants!.find(
         (entry) => entry.id === level,
       )!;
@@ -249,6 +251,7 @@ async function installAdaptationFixture(page: Page, eyes: boolean) {
       variantId: input.variantId,
     }).toEqual(target);
     requests.push(target);
+    pendingTarget = target;
     const record = recordedAppearance(targetPlan().recipe);
     output = {
       id: `mock-provider-output-${requests.length}`,
@@ -280,13 +283,7 @@ async function installAdaptationFixture(page: Page, eyes: boolean) {
 
 async function confirmCurrentStep(page: Page) {
   await page
-    .getByRole("button", { name: "Check this step", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Use my judgment", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "I’m ready for the next step", exact: true })
+    .getByRole("button", { name: "Done with this step", exact: true })
     .click();
 }
 
@@ -302,15 +299,11 @@ async function resume(page: Page) {
 async function assertPending(page: Page) {
   await expect(
     page.getByRole("button", {
-      name: "Preparing this method’s target…",
+      name: "Preparing target…",
       exact: true,
     }),
   ).toBeDisabled();
-  await expect(
-    page.getByText("Your selected target will appear when ready.", {
-      exact: true,
-    }),
-  ).toBeVisible();
+  await expect(page.locator(".method-target-request")).toHaveCount(1);
 }
 
 test("personal eye repair generates the proposed selected target and keeps it ready through acceptance and reload", async ({
@@ -342,7 +335,7 @@ test("personal eye repair generates the proposed selected target and keeps it re
   expect(proposal.candidate.previewAsset).toBeUndefined();
   await page
     .getByRole("button", {
-      name: "Generate a target for this method",
+      name: "Generate target",
       exact: true,
     })
     .click();
@@ -366,7 +359,7 @@ test("personal eye repair generates the proposed selected target and keeps it re
   );
   await expect(
     page.getByRole("button", {
-      name: "Generate a target for this method",
+      name: "Generate target",
       exact: true,
     }),
   ).toHaveCount(0);
@@ -414,7 +407,7 @@ test("accepted cream-to-powder repair generates Build and retries only an explic
   await resume(page);
   expect(fixture.snapshot().goalChanged).toBe(false);
   const generate = page.getByRole("button", {
-    name: "Generate a target for this method",
+    name: "Generate target",
     exact: true,
   });
   await generate.click();
@@ -456,3 +449,100 @@ test("accepted cream-to-powder repair generates Build and retries only an explic
   expect(fixture.forbidden).toEqual([]);
   expect(errors).toEqual([]);
 });
+
+for (const staleResult of ["old proposal", "late error"] as const) {
+  test(`accepting an adapted target ignores an in-flight GET's ${staleResult}`, async ({
+    page,
+  }) => {
+    const fixture = await installAdaptationFixture(page, false);
+    const history = physicalHistory(fixture.snapshot());
+    let holdNext = false;
+    let signalHeld!: () => void;
+    let release!: () => void;
+    const held = new Promise<void>((resolve) => {
+      signalHeld = resolve;
+    });
+    const gate = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    await page.route(`**/api/sessions/${fixture.id}`, async (route) => {
+      if (!holdNext) return route.fallback();
+      holdNext = false;
+      const oldProposal = fixture.snapshot();
+      signalHeld();
+      await gate;
+      await route.fulfill({
+        status: staleResult === "late error" ? 503 : 200,
+        headers: { "x-fixture-stale": "1" },
+        json:
+          staleResult === "late error"
+            ? {
+                error: {
+                  code: "STALE_POLL",
+                  message: "A superseded poll failed.",
+                },
+              }
+            : oldProposal,
+      });
+    });
+    try {
+      await page.goto(`/studio/${fixture.id}/mirror`);
+      await page
+        .getByRole("button", { name: "Generate target", exact: true })
+        .click();
+      await assertPending(page);
+      holdNext = true;
+      await held;
+      await page
+        .getByRole("button", { name: "Use this change", exact: true })
+        .click();
+      await expect(
+        page.getByRole("button", { name: "Continue at my pace", exact: true }),
+      ).toBeVisible();
+      const accepted = fixture.snapshot();
+      expect(accepted.adaptation).toBeUndefined();
+      expect(accepted.activePlan!.previewStatus).toBe("queued");
+      const staleResponse = page.waitForResponse(
+        (response) => response.headers()["x-fixture-stale"] === "1",
+      );
+      release();
+      await (await staleResponse).finished();
+      await page.evaluate(
+        () =>
+          new Promise<void>((resolve) =>
+            requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+          ),
+      );
+      // Immediate checks: a newer polling cycle must not get a chance to hide
+      // an old proposal or error that was incorrectly published first.
+      expect(
+        await page
+          .getByRole("button", { name: "Use this change", exact: true })
+          .count(),
+      ).toBe(0);
+      expect(
+        await page
+          .getByText("A superseded poll failed.", { exact: true })
+          .count(),
+      ).toBe(0);
+      expect(
+        await page
+          .getByRole("button", { name: "Continue at my pace", exact: true })
+          .count(),
+      ).toBe(1);
+      fixture.finish("ready");
+      await resume(page);
+      await expect(
+        page.getByRole("img", {
+          name: "build YouCam target for right cheek",
+          exact: true,
+        }),
+      ).toBeVisible();
+      expect(physicalHistory(fixture.snapshot())).toBe(history);
+      expect(fixture.requests).toHaveLength(1);
+      expect(fixture.forbidden).toEqual([]);
+    } finally {
+      release();
+    }
+  });
+}

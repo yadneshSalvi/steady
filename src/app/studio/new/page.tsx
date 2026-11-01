@@ -5,7 +5,7 @@ import { LoadingState } from "@/components/ui";
 export const metadata: Metadata = { title: "Your personal setup" };
 export default function NewStudioPage() {
   return (
-    <Suspense fallback={<LoadingState>Preparing a fresh space…</LoadingState>}>
+    <Suspense fallback={<LoadingState>Opening setup…</LoadingState>}>
       <SetupWizard />
     </Suspense>
   );

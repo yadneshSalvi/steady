@@ -12,11 +12,7 @@ import type {
   StudioSession,
 } from "@/lib/contracts";
 import { sampleCheckpointForPlan } from "@/lib/youcam/sample-checkpoints";
-import {
-  CHEEK_GEOMETRY_VERSION,
-  faceEligible,
-  type Point,
-} from "@/lib/vision/geometry";
+import { faceEligible, type Point } from "@/lib/vision/geometry";
 import {
   createMeasurementTarget,
   measureCheckpoint,
@@ -310,9 +306,7 @@ export function useCheckpointMeasurement({
         const elapsedMs = performance.now() - started;
         const measurement: StoredMeasurement = {
           version: 1,
-          geometryVersion: result.region.endsWith("_cheek")
-            ? CHEEK_GEOMETRY_VERSION
-            : "landmark-polygon-v1",
+          geometryVersion: result.geometryVersion,
           ...(sampleCheckpointId ? { sampleCheckpointId } : {}),
           region: result.region,
           verdict: result.verdict,

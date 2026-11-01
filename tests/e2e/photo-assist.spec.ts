@@ -30,7 +30,7 @@ async function fulfillAbortedRequest(route: Route, description: string) {
 async function openInspiration(page: Page) {
   await page.goto("/studio/new");
   await expect(page.getByRole("heading", { level: 1 })).toHaveAccessibleName(
-    "Let’s begin with you.",
+    "Choose a color",
   );
   await page.getByText("Start from a photo you love", { exact: true }).click();
 }
@@ -40,7 +40,10 @@ async function selectPhoto(page: Page, path: string) {
     .getByLabel("Choose an inspiration reference", { exact: true })
     .setInputFiles(path);
   await page
-    .getByRole("checkbox", { name: /I have permission to use this image/ })
+    .getByRole("checkbox", {
+      name: "Send this permitted image to Gemini or OpenAI.",
+      exact: true,
+    })
     .check();
 }
 
@@ -135,13 +138,13 @@ test("a late interpretation cannot replace the newly selected photo", async ({
     // A suggestion does not change the chosen goal until explicitly accepted.
     await expect(
       page.locator(".look-choice[aria-pressed=true] .look-choice-name"),
-    ).toHaveText("A little rose");
+    ).toHaveText("Rose");
     await page
       .getByRole("button", { name: "Use this interpretation", exact: true })
       .click();
     await expect(
       page.locator(".look-choice[aria-pressed=true] .look-choice-name"),
-    ).toHaveText("Berry, softly");
+    ).toHaveText("Berry");
     expect(requests).toBe(2);
   } finally {
     releaseOld.release();

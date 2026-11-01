@@ -80,6 +80,7 @@ export async function newIsolatedAppContext(
     options.baseURL || process.env.TEST_BASE_URL || "http://localhost:3000";
   return browser.newContext({
     ...options,
+    userAgent: options.userAgent ?? process.env.STEADY_QA_USER_AGENT,
     baseURL,
     storageState: deploymentStorageState(baseURL),
   });

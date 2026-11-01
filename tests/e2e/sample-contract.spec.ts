@@ -52,24 +52,18 @@ test("recorded sample contract clears personal lip color on photo-mode switch an
     await page
       .getByRole("button", { name: "Use the sample", exact: true })
       .click();
-    await expect(
-      page.getByText(
-        "Recorded samples cover cheeks or eyes. Optional lip color is available with your own photo.",
-        { exact: true },
-      ),
-    ).toBeVisible();
+    await expect(page.locator(".sample-badge")).toHaveCount(1);
     for (let step = 0; step < 3; step++)
       await page.getByRole("button", { name: "Back", exact: true }).click();
     const lipOption = page.getByRole("checkbox", {
       name: /Add a touch of lip color/,
     });
-    await expect(lipOption).not.toBeChecked();
-    await expect(lipOption).toBeDisabled();
+    await expect(lipOption).toHaveCount(0);
     for (let step = 0; step < 3; step++)
       await page.getByRole("button", { name: "Continue", exact: true }).click();
-    await page
-      .getByRole("checkbox", { name: /I understand this is a synthetic/ })
-      .check();
+    await expect(
+      page.getByRole("button", { name: "Find my methods", exact: true }),
+    ).toBeEnabled();
     const response = page.waitForResponse(
       (item) =>
         item.url().endsWith("/api/sessions") &&
@@ -92,9 +86,7 @@ test("recorded sample contract clears personal lip color on photo-mode switch an
     ).toBe(true);
     await page.waitForURL(`**/studio/${created!.id}/looks`);
     await expect(
-      page
-        .getByRole("button", { name: "Recorded YouCam", exact: true })
-        .first(),
+      page.getByRole("img", { name: /^full YouCam target/ }),
     ).toBeVisible();
     expect(freshRequests).toBe(0);
   } finally {
@@ -140,7 +132,10 @@ test("recorded sample contract clears lip color when fictional workbench suggest
     .getByRole("button", { name: "Try a sample workbench", exact: true })
     .click();
   await page
-    .getByRole("checkbox", { name: /I have permission to use this image/ })
+    .getByRole("checkbox", {
+      name: "Send this permitted image to Gemini or OpenAI.",
+      exact: true,
+    })
     .check();
   await page
     .getByRole("button", { name: "Suggest my tools", exact: true })
@@ -160,6 +155,5 @@ test("recorded sample contract clears lip color when fictional workbench suggest
   const lipOption = page.getByRole("checkbox", {
     name: /Add a touch of lip color/,
   });
-  await expect(lipOption).not.toBeChecked();
-  await expect(lipOption).toBeDisabled();
+  await expect(lipOption).toHaveCount(0);
 });

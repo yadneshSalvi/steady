@@ -3,24 +3,33 @@ import { secondarySpatialGuidance } from "@/lib/vision/measurement-guidance";
 
 function guidance(
   overrides: Partial<Parameters<typeof secondarySpatialGuidance>[0]> = {},
+  action?: Parameters<typeof secondarySpatialGuidance>[1],
 ) {
-  return secondarySpatialGuidance({
-    region: "left_cheek",
-    verdict: "build",
-    lagging: "upper",
-    regionalProgress: [
-      { subregion: "inner", progress: 0.55, pixels: 100 },
-      { subregion: "outer", progress: 0.22, pixels: 100 },
-    ],
-    ...overrides,
-  });
+  return secondarySpatialGuidance(
+    {
+      region: "left_cheek",
+      verdict: "build",
+      lagging: "upper",
+      regionalProgress: [
+        { subregion: "inner", progress: 0.55, pixels: 100 },
+        { subregion: "outer", progress: 0.22, pixels: 100 },
+      ],
+      ...overrides,
+    },
+    action,
+  );
 }
 
 describe("secondary spatial cheek guidance", () => {
   it("reports a real horizontal deficit alongside a vertical dominant lag", () => {
-    expect(guidance()).toContain("outer part is also lighter");
-    expect(guidance()).toContain("22%");
-    expect(guidance()).toContain("55%");
+    expect(guidance()).toBe("Work gently toward your ear.");
+    expect(guidance()).not.toContain("%");
+    expect(guidance({}, { motion: "blending" })).toBe(
+      "One more broad pass toward your ear.",
+    );
+    expect(guidance({}, { motion: "tapping" })).toBe(
+      "Tap gently toward your ear.",
+    );
     expect(
       guidance({
         lagging: "lower",
@@ -29,7 +38,7 @@ describe("secondary spatial cheek guidance", () => {
           { subregion: "outer", progress: 0.55, pixels: 100 },
         ],
       }),
-    ).toContain("inner part is also lighter");
+    ).toBe("Work gently toward the center of the guide.");
   });
 
   it("requires at least a measured 0.12 horizontal gap", () => {

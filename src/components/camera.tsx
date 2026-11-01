@@ -6,13 +6,12 @@ import {
   Check,
   ImagePlus,
   RefreshCw,
-  ShieldCheck,
   Sun,
   Upload,
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Button, Notice, ProvenanceLabel } from "./ui";
+import { Button, Notice } from "./ui";
 
 export function useCamera() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -211,14 +210,6 @@ export function StillCapture({
             }
             unoptimized
           />
-          {previewLabel ? (
-            <span className="provenance">
-              <span />
-              {previewLabel}
-            </span>
-          ) : (
-            <ProvenanceLabel kind="actual_capture" />
-          )}
           <div className="capture-actions">
             <Button variant="secondary" onClick={() => onSelected(null)}>
               <RefreshCw size={16} aria-hidden />
@@ -252,10 +243,7 @@ export function StillCapture({
       ) : (
         <div className="upload-zone">
           <ImagePlus size={35} aria-hidden />
-          <p>
-            {description ||
-              `${label}. Face a light, keep your face visible, and choose a photo without a filter.`}
-          </p>
+          <p>{description || label}</p>
           <div className="capture-actions">
             <Button
               variant="secondary"
@@ -273,9 +261,6 @@ export function StillCapture({
               Choose photo
             </Button>
           </div>
-          <span className="small muted" style={{ fontSize: 11 }}>
-            JPG, PNG or WebP · up to {Math.round(maxBytes / 1024 / 1024)} MB
-          </span>
         </div>
       )}
       {cameraError || error ? (
@@ -292,10 +277,6 @@ export function StillCapture({
           <span>
             <Check size={14} aria-hidden />
             No filter
-          </span>
-          <span>
-            <ShieldCheck size={14} aria-hidden />
-            Only this still is uploaded
           </span>
         </div>
       ) : null}

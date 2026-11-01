@@ -34,6 +34,7 @@ export function StaticFaceGuide({
     <div
       ref={ref}
       className="static-face-guide"
+      role="img"
       aria-label="On-device sample placement guide"
     >
       <svg
@@ -51,7 +52,6 @@ export function StaticFaceGuide({
           strokeLinejoin="round"
         />
       </svg>
-      <span>Placement guide</span>
     </div>
   );
 }

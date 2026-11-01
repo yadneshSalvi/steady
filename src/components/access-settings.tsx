@@ -9,7 +9,7 @@ import {
   ShieldCheck,
   SlidersHorizontal,
   Trash2,
-  Volume2,
+  Sparkles,
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { DEFAULT_PREFERENCES, LOOKS } from "@/lib/catalog";
@@ -18,6 +18,17 @@ import type { Preferences, StudioSession } from "@/lib/contracts";
 import { applyDevicePreferences } from "./access-preferences";
 import { MovementFields } from "./setup-wizard";
 import { Button, ButtonLink, Notice } from "./ui";
+
+const STAGE_LABELS: Record<StudioSession["stage"], string> = {
+  choosing: "Choosing a method",
+  ready: "Ready to start",
+  applying: "In progress",
+  paused: "Paused",
+  adapting: "Changing method",
+  reviewing: "Ready to review",
+  completed: "Completed",
+  stopped: "Stopped",
+};
 
 function Toggle({
   id,
@@ -28,7 +39,7 @@ function Toggle({
 }: {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   value: boolean;
   onChange: (value: boolean) => void;
 }) {
@@ -38,7 +49,7 @@ function Toggle({
         <label htmlFor={id}>
           <strong>{title}</strong>
         </label>
-        <p id={`${id}-description`}>{description}</p>
+        {description ? <p id={`${id}-description`}>{description}</p> : null}
       </div>
       <label className="switch">
         <input
@@ -46,7 +57,7 @@ function Toggle({
           type="checkbox"
           checked={value}
           onChange={(event) => onChange(event.target.checked)}
-          aria-describedby={`${id}-description`}
+          aria-describedby={description ? `${id}-description` : undefined}
         />
         <span />
       </label>
@@ -171,27 +182,19 @@ export function AccessSettings() {
   }
 
   return (
-    <div className="wrap page-wrap settings-page">
+    <div className="wrap page-wrap settings-page r3-settings">
       <div className="page-intro">
-        <p className="eyebrow">Make yourself comfortable</p>
-        <h1>
-          A studio that
-          <br /> <em>moves with you.</em>
-        </h1>
-        <p>
-          Your preferred controls, your movements, your data. Make this space
-          feel a little more yours.
-        </p>
+        <h1>Settings</h1>
       </div>
       <div className="settings-layout">
         <nav className="settings-nav" aria-label="Settings sections">
           <a href="#your-comfort">
             <Hand size={17} aria-hidden />
-            Your comfort
+            Movements
           </a>
           <a href="#your-controls">
             <SlidersHorizontal size={17} aria-hidden />
-            Your controls
+            Controls
           </a>
           <a href="#your-data">
             <ShieldCheck size={17} aria-hidden />
@@ -200,40 +203,26 @@ export function AccessSettings() {
         </nav>
         <div>
           <section className="settings-section" id="your-comfort">
-            <h2>
-              How you like
-              <br /> <em>to move.</em>
-            </h2>
-            <p style={{ marginBottom: 25 }}>
-              These choices are stored on this device and prefill a new setup.
-              Each session keeps its own confirmed choices, which you can edit
-              in the mirror.
-            </p>
+            <h2>Movements</h2>
+            <p className="field-note">Saved on this device for new setups.</p>
             <MovementFields
               preferences={preferences}
               onChange={changePreferences}
             />
           </section>
           <section className="settings-section" id="your-controls">
-            <h2>
-              A little more
-              <br /> <em>your kind of comfortable.</em>
-            </h2>
-            <p>
-              Touch and keyboard controls remain available for every essential
-              action.
-            </p>
+            <h2>Controls</h2>
             <Toggle
               id="settings-audio"
               title="Read each studio instruction"
-              description="Use your browser’s speech voice. Pause immediately stops the spoken instruction; no microphone is needed."
+              description="Your browser’s voice reads each step."
               value={preferences.audio}
               onChange={(audio) => changePreferences({ ...preferences, audio })}
             />
             <Toggle
               id="settings-mirror"
               title="Mirror view"
-              description="See yourself as you would in a mirror. Photo view keeps the camera’s original orientation; saved captures use the original pixels."
+              description="Flip the camera like a mirror."
               value={preferences.mirror}
               onChange={(mirror) =>
                 changePreferences({ ...preferences, mirror })
@@ -242,7 +231,6 @@ export function AccessSettings() {
             <Toggle
               id="settings-reduced-motion"
               title="Less motion"
-              description="Use minimal transitions. Your system’s reduced-motion setting is always respected too."
               value={reducedMotion}
               onChange={(value) => {
                 setReducedMotion(value);
@@ -252,18 +240,12 @@ export function AccessSettings() {
             <Toggle
               id="settings-larger-text"
               title="Larger studio instructions"
-              description="Increase the size of the current instruction and its supporting guidance."
               value={largerText}
               onChange={(value) => {
                 setLargerText(value);
                 setSaved(false);
               }}
             />
-            <p className="local-pref-note">
-              Your browser’s zoom and text enlargement work throughout the
-              studio. Essential controls don’t need dragging, hovering, or a
-              timed response.
-            </p>
           </section>
           {error ? (
             <div style={{ marginBottom: 20 }}>
@@ -275,58 +257,40 @@ export function AccessSettings() {
               <Check size={17} aria-hidden />
               Save my preferences
             </Button>
-            <p role="status">
-              {saved
-                ? "Saved on this device."
-                : "Changes apply to future setups."}
-            </p>
+            <p role="status">{saved ? "Saved on this device." : ""}</p>
           </div>
           <section
             className="settings-section"
             id="your-data"
             style={{ marginTop: 45 }}
           >
-            <h2>
-              Your photos.
-              <br /> <em>Your say.</em>
-            </h2>
-            <p>
-              The live mirror and face guides run on your device. You choose
-              each still that enters a saved session.
-            </p>
+            <h2>Photos &amp; data</h2>
             <ul className="privacy-list">
               <li>
                 <Camera size={21} aria-hidden />
                 <div>
-                  <strong>Live camera frames stay on this device</strong>
-                  <p>
-                    The app doesn’t upload your live video stream. A photo is
-                    captured only when you choose to take one.
-                  </p>
+                  <strong>Live camera stays on this device</strong>
+                  <p>Photos are captured only when you choose.</p>
                 </div>
               </li>
               <li>
-                <Volume2 size={21} aria-hidden />
+                <Sparkles size={21} aria-hidden />
                 <div>
-                  <strong>You choose any AI image processing</strong>
+                  <strong>You choose AI image processing</strong>
                   <p>
-                    Virtual color previews send your selected photo to YouCam.
-                    Optional reference matching, tool suggestions and AI
-                    checkpoints may send a selected image to Google Gemini or
-                    OpenAI, with your consent.
+                    Previews use YouCam; optional suggestions use Gemini or
+                    OpenAI.
                   </p>
                 </div>
               </li>
               <li>
                 <ShieldCheck size={21} aria-hidden />
                 <div>
-                  <strong>Stored photos belong to your private session</strong>
+                  <strong>Your photos are private</strong>
                   <p>
-                    Your photos aren’t a public gallery. Deleting a session
-                    removes its saved method and queues deletion of its private
-                    photos. Sessions are also subject to a 30-day retention
-                    policy. An external provider’s processing and retention
-                    policy applies to copies already sent there.
+                    Sessions expire after 30 days. Deleting queues private
+                    photos for removal. Provider copies follow their separate
+                    retention policies.
                   </p>
                 </div>
               </li>
@@ -342,9 +306,7 @@ export function AccessSettings() {
             <hr className="section-rule" />
             <h3 className="inline-heading">Your saved sessions</h3>
             <p className="field-note" style={{ marginBottom: 20 }}>
-              These sessions are tied to this browser’s private studio. Clearing
-              its cookies can remove your access. Export keeps a JSON record of
-              your choices and events, without image download links.
+              Tied to this browser. Export excludes images.
             </p>
             {loading ? (
               <p className="small muted" role="status">
@@ -365,10 +327,7 @@ export function AccessSettings() {
                 {dataError}
               </Notice>
             ) : !sessions.length ? (
-              <p className="small muted">
-                No saved sessions yet. Your next studio can start whenever
-                you’re ready.
-              </p>
+              <p className="small muted">No saved sessions yet.</p>
             ) : (
               sessions.map((session) => (
                 <div className="data-row" key={session.id}>
@@ -380,11 +339,8 @@ export function AccessSettings() {
                         "Your studio"}
                     </strong>
                     <small>
-                      {session.mode === "sample"
-                        ? "Synthetic sample"
-                        : "Personal session"}{" "}
-                      · {session.stage} · {session.assets.length} saved{" "}
-                      {session.assets.length === 1 ? "image" : "images"}
+                      {session.mode === "sample" ? "Sample · " : ""}
+                      {STAGE_LABELS[session.stage]}
                     </small>
                   </div>
                   <div className="button-row" style={{ gap: 3 }}>
@@ -414,11 +370,7 @@ export function AccessSettings() {
             {deleteId ? (
               <div className="delete-confirm">
                 <h3>Delete this session and its photos?</h3>
-                <p>
-                  This also removes its saved method from STEADY. Copies already
-                  processed by an external provider follow that provider’s
-                  retention policy.
-                </p>
+                <p>Also removes its saved method.</p>
                 <div className="button-row">
                   <Button
                     variant="danger"

@@ -172,11 +172,6 @@ export function PhotoAssist({
         <ChevronDown size={17} aria-hidden />
       </summary>
       <div className="photo-assist-body">
-        <p>
-          {kind === "inspiration"
-            ? "AI can suggest the closest available color family and describe what it sees. You choose which interpretation to keep."
-            : "AI can suggest supported tools and products from a clear photo. You’ll confirm each one before it can enter your method."}
-        </p>
         <StillCapture
           file={file}
           onSelected={select}
@@ -185,11 +180,6 @@ export function PhotoAssist({
             kind === "inspiration"
               ? "Choose an inspiration reference"
               : "Choose a photo of your tools"
-          }
-          description={
-            kind === "inspiration"
-              ? "Choose a photo you have permission to use. It is a reference for your goal, not a photo of your result."
-              : "Lay your own tools and products on a clear surface. Keep product labels visible where possible."
           }
           previewLabel={
             sampleInventory
@@ -209,13 +199,6 @@ export function PhotoAssist({
             Try a sample workbench
           </Button>
         ) : null}
-        {sampleInventory ? (
-          <p className="field-note">
-            AI-created sample inventory. These items don’t represent tools you
-            personally own; confirm the example suggestions to continue in a
-            clearly labeled sample studio.
-          </p>
-        ) : null}
         {file && !inspiration && !suggestions ? (
           <>
             <label className="checkbox-label" style={{ marginTop: 20 }}>
@@ -224,14 +207,7 @@ export function PhotoAssist({
                 checked={consent}
                 onChange={(event) => setConsent(event.target.checked)}
               />
-              <span>
-                I have permission to use this image and agree to send this
-                selected still to Google Gemini or OpenAI for{" "}
-                {kind === "inspiration"
-                  ? "color-reference interpretation"
-                  : "tool and product suggestions"}
-                . Live camera frames stay on my device.
-              </span>
+              <span>Send this permitted image to Gemini or OpenAI.</span>
             </label>
             <Button
               variant="secondary"
@@ -262,14 +238,11 @@ export function PhotoAssist({
         ) : null}
         {error ? (
           <div style={{ marginTop: 18 }}>
-            <Notice kind="error">
-              {error} Your manual choices remain available.
-            </Notice>
+            <Notice kind="error">{error}</Notice>
           </div>
         ) : null}
         {inspiration ? (
           <div className="photo-assist-result">
-            <p className="eyebrow">AI color interpretation</p>
             <h3>
               {LOOKS.find((look) => look.id === inspiration.lookId)?.title ||
                 "Your starting color"}
@@ -282,11 +255,6 @@ export function PhotoAssist({
                 </span>
               ))}
             </div>
-            {inspiration.uncertainties.length ? (
-              <p className="field-note">
-                {inspiration.uncertainties.join(" ")}
-              </p>
-            ) : null}
             <Button
               onClick={() => {
                 onLook?.(inspiration);
@@ -306,15 +274,7 @@ export function PhotoAssist({
         ) : null}
         {suggestions ? (
           <div className="photo-assist-result">
-            <p className="eyebrow">Suggestions to confirm</p>
-            <h3>
-              Your eyes have
-              <br /> <em>the final say.</em>
-            </h3>
-            <p>
-              Tick only items that are correctly identified and available to you
-              today.
-            </p>
+            <h3>Confirm what you have</h3>
             {!suggestions.tools.length && !suggestions.products.length ? (
               <Notice>
                 No supported tools or products could be identified. Use the
@@ -358,9 +318,6 @@ export function PhotoAssist({
                 ))}
               </div>
             )}
-            {suggestions.notes.length ? (
-              <p className="field-note">{suggestions.notes.join(" ")}</p>
-            ) : null}
             {suggestions.tools.length || suggestions.products.length ? (
               <Button
                 onClick={() => {

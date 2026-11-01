@@ -8,7 +8,7 @@ The historical results are from 31 October 2026 UTC and the geometry review is f
 
 The IMAGE detector processes the exact captured bitmap. It uses an independent worker/Face Landmarker instance rather than reusing temporally smoothed video landmarks. Source-photo landmarks are detected once and reused for a pixel-aligned source/YouCam preview pair. A still request carries a request ID; inference and model startup have bounded timeouts and a failed worker can be recreated.
 
-Cheeks now use a smooth, landmark-derived cheekbone/apple oval; the 31 October observations used the earlier six-landmark outlines. `geometry.regionPolygon` supplies the same source-coordinate polygon to both guides and measurement. Lips retain their anatomical landmark polygon. Sampling removes pixels within 5% of the shorter bounding dimension of every edge, approximately 10% overall. The inner mouth is excluded from lip sampling. Black/white clipping and transparent pixels are rejected. A 4×4 grid supplies the coarse heatmap; the heatmap is a regional summary rather than a dense per-pixel estimate.
+Cheeks now use `blush-centroid-oval-v3`, a smooth anatomical oval centered on the recorded Full renders' positive Δa* centroids. R1 used six-landmark outlines and R2 used the earlier oval; historical observations retain those scopes. `geometry.regionPolygon` supplies the same source-coordinate polygon to both guides and measurement. Lips retain their anatomical landmark polygon. Sampling removes pixels within 5% of the shorter bounding dimension of every edge, approximately 10% overall. The inner mouth is excluded from lip sampling. Black/white clipping and transparent pixels are rejected. A 4×4 grid supplies the coarse heatmap; the heatmap is a regional summary rather than a dense per-pixel estimate.
 
 Illumination correction uses three multiplicative gains in **linear RGB**, mapping the checkpoint's unchanged forehead patch to the baseline. Reference statistics drop the brightest 5% of samples to reduce highlight contamination. A separate nose-bridge patch is held out of the fit. Its corrected CIEDE2000 residual, plus spatial residuals across forehead cells, can reject nonuniform illumination. Comparing only the fitted reference means would trivially hide a lighting change; that is not the implemented check.
 
@@ -111,7 +111,7 @@ Selecting Light as the target has its own denominator: **7 of 8 possible eye tar
 
 The eye planner tests enumerate 288 movement/tool/product combinations without assuming unknown movements are comfortable. A tool-only shadow repair ranks the same shadow product above a switch to liner. A liner↔shadow repair explicitly changes the appearance goal, preserves any completed eye byte for byte, explains that two sides may differ, and sets the goal-change flag only when accepted. It does not imply removal or rewriting of earlier pigment. These are deterministic software invariants, not participant outcomes or artist approval.
 
-## Shared cheek oval review — 1 November
+## Historical R2 shared cheek oval review — 1 November
 
 `cheekbone-oval-v2` replaces the six-point cheek outlines with 48-point smooth ovals. For the left cheek, landmarks 330/346 define the medial apple and lateral cheekbone, with landmark 280 defining the lower apple; the right-side counterparts are 101/117/50. The center is the midpoint of the apple/cheekbone anchors. The major-axis vector is 0.9 times their separation, and the minor-axis vector is 0.85 times the center-to-lower-apple vector. The outline is `center + major × cos(angle) + minor × sin(angle)`. These normalized source-coordinate vectors follow the face rather than a screen-aligned rectangle. They transform consistently under affine scale, roll, reflection, and source aspect ratio.
 
@@ -140,7 +140,7 @@ After adopting the R2 recordings, the focused vision/history/guidance check pass
 pnpm exec vitest run tests/geometry.test.ts tests/measurement.test.ts tests/measurement-eyes.test.ts tests/measurement-recorded.test.ts tests/measurement-historical.test.ts tests/measurement-guidance.test.ts tests/measurement-secondary-guidance.test.ts tests/measurement-round2.test.ts tests/review-flow-state.test.ts
 ```
 
-## Recorded spatial and warm-shadow review — 1 November
+## Historical R2 spatial and warm-shadow review — 1 November
 
 The adopted R2 assets use the same source bytes and IMAGE landmark fixture. `public/examples/recorded-round2.json` binds six actual YouCam `Circle2` first-pass renders (three colors × satin/matte, intensity 45) and two revised warm-shadow targets to their exact recipes and output bytes. The manifest SHA256 is `5d4560f533cf985b97fc7c2d9015e2738621f08709867e3c8ecb4456a6c5fe97`. The original 31 PNGs and three manifests remain unchanged. The published first passes are separate provider outputs, not painted or composited checkpoints.
 
@@ -222,6 +222,54 @@ The separate **local optimized production-build** browser suite passed **24/24 c
 These five warmed intervals include **exact capture, IMAGE inference, PNG encoding, and pixel calculation**, excluding **model startup, JPEG encoding, persistence, and UI rendering**. The same color results and abstentions were recovered in this run. The timing observations do not identify the cause of differences between build modes or establish a latency distribution. Measured frames were not uploaded; no physical webcam or participant was involved.
 
 The separate [sanitized optimized timing JSON](evidence/measurement-timing-r2-optimized.json) preserves the exact metrics and source-attachment checksum without session/asset IDs. Its private source is under `artifacts/private/review-round2/optimized-browser/**/synthetic-camera-measurements.json`. The R1 and development-server evidence above remains unchanged in scope.
+
+## R3 centroid and stronger shadow review — 1 November
+
+The new cheek center comes from _*12 actual source→Full positive-Δa* centroids__: six Full renders, both cheeks. The diagnostic uses broad face bounds from the lower-eye row to the mouth, split at the nose. It never uses the oval being fitted to choose its centroid pixels. These bounds retain **95.46–99.51%** of the positive-a_ mass in the corresponding whole-image half; both definitions are retained in the [public centroid report](evidence/measurement-centroid-r3.json).
+
+An equal-render mean is expressed in the existing anatomical major/minor axes. The outline still has 48 points and the same radii. The recorded centroids were already close to the R2 centers, so the measured correction is small:
+
+| Source-image adjustment from v2 | Left cheek | Right cheek |
+| ------------------------------- | ---------: | ----------: |
+| Outward                         |    2.51 px |     1.55 px |
+| Downward                        |    1.66 px |     1.97 px |
+
+The resulting current center is within **1.460 pixels** of every one of the 12 independent centroids. A source/Full overlay showing old/new outlines and the actual centroid was rendered and visually inspected. This fits one fictional source and its actual renders; it is not a population or human-placement calibration. No larger shift was invented to fit a visual assumption.
+
+`regionPolygon`, `regionCrop`, and measurement targets accept an explicit geometry version. New cheek measurements use `blush-centroid-oval-v3`; eyes/lips retain `landmark-polygon-v1`. An absent stored geometry version means historical v1. Explicit v1/v2 masks remain reproducible, and stored scalar readings are never overwritten by a new-mask calculation. The interface keeps older-guide history scalar-only. Target and result carry the actual mask version; consecutive-stall checks require matching geometry and recorded-frame identity.
+
+All 31 original PNGs were tested under v1, v2, and v3, with their original subtle-target abstentions retained. All six R2 compact first passes were tested against all three target levels on both cheeks under v2 and v3. The v3 ladder observations, with every eligibility and verdict threshold unchanged, are:
+
+| Original ladder checkpoint against Full | Comparisons |  v3 progress |
+| --------------------------------------- | ----------: | -----------: |
+| Light 25                                |          12 | 33.30–38.46% |
+| Build 45                                |          12 | 66.13–69.18% |
+| Full 65 against itself                  |          12 |      100.00% |
+
+The actual default rose/satin compact pass measures **37.962% left and 38.592% right** against Full. Its dominant lag remains `upper`. Main guidance is one direction, **“Work up along the cheekbone.”**, with no duplicated percentage opener. Ear-directed suggestions respect the action's confirmed motion. The four measured half-region projections remain local data for optional details and are omitted from scalar session summaries.
+
+The first R3 eye trials kept `1color20`/matte/`#805036` and increased Light/Full to 35/65. Their Full ΔE00 was only **2.495/2.883**, short of the requested strength aim. The official [eye-shadow schema](https://docs.makeupar.com/reference/makeup_vto) confirms `palettes[].colorIntensity` is an integer from 0 to 100; no additional matte strength field is documented there. The submitted recipe fields were correct. An independent reconstruction of the unchanged 1,395/1,505-pixel lid masks found R2 Full45→trial Full65 mean ΔE00 of just 0.257/0.202, with almost every lid pixel edited. This records a shallow observed response, not a claim about the provider's internal mechanism.
+
+A separately approved deeper warm **`#68402B` Full65** trial reached the aim. Its matching **Light35** was requested only after the Full audit and visual inspection passed. Only this final pair is adopted under new immutable round3 URLs:
+
+| Approved R3 eye measurement | Left eye | Right eye |
+| --------------------------- | -------: | --------: |
+| Full target ΔE00            |    4.434 |     4.707 |
+| Light target ΔE00           |    2.618 |     2.762 |
+| Light→Full progress         |  56.498% |   56.192% |
+| Full against itself         |  100.00% |   100.00% |
+| Usable upper-lid pixels     |    1,395 |     1,505 |
+
+Both levels pass the original guards and eye mask; Full-versus-full is still a consistency check. **Every RGB pixel** in the fixed 1,150/1,103-pixel below-eye patches matches the source for both approved outputs. There is zero added mean ΔL* in those patches; natural shadows are retained. This finding does not extend beyond the audited image regions or establish a physical cosmetic outcome.
+
+The [R3 recording report](evidence/measurement-recordings-r3.json) contains exact output/trial identities and scalar results. R3 used **four successful once-only tasks, four observed units, 952→948**: two successful `#805036` trials remain archived privately and two approved `#68402B` outputs are published. No provider pixels were altered. All 39 earlier PNGs and four manifests remain unchanged. R1/R2 recipe builders remain available; current recipes and new observations do not rewrite saved targets. Timestamp-free registered legacy Light assets and the original nine-preview sample catalog now have tested exact-pixel paths; a missing modern checkpoint still abstains rather than substituting another image.
+
+The final focused measurement/recipe/history run passed **291 tests across 14 files**. Owned ESLint/formatting and the repository TypeScript check passed. These are focused local checks; integrated release gates and deployment are recorded separately. The centroid diagnostic is reproducible without provider keys or calls:
+
+```sh
+pnpm exec tsx scripts/evaluate-measurement-geometry.mjs
+pnpm exec vitest run tests/delta-a-centroid.test.ts tests/measurement-historical.test.ts tests/measurement-round2.test.ts tests/round3-recordings.test.ts tests/measurement-guidance.test.ts
+```
 
 ## Limits and pending evaluation
 

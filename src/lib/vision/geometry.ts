@@ -1,4 +1,8 @@
-import type { Region } from "@/lib/contracts";
+import type {
+  GeometryVersion,
+  Region,
+  StoredMeasurement,
+} from "@/lib/contracts";
 export interface Point {
   x: number;
   y: number;
@@ -39,12 +43,36 @@ export const REGION_LANDMARKS: Record<Region, number[]> = {
   ],
 };
 
-export const CHEEK_GEOMETRY_VERSION = "cheekbone-oval-v2" as const;
+export const CHEEK_GEOMETRY_VERSION = "blush-centroid-oval-v3" as const;
 export const CHEEK_OVAL_SEGMENTS = 48;
 export const CHEEK_OVAL_ANCHORS = {
   left_cheek: { medialApple: 330, lateralCheekbone: 346, lowerApple: 280 },
   right_cheek: { medialApple: 101, lateralCheekbone: 117, lowerApple: 50 },
 } as const;
+/** Equal-render mean of six exact source→Full positive-a* centroids.
+ * Coefficients use anatomical axes, not fixed pixels. One fictional source;
+ * this is a placement diagnostic, not human calibration.
+ */
+export const BLUSH_CENTROID_OFFSETS = {
+  left_cheek: { major: 0.02494, minor: 0.07598 },
+  right_cheek: { major: 0.01251, minor: 0.06865 },
+} as const;
+
+export function geometryVersionForRegion(
+  region: Region,
+  requested?: GeometryVersion,
+): GeometryVersion {
+  return region === "left_cheek" || region === "right_cheek"
+    ? (requested ?? CHEEK_GEOMETRY_VERSION)
+    : "landmark-polygon-v1";
+}
+
+/** An absent stored version is historical v1, never the current guide. */
+export function storedMeasurementGeometry(
+  measurement: Pick<StoredMeasurement, "geometryVersion">,
+): GeometryVersion {
+  return measurement.geometryVersion ?? "landmark-polygon-v1";
+}
 const ovalCircle = Array.from({ length: CHEEK_OVAL_SEGMENTS }, (_, index) => {
   const angle = (index * 2 * Math.PI) / CHEEK_OVAL_SEGMENTS;
   return { x: Math.cos(angle), y: Math.sin(angle) };
@@ -60,8 +88,20 @@ const ovalCircle = Array.from({ length: CHEEK_OVAL_SEGMENTS }, (_, index) => {
 export function regionPolygon(
   points: readonly Point[],
   region: Region,
+  geometryVersion: GeometryVersion = geometryVersionForRegion(region),
 ): Point[] {
-  if (region === "left_cheek" || region === "right_cheek") {
+  if (
+    ![
+      "landmark-polygon-v1",
+      "cheekbone-oval-v2",
+      "blush-centroid-oval-v3",
+    ].includes(geometryVersion)
+  )
+    return [];
+  if (
+    (region === "left_cheek" || region === "right_cheek") &&
+    geometryVersion !== "landmark-polygon-v1"
+  ) {
     const anchors = CHEEK_OVAL_ANCHORS[region];
     const inner = points[anchors.medialApple];
     const outer = points[anchors.lateralCheekbone];
@@ -73,15 +113,32 @@ export function regionPolygon(
       )
     )
       return [];
-    const center = { x: (inner.x + outer.x) / 2, y: (inner.y + outer.y) / 2 };
+    const anchorCenter = {
+      x: (inner.x + outer.x) / 2,
+      y: (inner.y + outer.y) / 2,
+    };
     const major = {
       x: (outer.x - inner.x) * 0.9,
       y: (outer.y - inner.y) * 0.9,
     };
     const minor = {
-      x: (apple.x - center.x) * 0.85,
-      y: (apple.y - center.y) * 0.85,
+      x: (apple.x - anchorCenter.x) * 0.85,
+      y: (apple.y - anchorCenter.y) * 0.85,
     };
+    const offsets = BLUSH_CENTROID_OFFSETS[region];
+    const center =
+      geometryVersion === "blush-centroid-oval-v3"
+        ? {
+            x:
+              anchorCenter.x +
+              offsets.major * major.x +
+              offsets.minor * minor.x,
+            y:
+              anchorCenter.y +
+              offsets.major * major.y +
+              offsets.minor * minor.y,
+          }
+        : anchorCenter;
     if (Math.abs(major.x * minor.y - major.y * minor.x) < 1e-7) return [];
     const polygon = ovalCircle.map((unit) => ({
       x: center.x + major.x * unit.x + minor.x * unit.y,

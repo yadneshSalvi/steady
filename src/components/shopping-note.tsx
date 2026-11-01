@@ -3,18 +3,30 @@ import { useState } from "react";
 import { Copy, Printer } from "lucide-react";
 import { LOOKS, PRODUCT_LABELS, TOOL_LABELS } from "@/lib/catalog";
 import type { CandidatePlan, LookId } from "@/lib/contracts";
-import { Button } from "./ui";
+import { ActionList, Button } from "./ui";
 
 export function ShoppingNote({
   plan,
   lookId,
+  completed = [],
 }: {
   plan: CandidatePlan;
   lookId: LookId;
+  completed?: string[];
 }) {
   const [copied, setCopied] = useState(false);
   const look = LOOKS.find((item) => item.id === lookId)!;
-  const shade = plan.routeId === "liner" ? "#3A2B2B" : look.color;
+  const effect = plan.recipe.find((item) =>
+    ["eye_liner", "eye_shadow", "blush"].includes(item.category),
+  );
+  const palette = Array.isArray(effect?.palettes) ? effect.palettes[0] : null;
+  const shade =
+    palette &&
+    typeof palette === "object" &&
+    !Array.isArray(palette) &&
+    typeof palette.color === "string"
+      ? palette.color
+      : look.color;
   const texture =
     plan.routeId === "liner"
       ? "Matte eye liner"
@@ -51,7 +63,7 @@ export function ShoppingNote({
     if (!tab) return;
     tab.document.title = "STEADY · My method note";
     const heading = tab.document.createElement("h1");
-    heading.textContent = "My method, ready to take along.";
+    heading.textContent = "Your method";
     const content = tab.document.createElement("pre");
     content.textContent = text;
     content.style.cssText =
@@ -64,7 +76,7 @@ export function ShoppingNote({
   }
   return (
     <details className="shopping-note">
-      <summary>What this method needs</summary>
+      <summary>Your method</summary>
       <div className="shopping-note-content">
         <div className="shade-reference">
           <span
@@ -74,9 +86,7 @@ export function ShoppingNote({
           <div>
             <strong>{look.title}</strong>
             <code>{shade}</code>
-            <p>
-              {texture} · {plan.actions.length} steps
-            </p>
+            <p>{texture}</p>
           </div>
         </div>
         <ul>
@@ -104,10 +114,7 @@ export function ShoppingNote({
             Print shopping note
           </Button>
         </div>
-        <p className="small">
-          A brand-free reference for the method you chose. Start with what you
-          own.
-        </p>
+        <ActionList actions={plan.actions} completed={completed} />
       </div>
     </details>
   );

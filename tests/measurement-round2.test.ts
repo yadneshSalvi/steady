@@ -40,11 +40,16 @@ const firstPasses = recordings.records.filter(
   (record) => record.purpose === "simulated_first_pass",
 );
 const cheekCases = firstPasses.flatMap((record) =>
-  (["left_cheek", "right_cheek"] as const).map((region) => ({
-    record,
-    region,
-    label: `${record.id}/${region}`,
-  })),
+  (["left_cheek", "right_cheek"] as const).flatMap((region) =>
+    (["cheekbone-oval-v2", "blush-centroid-oval-v3"] as const).map(
+      (geometryVersion) => ({
+        record,
+        region,
+        geometryVersion,
+        label: `${geometryVersion}/${record.id}/${region}`,
+      }),
+    ),
+  ),
 );
 const lightShadow = recordings.records.find(
   (record) => record.id === "shadow-light-warm-v2",
@@ -75,7 +80,7 @@ describe("published R2 actual pixels on the pinned fictional source", () => {
 
   it.each(cheekCases)(
     "derives spatial guidance from $label against each chosen target",
-    async ({ record, region }) => {
+    async ({ record, region, geometryVersion }) => {
       const baseline = await load(recordings.source.url);
       const checkpoint = await load(record.output.url);
       for (const level of ["light", "build", "full"] as const) {
@@ -89,6 +94,7 @@ describe("published R2 actual pixels on the pinned fictional source", () => {
           baseline,
           await load(targetRecord.output.url),
           region,
+          geometryVersion,
         );
         const result = measureCheckpoint({ baseline, checkpoint, target });
 
@@ -135,9 +141,7 @@ describe("published R2 actual pixels on the pinned fictional source", () => {
             level === "full" ? 0.3 : 0.45,
           );
           expect(result.progress).toBeLessThan(level === "full" ? 0.5 : 0.7);
-          expect(secondarySpatialGuidance(result)).toContain(
-            "outer part is also lighter",
-          );
+          expect(secondarySpatialGuidance(result)).toContain("toward your ear");
         }
       }
     },

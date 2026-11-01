@@ -10,6 +10,7 @@ interface VoiceControlsProps {
   contextKey: string;
   blocked: boolean;
   onCommand: (command: VoiceCommand) => Promise<void> | void;
+  onEnabledChange?: (enabled: boolean) => void;
 }
 
 const formats = [
@@ -23,12 +24,16 @@ export function VoiceControls({
   contextKey,
   blocked,
   onCommand,
+  onEnabledChange,
 }: VoiceControlsProps) {
   const [consent, setConsent] = useState(false);
   const [enabled, setEnabled] = useState(false);
   const [status, setStatus] = useState("Microphone off");
   const [heard, setHeard] = useState("");
   const [error, setError] = useState("");
+  useEffect(() => {
+    onEnabledChange?.(enabled);
+  }, [enabled, onEnabledChange]);
   const current = useRef({ contextKey, blocked, onCommand });
   useEffect(() => {
     current.current = { contextKey, blocked, onCommand };
@@ -237,21 +242,11 @@ export function VoiceControls({
     <details className="photo-assist voice-controls">
       <summary>
         <Mic size={18} aria-hidden />
-        <span>Voice controls · {enabled ? "microphone on" : "optional"}</span>
+        <span>Voice controls{enabled ? " · on" : ""}</span>
         <ChevronDown size={17} aria-hidden />
       </summary>
       <div className="photo-assist-body">
-        <p>
-          Say <strong>“Steady, pause”</strong>, “repeat”, “check”, “help”,
-          “next”, or “stop”. “Next” confirms a checked step; “stop” opens a
-          confirmation.
-        </p>
-        <p className="field-note">
-          While enabled, short audio clips are sent to Deepgram through STEADY
-          to recognize commands. Audio and free-form transcripts aren’t saved by
-          STEADY. Recognition may miss a phrase; the visible controls remain
-          available.
-        </p>
+        <p>Say “Steady,” then pause, repeat, check, help, next or stop.</p>
         <label className="checkbox-label" style={{ marginTop: 16 }}>
           <input
             type="checkbox"
@@ -259,10 +254,7 @@ export function VoiceControls({
             disabled={enabled}
             onChange={(event) => setConsent(event.target.checked)}
           />
-          <span>
-            I agree to send short microphone clips to Deepgram while voice
-            controls are on.
-          </span>
+          <span>Send short mic clips to Deepgram while on.</span>
         </label>
         <div className="button-row" style={{ marginTop: 16 }}>
           <Button

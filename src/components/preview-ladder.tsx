@@ -20,7 +20,7 @@ export function PreviewLadder({
       className={`preview-ladder ${compact ? "preview-ladder--compact" : ""}`}
       disabled={disabled}
     >
-      <legend>Choose your stopping point</legend>
+      <legend>Stop at</legend>
       <div
         style={{
           gridTemplateColumns: `repeat(${candidate.previewVariants.length}, minmax(0,1fr))`,

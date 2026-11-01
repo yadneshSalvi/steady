@@ -8,27 +8,22 @@ import {
   BookmarkCheck,
   Camera,
   Check,
-  Heart,
-  ShieldCheck,
-  Sparkles,
   Trash2,
 } from "lucide-react";
 import { useState } from "react";
 import type { Outcome } from "@/lib/contracts";
-import { LOOKS } from "@/lib/catalog";
+import { LOOKS, TOOL_LABELS } from "@/lib/catalog";
 import { deleteSession } from "@/lib/client";
 import { uploadPhoto } from "@/lib/upload-client";
 import { StillCapture, usePhotoUrl } from "./camera";
 import {
-  ActionList,
   BackLink,
   Button,
   ButtonLink,
-  DraftNote,
   ErrorState,
   LoadingState,
   Notice,
-  ProvenanceLabel,
+  SampleBadge,
   StepProgress,
 } from "./ui";
 import { useStudioSession } from "./use-studio-session";
@@ -107,8 +102,7 @@ export function ResultReview({ id }: { id: string }) {
   const [deleting, setDeleting] = useState(false);
   const busy = studio.busy || uploading || deleting;
 
-  if (studio.loading)
-    return <LoadingState>Making space for your result…</LoadingState>;
+  if (studio.loading) return <LoadingState>Opening your result…</LoadingState>;
   if (!session)
     return (
       <ErrorState
@@ -120,8 +114,7 @@ export function ResultReview({ id }: { id: string }) {
     return (
       <div className="wrap page-wrap">
         <Notice title="Your studio is still open">
-          Return to your current instruction, or choose “Keep this result” in
-          the mirror when you’d like to finish.
+          Continue your method, or choose Make this easier → Finish here.
         </Notice>
         <div className="button-row" style={{ marginTop: 24 }}>
           <ButtonLink
@@ -198,6 +191,7 @@ export function ResultReview({ id }: { id: string }) {
         setCaptureOpen(false);
         setFile(null);
       }
+      return next;
     } catch (cause) {
       setLocalError(
         cause instanceof Error
@@ -207,6 +201,11 @@ export function ResultReview({ id }: { id: string }) {
     } finally {
       setUploading(false);
     }
+  }
+  async function saveMethod() {
+    if (busy || session?.savedMethod) return;
+    if (!finished && !(await finish())) return;
+    await studio.run({ type: "save_method" });
   }
   async function remove() {
     setDeleting(true);
@@ -224,416 +223,284 @@ export function ResultReview({ id }: { id: string }) {
     }
   }
 
+  const changes = session.events.filter(
+    (event) => event.type === "accept_adaptation",
+  ).length;
+  const methodTools = [
+    ...new Set(
+      session.activePlan?.actions.map((action) => TOOL_LABELS[action.tool]) ??
+        [],
+    ),
+  ];
+  const canSave =
+    session.stage !== "stopped" && (isSample || !!session.outcome);
   return (
-    <div className="wrap page-wrap review-page">
+    <div className="wrap page-wrap review-page r3-review">
       <div className="page-top">
         <BackLink href={finished ? "/methods" : `/studio/${id}/mirror`}>
           {finished ? "Your methods" : "Your mirror"}
         </BackLink>
         <StepProgress active={3} />
       </div>
-      <div className="page-intro">
-        <p className="eyebrow">
-          {isSample
-            ? "The sample walkthrough"
-            : "Your expression, your assessment"}
-        </p>
-        <h1>
-          {isSample ? (
-            <>
-              A little closer
-              <br /> <em>to your way.</em>
-            </>
-          ) : (
-            <>
-              Your look.
-              <br /> <em>On your terms.</em>
-            </>
-          )}
-        </h1>
-        <p>
-          {isSample
-            ? "Review the color checkpoints, the target you chose, and how your method changed."
-            : "The photo is real. How it feels is yours to say. Keep what you love, and tell us how the method felt."}
-        </p>
+      <div className="review-title-row">
+        <div className="page-intro">
+          {isSample ? <SampleBadge /> : null}
+          <h1>Review</h1>
+        </div>
+        {canSave ? (
+          <div className="review-primary-actions">
+            <Button
+              onClick={() => void saveMethod()}
+              disabled={session.savedMethod || busy}
+              busy={studio.busy}
+            >
+              {session.savedMethod ? (
+                <BookmarkCheck size={18} aria-hidden />
+              ) : (
+                <Bookmark size={18} aria-hidden />
+              )}
+              {session.savedMethod ? "Method saved" : "Save my method"}
+            </Button>
+            {finished ? (
+              <ButtonLink href="/methods" variant="secondary">
+                Finish
+              </ButtonLink>
+            ) : (
+              <Button
+                variant="secondary"
+                onClick={() => void finish()}
+                disabled={busy}
+              >
+                Finish
+              </Button>
+            )}
+          </div>
+        ) : null}
       </div>
       {studio.error || localError ? (
-        <div style={{ marginBottom: 24 }}>
-          <Notice kind="error">{localError || studio.error}</Notice>
-        </div>
+        <Notice kind="error">{localError || studio.error}</Notice>
       ) : null}
-      <div className="review-grid">
-        <div className="review-visual">
-          {isSample ? (
-            <div className="review-capture">
-              <Image
-                src="/images/studio-portrait.jpg"
-                alt="Fictional adult sample portrait"
-                width={1200}
-                height={1500}
-              />
-              <ProvenanceLabel kind="synthetic_inspiration" />
-            </div>
-          ) : captureOpen && !finished ? (
-            <div
-              className="review-capture"
-              style={{ padding: 20, minHeight: 380 }}
-            >
+      <div className="review-summary-grid">
+        <figure className="review-reference">
+          <figcaption>Before</figcaption>
+          <Image
+            src={source?.url || look.image}
+            alt={
+              source?.provenance === "actual_capture"
+                ? "Your actual starting photo"
+                : "Fictional adult sample portrait before YouCam rendering"
+            }
+            width={source?.width || 1024}
+            height={source?.height || 1280}
+            sizes="(max-width: 740px) 42vw, 240px"
+            unoptimized={source?.provenance === "actual_capture"}
+          />
+        </figure>
+        <ArrowRight className="review-flow-arrow" size={24} aria-hidden />
+        <figure className="review-reference">
+          <figcaption>{preview ? "Target" : "Color inspiration"}</figcaption>
+          <Image
+            src={preview?.url || look.image}
+            alt={
+              preview
+                ? "Generated YouCam appearance reference"
+                : "AI-created color inspiration"
+            }
+            width={preview?.width || 1024}
+            height={preview?.height || 1280}
+            sizes="(max-width: 740px) 42vw, 240px"
+            unoptimized={!!preview && !preview.recordedAt}
+          />
+        </figure>
+        <CheckpointHistory session={session} />
+      </div>
+      {session.activePlan ? (
+        <p className="review-method-diff">
+          {changes
+            ? `${methodTools.join(" → ")} · ${changes} method ${changes === 1 ? "change" : "changes"}`
+            : session.activePlan.name}
+        </p>
+      ) : null}
+      {!isSample ? (
+        <div className="review-personal-grid">
+          <div className="review-visual">
+            {captureOpen && !finished ? (
               <StillCapture
                 file={file}
                 onSelected={setFile}
                 label="Choose your actual final photo"
               />
-            </div>
-          ) : fileUrl || finalAsset ? (
-            <div className="review-capture">
-              <Image
-                src={fileUrl || finalAsset!.url}
-                alt="Your selected actual final makeup photo"
-                width={1200}
-                height={1500}
-                unoptimized
-              />
-              <ProvenanceLabel kind="actual_capture" />
-            </div>
-          ) : (
-            <div className="review-capture review-capture-empty">
-              <Camera size={52} aria-hidden />
-              <h2>
-                Room for
-                <br /> <em>the real thing.</em>
-              </h2>
-              <p>
-                {finished
-                  ? "No final photo was saved with this session. Its outcome reflects the recorded assessment."
-                  : "Choose an actual photo of your result. A virtual preview can’t stand in for this moment."}
-              </p>
-              {!finished ? (
-                <Button onClick={() => setCaptureOpen(true)}>
-                  <Camera size={18} aria-hidden />
-                  Capture my result
-                </Button>
-              ) : null}
-            </div>
-          )}
-          {!isSample && !finished && (file || finalAsset || captureOpen) ? (
-            <div className="review-capture-controls">
+            ) : fileUrl || finalAsset ? (
+              <figure className="review-final-photo">
+                <Image
+                  src={fileUrl || finalAsset!.url}
+                  alt="Your selected actual final makeup photo"
+                  width={finalAsset?.width || 1024}
+                  height={finalAsset?.height || 1280}
+                  unoptimized
+                />
+                <figcaption>Your result</figcaption>
+              </figure>
+            ) : (
+              <div className="review-capture-empty">
+                <Camera size={36} aria-hidden />
+                <p>No final photo saved.</p>
+                {!finished ? (
+                  <Button
+                    variant="secondary"
+                    onClick={() => setCaptureOpen(true)}
+                  >
+                    Capture my result
+                  </Button>
+                ) : null}
+              </div>
+            )}
+            {!finished && (file || finalAsset || captureOpen) ? (
               <Button
-                variant="secondary"
+                variant="quiet"
                 onClick={() => {
                   setCaptureOpen(!captureOpen);
                   if (captureOpen) setFile(null);
                 }}
               >
                 {captureOpen
-                  ? "Keep going without a new photo"
+                  ? "Continue without a new photo"
                   : "Choose another photo"}
               </Button>
-            </div>
-          ) : null}
-          <div className="review-references">
-            <div className="reference-thumb">
-              <Image
-                src={preview?.url || source?.url || look.image}
-                alt={
-                  preview
-                    ? "Generated YouCam appearance reference"
-                    : source?.provenance === "actual_capture"
-                      ? "Your actual starting photo"
-                      : "AI-created color inspiration"
-                }
-                width={180}
-                height={220}
-                unoptimized={!!preview || !!source}
-              />
-            </div>
-            <div className="reference-label">
-              <strong>
-                {preview
-                  ? "Your virtual color reference"
-                  : source?.provenance === "actual_capture"
-                    ? "Your starting reference"
-                    : "Your color inspiration"}
-              </strong>
-              <ProvenanceLabel
-                kind={
-                  preview
-                    ? "virtual_preview"
-                    : source?.provenance || "synthetic_inspiration"
-                }
-                recordedAt={preview?.recordedAt}
-              />
-            </div>
+            ) : null}
+          </div>
+          <div className="review-form">
+            {session.outcome ? (
+              <div className="outcome-saved">
+                <span className="badge">
+                  <Check size={14} aria-hidden />
+                  {outcomeLabels[session.outcome.classification]}
+                </span>
+                <dl className="outcome-summary">
+                  <div>
+                    <dt>Your expression</dt>
+                    <dd>
+                      {session.outcome.classification === "stopped"
+                        ? "Not assessed"
+                        : session.outcome.satisfaction === "yes"
+                          ? "Expresses my look"
+                          : session.outcome.satisfaction === "partly"
+                            ? "Partly expresses my look"
+                            : "Not there yet"}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Your comfort</dt>
+                    <dd>{comfortLabels[session.outcome.comfort]}</dd>
+                  </div>
+                  <div>
+                    <dt>Human assistance</dt>
+                    <dd>{helpLabels[session.outcome.assistance]}</dd>
+                  </div>
+                  <div>
+                    <dt>Your steps</dt>
+                    <dd>{session.completedActionIds.length} confirmed</dd>
+                  </div>
+                </dl>
+                {session.outcome.note ? <p>{session.outcome.note}</p> : null}
+              </div>
+            ) : (
+              <>
+                <h2>Your assessment</h2>
+                <OutcomeQuestion
+                  title="Does this express your look?"
+                  name="satisfaction"
+                  value={satisfaction}
+                  onChange={setSatisfaction}
+                  options={[
+                    { value: "yes", label: "Yes, it does" },
+                    { value: "partly", label: "Partly" },
+                    { value: "not_yet", label: "Not yet" },
+                  ]}
+                />
+                <OutcomeQuestion
+                  title="How did the method feel?"
+                  name="comfort"
+                  value={comfort}
+                  onChange={setComfort}
+                  options={[
+                    { value: "comfortable", label: "Comfortable" },
+                    { value: "mixed", label: "A mix" },
+                    { value: "difficult", label: "Difficult" },
+                    { value: "not_assessed", label: "Not assessed" },
+                  ]}
+                />
+                <OutcomeQuestion
+                  title="Did someone help you?"
+                  name="assistance"
+                  value={assistance}
+                  onChange={setAssistance}
+                  options={[
+                    { value: "none", label: "No help" },
+                    { value: "verbal", label: "Verbal guidance" },
+                    { value: "physical", label: "Hands-on help" },
+                    { value: "not_assessed", label: "Not assessed" },
+                  ]}
+                />
+                <div className="form-field">
+                  <label htmlFor="outcome-note" className="label">
+                    Anything to remember?{" "}
+                    <span className="visually-required">Optional</span>
+                  </label>
+                  <textarea
+                    className="textarea"
+                    id="outcome-note"
+                    value={note}
+                    onChange={(event) => setNote(event.target.value)}
+                    maxLength={1000}
+                  />
+                </div>
+                <Button onClick={() => void finish()} busy={busy}>
+                  Save my result
+                </Button>
+              </>
+            )}
           </div>
         </div>
-        <div className="review-form">
-          {isSample ? (
-            <div className="sample-completion">
-              <Sparkles
-                size={28}
-                strokeWidth={1.3}
-                aria-hidden
-                style={{ color: "#6e875b", marginBottom: 20 }}
-              />
-              <h2>
-                {finished ? (
-                  <>
-                    Your sample,
-                    <br /> <em>ready to revisit.</em>
-                  </>
-                ) : (
-                  <>
-                    You’ve seen
-                    <br /> <em>another way.</em>
-                  </>
-                )}
-              </h2>
-              <p>
-                Start your own studio with a photo and your choices when you’re
-                ready.
-              </p>
-              <div className="button-row">
-                {!finished ? (
-                  <Button onClick={() => void finish()} busy={busy}>
-                    Finish the walkthrough <Check size={17} aria-hidden />
-                  </Button>
-                ) : (
-                  <ButtonLink href="/studio/new">
-                    Start my own studio <ArrowRight size={17} aria-hidden />
-                  </ButtonLink>
-                )}
-              </div>
-              {finished && session.stage === "completed" ? (
-                <Button
-                  variant="secondary"
-                  onClick={() => void studio.run({ type: "save_method" })}
-                  disabled={session.savedMethod || busy}
-                  style={{ marginTop: 15 }}
-                >
-                  {session.savedMethod ? (
-                    <BookmarkCheck size={17} aria-hidden />
-                  ) : (
-                    <Bookmark size={17} aria-hidden />
-                  )}
-                  {session.savedMethod
-                    ? "Sample method saved"
-                    : "Save this sample method"}
-                </Button>
-              ) : null}
-            </div>
-          ) : session.outcome ? (
-            <div className="outcome-saved">
-              <p className="eyebrow">Your assessment is saved</p>
-              <h2>
-                {session.outcome.classification === "stopped" ? (
-                  <>
-                    You chose
-                    <br /> <em>where to stop.</em>
-                  </>
-                ) : (
-                  <>
-                    Kept, just
-                    <br /> <em>as you chose.</em>
-                  </>
-                )}
-              </h2>
-              <span className="badge">
-                <Check size={13} aria-hidden />
-                {outcomeLabels[session.outcome.classification]}
-              </span>
-              <dl className="outcome-summary">
-                <div>
-                  <dt>Your expression</dt>
-                  <dd>
-                    {session.outcome.classification === "stopped"
-                      ? "Not assessed"
-                      : session.outcome.satisfaction === "yes"
-                        ? "Expresses my look"
-                        : session.outcome.satisfaction === "partly"
-                          ? "Partly expresses my look"
-                          : "Not there yet"}
-                  </dd>
-                </div>
-                <div>
-                  <dt>Your comfort</dt>
-                  <dd>{comfortLabels[session.outcome.comfort]}</dd>
-                </div>
-                <div>
-                  <dt>Human assistance</dt>
-                  <dd>{helpLabels[session.outcome.assistance]}</dd>
-                </div>
-                <div>
-                  <dt>Your steps</dt>
-                  <dd>{session.completedActionIds.length} user-confirmed</dd>
-                </div>
-              </dl>
-              {session.outcome.note ? <p>{session.outcome.note}</p> : null}
-              <p className="field-note">
-                Your recorded assessment is kept separately from any AI
-                observations.
-              </p>
-              {session.stage === "completed" ? (
-                <Button
-                  onClick={() => void studio.run({ type: "save_method" })}
-                  disabled={session.savedMethod || busy}
-                  busy={studio.busy}
-                >
-                  {session.savedMethod ? (
-                    <BookmarkCheck size={18} aria-hidden />
-                  ) : (
-                    <Bookmark size={18} aria-hidden />
-                  )}
-                  {session.savedMethod
-                    ? "Your method is saved"
-                    : "Save my method"}
-                </Button>
-              ) : null}
-              <div className="button-row" style={{ marginTop: 15 }}>
-                <ButtonLink href="/methods" variant="quiet">
-                  Go to your methods <ArrowRight size={16} aria-hidden />
-                </ButtonLink>
-              </div>
-            </div>
-          ) : (
-            <>
-              <p className="eyebrow">A moment for how it felt</p>
-              <h2>
-                How was
-                <br /> <em>your way?</em>
-              </h2>
-              <p>
-                Your choices describe this session. A result you accept with
-                steps left is kept as a partial result.
-              </p>
-              <OutcomeQuestion
-                title="Does your result express the look you wanted?"
-                name="satisfaction"
-                value={satisfaction}
-                onChange={setSatisfaction}
-                options={[
-                  { value: "yes", label: "Yes, it does" },
-                  { value: "partly", label: "Partly" },
-                  { value: "not_yet", label: "Not yet" },
-                ]}
-              />
-              <OutcomeQuestion
-                title="How did the method feel?"
-                name="comfort"
-                value={comfort}
-                onChange={setComfort}
-                options={[
-                  { value: "comfortable", label: "Comfortable" },
-                  { value: "mixed", label: "A mix" },
-                  { value: "difficult", label: "Difficult" },
-                  { value: "not_assessed", label: "Not assessed" },
-                ]}
-              />
-              <OutcomeQuestion
-                title="Did someone help you?"
-                name="assistance"
-                value={assistance}
-                onChange={setAssistance}
-                options={[
-                  { value: "none", label: "No help" },
-                  { value: "verbal", label: "Verbal guidance" },
-                  { value: "physical", label: "Hands-on help" },
-                  { value: "not_assessed", label: "Not assessed" },
-                ]}
-              />
-              <div className="form-field">
-                <label htmlFor="outcome-note" className="label">
-                  Anything to remember?
-                  <span className="visually-required">Optional</span>
-                </label>
-                <textarea
-                  className="textarea"
-                  id="outcome-note"
-                  value={note}
-                  onChange={(event) => setNote(event.target.value)}
-                  maxLength={1000}
-                  placeholder="A tool you liked, a movement to change, a moment that felt good…"
-                />
-              </div>
-              <Button
-                className="button--wide"
-                onClick={() => void finish()}
-                busy={busy}
-              >
-                <Heart size={18} aria-hidden />
-                Save my result
-              </Button>
-              <p className="field-note">
-                <ShieldCheck
-                  size={13}
-                  aria-hidden
-                  style={{
-                    display: "inline",
-                    verticalAlign: "-2px",
-                    marginRight: 5,
-                  }}
-                />
-                Only the final still you choose is uploaded. A completed
-                physical result requires all agreed steps and an actual final
-                photo.
-              </p>
-            </>
-          )}
-          <div className="review-data-actions">
-            <Button
-              variant="quiet"
-              onClick={() => setDeleteOpen(!deleteOpen)}
-              disabled={busy}
-            >
-              <Trash2 size={15} aria-hidden />
-              Delete this session
-            </Button>
-            <ButtonLink href="/settings/access#your-data" variant="quiet">
-              Your data choices <ArrowRight size={14} aria-hidden />
-            </ButtonLink>
-          </div>
-          {deleteOpen ? (
-            <div className="delete-confirm">
-              <h3>Delete this session?</h3>
-              <p>
-                STEADY will remove this session and its saved method, and queue
-                deletion of its private photos. Photos already processed by
-                YouCam follow the provider’s separate retention policy.
-              </p>
-              <div className="button-row">
-                <Button
-                  variant="danger"
-                  onClick={() => void remove()}
-                  busy={deleting}
-                >
-                  Yes, delete this session
-                </Button>
-                <Button
-                  variant="secondary"
-                  onClick={() => setDeleteOpen(false)}
-                  disabled={busy}
-                >
-                  Keep it
-                </Button>
-              </div>
-            </div>
-          ) : null}
-        </div>
-      </div>
-      <CheckpointHistory session={session} />
-      {session.activePlan ? (
-        <ShoppingNote plan={session.activePlan} lookId={session.lookId} />
       ) : null}
       {session.activePlan ? (
-        <details className="mirror-step-summary" style={{ marginTop: 40 }}>
-          <summary>
-            The method you chose <ArrowRight size={17} aria-hidden />
-          </summary>
-          <ActionList
-            actions={session.activePlan.actions}
-            completed={session.completedActionIds}
-          />
-          <DraftNote short />
-        </details>
+        <ShoppingNote
+          plan={session.activePlan}
+          lookId={session.lookId}
+          completed={session.completedActionIds}
+        />
+      ) : null}
+      <div className="review-data-actions">
+        <Button
+          variant="quiet"
+          onClick={() => setDeleteOpen(!deleteOpen)}
+          disabled={busy}
+        >
+          <Trash2 size={15} aria-hidden />
+          Delete this session
+        </Button>
+      </div>
+      {deleteOpen ? (
+        <div className="delete-confirm">
+          <h3>Delete this session?</h3>
+          <p>Removes this session, its method and its photos.</p>
+          <div className="button-row">
+            <Button
+              variant="danger"
+              onClick={() => void remove()}
+              busy={deleting}
+            >
+              Yes, delete this session
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => setDeleteOpen(false)}
+              disabled={busy}
+            >
+              Keep it
+            </Button>
+          </div>
+        </div>
       ) : null}
     </div>
   );

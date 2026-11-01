@@ -12,6 +12,7 @@ import { applyCommand, createSession } from "@/lib/planner";
 import { getPool, transaction } from "./db";
 import { ApiError } from "./auth";
 import { attachRecordedSamplePreviews } from "./recorded-previews";
+import { reconcilePreviewOwnership } from "./jobs";
 
 export const isUuid = (id: string) =>
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
@@ -167,6 +168,18 @@ export async function mutateSession(
         );
     }
     const next = applyCommand(current, command);
+    if (
+      [
+        "update_setup",
+        "set_preferences",
+        "approve_candidate",
+        "propose_adaptation",
+        "accept_adaptation",
+        "decline_adaptation",
+        "stop",
+      ].includes(command.type)
+    )
+      await reconcilePreviewOwnership(client, ownerId, next);
     await persistSession(client, next, current.events);
     return next;
   });

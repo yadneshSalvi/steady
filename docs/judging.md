@@ -1,37 +1,39 @@
 # Judge walkthrough
 
-Open [STEADY](https://steady-taupe-pi.vercel.app) in a fresh browser profile. **Quick sample** needs no camera, personal photo, account form, or provider credits.
+Open [STEADY](https://steady-taupe-pi.vercel.app) in a fresh browser profile. **Quick sample** needs no camera, personal photo, account form, or provider credits. The round-three interface described here is pending release; the release checklist identifies the deployed build.
 
-## Measured cheeks and a different movement
+## Cheeks: measure, adapt, and finish
 
-1. Choose **Quick sample** on home. The fictional profile opens directly to three methods. Compare **Light**, **Build**, and **Full** on **Fingertip tapping**; leave Full chosen for the clearest intermediate checkpoint.
-2. Choose the method and begin the walkthrough. Actual MediaPipe IMAGE landmarks place a cheek guide on the source portrait. The target crop and stopping-level controls sit beside the instruction.
-3. Choose **Measure the sample**. The app compares a separate compact blush pass with the source and Full target. Rose satin is approximately 38% toward Full. The strongest measured deficit is upper; the additional horizontal comparison shows the outer part around 23% versus 53% inner on the left cheek. Inspect the translucent heatmap, complete padded oval, target crop, and legend. The **Simulated checkpoint** chip explains the input.
-4. **Continue the sample** explicitly confirms the first step. Choose **Make this easier → A different movement**. The cream brush proposal keeps the completed cheek and the same cream product while changing the remaining movement. Accept and choose **Continue sample**.
-5. Measure the other cheek. Guidance uses the new broad-pass movement. Finish and review both checkpoints, their numbers, and their individual targets. Save, reuse, or delete the method.
-6. Optional: choose **A softer version** during a remaining step. Light becomes the stopping point. The same compact blush pass measures about 98% on the left or 100% on the right for Rose satin; both are at target. Confirmed steps retain their original target, geometry, and checkpoint image identity. Other families can honestly exceed Light or abstain when that target is too subtle.
-7. Optional: before continuing a step, choose **I made a pass · check again** twice, then close the checkpoint. The fixed sample image remains unchanged. In the **A broader tool may help** notice, **Make this easier** opens a same-product broader-tool proposal directly. **Other changes** opens the alternatives menu in one click. Changing target/geometry/checkpoint identity or receiving a later at-target, over, or insufficient measurement dismisses an old stall offer.
+1. Choose **Quick sample**. **Methods** shows one shared target and a **Stop at** ladder. Leave Full selected for **Fingertip tapping**. Each compact method card has **View target** and **Choose**; different finishes retain their own target recipes.
+2. Choose the method and **Begin the walkthrough**. The active cheek oval comes from actual MediaPipe IMAGE landmarks. The target is inset into the mirror; Light, Build, and Full stay selectable beside the instruction.
+3. Choose **Measure the sample**. The app measures a separate compact blush render against the source and chosen target. The percentage and one next direction replace the instruction. The measured frame carries a translucent heatmap; its scale marks **100% target**. **Measurement details** contains the actual inner/outer numbers, color differences, and calculation interval.
+4. **Done with this step** explicitly confirms the left cheek and advances. It also works without measuring. Choose **Make this easier → A different movement** on the remaining cheek. The cream-brush proposal preserves completed work and the cream product. **Use this change**, then **Continue sample**.
+5. Measure the other cheek. **Done with this step** opens **Review** after the final agreed action. Review puts Before, Target, and regional readings together. **Save my method** finishes and saves a sample; **Finish** is secondary. Saved methods can be reused or deleted.
+6. Optional: **A softer version** changes the remaining target to Light. It does not rewrite confirmed actions or previous target/geometry/frame identities. A subtle target can honestly abstain; some compact passes can exceed the softer target.
+7. Optional: choose **Check again** twice to report additional sample passes. The fixed render remains unchanged. **Try a broader tool** opens a same-product proposal directly when the measured history supports it. **Other changes** opens the alternatives menu. A later at-target/over/insufficient result or changed target scope dismisses an old stall suggestion.
 
-The sample never requests fresh previews. Its three cheek families and both textures have exact 25/45/65 recordings, including adaptation targets. Some subtle selected targets correctly abstain; the measurement report lists these cases.
+Sample pages carry one plain **Sample** marker. The footer’s **Evidence & limits** explains recorded imagery and the boundary between pixel measurements and physical outcomes. Samples never request fresh provider tasks.
 
-## Change the look while keeping eye emphasis
+## Eyes: change the method and appearance
 
-1. On home, choose **Explore the eye sample** below the look cards.
-2. Compare **Fine upper liner** and **Soft tapped shadow**: different YouCam effect recipes, each with Light/Full recordings. Choose liner Full and begin.
-3. Measure the first upper-lid region: liner Light is about 39% of Full on the left eye. Confirm that step.
-4. Choose **Make this easier → A different movement**. The proposal changes the remaining eye from precise short strokes to low-precision tapping with shadow. It explains that the completed eye retains liner; no completed action is erased.
-5. Accept, continue the sample, and measure the remaining eye: the revised warm upper-lid shadow at Light 25 measures about 59% of Full 45. Review retains each checkpoint's original target and action. The original darker shadow files remain available to saved historical plans. **Stop eye steps** remains available without marking remaining actions complete.
+1. On home, choose **Explore the eye sample**.
+2. **View target** on **Fine upper liner** and **Soft tapped shadow** compares genuinely different recipes. Each has Light/Full recordings. Choose liner Full and begin.
+3. Measure the first upper-lid region, then choose **Done with this step**.
+4. **Make this easier → A different movement** proposes shadow tapping for the remaining eye. It explains that liner and shadow can leave different sides. Completed work remains unchanged.
+5. Accept and continue. Measure the warm shadow against its chosen Full target, then finish the second step. Review retains each measurement’s original target and action. **Make this easier → Finish here** remains available during either eye step.
+
+The stronger round-three shadow uses a separate immutable recording pair. Older recipes, targets, and scalar histories retain their original identities; no old output is overwritten.
 
 ## Personal studio and optional integrations
 
-**Find your way** opens the four-step setup. The planner reports feasibility as comfort and inventory are selected. An incompatible setup is blocked with specific changes; editing a choosing/ready studio preserves its photo. AI inspiration and tool suggestions stay optional and unselected until accepted.
+**Find your way** opens four compact setup steps. Confirm movements, tools, and products; the method count updates beside Continue. Unsupported choices are blocked with specific errors. A choosing/ready studio keeps its photo when edited. Optional photo interpretation never silently confirms a tool.
 
-For a fresh preview, use an authorized adult photo and explicitly choose **Generate fresh ladder** on one method: up to 3 one-unit cheek tasks or 2 eye tasks. The server may accept a partial ladder within the remaining allowance and explains what is waiting. Full is prioritized. During application or a repair proposal, **Generate a target for this method** requests only the currently selected missing level, whether Light, Build, or Full. This also supports eye appearance changes and cream-to-powder repair, under the unchanged two-job daily adaptation ceiling. The target refreshes automatically when ready; confirmed steps remain intact. Sample sessions cannot call this paid path.
+**Generate previews** requests the viewed method’s ladder: up to three cheek tasks or two eye tasks. The button includes its unit estimate. The server can return a partial ladder when the allowance is limited. During application or adaptation, **Generate target** requests only the selected missing level under the existing daily limit. A ready target never shows that generation button. Accepted and shared jobs remain owned; abandoned proposal jobs cannot replace the active target. Sample sessions cannot call this paid path.
 
-In the local mirror, hold still before applying to capture a baseline automatically. Checkpoints use landmarks detected on the exact captured bitmap. Return to the original pose/light when prompted. A baseline survives repairs of the same region; after memory loss, replacement requires explicitly confirming that area has no newly applied product. Only measured numbers are saved automatically. A separately consented still can be stored and sent to Gemini/OpenAI for a second opinion that receives the local measurement.
+Before applying, hold still to capture the personal baseline. Measurement uses landmarks from the exact captured bitmap. Follow pose/light prompts when evidence is insufficient. Repeated passes and same-region repairs preserve the original baseline; memory loss requires confirming that no product has been applied before replacing it. Automatic persistence contains measured numbers, not local frames. An optional second opinion requires consent before a selected still is stored and sent to Gemini/OpenAI.
 
-Pause, visible controls, instruction reading, and manual judgment remain available. Optional voice uses six exact wake-word commands. Deletion revokes access immediately and queues private object removal. **What this method needs** supplies tool/product/texture references, a copyable shade, and a printable brand-free note.
+**Comfort & controls** contains movement preferences, mirror orientation, instruction reading, optional voice, and **Your method**. The method disclosure combines steps with the exact recipe shade and a printable supply note. Voice continues after closing the drawer, with a visible microphone indicator; its six commands remain optional. Manual controls stay available. Session deletion immediately revokes access and queues private-photo removal.
 
 ## Evidence to assess
 
-The release demonstrates finite planning, preservation of confirmed work, real provider targets, local pixel measurement, provenance, private state, and recovery. [Measurement evaluation](evaluation-measurement.md) distinguishes synthetic checks from unverified hardware and physical application. [Engineering evaluation](evaluation.md) and [release verification](release-checklist.md) record the actual test and deployment gates. No participant benefit, clinical result, or artist validation is claimed.
+The implementation demonstrates finite planning, immutable completed work, real provider targets, local pixel measurements, private ownership, and recovery. [Measurement evaluation](evaluation-measurement.md), [engineering evaluation](evaluation.md), and [release verification](release-checklist.md) record observed scopes and limits. Synthetic fixtures do not establish physical makeup success, participant benefit, clinical accuracy, or artist validation.

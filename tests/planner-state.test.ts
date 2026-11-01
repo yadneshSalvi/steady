@@ -59,6 +59,34 @@ function attachFinal(session: StudioSession): StudioSession {
 }
 
 describe("physical-state transition invariants", () => {
+  it.each(["sample", "personal"] as const)(
+    "advances both %s steps by explicit confirmation without requesting or inventing a measurement",
+    (mode) => {
+      const first = start(mode);
+      const originalActions = JSON.stringify(first.activePlan!.actions);
+      expect(first.observations).toEqual([]);
+      const second = completeCurrent(first);
+      expect(second.stage).toBe("applying");
+      expect(currentAction(second)?.region).toBe("right_cheek");
+      expect(second.completedActionIds).toEqual([
+        first.activePlan!.actions[0].id,
+      ]);
+      expect(second.events.at(-1)).toMatchObject({
+        actionId: first.activePlan!.actions[0].id,
+        provenance: "user_confirmed",
+      });
+      expect(second.observations).toEqual([]);
+      const review = completeCurrent(second);
+      expect(review.stage).toBe("reviewing");
+      expect(review.completedActionIds).toEqual(
+        first.activePlan!.actions.map((action) => action.id),
+      );
+      expect(review.observations).toEqual([]);
+      expect(review.outcome).toBeUndefined();
+      expect(JSON.stringify(review.activePlan!.actions)).toBe(originalActions);
+    },
+  );
+
   it("uses immutable snapshots, one revision per accepted command and only the active action", () => {
     const session = start();
     const snapshot = structuredClone(session);

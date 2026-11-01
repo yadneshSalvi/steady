@@ -167,12 +167,12 @@ export function FaceGuide({
       : [];
   const label =
     state === "loading"
-      ? "Preparing on-device guide…"
+      ? "Preparing guide…"
       : state === "unavailable"
-        ? "Guide unavailable · text guidance still works"
+        ? "Guide unavailable"
         : state === "no_face"
           ? "Face the camera for a placement guide"
-          : "Placement guide · processed on this device";
+          : "";
   return (
     <div
       className="face-guide"
@@ -196,22 +196,24 @@ export function FaceGuide({
           />
         )}
       </svg>
-      <span
-        style={{
-          position: "absolute",
-          left: 16,
-          right: 16,
-          bottom: 16,
-          padding: "9px 12px",
-          borderRadius: 8,
-          background: "rgba(17,24,20,.78)",
-          color: "#fffaf1",
-          fontSize: 14,
-          textAlign: "center",
-        }}
-      >
-        {label}
-      </span>
+      {label ? (
+        <span
+          style={{
+            position: "absolute",
+            left: 16,
+            right: 16,
+            bottom: 16,
+            padding: "9px 12px",
+            borderRadius: 8,
+            background: "rgba(17,24,20,.78)",
+            color: "#fffaf1",
+            fontSize: 14,
+            textAlign: "center",
+          }}
+        >
+          {label}
+        </span>
+      ) : null}
     </div>
   );
 }

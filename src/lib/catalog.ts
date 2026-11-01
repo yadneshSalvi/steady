@@ -11,7 +11,7 @@ import type {
 export const LOOKS: LookDefinition[] = [
   {
     id: "rose",
-    title: "A little rose",
+    title: "Rose",
     subtitle: "Soft rose · a quiet wash of color",
     description:
       "A rose cheek tint, with optional lip color. Choose the method that fits the tools and movements you confirm.",
@@ -22,10 +22,9 @@ export const LOOKS: LookDefinition[] = [
   },
   {
     id: "terracotta",
-    title: "Warm terracotta",
+    title: "Terracotta",
     subtitle: "Earthy warmth · softly expressed",
-    description:
-      "Warm terracotta cheek color, with an optional matching lip. The preview illustrates color intent; your product determines the actual finish.",
+    description: "Warm cheek color with an optional matching lip.",
     color: "#BF7153",
     lipColor: "#A35D46",
     image: "/images/inspiration-terracotta.jpg",
@@ -37,7 +36,7 @@ export const LOOKS: LookDefinition[] = [
   },
   {
     id: "berry",
-    title: "Berry, softly",
+    title: "Berry",
     subtitle: "A berry tint · your chosen emphasis",
     description:
       "A berry cheek tint with optional lip color. Keep the color family while comparing fingertip, brush and sponge methods.",
