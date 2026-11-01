@@ -1,0 +1,705 @@
+{
+  "schemaVersion": 1,
+  "application": "STEADY",
+  "origin": "https://steady-taupe-pi.vercel.app",
+  "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+  "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+  "immutableDeploymentUrl": "https://steady-9pj6j3w8t-yadneshsalvis-projects.vercel.app",
+  "verifiedAt": "2026-11-01T12:55:55.129Z",
+  "tests": {
+    "passed": 28,
+    "failed": 0,
+    "flaky": 0,
+    "skipped": 0,
+    "total": 28,
+    "workers": 1,
+    "retries": 0,
+    "playwrightDurationSeconds": 189.142882,
+    "wrapperElapsedSeconds": 189.647,
+    "freshIsolatedApplicationContexts": true,
+    "sharedApplicationCookies": false,
+    "sharedProtectionState": false
+  },
+  "privateUpload": {
+    "source": "AI-created synthetic adult portrait through actual personal upload",
+    "ownerRead": 200,
+    "unauthenticatedRead": 401,
+    "foreignOwnerRead": 404,
+    "browserInjectionRejected": 400,
+    "deleteAccepted": 200,
+    "ownerReadAfterDelete": 404,
+    "privateObjectErased": true,
+    "testStudioErased": true
+  },
+  "paidProcessing": {
+    "liveYouCamSubmissions": 0,
+    "browserFreshPreviewRequests": 0,
+    "floorProbeRequests": 0,
+    "providerJobsForExactRunOwnersBeforeCleanup": 0,
+    "method": "Paid browser processing was blocked or mocked; the independent database audit selected only exact run-tag owners."
+  },
+  "cleanup": {
+    "scope": "Exact fresh-run user-agent tag only; unrelated owners and historical/manual studios excluded.",
+    "ownersDeleted": 11,
+    "residualStudioRowsBeforeCleanup": 3,
+    "extraOwnedObjectsDeleted": 0,
+    "remaining": {
+      "owners": 0,
+      "sessions": 0,
+      "active_sessions": 0,
+      "private_assets": 0,
+      "upload_intents": 0,
+      "provider_jobs": 0,
+      "reservations": 0
+    },
+    "nativeStudiosWithDelete200ThenRead404": 6,
+    "protectedManualStudios": {
+      "present": 2,
+      "inQaCleanupScope": 0
+    }
+  },
+  "captures": {
+    "count": 34,
+    "screensPerViewport": 17,
+    "viewports": [
+      {
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "width": 1366,
+        "height": 768
+      }
+    ],
+    "nativeViewports": true,
+    "composites": false,
+    "publicExportsDuringRun": false,
+    "screenshots": [
+      {
+        "name": "landing-1440x900",
+        "screen": "landing",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/landing-1440x900.png",
+        "sha256": "998e02d5cafb88bc84c3f5e043b5bf6bd9aab67fd88098317feeb925c75f5e06"
+      },
+      {
+        "name": "methods-1440x900",
+        "screen": "methods",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/methods-1440x900.png",
+        "sha256": "6bf553bb8aaeba75f33c4b96bfb422767d437ba114f9044bf6e7c1399f1fba9f"
+      },
+      {
+        "name": "mirror-ready-1440x900",
+        "screen": "mirror-ready",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/mirror-ready-1440x900.png",
+        "sha256": "b16aad44be4f5c47dee4c901b928f1e897f306f3e392388c9eeff973a6a8031d"
+      },
+      {
+        "name": "mirror-step-1440x900",
+        "screen": "mirror-step",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/mirror-step-1440x900.png",
+        "sha256": "f2759486023fa0ef9012dfdbb0d6ef18a9751f532141fcffd0bd2376e9508067"
+      },
+      {
+        "name": "checkpoint-1440x900",
+        "screen": "checkpoint",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/checkpoint-1440x900.png",
+        "sha256": "bc898d03d8e78fe9977ac6b0e82f2f0faa9f962df6ab56e1c4b389f04ce95dc0"
+      },
+      {
+        "name": "adaptation-1440x900",
+        "screen": "adaptation",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/adaptation-1440x900.png",
+        "sha256": "70614aa00d6e79db9ca65d3429e85fa66cda1aa825aa7b0f8512551893edfb7a"
+      },
+      {
+        "name": "review-1440x900",
+        "screen": "review",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/review-1440x900.png",
+        "sha256": "f9ee23f59af537201956cc29958b81d65ba509db1b3bf09c4136bf1760abb34e"
+      },
+      {
+        "name": "saved-methods-1440x900",
+        "screen": "saved-methods",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/saved-methods-1440x900.png",
+        "sha256": "c6d4878db602833f71c8d4a51f9f6d18b65242a94e94704ce36905c73a8898fc"
+      },
+      {
+        "name": "setup-color-1440x900",
+        "screen": "setup-color",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/setup-color-1440x900.png",
+        "sha256": "a9d0612eaf0bf5211dc2c8c93af1dab7e31f15b3d034f7f7eeb11d8200e8d743"
+      },
+      {
+        "name": "setup-movements-1440x900",
+        "screen": "setup-movements",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/setup-movements-1440x900.png",
+        "sha256": "fe99002929e8ae173afc9ba49798f2dd7d6eb443901e54c7d872742cf15441dd"
+      },
+      {
+        "name": "setup-tools-1440x900",
+        "screen": "setup-tools",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/setup-tools-1440x900.png",
+        "sha256": "b407218a257d4fe1e00545b4eabd263d416678a9cbe9262e0778fe740655dcce"
+      },
+      {
+        "name": "setup-photo-1440x900",
+        "screen": "setup-photo",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/setup-photo-1440x900.png",
+        "sha256": "a0c9fa38a8128c00ea40c3176621ce0aac1dbbd9ef4597b302b70d7e6a7e8347"
+      },
+      {
+        "name": "eye-methods-1440x900",
+        "screen": "eye-methods",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/eye-methods-1440x900.png",
+        "sha256": "b249c4bb3cf7f8d44c413e3cba14c1a9d26c2e0ff645e0989e9d15e24f63778d"
+      },
+      {
+        "name": "eye-mirror-1440x900",
+        "screen": "eye-mirror",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/eye-mirror-1440x900.png",
+        "sha256": "395e609b473efc73c724c63dd062c80e3bd5ad73e63cd30ab6872c77f6284921"
+      },
+      {
+        "name": "eye-checkpoint-1440x900",
+        "screen": "eye-checkpoint",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/eye-checkpoint-1440x900.png",
+        "sha256": "4d5c2d9028d662efc4afbb0164a7b26730bda522c42413af292495a88304d3c9"
+      },
+      {
+        "name": "settings-1440x900",
+        "screen": "settings",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/settings-1440x900.png",
+        "sha256": "8376622bad4e122ac3142b5cb694647740033fb2d37977fa89c209f6816a12f2"
+      },
+      {
+        "name": "evidence-1440x900",
+        "screen": "evidence",
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/evidence-1440x900.png",
+        "sha256": "7b588e8f3494270697df576182b675b08bc7bead3de225d2a087243c4f1c40a5"
+      },
+      {
+        "name": "landing-1366x768",
+        "screen": "landing",
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/landing-1366x768.png",
+        "sha256": "46cc74d642ba73201e2c4d960e9abcb3ecee5a1d1aec06d9762eaa94fc2a867f"
+      },
+      {
+        "name": "methods-1366x768",
+        "screen": "methods",
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/methods-1366x768.png",
+        "sha256": "03317efb3e66764c98798842891c352d968b87caf2a8ee81ca3cbc6b3a954216"
+      },
+      {
+        "name": "mirror-ready-1366x768",
+        "screen": "mirror-ready",
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/mirror-ready-1366x768.png",
+        "sha256": "093590c48b1af395a3192f29975377d10e591ceac078c6277ddd50bdee3f3981"
+      },
+      {
+        "name": "mirror-step-1366x768",
+        "screen": "mirror-step",
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/mirror-step-1366x768.png",
+        "sha256": "dbe64ec5db18f3a0c4989bc36d5ecd6646f5b0023aa0537f72bada10947bf857"
+      },
+      {
+        "name": "checkpoint-1366x768",
+        "screen": "checkpoint",
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/checkpoint-1366x768.png",
+        "sha256": "1b9462f1bd75d0d5af60e12c3036376195fb0621e6a0fb055f8cec1000186578"
+      },
+      {
+        "name": "adaptation-1366x768",
+        "screen": "adaptation",
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/adaptation-1366x768.png",
+        "sha256": "c9ec06ccc86a8bd6ab7d76d569d568245d370018c80293ff917d148fdfa46d82"
+      },
+      {
+        "name": "review-1366x768",
+        "screen": "review",
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/review-1366x768.png",
+        "sha256": "ded9944d24299754843139f72f242104fbd5e10f10ef71c306cbd3afa878e54d"
+      },
+      {
+        "name": "saved-methods-1366x768",
+        "screen": "saved-methods",
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/saved-methods-1366x768.png",
+        "sha256": "51468ddd2165b1c695bf50b515058c2adfaa4d261034ac47b35344c20fd054df"
+      },
+      {
+        "name": "setup-color-1366x768",
+        "screen": "setup-color",
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/setup-color-1366x768.png",
+        "sha256": "cc4d1d94090213c7fb1edce2a2844b92653cb69a93984bad211cf9f79b8da419"
+      },
+      {
+        "name": "setup-movements-1366x768",
+        "screen": "setup-movements",
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/setup-movements-1366x768.png",
+        "sha256": "6e8e01a28cc52912041bab47ce39d6ba4a64883be4a8a873e5e915ba006ee521"
+      },
+      {
+        "name": "setup-tools-1366x768",
+        "screen": "setup-tools",
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/setup-tools-1366x768.png",
+        "sha256": "3506a642ebda9b5bd66978b868739c63ca8bb7a495f04abdacf663834fea556f"
+      },
+      {
+        "name": "setup-photo-1366x768",
+        "screen": "setup-photo",
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/setup-photo-1366x768.png",
+        "sha256": "e0c0ad2590407a93e572ff27e729ae583240cab6bc65437d66e64383210d0653"
+      },
+      {
+        "name": "eye-methods-1366x768",
+        "screen": "eye-methods",
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/eye-methods-1366x768.png",
+        "sha256": "d2fc6fbc389bd187659ba6e25a5285ba5c0649442de2d087021bf3af17267c09"
+      },
+      {
+        "name": "eye-mirror-1366x768",
+        "screen": "eye-mirror",
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/eye-mirror-1366x768.png",
+        "sha256": "4096b4cd17033c5e89128cbba8fac6bbe99e4a661db51c4c2bea1df9f2217c9e"
+      },
+      {
+        "name": "eye-checkpoint-1366x768",
+        "screen": "eye-checkpoint",
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/eye-checkpoint-1366x768.png",
+        "sha256": "8f03ef31523f3d36df6898a095afa288cd435135fdb259be21bf70f65aa6db45"
+      },
+      {
+        "name": "settings-1366x768",
+        "screen": "settings",
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/settings-1366x768.png",
+        "sha256": "733b55ec6994aae5df86ce9f57dcd9113176ccf1e50625a8ae1ba0ef21088ab3"
+      },
+      {
+        "name": "evidence-1366x768",
+        "screen": "evidence",
+        "viewport": {
+          "width": 1366,
+          "height": 768
+        },
+        "origin": "https://steady-taupe-pi.vercel.app",
+        "environment": "canonical",
+        "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+        "publicCandidatePath": "docs/evidence/round3/after/evidence-1366x768.png",
+        "sha256": "62a4ac6982f575da2ade8b210abed0f94384a94a6a71cd5b86c25a7de9a49f3f"
+      }
+    ]
+  },
+  "renderedCopyAudits": {
+    "1440x900": [
+      {
+        "screen": "landing",
+        "profile": "public",
+        "authoredCount": 23,
+        "target": 21,
+        "limit": 23.1,
+        "withinLimit": true
+      },
+      {
+        "screen": "methods",
+        "profile": "sample",
+        "authoredCount": 24,
+        "target": 32,
+        "limit": 35.2,
+        "withinLimit": true
+      },
+      {
+        "screen": "checkpoint",
+        "profile": "sample",
+        "authoredCount": 24,
+        "target": 37,
+        "limit": 40.7,
+        "withinLimit": true
+      },
+      {
+        "screen": "review",
+        "profile": "sample",
+        "authoredCount": 31,
+        "target": 31,
+        "limit": 34.1,
+        "withinLimit": true
+      },
+      {
+        "screen": "saved-methods",
+        "profile": "one-saved-sample",
+        "authoredCount": 8,
+        "target": 8,
+        "limit": 8.8,
+        "withinLimit": true
+      },
+      {
+        "screen": "setup-color",
+        "profile": "sample-setup",
+        "authoredCount": 12,
+        "target": 12,
+        "limit": 13.200000000000001,
+        "withinLimit": true
+      },
+      {
+        "screen": "setup-movements",
+        "profile": "sample-setup",
+        "authoredCount": 29,
+        "target": 30,
+        "limit": 33,
+        "withinLimit": true
+      },
+      {
+        "screen": "setup-tools",
+        "profile": "sample-setup",
+        "authoredCount": 17,
+        "target": 18,
+        "limit": 19.8,
+        "withinLimit": true
+      },
+      {
+        "screen": "setup-photo",
+        "profile": "personal-empty-upload",
+        "authoredCount": 16,
+        "target": 19,
+        "limit": 20.900000000000002,
+        "withinLimit": true
+      },
+      {
+        "screen": "settings",
+        "profile": "two-sample-studios",
+        "authoredCount": 53,
+        "target": 50,
+        "limit": 55.00000000000001,
+        "withinLimit": true
+      },
+      {
+        "screen": "evidence",
+        "profile": "public",
+        "authoredCount": 25,
+        "target": 23,
+        "limit": 25.3,
+        "withinLimit": true
+      }
+    ],
+    "1366x768": [
+      {
+        "screen": "landing",
+        "profile": "public",
+        "authoredCount": 23,
+        "target": 21,
+        "limit": 23.1,
+        "withinLimit": true
+      },
+      {
+        "screen": "methods",
+        "profile": "sample",
+        "authoredCount": 24,
+        "target": 32,
+        "limit": 35.2,
+        "withinLimit": true
+      },
+      {
+        "screen": "checkpoint",
+        "profile": "sample",
+        "authoredCount": 24,
+        "target": 37,
+        "limit": 40.7,
+        "withinLimit": true
+      },
+      {
+        "screen": "review",
+        "profile": "sample",
+        "authoredCount": 31,
+        "target": 31,
+        "limit": 34.1,
+        "withinLimit": true
+      },
+      {
+        "screen": "saved-methods",
+        "profile": "one-saved-sample",
+        "authoredCount": 8,
+        "target": 8,
+        "limit": 8.8,
+        "withinLimit": true
+      },
+      {
+        "screen": "setup-color",
+        "profile": "sample-setup",
+        "authoredCount": 12,
+        "target": 12,
+        "limit": 13.200000000000001,
+        "withinLimit": true
+      },
+      {
+        "screen": "setup-movements",
+        "profile": "sample-setup",
+        "authoredCount": 29,
+        "target": 30,
+        "limit": 33,
+        "withinLimit": true
+      },
+      {
+        "screen": "setup-tools",
+        "profile": "sample-setup",
+        "authoredCount": 17,
+        "target": 18,
+        "limit": 19.8,
+        "withinLimit": true
+      },
+      {
+        "screen": "setup-photo",
+        "profile": "personal-empty-upload",
+        "authoredCount": 16,
+        "target": 19,
+        "limit": 20.900000000000002,
+        "withinLimit": true
+      },
+      {
+        "screen": "settings",
+        "profile": "two-sample-studios",
+        "authoredCount": 53,
+        "target": 50,
+        "limit": 55.00000000000001,
+        "withinLimit": true
+      },
+      {
+        "screen": "evidence",
+        "profile": "public",
+        "authoredCount": 25,
+        "target": 23,
+        "limit": 25.3,
+        "withinLimit": true
+      }
+    ]
+  },
+  "classification": "Synthetic sample and engineering verification; no participant or physical-webcam outcome evaluation."
+}

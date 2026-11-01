@@ -1,11 +1,13 @@
 {
   "1440x900": {
-    "origin": "http://localhost:3000",
-    "environment": "local",
+    "origin": "https://steady-taupe-pi.vercel.app",
+    "environment": "canonical production",
+    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
     "audits": [
       {
         "screen": "landing",
-        "observedAt": "2026-11-01T12:29:43.428Z",
+        "observedAt": "2026-11-01T12:52:42.060Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 21,
@@ -62,7 +64,7 @@
             "reason": null
           },
           {
-            "text": "✳",
+            "text": "\u2733",
             "path": "main > div.r3-home > section.hero.wrap:nth-of-type(1) > div.hero-visual:nth-of-type(2) > span.hero-star",
             "kind": "authored",
             "reason": null
@@ -134,7 +136,7 @@
             "reason": null
           },
           {
-            "text": "✳",
+            "text": "\u2733",
             "path": "main > div.r3-home > section.manifesto:nth-of-type(4) > div.wrap.manifesto-inner > span.manifesto-symbol",
             "kind": "authored",
             "reason": null
@@ -198,7 +200,7 @@
       },
       {
         "screen": "methods",
-        "observedAt": "2026-11-01T12:29:44.439Z",
+        "observedAt": "2026-11-01T12:52:43.785Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 32,
@@ -451,7 +453,7 @@
       },
       {
         "screen": "checkpoint",
-        "observedAt": "2026-11-01T12:29:46.494Z",
+        "observedAt": "2026-11-01T12:52:47.176Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 37,
@@ -640,7 +642,7 @@
             "reason": "collapsed disclosure"
           },
           {
-            "text": "Redness change · Δa*",
+            "text": "Redness change \u00b7 \u0394a*",
             "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > details.measurement-details > dl > div:nth-of-type(1) > dt",
             "kind": "excluded",
             "reason": "collapsed disclosure"
@@ -652,7 +654,7 @@
             "reason": "collapsed disclosure"
           },
           {
-            "text": "Color difference · ΔE00",
+            "text": "Color difference \u00b7 \u0394E00",
             "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > details.measurement-details > dl > div:nth-of-type(2) > dt",
             "kind": "excluded",
             "reason": "collapsed disclosure"
@@ -682,7 +684,7 @@
             "reason": "collapsed disclosure"
           },
           {
-            "text": "48",
+            "text": "91",
             "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > details.measurement-details > dl > div:nth-of-type(4) > dd",
             "kind": "excluded",
             "reason": "collapsed disclosure"
@@ -826,7 +828,7 @@
             "reason": "closed dialog"
           },
           {
-            "text": "I’ll choose breaks",
+            "text": "I\u2019ll choose breaks",
             "path": "main > div.wrap.mirror-page.r3-mirror > dialog.controls-drawer > div.preference-row:nth-of-type(4) > div.segmented-control:nth-of-type(2) > label:nth-of-type(1) > span",
             "kind": "excluded",
             "reason": "closed dialog"
@@ -856,7 +858,7 @@
             "reason": "closed dialog"
           },
           {
-            "text": "Say “Steady,” then pause, repeat, check, help, next or stop.",
+            "text": "Say \u201cSteady,\u201d then pause, repeat, check, help, next or stop.",
             "path": "main > div.wrap.mirror-page.r3-mirror > dialog.controls-drawer > details.photo-assist.voice-controls:nth-of-type(1) > div.photo-assist-body > p:nth-of-type(1)",
             "kind": "excluded",
             "reason": "closed dialog"
@@ -1051,7 +1053,7 @@
           },
           {
             "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-control-dock:nth-of-type(2) > div.instruction-buttons > button.button.button--secondary:nth-of-type(2)",
-            "ariaLabel": "I made a pass · check again",
+            "ariaLabel": "I made a pass \u00b7 check again",
             "alt": null,
             "excludedFromAuthoredCount": true
           },
@@ -1112,7 +1114,7 @@
       },
       {
         "screen": "review",
-        "observedAt": "2026-11-01T12:29:47.771Z",
+        "observedAt": "2026-11-01T12:52:52.091Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 31,
@@ -1325,7 +1327,7 @@
             "reason": null
           },
           {
-            "text": "Fingertips → Wide blush brush · 1 method change",
+            "text": "Fingertips \u2192 Wide blush brush \u00b7 1 method change",
             "path": "main > div.wrap.page-wrap.review-page > p.review-method-diff",
             "kind": "authored",
             "reason": null
@@ -1527,7 +1529,7 @@
       },
       {
         "screen": "saved-methods",
-        "observedAt": "2026-11-01T12:29:48.020Z",
+        "observedAt": "2026-11-01T12:52:54.114Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 8,
@@ -1641,7 +1643,7 @@
       },
       {
         "screen": "setup-color",
-        "observedAt": "2026-11-01T12:29:48.486Z",
+        "observedAt": "2026-11-01T12:52:54.646Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 12,
@@ -1828,7 +1830,7 @@
       },
       {
         "screen": "setup-movements",
-        "observedAt": "2026-11-01T12:29:48.918Z",
+        "observedAt": "2026-11-01T12:52:55.081Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 30,
@@ -1999,7 +2001,7 @@
             "reason": null
           },
           {
-            "text": "I’ll choose breaks",
+            "text": "I\u2019ll choose breaks",
             "path": "main > div.wrap.page-wrap.r3-setup > div.setup-form > div.preference-row:nth-of-type(4) > div.segmented-control:nth-of-type(2) > label:nth-of-type(1) > span",
             "kind": "authored",
             "reason": null
@@ -2117,7 +2119,7 @@
       },
       {
         "screen": "setup-tools",
-        "observedAt": "2026-11-01T12:29:49.365Z",
+        "observedAt": "2026-11-01T12:52:55.496Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 18,
@@ -2322,7 +2324,7 @@
       },
       {
         "screen": "setup-photo",
-        "observedAt": "2026-11-01T12:29:51.016Z",
+        "observedAt": "2026-11-01T12:52:57.131Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 19,
@@ -2415,7 +2417,7 @@
             "reason": null
           },
           {
-            "text": "I’m 18+, have photo permission, and allow private storage and YouCam previews.",
+            "text": "I\u2019m 18+, have photo permission, and allow private storage and YouCam previews.",
             "path": "main > div.wrap.page-wrap.r3-setup > div.setup-form > div.form-field:nth-of-type(4) > label.checkbox-label > span",
             "kind": "authored",
             "reason": null
@@ -2497,7 +2499,7 @@
       },
       {
         "screen": "settings",
-        "observedAt": "2026-11-01T12:29:54.010Z",
+        "observedAt": "2026-11-01T12:53:04.289Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 50,
@@ -2650,7 +2652,7 @@
             "reason": null
           },
           {
-            "text": "I’ll choose breaks",
+            "text": "I\u2019ll choose breaks",
             "path": "main > div.wrap.page-wrap.settings-page > div.settings-layout:nth-of-type(2) > div > section.settings-section:nth-of-type(1) > div.preference-row:nth-of-type(3) > div.segmented-control:nth-of-type(2) > label:nth-of-type(1) > span",
             "kind": "authored",
             "reason": null
@@ -2674,7 +2676,7 @@
             "reason": null
           },
           {
-            "text": "Your browser’s voice reads each step.",
+            "text": "Your browser\u2019s voice reads each step.",
             "path": "main > div.wrap.page-wrap.settings-page > div.settings-layout:nth-of-type(2) > div > section.settings-section:nth-of-type(2) > div.setting-toggle:nth-of-type(1) > div > p",
             "kind": "authored",
             "reason": null
@@ -2776,7 +2778,7 @@
             "reason": null
           },
           {
-            "text": "Sample ·",
+            "text": "Sample \u00b7",
             "path": "main > div.wrap.page-wrap.settings-page > div.settings-layout:nth-of-type(2) > div > section.settings-section:nth-of-type(3) > div.data-row:nth-of-type(2) > div:nth-of-type(1) > small",
             "kind": "authored",
             "reason": null
@@ -2806,7 +2808,7 @@
             "reason": null
           },
           {
-            "text": "Sample ·",
+            "text": "Sample \u00b7",
             "path": "main > div.wrap.page-wrap.settings-page > div.settings-layout:nth-of-type(2) > div > section.settings-section:nth-of-type(3) > div.data-row:nth-of-type(3) > div:nth-of-type(1) > small",
             "kind": "authored",
             "reason": null
@@ -2906,7 +2908,7 @@
       },
       {
         "screen": "evidence",
-        "observedAt": "2026-11-01T12:29:54.191Z",
+        "observedAt": "2026-11-01T12:53:04.978Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 23,
@@ -2999,7 +3001,7 @@
             "reason": null
           },
           {
-            "text": "Unreliable tracking, pose, visibility, or reference lighting can prevent measurement. Region-only lighting changes can still resemble pigment. Camera processing, skin appearance, texture, and products also affect readings. These engineering thresholds aren’t calibrated cosmetic assessments. Reloading clears local frames; STEADY asks before capturing another baseline.",
+            "text": "Unreliable tracking, pose, visibility, or reference lighting can prevent measurement. Region-only lighting changes can still resemble pigment. Camera processing, skin appearance, texture, and products also affect readings. These engineering thresholds aren\u2019t calibrated cosmetic assessments. Reloading clears local frames; STEADY asks before capturing another baseline.",
             "path": "main > div.wrap.page-wrap.evidence-page > section:nth-of-type(2) > p:nth-of-type(2)",
             "kind": "authored",
             "reason": null
@@ -3023,7 +3025,7 @@
             "reason": null
           },
           {
-            "text": "The planner checks confirmed movements, products, and tools against finite methods. Adaptation preserves confirmed steps and prefers the existing product family. Instructions are AI-assisted drafts, without makeup-artist or participant validation. Follow product directions; skip or stop movements you don’t want. Light, Build, and Full are visual targets, not calibrated doses. Your chosen photo and assessment describe your physical result.",
+            "text": "The planner checks confirmed movements, products, and tools against finite methods. Adaptation preserves confirmed steps and prefers the existing product family. Instructions are AI-assisted drafts, without makeup-artist or participant validation. Follow product directions; skip or stop movements you don\u2019t want. Light, Build, and Full are visual targets, not calibrated doses. Your chosen photo and assessment describe your physical result.",
             "path": "main > div.wrap.page-wrap.evidence-page > section:nth-of-type(4) > p",
             "kind": "authored",
             "reason": null
@@ -3094,12 +3096,14 @@
     ]
   },
   "1366x768": {
-    "origin": "http://localhost:3000",
-    "environment": "local",
+    "origin": "https://steady-taupe-pi.vercel.app",
+    "environment": "canonical production",
+    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
     "audits": [
       {
         "screen": "landing",
-        "observedAt": "2026-11-01T12:29:56.089Z",
+        "observedAt": "2026-11-01T12:53:11.665Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 21,
@@ -3156,7 +3160,7 @@
             "reason": null
           },
           {
-            "text": "✳",
+            "text": "\u2733",
             "path": "main > div.r3-home > section.hero.wrap:nth-of-type(1) > div.hero-visual:nth-of-type(2) > span.hero-star",
             "kind": "authored",
             "reason": null
@@ -3228,7 +3232,7 @@
             "reason": null
           },
           {
-            "text": "✳",
+            "text": "\u2733",
             "path": "main > div.r3-home > section.manifesto:nth-of-type(4) > div.wrap.manifesto-inner > span.manifesto-symbol",
             "kind": "authored",
             "reason": null
@@ -3292,7 +3296,7 @@
       },
       {
         "screen": "methods",
-        "observedAt": "2026-11-01T12:29:57.084Z",
+        "observedAt": "2026-11-01T12:53:13.359Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 32,
@@ -3545,7 +3549,7 @@
       },
       {
         "screen": "checkpoint",
-        "observedAt": "2026-11-01T12:29:58.698Z",
+        "observedAt": "2026-11-01T12:53:16.556Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 37,
@@ -3734,7 +3738,7 @@
             "reason": "collapsed disclosure"
           },
           {
-            "text": "Redness change · Δa*",
+            "text": "Redness change \u00b7 \u0394a*",
             "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > details.measurement-details > dl > div:nth-of-type(1) > dt",
             "kind": "excluded",
             "reason": "collapsed disclosure"
@@ -3746,7 +3750,7 @@
             "reason": "collapsed disclosure"
           },
           {
-            "text": "Color difference · ΔE00",
+            "text": "Color difference \u00b7 \u0394E00",
             "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > details.measurement-details > dl > div:nth-of-type(2) > dt",
             "kind": "excluded",
             "reason": "collapsed disclosure"
@@ -3776,7 +3780,7 @@
             "reason": "collapsed disclosure"
           },
           {
-            "text": "46",
+            "text": "87",
             "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > details.measurement-details > dl > div:nth-of-type(4) > dd",
             "kind": "excluded",
             "reason": "collapsed disclosure"
@@ -3920,7 +3924,7 @@
             "reason": "closed dialog"
           },
           {
-            "text": "I’ll choose breaks",
+            "text": "I\u2019ll choose breaks",
             "path": "main > div.wrap.mirror-page.r3-mirror > dialog.controls-drawer > div.preference-row:nth-of-type(4) > div.segmented-control:nth-of-type(2) > label:nth-of-type(1) > span",
             "kind": "excluded",
             "reason": "closed dialog"
@@ -3950,7 +3954,7 @@
             "reason": "closed dialog"
           },
           {
-            "text": "Say “Steady,” then pause, repeat, check, help, next or stop.",
+            "text": "Say \u201cSteady,\u201d then pause, repeat, check, help, next or stop.",
             "path": "main > div.wrap.mirror-page.r3-mirror > dialog.controls-drawer > details.photo-assist.voice-controls:nth-of-type(1) > div.photo-assist-body > p:nth-of-type(1)",
             "kind": "excluded",
             "reason": "closed dialog"
@@ -4145,7 +4149,7 @@
           },
           {
             "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-control-dock:nth-of-type(2) > div.instruction-buttons > button.button.button--secondary:nth-of-type(2)",
-            "ariaLabel": "I made a pass · check again",
+            "ariaLabel": "I made a pass \u00b7 check again",
             "alt": null,
             "excludedFromAuthoredCount": true
           },
@@ -4206,7 +4210,7 @@
       },
       {
         "screen": "review",
-        "observedAt": "2026-11-01T12:29:59.779Z",
+        "observedAt": "2026-11-01T12:53:21.280Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 31,
@@ -4419,7 +4423,7 @@
             "reason": null
           },
           {
-            "text": "Fingertips → Wide blush brush · 1 method change",
+            "text": "Fingertips \u2192 Wide blush brush \u00b7 1 method change",
             "path": "main > div.wrap.page-wrap.review-page > p.review-method-diff",
             "kind": "authored",
             "reason": null
@@ -4621,7 +4625,7 @@
       },
       {
         "screen": "saved-methods",
-        "observedAt": "2026-11-01T12:30:00.019Z",
+        "observedAt": "2026-11-01T12:53:22.777Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 8,
@@ -4735,7 +4739,7 @@
       },
       {
         "screen": "setup-color",
-        "observedAt": "2026-11-01T12:30:00.489Z",
+        "observedAt": "2026-11-01T12:53:23.275Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 12,
@@ -4922,7 +4926,7 @@
       },
       {
         "screen": "setup-movements",
-        "observedAt": "2026-11-01T12:30:00.906Z",
+        "observedAt": "2026-11-01T12:53:23.707Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 30,
@@ -5093,7 +5097,7 @@
             "reason": null
           },
           {
-            "text": "I’ll choose breaks",
+            "text": "I\u2019ll choose breaks",
             "path": "main > div.wrap.page-wrap.r3-setup > div.setup-form > div.preference-row:nth-of-type(4) > div.segmented-control:nth-of-type(2) > label:nth-of-type(1) > span",
             "kind": "authored",
             "reason": null
@@ -5211,7 +5215,7 @@
       },
       {
         "screen": "setup-tools",
-        "observedAt": "2026-11-01T12:30:01.339Z",
+        "observedAt": "2026-11-01T12:53:24.137Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 18,
@@ -5416,7 +5420,7 @@
       },
       {
         "screen": "setup-photo",
-        "observedAt": "2026-11-01T12:30:02.955Z",
+        "observedAt": "2026-11-01T12:53:25.777Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 19,
@@ -5509,7 +5513,7 @@
             "reason": null
           },
           {
-            "text": "I’m 18+, have photo permission, and allow private storage and YouCam previews.",
+            "text": "I\u2019m 18+, have photo permission, and allow private storage and YouCam previews.",
             "path": "main > div.wrap.page-wrap.r3-setup > div.setup-form > div.form-field:nth-of-type(4) > label.checkbox-label > span",
             "kind": "authored",
             "reason": null
@@ -5591,7 +5595,7 @@
       },
       {
         "screen": "settings",
-        "observedAt": "2026-11-01T12:30:05.928Z",
+        "observedAt": "2026-11-01T12:53:32.470Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 50,
@@ -5744,7 +5748,7 @@
             "reason": null
           },
           {
-            "text": "I’ll choose breaks",
+            "text": "I\u2019ll choose breaks",
             "path": "main > div.wrap.page-wrap.settings-page > div.settings-layout:nth-of-type(2) > div > section.settings-section:nth-of-type(1) > div.preference-row:nth-of-type(3) > div.segmented-control:nth-of-type(2) > label:nth-of-type(1) > span",
             "kind": "authored",
             "reason": null
@@ -5768,7 +5772,7 @@
             "reason": null
           },
           {
-            "text": "Your browser’s voice reads each step.",
+            "text": "Your browser\u2019s voice reads each step.",
             "path": "main > div.wrap.page-wrap.settings-page > div.settings-layout:nth-of-type(2) > div > section.settings-section:nth-of-type(2) > div.setting-toggle:nth-of-type(1) > div > p",
             "kind": "authored",
             "reason": null
@@ -5870,7 +5874,7 @@
             "reason": null
           },
           {
-            "text": "Sample ·",
+            "text": "Sample \u00b7",
             "path": "main > div.wrap.page-wrap.settings-page > div.settings-layout:nth-of-type(2) > div > section.settings-section:nth-of-type(3) > div.data-row:nth-of-type(2) > div:nth-of-type(1) > small",
             "kind": "authored",
             "reason": null
@@ -5900,7 +5904,7 @@
             "reason": null
           },
           {
-            "text": "Sample ·",
+            "text": "Sample \u00b7",
             "path": "main > div.wrap.page-wrap.settings-page > div.settings-layout:nth-of-type(2) > div > section.settings-section:nth-of-type(3) > div.data-row:nth-of-type(3) > div:nth-of-type(1) > small",
             "kind": "authored",
             "reason": null
@@ -6000,7 +6004,7 @@
       },
       {
         "screen": "evidence",
-        "observedAt": "2026-11-01T12:30:06.093Z",
+        "observedAt": "2026-11-01T12:53:32.683Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 23,
@@ -6093,7 +6097,7 @@
             "reason": null
           },
           {
-            "text": "Unreliable tracking, pose, visibility, or reference lighting can prevent measurement. Region-only lighting changes can still resemble pigment. Camera processing, skin appearance, texture, and products also affect readings. These engineering thresholds aren’t calibrated cosmetic assessments. Reloading clears local frames; STEADY asks before capturing another baseline.",
+            "text": "Unreliable tracking, pose, visibility, or reference lighting can prevent measurement. Region-only lighting changes can still resemble pigment. Camera processing, skin appearance, texture, and products also affect readings. These engineering thresholds aren\u2019t calibrated cosmetic assessments. Reloading clears local frames; STEADY asks before capturing another baseline.",
             "path": "main > div.wrap.page-wrap.evidence-page > section:nth-of-type(2) > p:nth-of-type(2)",
             "kind": "authored",
             "reason": null
@@ -6117,7 +6121,7 @@
             "reason": null
           },
           {
-            "text": "The planner checks confirmed movements, products, and tools against finite methods. Adaptation preserves confirmed steps and prefers the existing product family. Instructions are AI-assisted drafts, without makeup-artist or participant validation. Follow product directions; skip or stop movements you don’t want. Light, Build, and Full are visual targets, not calibrated doses. Your chosen photo and assessment describe your physical result.",
+            "text": "The planner checks confirmed movements, products, and tools against finite methods. Adaptation preserves confirmed steps and prefers the existing product family. Instructions are AI-assisted drafts, without makeup-artist or participant validation. Follow product directions; skip or stop movements you don\u2019t want. Light, Build, and Full are visual targets, not calibrated doses. Your chosen photo and assessment describe your physical result.",
             "path": "main > div.wrap.page-wrap.evidence-page > section:nth-of-type(4) > p",
             "kind": "authored",
             "reason": null

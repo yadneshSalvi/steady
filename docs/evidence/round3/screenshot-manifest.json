@@ -1,0 +1,455 @@
+{
+  "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+  "beforeSourceCommit": "6e34fe92ab848c5678974997906410a3e13f6d78",
+  "beforeApplicationCommit": "88f47f29649fa8339580b460cb425fd05e63895d",
+  "afterEnvironment": "canonical production",
+  "screenshots": [
+    {
+      "file": "before/adaptation-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "f749b8f49952153038563a73a343b5976da10c0b47d53e92ad5d77f4bb6f9638"
+    },
+    {
+      "file": "before/adaptation-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "88de0186ede6866746fdca5e693c9e17e7bf1487b5377ab309209516cbf41711"
+    },
+    {
+      "file": "before/checkpoint-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "dd1d257961554e11a24a259598063a9fb0aa94dcbe2c6de3766dced468cc987c"
+    },
+    {
+      "file": "before/checkpoint-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "b72aea4be207cca52cba06366cb18e3fcf194f9c90c764b5a02a19acb9bc59df"
+    },
+    {
+      "file": "before/evidence-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "1be2a3bb794af1e90f099ed6f9cf174568567d18f47caaa7d5db96c3ddc96f05"
+    },
+    {
+      "file": "before/evidence-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "1303bffbf766634a1ba90557c23501f7ad56d03fd9e737c77f0656bb733fca87"
+    },
+    {
+      "file": "before/eye-checkpoint-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "a9e0f508dfb7d55675b9ae8612c948aebfeb19994b5fe9867b9ef85eeb85d3f3"
+    },
+    {
+      "file": "before/eye-checkpoint-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "78df950833950108cfab14dbc3826d0947911d8790b9a3535e7cb6c04e12acf6"
+    },
+    {
+      "file": "before/eye-methods-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "634842470408378d9db3a2869a4e38e68904348e82bad38eefb386d49342d2c4"
+    },
+    {
+      "file": "before/eye-methods-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "207c5e6ef798c39927bae9c738bf44838566763627a3eb4eee60c4302c2a2456"
+    },
+    {
+      "file": "before/eye-mirror-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "eb707a735e22b488271c33f79c0a0c7fab423758998e92631dde41a29548bcfd"
+    },
+    {
+      "file": "before/eye-mirror-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "69aeb43d129f525b18fda865ecea2b8f17d40a0d6c92290a5cea5a45c8fe9c11"
+    },
+    {
+      "file": "before/landing-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "b4745777dac53dc6230c249e600a30025da429edb32eef74a82b329022baa776"
+    },
+    {
+      "file": "before/landing-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "848f12bb73872acbb829d3908204f179091bd0c892bd1a7cd86ef680815b8e99"
+    },
+    {
+      "file": "before/methods-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "6d8840af337eafbb00ad1f0f116bc15fe080dd6aa0447494701227216df7d75b"
+    },
+    {
+      "file": "before/methods-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "ce9961c07e21cc706e73693a9221e39167468bc526a357cf9483bdbc7ad41475"
+    },
+    {
+      "file": "before/mirror-ready-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "72a2d772eed166a4c62016a199fa17816afa6b61efd74c652412274fed97afe9"
+    },
+    {
+      "file": "before/mirror-ready-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "ff6dc1d9028cf034d0239cb2f9fbfbbffd0e8bee071b90e6e86150a4d411457c"
+    },
+    {
+      "file": "before/mirror-step-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "db5fd288242f4c290e3605776aa4298bb2c9471687753addb01b6a30d05a83c2"
+    },
+    {
+      "file": "before/mirror-step-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "4753465244216fc173e07536db1d0176a32e945ac97878967a06246bf86d7009"
+    },
+    {
+      "file": "before/review-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "447225b1b274fd82e783081a972b3c9038bf20bbf2b20cf5cdcb11d1ff7fcffd"
+    },
+    {
+      "file": "before/review-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "dfd33ba9db94fb40a44d75ce65c60aba7ca2e14557fe76d7a53d162654396650"
+    },
+    {
+      "file": "before/saved-methods-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "9df105d734442db5528ca5b849a240ba568f1b124cdbc0f55f1a8e8161100da3"
+    },
+    {
+      "file": "before/saved-methods-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "ee33da02a4a909f10dc24ff4d6eba8fe3db79515319544c1eafb6a97113f442e"
+    },
+    {
+      "file": "before/settings-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "1d9583044a0d36dd90b0046250f4705320ed982267bd64b78e7e1dae36ebe8ca"
+    },
+    {
+      "file": "before/settings-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "23339a9523df8cc99aa6c3d763974a23e4bef3292522c939c88d636832845c64"
+    },
+    {
+      "file": "before/setup-color-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "ba10ffcb25772ba2e0e699fd86bac8a1d209d68a617cdf1edf90ca6617ecef64"
+    },
+    {
+      "file": "before/setup-color-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "3adb4209dbcc6b0c00285f9d933f23044daec8c3545b76ba0a043c54349e8359"
+    },
+    {
+      "file": "before/setup-movements-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "ffe2b72a94ea66b78d2bf96a918e8c955e06f7cc243061c260bb694bc59e8b1d"
+    },
+    {
+      "file": "before/setup-movements-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "614531e3be2abc5a8310c26792a7c956f465f0a3d51e79534966f5f831845b96"
+    },
+    {
+      "file": "before/setup-photo-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "542799b5948ca7ced21951e08a9ca58f65614526987b534af04b961b4ca09185"
+    },
+    {
+      "file": "before/setup-photo-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "75ca534dac8949e23bf031701c30e45ff181c75def161422c2a068feeef4ad0a"
+    },
+    {
+      "file": "before/setup-tools-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "db109a9116f8a1597c56a3b99c3b294d631857d13bc6fee24a1620472dcf3d46"
+    },
+    {
+      "file": "before/setup-tools-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "b416849211793edfc6107d246579b158c0f8458810f7a284de44db1a8ab1a45f"
+    },
+    {
+      "file": "after/adaptation-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "c9ec06ccc86a8bd6ab7d76d569d568245d370018c80293ff917d148fdfa46d82",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/adaptation-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "70614aa00d6e79db9ca65d3429e85fa66cda1aa825aa7b0f8512551893edfb7a",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/checkpoint-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "1b9462f1bd75d0d5af60e12c3036376195fb0621e6a0fb055f8cec1000186578",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/checkpoint-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "bc898d03d8e78fe9977ac6b0e82f2f0faa9f962df6ab56e1c4b389f04ce95dc0",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/evidence-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "62a4ac6982f575da2ade8b210abed0f94384a94a6a71cd5b86c25a7de9a49f3f",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/evidence-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "7b588e8f3494270697df576182b675b08bc7bead3de225d2a087243c4f1c40a5",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/eye-checkpoint-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "8f03ef31523f3d36df6898a095afa288cd435135fdb259be21bf70f65aa6db45",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/eye-checkpoint-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "4d5c2d9028d662efc4afbb0164a7b26730bda522c42413af292495a88304d3c9",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/eye-methods-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "d2fc6fbc389bd187659ba6e25a5285ba5c0649442de2d087021bf3af17267c09",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/eye-methods-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "b249c4bb3cf7f8d44c413e3cba14c1a9d26c2e0ff645e0989e9d15e24f63778d",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/eye-mirror-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "4096b4cd17033c5e89128cbba8fac6bbe99e4a661db51c4c2bea1df9f2217c9e",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/eye-mirror-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "395e609b473efc73c724c63dd062c80e3bd5ad73e63cd30ab6872c77f6284921",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/landing-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "46cc74d642ba73201e2c4d960e9abcb3ecee5a1d1aec06d9762eaa94fc2a867f",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/landing-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "998e02d5cafb88bc84c3f5e043b5bf6bd9aab67fd88098317feeb925c75f5e06",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/methods-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "03317efb3e66764c98798842891c352d968b87caf2a8ee81ca3cbc6b3a954216",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/methods-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "6bf553bb8aaeba75f33c4b96bfb422767d437ba114f9044bf6e7c1399f1fba9f",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/mirror-ready-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "093590c48b1af395a3192f29975377d10e591ceac078c6277ddd50bdee3f3981",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/mirror-ready-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "b16aad44be4f5c47dee4c901b928f1e897f306f3e392388c9eeff973a6a8031d",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/mirror-step-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "dbe64ec5db18f3a0c4989bc36d5ecd6646f5b0023aa0537f72bada10947bf857",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/mirror-step-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "f2759486023fa0ef9012dfdbb0d6ef18a9751f532141fcffd0bd2376e9508067",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/review-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "ded9944d24299754843139f72f242104fbd5e10f10ef71c306cbd3afa878e54d",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/review-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "f9ee23f59af537201956cc29958b81d65ba509db1b3bf09c4136bf1760abb34e",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/saved-methods-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "51468ddd2165b1c695bf50b515058c2adfaa4d261034ac47b35344c20fd054df",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/saved-methods-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "c6d4878db602833f71c8d4a51f9f6d18b65242a94e94704ce36905c73a8898fc",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/settings-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "733b55ec6994aae5df86ce9f57dcd9113176ccf1e50625a8ae1ba0ef21088ab3",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/settings-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "8376622bad4e122ac3142b5cb694647740033fb2d37977fa89c209f6816a12f2",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/setup-color-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "cc4d1d94090213c7fb1edce2a2844b92653cb69a93984bad211cf9f79b8da419",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/setup-color-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "a9d0612eaf0bf5211dc2c8c93af1dab7e31f15b3d034f7f7eeb11d8200e8d743",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/setup-movements-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "6e8e01a28cc52912041bab47ce39d6ba4a64883be4a8a873e5e915ba006ee521",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/setup-movements-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "fe99002929e8ae173afc9ba49798f2dd7d6eb443901e54c7d872742cf15441dd",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/setup-photo-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "e0c0ad2590407a93e572ff27e729ae583240cab6bc65437d66e64383210d0653",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/setup-photo-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "a0c9fa38a8128c00ea40c3176621ce0aac1dbbd9ef4597b302b70d7e6a7e8347",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/setup-tools-1366x768.png",
+      "width": 1366,
+      "height": 768,
+      "sha256": "3506a642ebda9b5bd66978b868739c63ca8bb7a495f04abdacf663834fea556f",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    },
+    {
+      "file": "after/setup-tools-1440x900.png",
+      "width": 1440,
+      "height": 900,
+      "sha256": "b407218a257d4fe1e00545b4eabd263d416678a9cbe9262e0778fe740655dcce",
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb"
+    }
+  ],
+  "notes": [
+    "Screenshots show recorded example/sample workflows, not human validation.",
+    "Before and after captures use separate sessions; compare layout and workflow state, not record identity.",
+    "After screenshots were promoted from the passing canonical browser-suite attachments."
+  ]
+}

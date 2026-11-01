@@ -4,7 +4,7 @@
 
 **[Open the studio](https://steady-taupe-pi.vercel.app)** · **Quick sample** opens the camera-free walkthrough in one click. Choose a method, compare Light / Build / Full, and measure a compact recorded blush pass against your target. See which part needs more color through a translucent heatmap and measured spatial guidance. **Explore the eye sample** demonstrates fine liner changing to warm, softly tapped shadow while keeping eye emphasis.
 
-Round three is deployed on [canonical production](https://steady-taupe-pi.vercel.app). Local checks pass **479 unit/database tests** and **28 optimized browser tests**; verification of the final copy build is in progress. [Release verification](docs/release-checklist.md) identifies the deployed application and pending check.
+Round three is released and verified on [canonical production](https://steady-taupe-pi.vercel.app). Checks pass **479 local unit/database tests**, **28 optimized local browser tests**, and **28 final canonical browser tests**. [Release verification](docs/release-checklist.md) records the exact application, timings, cleanup and limitations.
 
 ## What the studio does
 
@@ -59,5 +59,6 @@ The measurement is experimental image-color change relative to a chosen virtual 
 - [Engineering evaluation](docs/evaluation.md) and [selected-image AI evaluation](docs/evaluation-ai.md)
 - [Media and model attribution](docs/asset-licenses.md)
 - [Release verification and deployed commit](docs/release-checklist.md)
+- [Round-three before/after gallery](docs/evidence/round3/README.md) and [sanitized production evidence](docs/evidence/review-round3-release.json)
 
 Credentials, plans, private captures, and execution artifacts remain outside version control. Public fictional inputs and recorded outputs have explicit source, recipe, and output provenance.

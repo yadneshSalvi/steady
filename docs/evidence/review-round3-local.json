@@ -313,5 +313,7 @@
     "One fictional source underlies the centroid/recorded-pixel diagnostics; no human or hardware-camera generalization is claimed.",
     "Below-eye equality describes only the defined fixture pixels and does not mean natural shadows are removed.",
     "Browser timing is warmed engineering processing; model startup, persistence, UI rendering and hardware camera behavior are outside its scope."
-  ]
+  ],
+  "subsequentProductionAcceptance": "review-round3-release.json",
+  "historicalStatusNote": "The status above describes the local verification time; final deployment and canonical results are recorded separately."
 }

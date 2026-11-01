@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-11-01T12:56:22.928459+00:00",
+  "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+  "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+  "origin": "https://steady-taupe-pi.vercel.app",
+  "deploymentReady": true,
+  "independentBrowserWalkthrough": {
+    "observedAt": "2026-11-01T12:43:39.830590+00:00",
+    "origin": "https://steady-taupe-pi.vercel.app",
+    "method": "Independent in-app browser interaction; existing root owner profile, separate from fresh-context automated runs.",
+    "checks": [
+      {
+        "name": "new cheek flow",
+        "viewport": [1366, 768],
+        "left": 38,
+        "right": 39,
+        "methodChange": "Fingertip tapping to Brush-blended cream; left confirmation retained",
+        "saved": true,
+        "chooseButtonBottom": 668.39
+      },
+      {
+        "name": "historical R2 review",
+        "left": 38,
+        "right": 38,
+        "earlierGuideLabel": true,
+        "mutated": false
+      },
+      {
+        "name": "new stronger eye",
+        "viewport": [1440, 900],
+        "left": 56,
+        "asset": "/examples/round3/shadow-full-warm-v4.png",
+        "guidance": "Tap gently across the upper lid.",
+        "consoleWarningsOrErrorsObserved": 0
+      }
+    ],
+    "limitations": [
+      "No physical makeup or human participant check.",
+      "Native IAB compositor scaling was not treated as app overflow; final proof images use native production-suite attachments."
+    ],
+    "finalNoticeVerification": {
+      "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+      "observedAt": "2026-11-01T12:51:17.137283+00:00",
+      "notice": "This changes your eye finish.",
+      "proposal": "Fine upper liner",
+      "targetLabel": "Full target",
+      "confirmedSteps": 1,
+      "remainingSteps": 1,
+      "falseLightNoticeAbsent": true
+    },
+    "observedOnApplicationCommit": "c60a6dddc22343d2713e49dc16025e6d9b408457",
+    "sameBehaviorInFinalFreshContextSuite": true
+  },
+  "finalCopyFollowup": {
+    "singularAdaptationAndSavedStepLabels": "verified in canonical in-app browser on b997471f",
+    "eyeMethodNotice": "The appearance change is distinct from a softer intensity; final focused regression and canonical eye workflow verify the notice."
+  },
+  "finalCanonicalSuite": {
+    "passed": 28,
+    "failed": 0,
+    "flaky": 0,
+    "skipped": 0,
+    "total": 28,
+    "workers": 1,
+    "retries": 0,
+    "playwrightDurationSeconds": 189.142882,
+    "wrapperElapsedSeconds": 189.647,
+    "freshIsolatedApplicationContexts": true,
+    "sharedApplicationCookies": false,
+    "sharedProtectionState": false
+  },
+  "finalCanonicalCleanup": {
+    "scope": "Exact fresh-run user-agent tag only; unrelated owners and historical/manual studios excluded.",
+    "ownersDeleted": 11,
+    "residualStudioRowsBeforeCleanup": 3,
+    "extraOwnedObjectsDeleted": 0,
+    "remaining": {
+      "owners": 0,
+      "sessions": 0,
+      "active_sessions": 0,
+      "private_assets": 0,
+      "upload_intents": 0,
+      "provider_jobs": 0,
+      "reservations": 0
+    },
+    "nativeStudiosWithDelete200ThenRead404": 6,
+    "protectedManualStudios": {
+      "present": 2,
+      "inQaCleanupScope": 0
+    }
+  },
+  "providerSpend": {
+    "roundUnits": 4,
+    "initialBalance": 952,
+    "finalObservedBalance": 948,
+    "readOnlyCheckedAt": "2026-11-01T12:41:09.660Z",
+    "finalBrowserSuiteFreshYouCamJobs": 0
+  },
+  "sourceAndClientScan": {
+    "checkedAt": "2026-11-01T12:56:32.111551+00:00",
+    "repository": "steady",
+    "textFiles": 272,
+    "clientFiles": 35,
+    "knownValuesChecked": 27,
+    "findings": []
+  },
+  "boundedRuntimeObservation": {
+    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "scope": "Vercel error-level records, last hour, at most 100; bounded query during the final suite, not exhaustive.",
+    "records": 3,
+    "items": [
+      {
+        "path": "/.well-known/workflow/v1/flow",
+        "status": 200,
+        "classification": "Pinned PostgreSQL driver future SSL-mode behavior warning; current modes resolve to verify-full."
+      },
+      {
+        "path": "/api/methods",
+        "status": 200,
+        "classification": "Pinned PostgreSQL driver future SSL-mode behavior warning; current modes resolve to verify-full."
+      },
+      {
+        "path": "/api/auth/get-session",
+        "status": 200,
+        "classification": "Pinned PostgreSQL driver future SSL-mode behavior warning; current modes resolve to verify-full."
+      }
+    ],
+    "recordedAt": "2026-11-01T12:55:09.537179+00:00"
+  },
+  "deploymentPackage": {
+    "checkedAt": "2026-11-01T12:50:56.837673+00:00",
+    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
+    "entries": 367,
+    "regularFiles": 360,
+    "bytes": 84279502,
+    "privateFiles": []
+  },
+  "noticeFocusedLocalGate": {
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "durationSeconds": 8.515014,
+    "freshProviderJobs": 0
+  },
+  "limitations": [
+    "No physical webcam plus real makeup application or human participant study was available.",
+    "Synthetic camera, recorded image and software checks do not establish real application benefit.",
+    "Bounded browser and runtime observations do not establish the absence of every possible error."
+  ],
+  "visualAcceptance": {
+    "canonicalAfterImages": 34,
+    "beforeImages": 34,
+    "pairedScreens": 17,
+    "viewports": [
+      [1440, 900],
+      [1366, 768]
+    ],
+    "allAuthoredCopyLimitsPassed": true,
+    "rootInspectedBothContactSheets": true,
+    "rootInspectedNative1366CheckpointAndEyeMirror": true
+  }
+}
