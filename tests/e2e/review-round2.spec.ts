@@ -230,6 +230,26 @@ test("actual partial sample keeps its full translucent cheek heatmap and opens a
       page.getByRole("button", { name: "A softer version", exact: true }),
     ).toBeVisible();
     expect((await saved()).adaptation).toBeUndefined();
+    await page
+      .getByRole("button", { name: "A softer version", exact: true })
+      .click();
+    await expect(
+      page.getByRole("button", { name: "Use this change", exact: true }),
+    ).toBeVisible();
+    const softer = await saved();
+    expect(softer.adaptation?.reason).toBe("softer");
+    expect(softer.adaptation?.changesGoal).toBe(true);
+    expect(softer.adaptation?.candidate.selectedPreviewVariantId).toBe("light");
+    expect(softer.activePlan?.selectedPreviewVariantId).toBe("full");
+    await expect(
+      page.getByText("This changes your target to Light.", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.locator(".adapt-panel .region-target figcaption"),
+    ).toHaveText("Light target");
+    await expect(
+      page.getByText("This changes your eye finish.", { exact: true }),
+    ).toHaveCount(0);
     expect(paidRequests).toEqual([]);
     expect(errors).toEqual([]);
   } finally {

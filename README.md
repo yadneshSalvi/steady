@@ -4,7 +4,7 @@
 
 **[Open the studio](https://steady-taupe-pi.vercel.app)** · **Quick sample** opens the camera-free walkthrough in one click. Choose a method, compare Light / Build / Full, and measure a compact recorded blush pass against your target. See which part needs more color through a translucent heatmap and measured spatial guidance. **Explore the eye sample** demonstrates fine liner changing to warm, softly tapped shadow while keeping eye emphasis.
 
-Round three passes local release checks: **479 unit/database tests** and **28 optimized browser tests**. Production verification is pending; the live release remains round two until that check completes.
+Round three is deployed on [canonical production](https://steady-taupe-pi.vercel.app). Local checks pass **479 unit/database tests** and **28 optimized browser tests**; verification of the final copy build is in progress. [Release verification](docs/release-checklist.md) identifies the deployed application and pending check.
 
 ## What the studio does
 

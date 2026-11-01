@@ -1,8 +1,10 @@
 # Release verification
 
-## Review round 3 — local verification complete, release pending
+## Review round 3 — deployed, final verification pending
 
 The current source makes **Done with this step** confirm and advance with or without measurement. Methods shares one target; the mirror contains its target inset and shows each checkpoint in place. Review groups Before, Target, and regional readings with Save primary. One Sample marker replaces repeated disclosures. Exact recording, target, geometry, completed-action, and private-ownership histories remain intact.
+
+Application commit `b997471f242fb9f346bcc5ff12993db2d21a0c85` reached `READY` on November 1, 2026 UTC as deployment `dpl_AegzBNmVMaVUvWcxoik6LYa7tp6L` at [steady-taupe-pi.vercel.app](https://steady-taupe-pi.vercel.app). Its immutable URL is [steady-6qarcsb8h-yadneshsalvis-projects.vercel.app](https://steady-6qarcsb8h-yadneshsalvis-projects.vercel.app). The final copy build corrects singular adaptation and saved-step labels; its complete canonical verification is still running.
 
 - [x] Complete local unit/invariant/PostgreSQL suite: **479/479 across 39 files**, zero failures or skips, including **35 disposable-schema local PostgreSQL cases**. Remote database URLs are rejected.
 - [x] Full formatting, TypeScript, whitespace, and ESLint with zero warnings pass. The optimized production build passes with **19 generated pages** and pinned local model/runtime assets.
@@ -15,9 +17,12 @@ The current source makes **Done with this step** confirm and advance with or wit
 - [x] The new centroid-derived cheek geometry uses actual source-to-Full color change and retains explicit v1/v2/v3 scope. All 39 historical PNGs and four manifests remain byte-identical. The new upper-lid pair passes unchanged guards: Full ΔE00 **4.4336/4.7074**, Light-to-Full **56.4976/56.1919%**, and zero changed pixels in the fixed 1150/1103-pixel below-eye strips.
 - [x] Four successful, once-only recording tasks use **four observed units, 952→948**. Two deeper warm outputs are adopted; two earlier successful trials remain private because they missed the strength aim. No further paid task or production smoke is planned for this round.
 - [x] Real IMAGE/VIDEO synthetic-camera regression preserves one live video track and the original baseline through Check again/Close. Six warmed processing intervals are **35.6–56.1 ms**; lighting and pose changes abstain. This excludes startup, persistence, rendering, and physical webcam behavior. R1/R2 timing files remain unchanged.
-- [ ] Root final source/client scan, commit/push/deployment, canonical full suite, and independent production acceptance.
+- [x] After the two copy corrections, focused formatting, zero-warning ESLint, TypeScript, and the optimized 19-page build pass. The earlier 479-case full unit/database result covers the unchanged behavior.
+- [x] Before final release documentation, the code/client scan finds zero matches across 268 text files, including 35 client chunks, against 27 configured credential values.
+- [x] The final application commit is pushed and deployed `READY` at the canonical URL above.
+- [ ] Complete canonical suite and independent acceptance of the final copy build.
 
-[Sanitized local evidence](evidence/review-round3-local.json), [raw local copy audit](evidence/round3/local-rendered-copy-audit.json), [current screenshot index](evidence/round3/after-captures.json), [measurement evaluation](evaluation-measurement.md), and [recording provenance](../public/examples/PROVENANCE.md) define the scopes. No R3 deployment or human physical-use result is claimed here. The dated R2 release below remains the verified production record until R3 acceptance.
+[Sanitized local evidence](evidence/review-round3-local.json), [raw local copy audit](evidence/round3/local-rendered-copy-audit.json), [current screenshot index](evidence/round3/after-captures.json), [measurement evaluation](evaluation-measurement.md), and [recording provenance](../public/examples/PROVENANCE.md) define the scopes. The final R3 application is deployed; its final canonical acceptance is pending. No human physical-use result is claimed. The dated releases below retain their original evidence.
 
 ## Review round 2 — released and verified
 

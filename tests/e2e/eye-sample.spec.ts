@@ -99,6 +99,18 @@ test("recorded eye sample keeps a completed liner eye while repairing the remain
     const proposed = await saved();
     expect(proposed.adaptation?.candidate.routeId).toBe("shadow");
     expect(proposed.adaptation?.changesGoal).toBe(true);
+    expect(proposed.adaptation?.candidate.selectedPreviewVariantId).toBe(
+      "full",
+    );
+    await expect(
+      page.getByText("This changes your eye finish.", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.locator(".adapt-panel .region-target figcaption"),
+    ).toHaveText("Full target");
+    await expect(
+      page.getByText("This changes your target to Light.", { exact: true }),
+    ).toHaveCount(0);
     expect(proposed.adaptation?.preservedActionIds).toEqual([
       completedAction.id,
     ]);

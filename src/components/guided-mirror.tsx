@@ -820,7 +820,11 @@ export function GuidedMirror({ id }: { id: string }) {
                       </Notice>
                     ) : null}
                     {session.adaptation.changesGoal ? (
-                      <p>This changes your target to Light.</p>
+                      <p>
+                        {session.adaptation.reason === "softer"
+                          ? "This changes your target to Light."
+                          : "This changes your eye finish."}
+                      </p>
                     ) : null}
                     {session.adaptation.candidate.previewAsset && action ? (
                       <RegionTarget
