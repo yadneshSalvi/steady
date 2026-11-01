@@ -27,7 +27,9 @@ import {
   StepProgress,
 } from "./ui";
 import { useStudioSession } from "./use-studio-session";
-import { PreviewLadder } from "./preview-ladder";
+import { PreviewLadder, publicRecording } from "./preview-ladder";
+import { RegionPhoto } from "./region-image";
+import { methodCrop, useSourceLandmarks } from "./use-source-landmarks";
 
 function generationLabel(candidate: CandidatePlan) {
   const units =
@@ -40,15 +42,18 @@ function generationLabel(candidate: CandidatePlan) {
   return `${retry ? "Retry previews" : "Generate previews"} · ≤${units} ${units === 1 ? "unit" : "units"}`;
 }
 
+/** Methods share one target unless they paint different effects (liner vs shadow). */
+function lookKey(candidate: CandidatePlan) {
+  return candidate.recipe
+    .filter((effect) => effect.category !== "skin_smooth")
+    .map((effect) => effect.category)
+    .sort()
+    .join("+");
+}
+
 function MethodPreview({ candidate }: { candidate: CandidatePlan }) {
   const asset = candidate.previewAsset;
   const waiting = ["queued", "processing"].includes(candidate.previewStatus);
-  const publicRecording =
-    asset?.provenance === "virtual_preview" &&
-    !!asset.recordedAt &&
-    /^\/examples\/(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-]+\.(?:png|jpe?g|webp)$/.test(
-      asset.url,
-    );
   return (
     <div
       className={`candidate-visual ${!asset ? "candidate-visual--empty" : ""}`}
@@ -60,7 +65,7 @@ function MethodPreview({ candidate }: { candidate: CandidatePlan }) {
           width={asset.width}
           height={asset.height}
           sizes="(max-width: 740px) 88vw, 360px"
-          unoptimized={!publicRecording}
+          unoptimized={!publicRecording(asset)}
         />
       ) : (
         <div className="preview-placeholder">
@@ -110,6 +115,9 @@ export function LooksStudio({ id }: { id: string }) {
   const [viewedId, setViewedId] = useState("");
   const session = studio.session;
   const refresh = studio.refresh;
+  const landmarks = useSourceLandmarks(
+    session?.assets.find((asset) => asset.id === session.sourceAssetId)?.url,
+  );
   const previewPending = !!session?.candidates.some(
     (item) =>
       ["queued", "processing"].includes(item.previewStatus) ||
@@ -154,6 +162,14 @@ export function LooksStudio({ id }: { id: string }) {
   const viewed =
     session.candidates.find((candidate) => candidate.id === viewedId) ??
     session.candidates[0];
+  const distinctLooks =
+    new Set(session.candidates.map((candidate) => lookKey(candidate))).size > 1;
+  const cropFor = (candidate: CandidatePlan) =>
+    methodCrop(
+      landmarks,
+      candidate.actions.map((action) => action.region),
+    );
+  const viewedCrop = viewed ? cropFor(viewed) : null;
   async function choose(candidate: CandidatePlan) {
     setSelected(candidate.id);
     const next = await studio.run({
@@ -225,6 +241,7 @@ export function LooksStudio({ id }: { id: string }) {
               </h2>
               <PreviewLadder
                 candidate={viewed}
+                crop={viewedCrop === undefined ? "loading" : viewedCrop}
                 disabled={studio.busy || !canEdit}
                 onChoose={(level) =>
                   void studio.run({
@@ -285,12 +302,26 @@ export function LooksStudio({ id }: { id: string }) {
               ) : null}
             </div>
           </section>
-          <div className="method-options" aria-label="Available methods">
+          <div
+            className={`method-options method-options--${Math.min(3, session.candidates.length)} ${distinctLooks ? "method-options--looks" : ""}`}
+            aria-label="Available methods"
+          >
             {session.candidates.map((candidate) => (
               <article
                 key={candidate.id}
                 className={`candidate-card method-option ${viewed.id === candidate.id ? "is-viewed" : ""}`}
               >
+                {distinctLooks && candidate.previewAsset ? (
+                  <RegionPhoto
+                    className="method-option-target"
+                    src={candidate.previewAsset.url}
+                    alt={`${candidate.selectedPreviewVariantId ?? "full"} target for ${candidate.name}`}
+                    width={candidate.previewAsset.width}
+                    height={candidate.previewAsset.height}
+                    crop={cropFor(candidate)}
+                    unoptimized={!publicRecording(candidate.previewAsset)}
+                  />
+                ) : null}
                 <div className="method-option-top">
                   <MethodIcon candidate={candidate} />
                   <h2>{candidate.name}</h2>

@@ -51,6 +51,34 @@ export function secondarySpatialGuidance(
     : "Work gently toward the center of the guide.";
 }
 
+/** One short per-area line, on the axis the main guidance names. */
+export function areaReading(
+  measurement: Pick<
+    MeasurementResult,
+    "region" | "verdict" | "lagging" | "regionalProgress"
+  >,
+): string | null {
+  if (measurement.region === "lips" || measurement.verdict === "insufficient")
+    return null;
+  const part = (id: MeasurementResult["lagging"]) =>
+    measurement.regionalProgress?.find(
+      (item) =>
+        item.subregion === id &&
+        Number.isFinite(item.progress) &&
+        Number.isFinite(item.pixels) &&
+        item.pixels >= 1,
+    );
+  const [first, second] =
+    measurement.lagging === "upper" || measurement.lagging === "lower"
+      ? (["upper", "lower"] as const)
+      : (["outer", "inner"] as const);
+  const a = part(first),
+    b = part(second);
+  if (!a || !b) return null;
+  const percent = (value: number) => `${Math.round(value * 100)}%`;
+  return `${first[0].toUpperCase()}${first.slice(1)} ${percent(a.progress)} · ${second} ${percent(b.progress)}`;
+}
+
 export function checkpointGuidance(
   measurement: Pick<
     StoredMeasurement,

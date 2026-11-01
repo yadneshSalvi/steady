@@ -121,10 +121,15 @@ test("actual partial sample keeps its full translucent cheek heatmap and opens a
     await expect(checkpoint.locator(".measurement-guidance")).toContainText(
       "Work up along the cheekbone.",
     );
+    // The per-area evidence names the same axis as the visible guidance.
+    await expect(checkpoint.locator(".measurement-areas")).toHaveText(
+      /^Upper \d+% · lower \d+%$/,
+    );
     await checkpoint.getByText("Measurement details", { exact: true }).click();
+    // Fingertip tapping: the secondary sentence is method-aware.
     await expect(
       checkpoint.locator(".measurement-spatial-guidance"),
-    ).toContainText("toward your ear.");
+    ).toHaveText("Tap gently toward your ear.");
     await checkpoint.getByText("Measurement details", { exact: true }).click();
     await expect(page.locator(".heatmap-target-marker")).toHaveText(
       "100% target",
@@ -171,8 +176,9 @@ test("actual partial sample keeps its full translucent cheek heatmap and opens a
           color: item.getAttribute("fill"),
         })),
       );
+      // Mirror overlay: readable from a distance (display only).
       expect(
-        fills.every((fill) => fill.opacity >= 0.35 && fill.opacity <= 0.5),
+        fills.every((fill) => fill.opacity >= 0.6 && fill.opacity <= 0.65),
       ).toBe(true);
       expect(new Set(fills.map((fill) => fill.color)).size).toBeGreaterThan(2);
       expect(

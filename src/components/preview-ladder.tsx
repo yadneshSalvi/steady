@@ -1,18 +1,36 @@
 "use client";
-import Image from "next/image";
 import type { CandidatePlan, PreviewLevel } from "@/lib/contracts";
+import type { CropBox } from "@/lib/vision/display";
 import { PREVIEW_LEVELS } from "@/lib/youcam/recipes";
+import { RegionPhoto } from "./region-image";
+
+// The optimizer can fetch public recordings. Personal assets need the owning
+// browser's cookies, so keep their authenticated URL untouched.
+export function publicRecording(
+  asset: CandidatePlan["previewAsset"] | undefined,
+) {
+  return (
+    asset?.provenance === "virtual_preview" &&
+    !!asset.recordedAt &&
+    /^\/examples\/(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-]+\.(?:png|jpe?g|webp)$/.test(
+      asset.url,
+    )
+  );
+}
 
 export function PreviewLadder({
   candidate,
   onChoose,
   disabled = false,
   compact = false,
+  crop = null,
 }: {
   candidate: CandidatePlan;
   onChoose: (level: PreviewLevel) => void;
   disabled?: boolean;
   compact?: boolean;
+  /** Painted-region window; "loading" while the face guide starts. */
+  crop?: CropBox | null | "loading";
 }) {
   if (!candidate.previewVariants?.length) return null;
   return (
@@ -34,14 +52,6 @@ export function PreviewLadder({
           );
           const chosen = (candidate.selectedPreviewVariantId ?? "full") === id;
           const asset = variant?.previewAsset;
-          // The optimizer can fetch public recordings. Personal assets need the
-          // owning browser's cookies, so keep their authenticated URL untouched.
-          const publicRecording =
-            asset?.provenance === "virtual_preview" &&
-            !!asset.recordedAt &&
-            /^\/examples\/(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-]+\.(?:png|jpe?g|webp)$/.test(
-              asset.url,
-            );
           return (
             <button
               key={id}
@@ -53,13 +63,13 @@ export function PreviewLadder({
             >
               {!compact &&
                 (asset ? (
-                  <Image
+                  <RegionPhoto
                     src={asset.url}
                     alt={`${label} color target`}
-                    width={160}
-                    height={180}
-                    sizes="(max-width: 740px) 28vw, (max-width: 1100px) 15vw, 10vw"
-                    unoptimized={!publicRecording}
+                    width={asset.width}
+                    height={asset.height}
+                    crop={crop === "loading" ? undefined : crop}
+                    unoptimized={!publicRecording(asset)}
                   />
                 ) : (
                   <span className="ladder-placeholder" aria-hidden>

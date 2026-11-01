@@ -337,6 +337,9 @@ for (const viewport of viewports) {
             exact: true,
           }),
         ).toBeVisible();
+        await expect(page.locator(".measurement-areas")).toHaveText(
+          /^(Upper|Outer) \d+% · (lower|inner) \d+%$/,
+        );
         const marker = page.locator(".heatmap-target-marker");
         await expect(marker).toHaveText("100% target");
         expect(
@@ -387,6 +390,13 @@ for (const viewport of viewports) {
           "right_cheek",
         );
         expect(bothMeasured.completedActionIds).toEqual([firstAction.id]);
+        // Broad blending after the adaptation gets the broad-pass sentence.
+        const details = page.getByText("Measurement details", { exact: true });
+        await details.click();
+        await expect(page.locator(".measurement-spatial-guidance")).toHaveText(
+          "One more broad pass toward your ear.",
+        );
+        await details.click();
         await done.click();
         await page.waitForURL(/\/review$/);
         await expect(page.getByRole("heading", { level: 1 })).toHaveText(
@@ -487,6 +497,15 @@ for (const viewport of viewports) {
               }),
           )
           .toBe("/examples/round3/shadow-full-warm-v4.png");
+        // Different looks: each method shows its own target, side by side.
+        await expect(
+          page.getByRole("img", { name: "full target for Fine upper liner" }),
+        ).toBeVisible();
+        await expect(
+          page.getByRole("img", {
+            name: "full target for Soft tapped shadow",
+          }),
+        ).toBeVisible();
         await capture(page, info, "eye-methods", audits);
         await shadow
           .getByRole("button", { name: "Choose", exact: true })

@@ -772,13 +772,13 @@ export function GuidedMirror({ id }: { id: string }) {
             <div className="mirror-heatmap-control">
               <button
                 type="button"
-                className="button button--secondary"
+                className="mirror-heatmap-toggle"
                 aria-pressed={showHeatmap}
                 onClick={() => setShowHeatmap(!showHeatmap)}
               >
                 {showHeatmap ? "Hide heatmap" : "Show heatmap"}
               </button>
-              {showHeatmap ? <HeatmapLegend /> : null}
+              {showHeatmap ? <HeatmapLegend compact /> : null}
             </div>
           ) : null}
           {cameraError ? (

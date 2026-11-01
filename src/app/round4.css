@@ -1,0 +1,162 @@
+/* Round-four visual polish. Loaded last; display-only. */
+
+/* Region crops drawn with an optimized image (methods ladder, method looks). */
+.region-photo {
+  position: relative;
+  overflow: hidden;
+  background: #ebe6dc;
+  border-radius: 4px;
+}
+.region-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 44%;
+}
+
+/* Methods: a larger target and a ladder that uses the full width. */
+.r3-methods .method-target-stage .preview-ladder {
+  max-width: none;
+}
+.r3-methods .method-target-stage .preview-ladder .region-photo {
+  height: 104px;
+}
+.r3-methods .method-target-stage .preview-ladder .region-photo img {
+  height: 100%;
+  border-radius: 0;
+}
+.r3-methods .method-options--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.r3-methods .method-options--1 {
+  grid-template-columns: minmax(0, 560px);
+}
+.r3-methods .method-options--looks .method-option {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: auto auto 1fr;
+  column-gap: 24px;
+  overflow: visible;
+}
+.r3-methods .method-options--looks .method-option > * {
+  grid-column: 2;
+}
+.r3-methods .method-options--looks .method-option-target {
+  grid-column: 1;
+  grid-row: 1 / span 3;
+  min-height: 120px;
+  border-radius: 8px;
+}
+.r3-methods .method-options--looks .method-option-actions {
+  align-self: end;
+}
+@media (min-width: 741px) {
+  .r3-methods .method-target-stage {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 32px;
+    padding: 20px;
+    align-items: center;
+  }
+  .r3-methods .method-target-stage .candidate-visual {
+    height: clamp(248px, calc(100vh - 500px), 400px);
+    width: auto;
+    aspect-ratio: 4 / 5;
+  }
+  .r3-methods .method-target-stage .preview-ladder .region-photo {
+    height: clamp(112px, calc(100vh - 636px), 250px);
+  }
+}
+@media (max-width: 740px) {
+  .r3-methods .method-target-stage .preview-ladder .region-photo {
+    height: 96px;
+  }
+  .r3-methods .method-options--2,
+  .r3-methods .method-options--looks {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .r3-methods .method-options--looks .method-option {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+  }
+  .r3-methods .method-options--looks .method-option > *,
+  .r3-methods .method-options--looks .method-option-target {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .r3-methods .method-options--looks .method-option-target {
+    height: 140px;
+    margin-bottom: 16px;
+  }
+}
+
+/* Checkpoint: one short per-area reading under the guidance. */
+.measurement-areas {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font: 500 14px/1.4 var(--sans);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Mirror heatmap: a compact legend pill over the photo. */
+.r3-mirror .mirror-heatmap-control,
+.mirror-heatmap-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: auto;
+  max-width: calc(100% - 32px);
+  padding: 6px 16px 6px 6px;
+  border-radius: 999px;
+  background: #fffcf7f2;
+  box-shadow: 0 6px 18px #2a24201a;
+}
+.mirror-heatmap-toggle {
+  min-height: 32px;
+  padding: 4px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: #edf1e6;
+  color: var(--forest);
+  font: 600 12px/1 var(--sans);
+  white-space: nowrap;
+}
+.mirror-heatmap-toggle:hover {
+  background: #e1e9d9;
+}
+.measurement-legend--pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: auto;
+  padding: 0 0 10px;
+  margin: 0;
+  font-size: 11px;
+  color: #52604b;
+}
+.measurement-legend--pill .heatmap-scale {
+  width: 112px;
+  height: 8px;
+}
+.measurement-legend--pill .heatmap-target-marker {
+  top: auto;
+  bottom: -14px;
+  font-size: 9px;
+  line-height: 1;
+}
+.measurement-legend--pill .heatmap-target-marker::after {
+  top: -12px;
+  height: 12px;
+}
+@media (max-width: 740px) {
+  .r3-mirror .mirror-heatmap-control,
+  .mirror-heatmap-control {
+    width: auto;
+    left: 8px;
+    bottom: 8px;
+    padding: 4px 12px 4px 4px;
+  }
+  .measurement-legend--pill .heatmap-scale {
+    width: 72px;
+  }
+}
