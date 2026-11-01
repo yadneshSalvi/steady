@@ -1,5 +1,22 @@
 # Release verification
 
+## Review round 2 — local verification, release pending
+
+R2 replaces the cheek guide with a shared smooth anatomical oval, shows a translucent uncropped heatmap with measured spatial feedback, adds compact first-pass recordings and a warmer upper-lid shadow target, and completes the selected-target generation flow for remaining eye or cheek repairs. Existing recordings, saved recipes, completed-side snapshots, and earlier scalar observations retain their identities. No database migration is required.
+
+- [x] Complete local unit/invariant/PostgreSQL suite: **366/366 tests across 36 files**, with zero failures or skips, including 26 cases in a disposable local PostgreSQL schema. Remote database URLs are rejected by that test suite.
+- [x] Lint with zero warnings, TypeScript, and optimized production build pass. The build contains 19 generated pages and the pinned local model/runtime assets.
+- [x] All 31 historical PNGs and three original manifests remain byte-identical. The eight adopted R2 outputs have exact source/recipe/request/task/output hashes in a separately pinned manifest. Ten successful, one-attempt provider requests used exactly ten observed units, **962→952**; two too-subtle eye trials remain privately preserved and are not adopted. No further paid release smoke is planned.
+- [x] Independent local in-app browser inspection passes at **1366×768, 1440×813, 1440×900, and 390×844**: compact hero label, full smooth cheek guide, complete padded 42%-opacity heatmap, spatial text, and no horizontal overflow. The broader-tool notice opens its proposal directly; Other changes is one click away.
+- [x] Saved R2 sample history reloads the exact first-pass bitmap. Default Rose/Full shows 38% on each cheek with genuine upper lag and secondary outer/inner readings of 23/53% left and 26/51% right. New warm shadow Light measures 59% of Full. These remain labeled simulations.
+- [x] Actual local thumbnail HTTP responses for the six unique Rose ladder images are 256×320 WebP, totaling 24,694 bytes versus 5,120,771 bytes for their originals. The 99.52% reduction describes those thumbnail payloads only. Full measurement originals are unchanged; compact text-only ladders contain no images.
+- [x] Complete optimized browser suite: **24/24 passed in 80.675931 seconds**, one Chromium worker, zero failures, skips, flakes, or retries. The real private upload/isolation/erasure test is enabled. New cases cover four viewport sizes, actual partial-render spatial feedback and full heatmap containment, direct stalled repair, selected eye/powder target generation, polling, explicit safe retry, and preserved completed history. Automated fresh-provider calls are blocked or mocked.
+- [x] Repository formatting and whitespace checks pass. Application/test source is frozen.
+- [ ] Final source/client credential scan.
+- [ ] Release commit, canonical deployment, complete canonical browser suite, and independent prior-session compatibility inspection.
+
+[Sanitized local acceptance](evidence/review-round2-local.json), [measurement evaluation](evaluation-measurement.md), and [recording provenance](../public/examples/PROVENANCE.md) define the evidence. Refreshed IMAGE/VIDEO timings are reported separately from R1. Physical webcam plus real blush remains unverified; synthetic inputs do not establish human application outcomes. Earlier releases below retain their dated evidence.
+
 ## Session recovery follow-up — released and verified
 
 A failed session lookup previously fell through to anonymous sign-in, which could block an existing owner from reopening a private studio. The client now preserves that identity on network errors, unsuccessful HTTP responses, and malformed session data. It permits anonymous sign-in only after an HTTP 200 response containing literal JSON `null`. A session-read 429 can retry the GET once after a supported `X-Retry-After` or `Retry-After` delay of at most 60 seconds; an uncertain sign-in POST is never automatically repeated. Existing studio setup, preview, and provider behavior is unchanged.

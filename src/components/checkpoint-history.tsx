@@ -16,6 +16,8 @@ import {
 } from "@/lib/vision/local-checkpoints";
 import { MeasurementVisual } from "./measurement-visual";
 import { sameStoredMeasurement } from "@/lib/vision/measurement-guidance";
+import { CHEEK_GEOMETRY_VERSION } from "@/lib/vision/geometry";
+import { sampleCheckpointForHistory } from "@/lib/youcam/sample-checkpoints";
 
 function CheckpointEntry({
   session,
@@ -28,12 +30,16 @@ function CheckpointEntry({
 }) {
   const [local, setLocal] = useState<LocalCheckpoint | null>(null);
   const measurement = observation.measurement!;
+  const currentGeometry =
+    !measurement.region.endsWith("_cheek") ||
+    measurement.geometryVersion === CHEEK_GEOMETRY_VERSION;
   const target = session.assets.find(
     (asset) => asset.id === measurement.targetAssetId,
   );
   useEffect(() => {
     const remembered = readLocalCheckpoint(session.id, observation.actionId);
     if (
+      currentGeometry &&
       remembered &&
       remembered.targetUrl === target?.url &&
       sameStoredMeasurement(remembered.measurement, measurement)
@@ -42,19 +48,18 @@ function CheckpointEntry({
       return;
     }
     queueMicrotask(() => setLocal(null));
-    if (session.mode !== "sample" || !target) return;
+    if (session.mode !== "sample" || !target || !currentGeometry) return;
     const source = session.assets.find(
       (asset) => asset.id === session.sourceAssetId,
     );
-    const lightUrl = target.url.replace(/-(light|build|full)\./, "-light.");
-    if (!source || (lightUrl === target.url && !target.url.includes("-light.")))
-      return;
+    const recorded = sampleCheckpointForHistory(session, measurement, target);
+    if (!source || !recorded) return;
     let alive = true;
     void (async () => {
       const baseline = await loadLocalFrame(source.url);
       const [preview, checkpoint] = await Promise.all([
         loadLocalFrame(target.url, baseline.landmarks),
-        loadLocalFrame(lightUrl, baseline.landmarks),
+        loadLocalFrame(recorded.url, baseline.landmarks),
       ]);
       const result = measureCheckpoint({
         baseline,
@@ -64,7 +69,7 @@ function CheckpointEntry({
       if (alive)
         setLocal({
           actionId: observation.actionId,
-          checkpointUrl: lightUrl,
+          checkpointUrl: recorded.url,
           targetUrl: target.url,
           result,
           measurement,
@@ -79,7 +84,7 @@ function CheckpointEntry({
     return () => {
       alive = false;
     };
-  }, [session, observation.actionId, target, measurement]);
+  }, [session, observation.actionId, target, measurement, currentGeometry]);
   return (
     <article className="review-checkpoint">
       <h3>{action.title}</h3>
@@ -94,6 +99,12 @@ function CheckpointEntry({
         <p className="small muted">
           The numbers are saved. This browser no longer holds the checkpoint
           image.
+        </p>
+      ) : null}
+      {!local && session.mode === "sample" && !currentGeometry ? (
+        <p className="small muted">
+          These saved readings used the earlier cheek guide. Their numbers are
+          preserved without reconstructing a new heatmap.
         </p>
       ) : null}
     </article>

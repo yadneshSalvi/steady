@@ -9,7 +9,11 @@ import { applyCommand, createSession } from "../src/lib/planner";
 import { attachRecordedSamplePreviews } from "../src/lib/server/recorded-previews";
 import { RECORDED_MANIFEST_SHA256 } from "../src/lib/youcam/recorded-integrity";
 import { RecordedSamplesManifestSchema } from "../src/lib/youcam/recorded";
-import { makeRecipe, validateEffects } from "../src/lib/youcam/recipes";
+import {
+  makeLegacyEyeRecipe,
+  makeRecipe,
+  validateEffects,
+} from "../src/lib/youcam/recipes";
 import { RecordedLadderManifestSchema } from "../src/lib/youcam/ladder-recorded";
 import { RECORDED_LADDER_MANIFEST_SHA256 } from "../src/lib/youcam/ladder-integrity";
 import { RecordedEyesManifestSchema } from "../src/lib/youcam/eye-recorded";
@@ -152,7 +156,7 @@ describe("recorded live YouCam examples (synthetic input, no physical outcome)",
     );
     for (const record of data.records) {
       expect(validateEffects(record.recipe)).toEqual(
-        makeRecipe("eyes", record.routeId, false, record.intensity),
+        makeLegacyEyeRecipe(record.routeId, record.intensity),
       );
       expect(sha(JSON.stringify(validateEffects(record.recipe)))).toBe(
         record.recipeHash,

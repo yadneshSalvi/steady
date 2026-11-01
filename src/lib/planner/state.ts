@@ -1,6 +1,7 @@
 import type {
   PlanAction,
   Preferences,
+  PreviewLevel,
   SessionCommand,
   SessionStage,
   SetupInput,
@@ -104,6 +105,29 @@ export function currentAction(session: StudioSession): PlanAction | undefined {
   return session.activePlan?.actions.find(
     (action) => !session.completedActionIds.includes(action.id),
   );
+}
+
+/** Application requests describe the selected target for unfinished work.
+ * A changed product/recipe needs this just as much as a changed goal does. */
+export function applicationPreviewTarget(
+  session: StudioSession,
+): { candidateId: string; variantId: PreviewLevel } | undefined {
+  if (
+    session.mode !== "personal" ||
+    !["applying", "paused", "adapting"].includes(session.stage) ||
+    !currentAction(session)
+  )
+    return undefined;
+  const candidate =
+    session.stage === "adapting"
+      ? session.adaptation?.candidate
+      : session.activePlan;
+  return candidate
+    ? {
+        candidateId: candidate.id,
+        variantId: candidate.selectedPreviewVariantId ?? "full",
+      }
+    : undefined;
 }
 
 export function createSession(

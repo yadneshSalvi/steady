@@ -33,7 +33,7 @@ const explanations: Record<
   simulated: {
     label: "Simulated checkpoint",
     description:
-      "A lighter, recorded YouCam render is measured against the original source and your chosen target. The numbers come from those pixels; they demonstrate the measurement flow, not physical application.",
+      "A recorded YouCam render stands in for a first pass and is measured against the original source and your chosen target. The numbers and spatial guidance come from those pixels; this is a simulated application.",
   },
 };
 

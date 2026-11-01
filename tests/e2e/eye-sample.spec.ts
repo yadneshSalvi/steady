@@ -109,7 +109,7 @@ test("recorded eye sample keeps a completed liner eye while repairing the remain
       originalTarget,
     );
     expect(proposed.adaptation?.candidate.previewAsset?.url).toMatch(
-      /\/eyes\/shadow-/,
+      /\/round2\/shadow-full-warm-v2\.png$/,
     );
     await expect(page.getByText(/two sides may differ/)).toBeVisible();
     expect(
@@ -135,7 +135,9 @@ test("recorded eye sample keeps a completed liner eye while repairing the remain
         (effect) => effect.category === "eye_shadow",
       ),
     ).toBe(true);
-    expect(adapted.activePlan?.previewAsset?.url).toMatch(/\/eyes\/shadow-/);
+    expect(adapted.activePlan?.previewAsset?.url).toMatch(
+      /\/round2\/shadow-full-warm-v2\.png$/,
+    );
     await page
       .getByRole("button", { name: "Measure the sample", exact: true })
       .click();

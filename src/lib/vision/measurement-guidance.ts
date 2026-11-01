@@ -3,6 +3,46 @@ import type {
   StoredMeasurement,
   StudioSession,
 } from "../contracts";
+import type { MeasurementResult } from "./measure";
+
+/** Secondary cheek evidence never replaces the dominant measured lagging area. */
+export function secondarySpatialGuidance(
+  measurement: Pick<
+    MeasurementResult,
+    "region" | "verdict" | "lagging" | "regionalProgress"
+  >,
+): string | null {
+  if (
+    measurement.verdict !== "build" ||
+    (measurement.region !== "left_cheek" &&
+      measurement.region !== "right_cheek") ||
+    (measurement.lagging !== "upper" && measurement.lagging !== "lower")
+  )
+    return null;
+  const inner = measurement.regionalProgress?.find(
+    (part) => part.subregion === "inner",
+  );
+  const outer = measurement.regionalProgress?.find(
+    (part) => part.subregion === "outer",
+  );
+  if (
+    !inner ||
+    !outer ||
+    [inner, outer].some(
+      (part) =>
+        !Number.isFinite(part.progress) ||
+        part.progress < 0 ||
+        part.progress > 1.5 ||
+        !Number.isFinite(part.pixels) ||
+        part.pixels < 1,
+    )
+  )
+    return null;
+  if (Math.abs(inner.progress - outer.progress) < 0.12) return null;
+  const [lighter, other] =
+    inner.progress < outer.progress ? [inner, outer] : [outer, inner];
+  return `The ${lighter.subregion} part is also lighter: about ${Math.round(lighter.progress * 100)}% toward the target, compared with ${Math.round(other.progress * 100)}% on the ${other.subregion} part.`;
+}
 
 export function checkpointGuidance(
   measurement: Pick<
@@ -68,6 +108,8 @@ export function stalledCheckpoint(
     ) &&
     measured[0].targetAssetId === measured[1].targetAssetId &&
     measured[0].targetLevel === measured[1].targetLevel &&
+    measured[0].geometryVersion === measured[1].geometryVersion &&
+    measured[0].sampleCheckpointId === measured[1].sampleCheckpointId &&
     measured[1].targetAssetId === session.activePlan?.previewAsset?.id &&
     measured[1].targetLevel ===
       (session.activePlan?.selectedPreviewVariantId ?? "full") &&
@@ -95,6 +137,8 @@ export function sameStoredMeasurement(
     "targetLevel",
     "targetAssetId",
     "elapsedMs",
+    "geometryVersion",
+    "sampleCheckpointId",
   ] as const;
   return fields.every((field) => left[field] === right[field]);
 }

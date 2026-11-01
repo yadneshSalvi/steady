@@ -103,6 +103,46 @@ beforeEach(() => {
 });
 
 describe("durable preview projection", () => {
+  it.each(["light", undefined] as const)(
+    "projects an explicitly bound legacy Full recipe while keeping the historical job level %s immutable",
+    (historicalLevel) => {
+      const candidate = session.candidates[0];
+      const light = candidate.previewVariants!.find(
+        (variant) => variant.id === "light",
+      )!;
+      const full = candidate.previewVariants!.find(
+        (variant) => variant.id === "full",
+      )!;
+      // Older softer plans stored this exact25 recipe without ladder labels;
+      // their approved target is now addressed as Full by legacy fallback.
+      full.recipe = structuredClone(light.recipe);
+      full.intensity = 25;
+      full.previewJobId = job.id;
+      selectPreviewLevel(candidate, "full");
+      session.activePlan = structuredClone(candidate);
+      job.input = {
+        effects: structuredClone(full.recipe),
+        ...(historicalLevel ? { variantId: historicalLevel } : {}),
+      };
+      job.request_hash = previewRequestHash(job.source_asset_id, full.recipe);
+      job.state = "succeeded";
+      job.output_asset_id = output.id;
+      const input = JSON.stringify(job.input);
+      expect(projectJobIntoSession(session, job, output)).toBe(true);
+      for (const copy of [candidate, session.activePlan]) {
+        expect(copy.selectedPreviewVariantId).toBe("full");
+        expect(copy.recipe).toEqual(full.recipe);
+        expect(copy.previewStatus).toBe("ready");
+        expect(copy.previewAsset?.id).toBe(output.id);
+        expect(
+          copy.previewVariants!.find((variant) => variant.id === "light")!
+            .previewStatus,
+        ).toBe("not_requested");
+      }
+      expect(JSON.stringify(job.input)).toBe(input);
+    },
+  );
+
   it("stores an unselected ladder result without replacing the chosen target", () => {
     const candidate = session.candidates[0];
     const full = candidate.previewVariants!.find(
@@ -228,6 +268,9 @@ describe("durable preview projection", () => {
       job.input.effects,
     ) as ProviderJob["input"]["effects"];
     expect(jobMatchesSession(session, job)).toBe(true);
+    job.session_id = "another-studio";
+    expect(jobMatchesSession(session, job)).toBe(false);
+    job.session_id = session.id;
     job.source_asset_id = "another-source";
     expect(jobMatchesSession(session, job)).toBe(false);
     job.source_asset_id = "source-id";

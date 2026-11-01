@@ -19,6 +19,7 @@ import { ownedSession, expectRevision, persistSession } from "./sessions";
 import { presentAsset, type AssetRow } from "./assets";
 import type { PoolClient } from "pg";
 import { readPreviewBudget, type PreviewBudget } from "./preview-budget";
+import { applicationPreviewTarget } from "@/lib/planner/state";
 
 export { requesterHash } from "./auth";
 
@@ -78,38 +79,28 @@ export function jobMatchesSession(
 ): boolean {
   return (
     !job.superseded_at &&
+    session.id === job.session_id &&
     session.sourceAssetId === job.source_asset_id &&
-    candidateCopies(session, job.candidate_id).some((candidate) =>
-      targetMatches(candidate, job),
+    candidateCopies(session).some(
+      (candidate) => jobTargets(candidate, job).length > 0,
     )
   );
 }
 
-function candidateCopies(session: StudioSession, id: string): CandidatePlan[] {
+function candidateCopies(session: StudioSession, id?: string): CandidatePlan[] {
   return [
     ...new Set([
       ...session.candidates,
       ...(session.adaptation ? [session.adaptation.candidate] : []),
       ...(session.activePlan ? [session.activePlan] : []),
     ]),
-  ].filter((candidate) => candidate.id === id);
+  ].filter((candidate) => !id || candidate.id === id);
 }
 
-function jobTarget(
-  candidate: CandidatePlan,
+function recipeMatchesJob(
+  target: CandidatePlan | PreviewVariant,
   job: ProviderJob,
-): CandidatePlan | PreviewVariant | undefined {
-  const target = job.input.variantId
-    ? candidate.previewVariants?.find(
-        (variant) => variant.id === job.input.variantId,
-      )
-    : candidate;
-  return target?.previewJobId === job.id ? target : undefined;
-}
-
-function targetMatches(candidate: CandidatePlan, job: ProviderJob): boolean {
-  const target = jobTarget(candidate, job);
-  if (!target) return false;
+): boolean {
   try {
     return (
       previewRequestHash(job.source_asset_id, target.recipe) ===
@@ -120,6 +111,37 @@ function targetMatches(candidate: CandidatePlan, job: ProviderJob): boolean {
   } catch {
     return false;
   }
+}
+
+function jobTargets(
+  candidate: CandidatePlan,
+  job: ProviderJob,
+): (CandidatePlan | PreviewVariant)[] {
+  const variants = candidate.previewVariants ?? [];
+  if (!variants.length)
+    return candidate.previewJobId === job.id && recipeMatchesJob(candidate, job)
+      ? [candidate]
+      : [];
+  // A level is presentation, not paid request identity. Legacy softer recipes
+  // can match a job submitted under a different level or before levels existed.
+  const targets = variants.filter(
+    (variant) =>
+      variant.previewJobId === job.id && recipeMatchesJob(variant, job),
+  );
+  const selected = variants.find(
+    (variant) => variant.id === (candidate.selectedPreviewVariantId ?? "full"),
+  );
+  // Older saves bound only the top-level target. Repair that projection only
+  // when the selected recipe is exact and has no newer job of its own.
+  if (
+    selected &&
+    !selected.previewJobId &&
+    candidate.previewJobId === job.id &&
+    recipeMatchesJob(candidate, job) &&
+    recipeMatchesJob(selected, job)
+  )
+    targets.push(selected);
+  return targets;
 }
 
 /** Project authoritative durable state; a late callback cannot regress a
@@ -146,51 +168,54 @@ export function projectJobIntoSession(
       asset.purpose !== "preview")
   )
     return false;
-  for (const candidate of candidateCopies(session, job.candidate_id)) {
-    if (!targetMatches(candidate, job)) continue;
-    const target = jobTarget(candidate, job)!;
-    if (job.cancel_requested || job.state === "cancelled") {
-      target.previewStatus = "cancelled";
-      target.previewError = "Preview stopped. Your chosen method is saved.";
-      target.previewRetryable =
-        !job.provider_task_id && !job.submission_started_at;
-      delete target.previewAsset;
-    } else if (job.state === "succeeded") {
-      target.previewStatus = "ready";
-      target.previewAsset = asset!;
-      delete target.previewRetryable;
-      delete target.previewError;
-      if (!session.assets.some((item) => item.id === asset!.id))
-        session.assets.push(asset!);
-    } else if (
-      job.state === "failed" ||
-      (job.state === "unknown_submission" && !job.provider_task_id)
-    ) {
-      target.previewStatus = "failed";
-      target.previewRetryable =
-        canResumeKnownTask(job) ||
-        (job.state === "failed" &&
-          !job.provider_task_id &&
-          !job.submission_started_at);
-      target.previewError =
-        job.state === "failed" &&
-        !canResumeKnownTask(job) &&
-        Boolean(job.provider_task_id || job.submission_started_at)
-          ? "This preview could not be created. Try a new photo; your chosen method is saved."
-          : job.error_message ||
-            "The preview stopped before submission. Please try again.";
-      delete target.previewAsset;
-    } else {
-      target.previewStatus = job.state === "queued" ? "queued" : "processing";
-      delete target.previewRetryable;
-      delete target.previewError;
-      delete target.previewAsset;
+  for (const candidate of candidateCopies(session)) {
+    const targets = jobTargets(candidate, job);
+    for (const target of targets) {
+      target.previewJobId = job.id;
+      if (job.cancel_requested || job.state === "cancelled") {
+        target.previewStatus = "cancelled";
+        target.previewError = "Preview stopped. Your chosen method is saved.";
+        target.previewRetryable =
+          !job.provider_task_id && !job.submission_started_at;
+        delete target.previewAsset;
+      } else if (job.state === "succeeded") {
+        target.previewStatus = "ready";
+        target.previewAsset = asset!;
+        delete target.previewRetryable;
+        delete target.previewError;
+        if (!session.assets.some((item) => item.id === asset!.id))
+          session.assets.push(asset!);
+      } else if (
+        job.state === "failed" ||
+        (job.state === "unknown_submission" && !job.provider_task_id)
+      ) {
+        target.previewStatus = "failed";
+        target.previewRetryable =
+          canResumeKnownTask(job) ||
+          (job.state === "failed" &&
+            !job.provider_task_id &&
+            !job.submission_started_at);
+        target.previewError =
+          job.state === "failed" &&
+          !canResumeKnownTask(job) &&
+          Boolean(job.provider_task_id || job.submission_started_at)
+            ? "This preview could not be created. Try a new photo; your chosen method is saved."
+            : job.error_message ||
+              "The preview stopped before submission. Please try again.";
+        delete target.previewAsset;
+      } else {
+        target.previewStatus = job.state === "queued" ? "queued" : "processing";
+        delete target.previewRetryable;
+        delete target.previewError;
+        delete target.previewAsset;
+      }
     }
-    if (
-      job.input.variantId &&
-      (candidate.selectedPreviewVariantId || "full") === job.input.variantId
-    )
-      selectPreviewLevel(candidate, job.input.variantId);
+    const selected = candidate.previewVariants?.find(
+      (variant) =>
+        variant.id === (candidate.selectedPreviewVariantId ?? "full"),
+    );
+    if (selected && targets.includes(selected))
+      selectPreviewLevel(candidate, selected.id);
   }
   return before !== snapshot();
 }
@@ -208,6 +233,33 @@ async function outputAsset(
 export interface PreviewRequestOptions {
   candidateId?: string;
   variantId?: PreviewLevel;
+}
+
+function legacyPreviewVariant(candidate: CandidatePlan): PreviewVariant {
+  const id = candidate.selectedPreviewVariantId ?? "full";
+  const appearance = candidate.recipe.find((effect) =>
+    ["blush", "eye_liner", "eye_shadow"].includes(effect.category),
+  );
+  const palette = Array.isArray(appearance?.palettes)
+    ? appearance.palettes[0]
+    : undefined;
+  const amount =
+    palette && typeof palette === "object" && !Array.isArray(palette)
+      ? palette.colorIntensity
+      : undefined;
+  const intensity =
+    ([20, 25, 45, 65] as const).find((value) => value === amount) ??
+    ({ light: 25, build: 45, full: 65 } as const)[id];
+  return {
+    id,
+    intensity,
+    recipe: structuredClone(candidate.recipe),
+    previewStatus: candidate.previewStatus,
+    previewAsset: candidate.previewAsset,
+    previewJobId: candidate.previewJobId,
+    previewError: candidate.previewError,
+    previewRetryable: candidate.previewRetryable,
+  };
 }
 
 export async function queuePreviews(
@@ -251,20 +303,33 @@ export async function queuePreviews(
         "Confirm comfortable movements and tools before creating previews.",
       );
     const adapting = !["choosing", "ready"].includes(session.stage);
+    const applicationTarget = applicationPreviewTarget(session);
     if (
       adapting &&
-      (!["applying", "paused", "adapting"].includes(session.stage) ||
-        options.variantId !== "light")
+      (!applicationTarget ||
+        (options.candidateId &&
+          options.candidateId !== applicationTarget.candidateId) ||
+        (options.variantId &&
+          options.variantId !== applicationTarget.variantId))
     )
       throw new ApiError(
         409,
         "PREVIEW_STAGE",
-        "During application, request a Light preview for a softer target.",
+        "During application, create the selected target for the current method.",
       );
-    const candidateId = options.candidateId || session.selectedCandidateId;
-    const candidate = candidateId
-      ? candidateCopies(session, candidateId)[0]
-      : undefined;
+    const candidateId =
+      options.candidateId ||
+      applicationTarget?.candidateId ||
+      session.selectedCandidateId;
+    // The proposal/approved plan is authoritative during application, including
+    // older saves whose comparison card still has a different selected level.
+    const candidate = adapting
+      ? session.stage === "adapting"
+        ? session.adaptation?.candidate
+        : session.activePlan
+      : candidateId
+        ? candidateCopies(session, candidateId)[0]
+        : undefined;
     if (!candidate)
       throw new ApiError(
         422,
@@ -272,18 +337,25 @@ export async function queuePreviews(
         "Choose a method before creating its personal previews.",
       );
     if (!candidate.previewVariants?.length) {
-      const variants = makePreviewVariants(
-        session.lookId,
-        candidate.routeId,
-        session.includeLips,
-      );
+      // Legacy approved recipes stay exact. Rebuilding one from today's
+      // catalog could silently change an already accepted appearance.
+      const variants: PreviewVariant[] = adapting
+        ? [legacyPreviewVariant(candidate)]
+        : makePreviewVariants(
+            session.lookId,
+            candidate.routeId,
+            session.includeLips,
+          );
       for (const copy of candidateCopies(session, candidate.id))
         copy.previewVariants = structuredClone(variants);
     }
     const selectedLevel = candidate.selectedPreviewVariantId || "full";
+    const requestedLevel = adapting
+      ? applicationTarget!.variantId
+      : options.variantId;
     const targets = candidate
       .previewVariants!.filter(
-        (variant) => !options.variantId || variant.id === options.variantId,
+        (variant) => !requestedLevel || variant.id === requestedLevel,
       )
       .sort(
         (a, b) =>
@@ -342,6 +414,8 @@ export async function queuePreviews(
       );
     const bind = (variant: PreviewVariant, job: ProviderJob) => {
       for (const copy of candidateCopies(session, candidate.id)) {
+        if (!copy.previewVariants?.length)
+          copy.previewVariants = structuredClone(candidate.previewVariants);
         const target = copy.previewVariants?.find(
           (entry) => entry.id === variant.id,
         );
@@ -352,6 +426,10 @@ export async function queuePreviews(
         ) {
           changed ||= target.previewJobId !== job.id;
           target.previewJobId = job.id;
+          if (adapting && copy.selectedPreviewVariantId !== selectedLevel) {
+            selectPreviewLevel(copy, selectedLevel);
+            changed = true;
+          }
         }
       }
     };
@@ -359,8 +437,11 @@ export async function queuePreviews(
       const effects = validateEffects(variant.recipe);
       const hash = previewRequestHash(session.sourceAssetId, effects);
       const previous = await client.query<ProviderJob>(
-        "SELECT * FROM provider_jobs WHERE session_id=$1 AND candidate_id=$2 AND request_hash=$3 AND superseded_at IS NULL FOR UPDATE",
-        [session.id, candidate.id, hash],
+        // Explicitly rebind an exact source/recipe job after repair instead of
+        // paying again merely because the physical action candidate has a new ID.
+        // A paid/uncertain attempt takes precedence over an unsubmitted failure.
+        "SELECT * FROM provider_jobs WHERE session_id=$1 AND source_asset_id=$2 AND request_hash=$3 AND superseded_at IS NULL ORDER BY CASE WHEN state='succeeded' THEN 0 WHEN provider_task_id IS NOT NULL THEN 1 WHEN submission_started_at IS NOT NULL THEN 2 WHEN state NOT IN ('failed','cancelled') THEN 3 ELSE 4 END,created_at DESC LIMIT 1 FOR UPDATE",
+        [session.id, session.sourceAssetId, hash],
       );
       const prior = previous.rows[0];
       const retryUnsubmitted =
@@ -369,13 +450,6 @@ export async function queuePreviews(
         !prior.provider_task_id &&
         !prior.submission_started_at;
       if (prior && !retryUnsubmitted) {
-        if (!prior.input.variantId) {
-          prior.input = { ...prior.input, variantId: variant.id };
-          await client.query(
-            "UPDATE provider_jobs SET input=$2::jsonb WHERE id=$1",
-            [prior.id, JSON.stringify(prior.input)],
-          );
-        }
         if (canResumeKnownTask(prior)) {
           await client.query(
             "UPDATE provider_jobs SET state='waiting',error_code=NULL,error_message=NULL,workflow_run_id=NULL,updated_at=now() WHERE id=$1 AND provider_task_id IS NOT NULL",

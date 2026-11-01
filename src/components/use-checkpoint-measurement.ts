@@ -11,7 +11,12 @@ import type {
   StoredMeasurement,
   StudioSession,
 } from "@/lib/contracts";
-import { faceEligible, type Point } from "@/lib/vision/geometry";
+import { sampleCheckpointForPlan } from "@/lib/youcam/sample-checkpoints";
+import {
+  CHEEK_GEOMETRY_VERSION,
+  faceEligible,
+  type Point,
+} from "@/lib/vision/geometry";
 import {
   createMeasurementTarget,
   measureCheckpoint,
@@ -278,16 +283,19 @@ export function useCheckpointMeasurement({
         const started = performance.now();
         let frame: LocalFrame;
         let frameUrl: string;
+        let sampleCheckpointId: string | undefined;
         if (isSample) {
-          const light = activeSession.activePlan!.previewVariants?.find(
-            (item) => item.id === "light",
-          )?.previewAsset;
-          if (!light)
+          const recorded = sampleCheckpointForPlan(
+            activeSession,
+            activeSession.activePlan!,
+          );
+          if (!recorded)
             throw new Error(
-              "The recorded Light checkpoint is unavailable for this target.",
+              "The recorded sample checkpoint is unavailable for this target.",
             );
-          frame = await loadLocalFrame(light.url, activeSource.landmarks);
-          frameUrl = light.url;
+          frame = await loadLocalFrame(recorded.url, activeSource.landmarks);
+          frameUrl = recorded.url;
+          sampleCheckpointId = recorded.sha256;
         } else {
           if (!videoRef.current || !current.cameraActive)
             throw new Error("Open your camera to measure this step locally.");
@@ -302,6 +310,10 @@ export function useCheckpointMeasurement({
         const elapsedMs = performance.now() - started;
         const measurement: StoredMeasurement = {
           version: 1,
+          geometryVersion: result.region.endsWith("_cheek")
+            ? CHEEK_GEOMETRY_VERSION
+            : "landmark-polygon-v1",
+          ...(sampleCheckpointId ? { sampleCheckpointId } : {}),
           region: result.region,
           verdict: result.verdict,
           progress: result.progress,

@@ -509,6 +509,20 @@ p + p {
   flex-direction: column;
   gap: 10px;
 }
+.portrait-provenance {
+  position: absolute;
+  top: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  width: max-content;
+  max-width: calc(100% - 48px);
+}
+.portrait-provenance .provenance {
+  width: max-content;
+  max-width: 100%;
+  white-space: nowrap;
+}
 .portrait-caption > span:last-child {
   font-family: var(--serif);
   font-size: 26px;
@@ -6496,6 +6510,26 @@ button.provenance:hover {
   gap: 24px;
   align-items: start;
 }
+.measurement-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  margin: 0 0 10px;
+  color: #52604b;
+  font-size: 11px;
+  line-height: 1.4;
+}
+.measurement-legend i {
+  width: 65px;
+  height: 8px;
+  border-radius: 5px;
+  opacity: 0.65;
+}
+.measurement-legend strong {
+  font-weight: 600;
+  text-transform: capitalize;
+}
 .measurement-images > figure {
   min-width: 0;
   margin: 0;
@@ -6785,6 +6819,13 @@ button.provenance:hover {
   margin: 13px 0 17px;
   font-size: 17px;
   line-height: 1.5;
+}
+.measurement-visual p.measurement-spatial-guidance {
+  margin: -6px 0 12px;
+  max-width: 720px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #465c45;
 }
 .measurement-images .region-target figcaption {
   margin: 0;

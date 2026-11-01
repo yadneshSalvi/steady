@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { Region } from "@/lib/contracts";
 import {
   faceEligible,
+  CHEEK_OVAL_ANCHORS,
   REGION_LANDMARKS,
   type Point,
 } from "@/lib/vision/geometry";
@@ -52,6 +53,15 @@ function landmarks(): Point[] {
         cheek[i][1],
       ),
     );
+  }
+  // Anatomical oval anchors produce the same known-color fixture bounds.
+  for (const region of ["left_cheek", "right_cheek"] as const) {
+    const side = region === "left_cheek" ? 1 : -1;
+    const centerX = region === "left_cheek" ? 0.69 : 0.31;
+    const anchors = CHEEK_OVAL_ANCHORS[region];
+    set(anchors.medialApple, centerX - side * (0.1 / 1.8), 0.555);
+    set(anchors.lateralCheekbone, centerX + side * (0.1 / 1.8), 0.555);
+    set(anchors.lowerApple, centerX, 0.655);
   }
   [
     [108, 0.43, 0.2],
@@ -259,6 +269,17 @@ describe("local checkpoint measurement from synthetic known pixels", () => {
     });
     expect(result.verdict, result.reason).toBe("build");
     expect(result.lagging).toBe("outer");
+    const inner = result.regionalProgress?.find(
+      (part) => part.subregion === "inner",
+    );
+    const outer = result.regionalProgress?.find(
+      (part) => part.subregion === "outer",
+    );
+    expect(inner?.progress).toBeGreaterThan(0.8);
+    expect(outer?.progress).toBeGreaterThan(0.15);
+    expect(outer?.progress).toBeLessThan(0.25);
+    expect(inner?.pixels).toBeGreaterThan(100);
+    expect(outer?.pixels).toBeGreaterThan(100);
     expect(result.uniformity).toBeLessThan(0.6);
     expect(
       Math.max(...result.heatmap.map((cell) => cell.progress)) -
@@ -322,10 +343,10 @@ describe("local checkpoint measurement from synthetic known pixels", () => {
   it("abstains on low region resolution while the face/reference remain eligible", () => {
     const { target } = fixture();
     const points = landmarks();
-    REGION_LANDMARKS.left_cheek.forEach((index, i) => {
+    Object.values(CHEEK_OVAL_ANCHORS.left_cheek).forEach((index) => {
       points[index] = {
-        x: 0.65 + (i < 3 ? 0 : 0.004),
-        y: 0.55 + (i % 3) * 0.002,
+        x: 0.65 + (points[index].x - 0.69) * 0.02,
+        y: 0.55 + (points[index].y - 0.555) * 0.02,
       };
     });
     const baseline = frame({ points });
@@ -476,6 +497,7 @@ describe("local checkpoint measurement from synthetic known pixels", () => {
     ).toBe(true);
     expect(summary).not.toHaveProperty("heatmap");
     expect(summary).not.toHaveProperty("exclusions");
+    expect(summary).not.toHaveProperty("regionalProgress");
     const crop = regionCrop(baseline.landmarks, "left_cheek")!;
     expect(crop.x).toBeGreaterThanOrEqual(0);
     expect(crop.y + crop.height).toBeLessThanOrEqual(1);

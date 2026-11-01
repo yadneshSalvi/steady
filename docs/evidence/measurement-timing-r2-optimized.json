@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "observedOn": "2026-11-01",
+  "serverMode": "local_optimized_production_build",
+  "evidenceClass": "synthetic_canvas_camera_engineering_test",
+  "sourceAttachmentSha256": "38a6c03d3423a977b4fd47652a7067b711165b9ce10b20020e3438aa9c9d4e65",
+  "testPath": "tests/e2e/local-mirror.spec.ts",
+  "geometryVersion": "cheekbone-oval-v2",
+  "frame": {
+    "width": 1024,
+    "height": 1280,
+    "framesPerSecond": 12
+  },
+  "browser": "156.0.8078.4",
+  "timingScope": "Warmed capture, exact IMAGE inference, PNG encoding and pixel calculation; excludes model startup, JPEG encoding, persistence and UI rendering. No physical webcam or participant.",
+  "physicalWebcam": false,
+  "participant": false,
+  "checkpointFramesUploaded": false,
+  "measurements": [
+    {
+      "condition": "recorded_uniform_light_25",
+      "region": "left_cheek",
+      "verdict": "build",
+      "progress": 0.3794636699291285,
+      "deltaA": 2.2104224262279644,
+      "deltaE00": 2.853530773573181,
+      "uniformity": 0.9881656837007872,
+      "lagging": null,
+      "reason": null,
+      "pipelineProvenance": "local_camera",
+      "elapsedMs": 55.60000002384186
+    },
+    {
+      "condition": "recorded_full_65",
+      "region": "left_cheek",
+      "verdict": "at_target",
+      "progress": 0.9986033021969839,
+      "deltaA": 5.887357176474005,
+      "deltaE00": 7.603932613369677,
+      "uniformity": 0.9987303110964968,
+      "lagging": null,
+      "reason": null,
+      "pipelineProvenance": "local_camera",
+      "elapsedMs": 54
+    },
+    {
+      "condition": "heldout_patch_lighting_change",
+      "region": "left_cheek",
+      "verdict": "insufficient",
+      "progress": null,
+      "deltaA": null,
+      "deltaE00": null,
+      "uniformity": null,
+      "lagging": null,
+      "reason": "The light changed across your face. Use even light and check again.",
+      "pipelineProvenance": "local_camera",
+      "elapsedMs": 38.10000002384186
+    },
+    {
+      "condition": "full_rotated_22_degrees",
+      "region": "left_cheek",
+      "verdict": "insufficient",
+      "progress": null,
+      "deltaA": null,
+      "deltaE00": null,
+      "uniformity": null,
+      "lagging": null,
+      "reason": "Your angle changed. Return to the position of your original baseline, then check again.",
+      "pipelineProvenance": "local_camera",
+      "elapsedMs": 36
+    },
+    {
+      "condition": "returned_full_at_original_angle",
+      "region": "left_cheek",
+      "verdict": "at_target",
+      "progress": 0.9986033021969839,
+      "deltaA": 5.887357176474005,
+      "deltaE00": 7.603932613369677,
+      "uniformity": 0.9987303110964968,
+      "lagging": null,
+      "reason": null,
+      "pipelineProvenance": "local_camera",
+      "elapsedMs": 53.5
+    }
+  ]
+}

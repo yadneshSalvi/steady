@@ -1,5 +1,6 @@
 import { z } from "zod";
 import eyeCatalog from "./fixtures/eye-patterns.json" with { type: "json" };
+import round2Catalog from "./fixtures/round2-patterns.json" with { type: "json" };
 import type {
   CandidatePlan,
   LookId,
@@ -43,7 +44,11 @@ export const EffectSchema = z.discriminatedUnion("category", [
   z
     .object({
       category: z.literal("blush"),
-      pattern: z.object({ name: z.literal("1color1") }).strict(),
+      pattern: z
+        .object({
+          name: z.enum(["1color1", round2Catalog.patterns.blush.label]),
+        })
+        .strict(),
       palettes: z
         .array(z.discriminatedUnion("texture", [matteBlush, satinBlush]))
         .length(1),
@@ -83,7 +88,12 @@ export const EffectSchema = z.discriminatedUnion("category", [
     .object({
       category: z.literal("eye_shadow"),
       pattern: z
-        .object({ name: z.literal(eyeCatalog.patterns.eye_shadow.label) })
+        .object({
+          name: z.enum([
+            eyeCatalog.patterns.eye_shadow.label,
+            round2Catalog.patterns.eye_shadow.label,
+          ]),
+        })
         .strict(),
       palettes: z.array(matteBlush).length(1),
     })
@@ -157,14 +167,14 @@ const PALETTES: Record<
   terracotta: { cheek: "#BF7153", lip: "#A35D46" },
   berry: { cheek: "#9D526C", lip: "#853E5D" },
 };
-export const RECIPE_REVISION = 3;
+export const RECIPE_REVISION = 4;
 export const PREVIEW_LEVELS = [
   { id: "light", label: "Light", intensity: 25 },
   { id: "build", label: "Build", intensity: 45 },
   { id: "full", label: "Full", intensity: 65 },
 ] as const;
 
-/** Frozen first eye-goal subset of the official single-color patterns. */
+/** Current eye targets. Historical eye recipes remain in their pinned catalog. */
 export const EYE_RECIPES = {
   liner: {
     category: "eye_liner",
@@ -173,8 +183,8 @@ export const EYE_RECIPES = {
   },
   shadow: {
     category: "eye_shadow",
-    pattern: eyeCatalog.patterns.eye_shadow.label,
-    color: "#6B4A40",
+    pattern: round2Catalog.patterns.eye_shadow.label,
+    color: "#805036",
   },
 } as const;
 
@@ -183,8 +193,9 @@ export function makeRecipe(
   lookId: LookId,
   routeId: CandidatePlan["routeId"],
   includeLips: boolean,
-  intensity: 25 | 45 | 65 = 65,
+  intensity?: 25 | 45 | 65,
 ): MakeupEffect[] {
+  const chosenIntensity = intensity ?? (routeId === "shadow" ? 45 : 65);
   if (lookId === "eyes") {
     if (includeLips || (routeId !== "liner" && routeId !== "shadow"))
       throw new InvalidRecipeError();
@@ -199,7 +210,11 @@ export function makeRecipe(
         category: eye.category,
         pattern: { name: eye.pattern },
         palettes: [
-          { color: eye.color, texture: "matte", colorIntensity: intensity },
+          {
+            color: eye.color,
+            texture: "matte",
+            colorIntensity: chosenIntensity,
+          },
         ],
       },
     ]);
@@ -209,11 +224,15 @@ export function makeRecipe(
     throw new InvalidRecipeError();
   const powder = routeId === "sweep";
   const blushPalette = powder
-    ? { color: palette.cheek, texture: "matte", colorIntensity: intensity }
+    ? {
+        color: palette.cheek,
+        texture: "matte",
+        colorIntensity: chosenIntensity,
+      }
     : {
         color: palette.cheek,
         texture: "satin",
-        colorIntensity: intensity,
+        colorIntensity: chosenIntensity,
         glowStrength: 10,
       };
   return validateEffects([
@@ -238,7 +257,7 @@ export function makeRecipe(
               {
                 color: palette.lip,
                 texture: "matte",
-                colorIntensity: intensity,
+                colorIntensity: chosenIntensity,
               },
             ],
           },
@@ -254,12 +273,48 @@ export function makePreviewVariants(
 ): PreviewVariant[] {
   return PREVIEW_LEVELS.filter(
     ({ id }) => lookId !== "eyes" || id !== "build",
-  ).map(({ id, intensity }) => ({
-    id,
-    intensity,
-    recipe: makeRecipe(lookId, routeId, includeLips, intensity),
-    previewStatus: "not_requested",
-  }));
+  ).map(({ id, intensity }) => {
+    const chosenIntensity =
+      lookId === "eyes" && routeId === "shadow" && id === "full"
+        ? 45
+        : intensity;
+    return {
+      id,
+      intensity: chosenIntensity,
+      recipe: makeRecipe(lookId, routeId, includeLips, chosenIntensity),
+      previewStatus: "not_requested",
+    };
+  });
+}
+
+/** Reproduces the immutable R1 request contract; never used for new plans. */
+export function makeLegacyEyeRecipe(
+  routeId: "liner" | "shadow",
+  intensity: 25 | 65,
+): MakeupEffect[] {
+  return validateEffects([
+    {
+      category: "skin_smooth",
+      skinSmoothStrength: 0,
+      skinSmoothColorIntensity: 0,
+    },
+    {
+      category: routeId === "liner" ? "eye_liner" : "eye_shadow",
+      pattern: {
+        name:
+          routeId === "liner"
+            ? eyeCatalog.patterns.eye_liner.label
+            : eyeCatalog.patterns.eye_shadow.label,
+      },
+      palettes: [
+        {
+          color: routeId === "liner" ? "#3A2B2B" : "#6B4A40",
+          texture: "matte",
+          colorIntensity: intensity,
+        },
+      ],
+    },
+  ]);
 }
 
 /** Keep the selected target and its job provenance in one place. */

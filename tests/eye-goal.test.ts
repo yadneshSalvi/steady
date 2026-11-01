@@ -18,11 +18,13 @@ import {
 import { setupSchema, commandSchema } from "@/lib/server/validation";
 import {
   EYE_RECIPES,
+  makeLegacyEyeRecipe,
   makePreviewVariants,
   makeRecipe,
   validateEffects,
 } from "@/lib/youcam/recipes";
 import patterns from "@/lib/youcam/fixtures/eye-patterns.json";
+import round2Patterns from "@/lib/youcam/fixtures/round2-patterns.json";
 
 function setup(): SetupInput {
   return {
@@ -318,14 +320,16 @@ describe("official eye recipe and catalog integrity", () => {
       colorNum: 1,
     });
     expect(EYE_RECIPES.liner.pattern).toBe(patterns.patterns.eye_liner.label);
-    expect(EYE_RECIPES.shadow.pattern).toBe(patterns.patterns.eye_shadow.label);
+    expect(EYE_RECIPES.shadow.pattern).toBe(
+      round2Patterns.patterns.eye_shadow.label,
+    );
   });
 
   it.each(["liner", "shadow"] as const)(
-    "uses the frozen %s recipe with explicit zero smoothing",
+    "preserves the historical %s recipe with explicit zero smoothing",
     (route) => {
       for (const intensity of [25, 65] as const) {
-        const recipe = makeRecipe("eyes", route, false, intensity);
+        const recipe = makeLegacyEyeRecipe(route, intensity);
         expect(recipe).toEqual([
           {
             category: "skin_smooth",
@@ -348,6 +352,32 @@ describe("official eye recipe and catalog integrity", () => {
       }
     },
   );
+
+  it("uses the adopted warm upper-lid shadow at Light25 and Full45 for new plans", () => {
+    const variants = makePreviewVariants("eyes", "shadow", false);
+    expect(variants.map(({ id, intensity }) => ({ id, intensity }))).toEqual([
+      { id: "light", intensity: 25 },
+      { id: "full", intensity: 45 },
+    ]);
+    expect(makeRecipe("eyes", "shadow", false)).toEqual(variants[1].recipe);
+    for (const variant of variants)
+      expect(variant.recipe[1]).toEqual({
+        category: "eye_shadow",
+        pattern: { name: "1color20" },
+        palettes: [
+          {
+            color: "#805036",
+            texture: "matte",
+            colorIntensity: variant.intensity,
+          },
+        ],
+      });
+    expect(
+      makePreviewVariants("eyes", "liner", false).map(
+        ({ intensity }) => intensity,
+      ),
+    ).toEqual([25, 65]);
+  });
 
   it("rejects the failed shadow alias, mixed effects, implicit smoothing, and cross-goal routes", () => {
     const liner = makeRecipe("eyes", "liner", false);

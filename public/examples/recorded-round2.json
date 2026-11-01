@@ -1,0 +1,311 @@
+{
+  "schemaVersion": 1,
+  "recipeRevision": 4,
+  "evidenceClass": "recorded_live_youcam_on_synthetic_source",
+  "catalogExcerptSha256": "5bbea24c490de47d9a7dcaaa425f6737128438005c624a4cdf213c48d8dc605b",
+  "source": {
+    "assetId": "sample-portrait-v1",
+    "url": "/images/studio-portrait.jpg",
+    "sha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+    "width": 1024,
+    "height": 1280,
+    "provenance": "synthetic_inspiration"
+  },
+  "records": [
+    {
+      "id": "blush-rose-satin",
+      "purpose": "simulated_first_pass",
+      "lookId": "rose",
+      "texture": "satin",
+      "level": "first_pass",
+      "intensity": 45,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": { "name": "Circle2" },
+          "palettes": [
+            {
+              "color": "#BE6680",
+              "texture": "satin",
+              "colorIntensity": 45,
+              "glowStrength": 10
+            }
+          ]
+        }
+      ],
+      "recipeHash": "946358eec3bf345c9ffb02dcf02cc738cd5e54ffe1931ea34410ceceb10c16b8",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "72abdb6e4634d963c85e78e3c998bcef022630dea64b06e3c8db80422471d6bf",
+      "taskHash": "58245218b5c4b9acd99dcb5b94c4deb02dc6110b073e8037a03ef034f5388334",
+      "attempts": 1,
+      "generatedAt": "2026-11-01T05:16:45.995Z",
+      "output": {
+        "url": "/examples/round2/blush-rose-satin.png",
+        "sha256": "12fc1ba89094b39d87ebf20145ee1605dcd45cd4ab05fa72566898052bf12daa",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "id": "blush-rose-matte",
+      "purpose": "simulated_first_pass",
+      "lookId": "rose",
+      "texture": "matte",
+      "level": "first_pass",
+      "intensity": 45,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": { "name": "Circle2" },
+          "palettes": [
+            { "color": "#BE6680", "texture": "matte", "colorIntensity": 45 }
+          ]
+        }
+      ],
+      "recipeHash": "ee15fab6bf86fd9c447974a23a7183cb91ae7a8ae24a34f1b2509b0f1cdb923f",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "6a4661b773f05dd7e5a8fbcbec6dd6fca3366c14dc8be3169083694f1533b9bf",
+      "taskHash": "2243f7cd49797e485a1765fd0d3daab41072a35b85cf75dc7801af71846f1e59",
+      "attempts": 1,
+      "generatedAt": "2026-11-01T05:27:37.254Z",
+      "output": {
+        "url": "/examples/round2/blush-rose-matte.png",
+        "sha256": "f150343fb9b9b00ed44678115d8613fba22f6b38c7adca0e31962d0085a27097",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "id": "blush-terracotta-satin",
+      "purpose": "simulated_first_pass",
+      "lookId": "terracotta",
+      "texture": "satin",
+      "level": "first_pass",
+      "intensity": 45,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": { "name": "Circle2" },
+          "palettes": [
+            {
+              "color": "#BF7153",
+              "texture": "satin",
+              "colorIntensity": 45,
+              "glowStrength": 10
+            }
+          ]
+        }
+      ],
+      "recipeHash": "ae924ac5d1789132410622496827de68ebcf34241148ce215050cf19a4024a56",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "ad60e1555d79e1210f13e60d857483e265e1fcdf4d1d343633f8e42f38a3ef07",
+      "taskHash": "9128acd1bca49fdb54bc5af36e4631cda9bcc7b5c12a4e5f75c8dd3a4b746e30",
+      "attempts": 1,
+      "generatedAt": "2026-11-01T05:27:45.280Z",
+      "output": {
+        "url": "/examples/round2/blush-terracotta-satin.png",
+        "sha256": "e06393c8fba0ef03a1904d15eef01aea77ce0ad353e817174dbcb246511e2622",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "id": "blush-terracotta-matte",
+      "purpose": "simulated_first_pass",
+      "lookId": "terracotta",
+      "texture": "matte",
+      "level": "first_pass",
+      "intensity": 45,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": { "name": "Circle2" },
+          "palettes": [
+            { "color": "#BF7153", "texture": "matte", "colorIntensity": 45 }
+          ]
+        }
+      ],
+      "recipeHash": "d6fdc2c0ef5c1d459dea5cd8f77440280f6fc670d7433d1079db644433db7bda",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "dad35a35d2add7ff014d9ed36606117e7ca5278ae2d354cb72958a51001f9ca7",
+      "taskHash": "caafa0c32c1b6776c35ad6a504485adf24612557641c7d2127817590647a28c2",
+      "attempts": 1,
+      "generatedAt": "2026-11-01T05:27:53.325Z",
+      "output": {
+        "url": "/examples/round2/blush-terracotta-matte.png",
+        "sha256": "b5398135e05a809df3e5bbebf84ee98a390f93cd4e7778bca240b7a35cfeba8f",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "id": "blush-berry-satin",
+      "purpose": "simulated_first_pass",
+      "lookId": "berry",
+      "texture": "satin",
+      "level": "first_pass",
+      "intensity": 45,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": { "name": "Circle2" },
+          "palettes": [
+            {
+              "color": "#9D526C",
+              "texture": "satin",
+              "colorIntensity": 45,
+              "glowStrength": 10
+            }
+          ]
+        }
+      ],
+      "recipeHash": "a64af3cb898b56459fc030e73f455217adf1747fa8043ecc1d8ae1b825db847f",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "0d9369ddff23a08aa18871ce2af2f882f47da60202a42cf32fbd2a7b1027cece",
+      "taskHash": "94c4caf90c60f81a3dff68f8216f21b1d527adfd5e41fbbda28f10a9e39e62c5",
+      "attempts": 1,
+      "generatedAt": "2026-11-01T05:28:01.159Z",
+      "output": {
+        "url": "/examples/round2/blush-berry-satin.png",
+        "sha256": "c26909c7aa3b9f97688fe296a80940e61fdad86823330e40880fb5b253e3d0d1",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "id": "blush-berry-matte",
+      "purpose": "simulated_first_pass",
+      "lookId": "berry",
+      "texture": "matte",
+      "level": "first_pass",
+      "intensity": 45,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "blush",
+          "pattern": { "name": "Circle2" },
+          "palettes": [
+            { "color": "#9D526C", "texture": "matte", "colorIntensity": 45 }
+          ]
+        }
+      ],
+      "recipeHash": "5896412d405d31af13fec36180fa9a2a3a58b34b87997579e9e17cfa9a973a69",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "33ffe18591736a6cc57d3b004636dbda5304c8d1c92065303947ab7aad08fe31",
+      "taskHash": "a429cd851b0f001b77d32166b006c3217dbc26149e222077d0310421b0d48974",
+      "attempts": 1,
+      "generatedAt": "2026-11-01T05:28:08.919Z",
+      "output": {
+        "url": "/examples/round2/blush-berry-matte.png",
+        "sha256": "909c81b4466b34907a4db66f78be4067a3b8479203138a105d9a36aaedb75fba",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "id": "shadow-light-warm-v2",
+      "purpose": "shadow_target",
+      "lookId": "eyes",
+      "texture": "matte",
+      "level": "light",
+      "intensity": 25,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "eye_shadow",
+          "pattern": { "name": "1color20" },
+          "palettes": [
+            { "color": "#805036", "texture": "matte", "colorIntensity": 25 }
+          ]
+        }
+      ],
+      "recipeHash": "7a87dd7c967a5ef4f533ddcacbcda9858e0f83bc6af063efee1c11e45563538d",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "acbbc0a55ce74a426ec811833405a0b52a33d932f2592b7d11dbddd9e00a30d0",
+      "taskHash": "c1a882b4e6e7975c2879ca48b9b0053b8bb1674492818dec1be27529f894052b",
+      "attempts": 1,
+      "generatedAt": "2026-11-01T05:23:10.792Z",
+      "output": {
+        "url": "/examples/round2/shadow-light-warm-v2.png",
+        "sha256": "7ba83d930982bebb69b22c3b3abf05dd4bd67b7add12b4814ee89f4c30621373",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    },
+    {
+      "id": "shadow-full-warm-v2",
+      "purpose": "shadow_target",
+      "lookId": "eyes",
+      "texture": "matte",
+      "level": "full",
+      "intensity": 45,
+      "recipe": [
+        {
+          "category": "skin_smooth",
+          "skinSmoothStrength": 0,
+          "skinSmoothColorIntensity": 0
+        },
+        {
+          "category": "eye_shadow",
+          "pattern": { "name": "1color20" },
+          "palettes": [
+            { "color": "#805036", "texture": "matte", "colorIntensity": 45 }
+          ]
+        }
+      ],
+      "recipeHash": "82c5558ce79f62627d222a0d2fc0263d2ae8ef8d9947f595fc6338cbf63a5460",
+      "inputSha256": "ab3cb20c55f3b4a7046b5b9b72eceef3376370070426a28bef009caaf7b932cd",
+      "providerRequestHash": "591344dbf0f87783e72c1cb3fded281419c3e61092406cfea0b742c35dc7ed24",
+      "taskHash": "5c7904a836a1857e4e31706318045759e303e1817f0481b3c7d68b80f9aef47a",
+      "attempts": 1,
+      "generatedAt": "2026-11-01T05:23:18.543Z",
+      "output": {
+        "url": "/examples/round2/shadow-full-warm-v2.png",
+        "sha256": "132fc106d49706f8d947cd8af05bc2bf493e3a00446d2063f399ba33d41348d0",
+        "width": 1024,
+        "height": 1280,
+        "provenance": "virtual_preview"
+      }
+    }
+  ]
+}

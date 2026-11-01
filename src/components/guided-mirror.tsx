@@ -28,8 +28,13 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { LOOKS, PRODUCT_LABELS, TOOL_LABELS } from "@/lib/catalog";
 import { uploadPhoto } from "@/lib/upload-client";
-import type { Preferences, StudioSession } from "@/lib/contracts";
+import type {
+  CandidatePlan,
+  Preferences,
+  StudioSession,
+} from "@/lib/contracts";
 import { api, requestPreviews } from "@/lib/client";
+import { applicationPreviewTarget } from "@/lib/planner";
 import { useCheckpointMeasurement } from "./use-checkpoint-measurement";
 import { MeasurementVisual, RegionTarget } from "./measurement-visual";
 import { StaticFaceGuide } from "./static-face-guide";
@@ -57,6 +62,43 @@ const FaceGuide = dynamic(
   () => import("./face-guide").then((module) => module.FaceGuide),
   { ssr: false },
 );
+
+function MethodTargetRequest({
+  candidate,
+  pending,
+  disabled,
+  onGenerate,
+}: {
+  candidate: CandidatePlan;
+  pending: boolean;
+  disabled: boolean;
+  onGenerate: () => void;
+}) {
+  return (
+    <div className="method-target-request">
+      {candidate.previewError ? (
+        <p role="alert" className="small">
+          {candidate.previewError}
+        </p>
+      ) : null}
+      <Button
+        variant="secondary"
+        disabled={disabled || candidate.previewRetryable === false}
+        busy={pending}
+        onClick={onGenerate}
+      >
+        {pending
+          ? "Preparing this method’s target…"
+          : "Generate a target for this method"}
+      </Button>
+      <p className="small">
+        {pending
+          ? "Your selected target will appear when ready."
+          : "One selected level · 1 YouCam unit"}
+      </p>
+    </div>
+  );
+}
 
 export function GuidedMirror({ id }: { id: string }) {
   const studio = useStudioSession(id);
@@ -130,6 +172,26 @@ export function GuidedMirror({ id }: { id: string }) {
   });
   const blocked =
     studio.busy || uploading || analyzing || measurement.measuring;
+  const requestedPlan = session?.adaptation?.candidate ?? session?.activePlan;
+  const refreshSession = studio.refresh;
+  const pendingPreview =
+    requestedPlan?.previewStatus === "queued" ||
+    requestedPlan?.previewStatus === "processing";
+
+  useEffect(() => {
+    if (!pendingPreview || !online) return;
+    let stopped = false;
+    let timer: ReturnType<typeof setTimeout>;
+    const poll = async () => {
+      if (document.visibilityState === "visible") await refreshSession();
+      if (!stopped) timer = setTimeout(() => void poll(), 2000);
+    };
+    timer = setTimeout(() => void poll(), 1500);
+    return () => {
+      stopped = true;
+      clearTimeout(timer);
+    };
+  }, [pendingPreview, requestedPlan?.id, online, refreshSession]);
 
   useEffect(() => {
     queueMicrotask(() => {
@@ -312,7 +374,7 @@ export function GuidedMirror({ id }: { id: string }) {
     setHelpRequested(false);
     requestAnimationFrame(() => instructionHeadingRef.current?.focus());
   }
-  async function openAdaptation() {
+  async function openAdaptation(suggestedReason?: "tool") {
     stopSpeech();
     setLocalPause(true);
     setAdaptOpen(true);
@@ -321,7 +383,11 @@ export function GuidedMirror({ id }: { id: string }) {
       panelHeadingRef.current?.focus();
       panelHeadingRef.current?.scrollIntoView({ block: "nearest" });
     });
-    if (session?.stage === "applying") await studio.run({ type: "pause" });
+    if (session?.stage === "applying") {
+      const next = await studio.run({ type: "pause" });
+      if (!next) return;
+    }
+    if (suggestedReason) await propose(suggestedReason);
   }
   async function propose(reason: "movement" | "tool" | "softer") {
     setLocalError("");
@@ -345,6 +411,24 @@ export function GuidedMirror({ id }: { id: string }) {
       setAdaptOpen(false);
       setLocalPause(true);
     }
+  }
+  async function otherAdaptationChoices() {
+    if (session?.adaptation) {
+      const next = await studio.run({ type: "decline_adaptation" });
+      if (!next) return;
+    }
+    setLocalPause(true);
+    setAdaptOpen(true);
+  }
+  async function generateMethodTarget() {
+    await studio.perform((current) => {
+      const selected = applicationPreviewTarget(current);
+      if (!selected)
+        throw new Error(
+          "Choose the remaining method before requesting its target.",
+        );
+      return requestPreviews(current, selected);
+    });
   }
   async function recordMeasurement(reportedPass: boolean) {
     if (!action) return;
@@ -758,22 +842,14 @@ export function GuidedMirror({ id }: { id: string }) {
                     </p>
                   )}
                   {session.mode === "personal" &&
-                  session.adaptation.changesGoal &&
+                  applicationPreviewTarget(session) &&
                   !session.adaptation.candidate.previewAsset ? (
-                    <Button
-                      variant="secondary"
-                      disabled={blocked}
-                      onClick={() =>
-                        void studio.perform((current) =>
-                          requestPreviews(current, {
-                            candidateId: current.adaptation!.candidate.id,
-                            variantId: "light",
-                          }),
-                        )
-                      }
-                    >
-                      Generate softer target · 1 unit
-                    </Button>
+                    <MethodTargetRequest
+                      candidate={session.adaptation.candidate}
+                      pending={pendingPreview}
+                      disabled={blocked || !online}
+                      onGenerate={() => void generateMethodTarget()}
+                    />
                   ) : null}
                   <div className="adapt-diff">
                     <h3>{session.adaptation.candidate.name}</h3>
@@ -816,6 +892,13 @@ export function GuidedMirror({ id }: { id: string }) {
                       busy={studio.busy}
                     >
                       Use this change <ArrowRight size={17} aria-hidden />
+                    </Button>
+                    <Button
+                      variant="quiet"
+                      onClick={() => void otherAdaptationChoices()}
+                      disabled={blocked}
+                    >
+                      Other changes
                     </Button>
                     <Button
                       variant="secondary"
@@ -1084,9 +1167,19 @@ export function GuidedMirror({ id }: { id: string }) {
                         level={plan.selectedPreviewVariantId ?? "full"}
                       />
                     ) : (
-                      <p className="small">
-                        Choose a preview target to enable color measurement.
-                      </p>
+                      <div>
+                        <p className="small">
+                          Choose a preview target to enable color measurement.
+                        </p>
+                        {applicationPreviewTarget(session) ? (
+                          <MethodTargetRequest
+                            candidate={plan}
+                            pending={pendingPreview}
+                            disabled={blocked || !online}
+                            onGenerate={() => void generateMethodTarget()}
+                          />
+                        ) : null}
+                      </div>
                     )}
                     <PreviewLadder
                       candidate={plan}
@@ -1160,7 +1253,7 @@ export function GuidedMirror({ id }: { id: string }) {
                     already use.
                     <Button
                       variant="secondary"
-                      onClick={() => void openAdaptation()}
+                      onClick={() => void openAdaptation("tool")}
                     >
                       Make this easier
                     </Button>

@@ -5,7 +5,10 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { setTimeout as delay } from "node:timers/promises";
 import sharp from "sharp";
-import { makeRecipe, validateEffects } from "../src/lib/youcam/recipes";
+import {
+  makeLegacyEyeRecipe,
+  validateEffects,
+} from "../src/lib/youcam/recipes";
 import { RecordedEyesManifestSchema } from "../src/lib/youcam/eye-recorded";
 import type { MakeupEffect } from "../src/lib/contracts";
 nextEnv.loadEnvConfig(process.cwd());
@@ -46,7 +49,7 @@ const planned: Task[] = (["liner", "shadow"] as const).flatMap((routeId) =>
     routeId,
     intensity,
     level: intensity === 25 ? "light" : "full",
-    recipe: makeRecipe("eyes", routeId, false, intensity),
+    recipe: makeLegacyEyeRecipe(routeId, intensity),
     state: "planned",
   })),
 );

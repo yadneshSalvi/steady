@@ -11,8 +11,15 @@ import {
   it,
   vi,
 } from "vitest";
-import { SAMPLE_SETUP } from "../src/lib/catalog";
-import { createSession } from "../src/lib/planner";
+import { EYE_SAMPLE_SETUP, SAMPLE_SETUP } from "../src/lib/catalog";
+import type { PreviewLevel, StudioSession } from "../src/lib/contracts";
+import {
+  applicationPreviewTarget,
+  applyCommand,
+  createSession,
+  currentAction,
+} from "../src/lib/planner";
+import { selectPreviewLevel, softerRecipe } from "../src/lib/youcam/recipes";
 
 const state = vi.hoisted(() => ({
   pool: undefined as Pool | undefined,
@@ -54,8 +61,13 @@ import {
   cancelSessionPreviews,
   failJob,
   queuePreviews,
+  setPreviewStatus,
 } from "../src/lib/server/jobs";
-import { markSessionDeleted, ownedSession } from "../src/lib/server/sessions";
+import {
+  markSessionDeleted,
+  mutateSession,
+  ownedSession,
+} from "../src/lib/server/sessions";
 import { reserveAIRequest } from "../src/lib/server/ai-input";
 import {
   submitPreviewStep,
@@ -90,6 +102,84 @@ async function seedSession(
     [session.id, owner, session.revision, JSON.stringify(session)],
   );
   return session;
+}
+
+async function storeFixture(session: StudioSession) {
+  await state.pool!.query(
+    "UPDATE studio_sessions SET revision=$2,data=$3::jsonb WHERE id=$1",
+    [session.id, session.revision, JSON.stringify(session)],
+  );
+  return ownedSession("owner-a", session.id);
+}
+
+async function adaptedFixture(
+  eyes: boolean,
+  level: PreviewLevel = "full",
+  accepted = false,
+) {
+  let session = createSession(
+    {
+      ...structuredClone(eyes ? EYE_SAMPLE_SETUP : SAMPLE_SETUP),
+      mode: "personal",
+      consent: true,
+    },
+    randomUUID(),
+  );
+  session.sourceAssetId = randomUUID();
+  const candidateId = session.candidates[0].id;
+  session = applyCommand(session, {
+    type: "select_preview_level",
+    candidateId,
+    level,
+  });
+  session = applyCommand(session, { type: "approve_candidate", candidateId });
+  session = applyCommand(session, { type: "start" });
+  const actionId = currentAction(session)!.id;
+  session = applyCommand(session, { type: "checkpoint", actionId });
+  session = applyCommand(session, { type: "complete_action", actionId });
+  session = applyCommand(session, {
+    type: "propose_adaptation",
+    reason: "movement",
+    routeId: eyes ? "shadow" : "sweep",
+  });
+  if (accepted)
+    session = applyCommand(session, {
+      type: "accept_adaptation",
+      proposalId: session.adaptation!.id,
+    });
+  await state.pool!.query(
+    "INSERT INTO studio_sessions(id,owner_id,revision,data) VALUES($1,'owner-a',$2,$3::jsonb)",
+    [session.id, session.revision, JSON.stringify(session)],
+  );
+  return ownedSession("owner-a", session.id);
+}
+
+function physicalHistory(session: StudioSession) {
+  return JSON.stringify({
+    actions: session.activePlan!.actions.filter((action) =>
+      session.completedActionIds.includes(action.id),
+    ),
+    completedActionIds: session.completedActionIds,
+    observations: session.observations,
+  });
+}
+
+/** Database-only output metadata tests projection; no provider or Blob request. */
+async function completeFixturePreview(jobId: string) {
+  const job = (
+    await state.pool!.query("SELECT * FROM provider_jobs WHERE id=$1", [jobId])
+  ).rows[0];
+  const assetId = randomUUID();
+  await state.pool!.query(
+    "INSERT INTO studio_assets(id,owner_id,session_id,pathname,purpose,provenance,content_type,bytes,checksum,width,height) VALUES($1,$2,$3,$4,'preview','virtual_preview','image/png',1,'fixture-only',1024,1280)",
+    [assetId, job.owner_id, job.session_id, `fixture-only/${assetId}.png`],
+  );
+  await state.pool!.query(
+    "UPDATE provider_jobs SET state='succeeded',output_asset_id=$2,provider_task_id='fixture-known-task',submission_started_at=now() WHERE id=$1",
+    [jobId, assetId],
+  );
+  await setPreviewStatus(jobId, "ready");
+  return assetId;
 }
 
 describe.skipIf(!connectionString)(
@@ -446,9 +536,12 @@ describe.skipIf(!connectionString)(
       ).toBe(true);
     });
 
-    it("limits extra Light previews during application to two per owner per day", async () => {
+    it("limits selected application targets to two per owner per day even when configured higher", async () => {
+      vi.stubEnv("YOUCAM_ADAPTATION_DAILY_JOB_LIMIT", "10");
+      const levels = ["full", "build", "light"] as const;
       for (let index = 0; index < 3; index++) {
         const session = await seedSession();
+        selectPreviewLevel(session.candidates[0], levels[index]);
         session.stage = "applying";
         session.activePlan = structuredClone(session.candidates[0]);
         await state.pool!.query(
@@ -456,7 +549,7 @@ describe.skipIf(!connectionString)(
           [session.id, JSON.stringify(session)],
         );
         const request = queuePreviews("owner-a", session.id, 0, "ip-a", {
-          variantId: "light",
+          variantId: levels[index],
         });
         if (index < 2) expect((await request).jobs).toHaveLength(1);
         else
@@ -465,6 +558,569 @@ describe.skipIf(!connectionString)(
           });
       }
     });
+
+    it("makes the selected Full shadow target ready before accepting while preserving the completed liner eye", async () => {
+      const session = await adaptedFixture(true);
+      const history = physicalHistory(session);
+      const observations = JSON.stringify(session.observations);
+      const result = await queuePreviews(
+        "owner-a",
+        session.id,
+        session.revision,
+        "ip-a",
+      );
+      expect(result.batch).toMatchObject({
+        requested: 1,
+        queued: 1,
+        deferred: 0,
+      });
+      expect(result.jobs[0].input).toMatchObject({
+        purpose: "adaptation",
+        variantId: "full",
+        effects: session.adaptation!.candidate.recipe,
+      });
+      const assetId = await completeFixturePreview(result.jobs[0].id);
+      let saved = await ownedSession("owner-a", session.id);
+      expect(saved.adaptation!.candidate).toMatchObject({
+        selectedPreviewVariantId: "full",
+        previewStatus: "ready",
+        previewAsset: { id: assetId },
+      });
+      expect(
+        saved.adaptation!.candidate.previewVariants!.find(
+          (variant) => variant.id === "light",
+        )!.previewStatus,
+      ).toBe("not_requested");
+      saved = await mutateSession("owner-a", session.id, saved.revision, {
+        type: "accept_adaptation",
+        proposalId: saved.adaptation!.id,
+      });
+      for (const copy of [saved.activePlan!, saved.candidates[0]])
+        expect(copy).toMatchObject({
+          selectedPreviewVariantId: "full",
+          previewStatus: "ready",
+          previewAsset: { id: assetId },
+          recipe: result.jobs[0].input.effects,
+        });
+      expect(physicalHistory(saved)).toBe(history);
+      expect(JSON.stringify(saved.observations)).toBe(observations);
+      expect(state.submit).not.toHaveBeenCalled();
+    });
+
+    it("generates the accepted powder recipe at Build without changing the completed cream cheek or its snapshots", async () => {
+      const session = await adaptedFixture(false, "build", true);
+      const history = physicalHistory(session);
+      const events = JSON.stringify(session.events);
+      expect(session.goalChanged).toBe(false);
+      const target = applicationPreviewTarget(session)!;
+      const result = await queuePreviews(
+        "owner-a",
+        session.id,
+        session.revision,
+        "ip-a",
+        target,
+      );
+      expect(result.jobs).toHaveLength(1);
+      expect(result.jobs[0].input).toMatchObject({
+        variantId: "build",
+        purpose: "adaptation",
+        effects: session.activePlan!.recipe,
+      });
+      const assetId = await completeFixturePreview(result.jobs[0].id);
+      const saved = await ownedSession("owner-a", session.id);
+      for (const copy of [saved.activePlan!, saved.candidates[0]]) {
+        expect(copy).toMatchObject({
+          selectedPreviewVariantId: "build",
+          previewStatus: "ready",
+          previewAsset: { id: assetId },
+        });
+        expect(copy.recipe[1].palettes).toEqual([
+          expect.objectContaining({ texture: "matte", colorIntensity: 45 }),
+        ]);
+      }
+      expect(saved.activePlan!.actions[0].product).toBe("cream_blush");
+      expect(saved.activePlan!.actions[1].product).toBe("powder_blush");
+      expect(physicalHistory(saved)).toBe(history);
+      expect(JSON.stringify(saved.events)).toBe(events);
+      expect(state.submit).not.toHaveBeenCalled();
+    });
+
+    it("rejects inactive and off-selection application requests and serializes concurrent valid requests", async () => {
+      const session = await adaptedFixture(true);
+      const target = applicationPreviewTarget(session)!;
+      for (const options of [
+        { ...target, candidateId: session.activePlan!.id },
+        { ...target, variantId: "light" as const },
+      ])
+        await expect(
+          queuePreviews(
+            "owner-a",
+            session.id,
+            session.revision,
+            "ip-a",
+            options,
+          ),
+        ).rejects.toMatchObject({ code: "PREVIEW_STAGE" });
+      expect(state.credit).not.toHaveBeenCalled();
+      const outcomes = await Promise.allSettled([
+        queuePreviews("owner-a", session.id, session.revision, "ip-a", target),
+        queuePreviews("owner-a", session.id, session.revision, "ip-a", target),
+      ]);
+      expect(
+        outcomes.filter((result) => result.status === "fulfilled"),
+      ).toHaveLength(1);
+      const rejected = outcomes.find((result) => result.status === "rejected");
+      expect(rejected).toMatchObject({
+        status: "rejected",
+        reason: { code: "REVISION_CONFLICT" },
+      });
+      expect(
+        (await state.pool!.query("SELECT count(*) FROM provider_jobs")).rows[0]
+          .count,
+      ).toBe("1");
+      expect(
+        (
+          await state.pool!.query(
+            "SELECT count(*) FROM quota_reservations WHERE NOT released",
+          )
+        ).rows[0].count,
+      ).toBe("1");
+      expect(state.submit).not.toHaveBeenCalled();
+    });
+
+    it("recovers an exact known task under a repaired candidate without changing its recipe or paying again", async () => {
+      const session = await seedSession();
+      const queued = await queuePreviews("owner-a", session.id, 0, "ip-a", {
+        variantId: "full",
+      });
+      const job = queued.jobs[0];
+      await state.pool!.query(
+        "UPDATE provider_jobs SET state='failed',error_code='workflow_interrupted',provider_task_id='known-task',submission_started_at=now() WHERE id=$1",
+        [job.id],
+      );
+      const original = (
+        await state.pool!.query(
+          "SELECT candidate_id,input,request_hash FROM provider_jobs WHERE id=$1",
+          [job.id],
+        )
+      ).rows[0];
+      let saved = await ownedSession("owner-a", session.id);
+      const commands = [
+        { type: "approve_candidate", candidateId: saved.candidates[0].id },
+        { type: "start" },
+      ] as const;
+      for (const command of commands)
+        saved = await mutateSession(
+          "owner-a",
+          saved.id,
+          saved.revision,
+          command,
+        );
+      const actionId = currentAction(saved)!.id;
+      saved = await mutateSession("owner-a", saved.id, saved.revision, {
+        type: "complete_action",
+        actionId,
+      });
+      saved = await mutateSession("owner-a", saved.id, saved.revision, {
+        type: "propose_adaptation",
+        reason: "tool",
+        routeId: "sponge",
+      });
+      const history = physicalHistory(saved);
+      const recovered = await queuePreviews(
+        "owner-a",
+        saved.id,
+        saved.revision,
+        "ip-a",
+        applicationPreviewTarget(saved),
+      );
+      expect(recovered.jobs).toHaveLength(1);
+      expect(recovered.jobs[0]).toMatchObject({
+        id: job.id,
+        candidate_id: original.candidate_id,
+        provider_task_id: "known-task",
+        state: "waiting",
+      });
+      expect(
+        (
+          await state.pool!.query(
+            "SELECT candidate_id,input,request_hash FROM provider_jobs WHERE id=$1",
+            [job.id],
+          )
+        ).rows[0],
+      ).toEqual(original);
+      expect(
+        (await state.pool!.query("SELECT count(*) FROM quota_reservations"))
+          .rows[0].count,
+      ).toBe("1");
+      const assetId = await completeFixturePreview(job.id);
+      const projected = await ownedSession("owner-a", session.id);
+      expect(projected.adaptation!.candidate).toMatchObject({
+        previewStatus: "ready",
+        previewAsset: { id: assetId },
+        selectedPreviewVariantId: "full",
+      });
+      expect(physicalHistory(projected)).toBe(history);
+      expect(state.submit).not.toHaveBeenCalled();
+    });
+
+    it.each(["queued", "succeeded"] as const)(
+      "rebinds the selected %s target from a partial ladder after method repair without reserving another unit",
+      async (priorState) => {
+        vi.stubEnv("YOUCAM_SESSION_JOB_LIMIT", "2");
+        const session = await seedSession();
+        const partial = await queuePreviews("owner-a", session.id, 0, "ip-a");
+        expect(partial.batch.deferred).toBe(1);
+        let saved = partial.session;
+        saved = applyCommand(saved, {
+          type: "approve_candidate",
+          candidateId: saved.candidates[0].id,
+        });
+        saved = applyCommand(saved, { type: "start" });
+        saved = applyCommand(saved, {
+          type: "complete_action",
+          actionId: currentAction(saved)!.id,
+        });
+        saved = applyCommand(saved, {
+          type: "propose_adaptation",
+          reason: "tool",
+          routeId: "sponge",
+        });
+        saved = await storeFixture(saved);
+        const history = physicalHistory(saved);
+        const assetId =
+          priorState === "succeeded"
+            ? await completeFixturePreview(partial.jobs[0].id)
+            : undefined;
+        if (assetId) {
+          // The old card's recovered output advances the studio revision.
+          // A stale request must reload before binding it to the repair.
+          await expect(
+            queuePreviews(
+              "owner-a",
+              saved.id,
+              saved.revision,
+              "ip-a",
+              applicationPreviewTarget(saved),
+            ),
+          ).rejects.toMatchObject({ code: "REVISION_CONFLICT" });
+          saved = await ownedSession("owner-a", saved.id);
+        }
+        const result = await queuePreviews(
+          "owner-a",
+          saved.id,
+          saved.revision,
+          "ip-a",
+          applicationPreviewTarget(saved),
+        );
+        expect(result.jobs.map((job) => job.id)).toEqual(
+          priorState === "queued" ? [partial.jobs[0].id] : [],
+        );
+        expect(result.session.adaptation!.candidate).toMatchObject({
+          previewStatus: priorState === "queued" ? "queued" : "ready",
+          previewJobId: partial.jobs[0].id,
+          selectedPreviewVariantId: "full",
+        });
+        if (assetId)
+          expect(result.session.adaptation!.candidate.previewAsset?.id).toBe(
+            assetId,
+          );
+        expect(result.batch).toMatchObject({
+          requested: 1,
+          queued: priorState === "queued" ? 1 : 0,
+          deferred: 0,
+        });
+        expect(physicalHistory(result.session)).toBe(history);
+        expect(
+          (await state.pool!.query("SELECT count(*) FROM provider_jobs"))
+            .rows[0].count,
+        ).toBe("2");
+        expect(
+          (
+            await state.pool!.query(
+              "SELECT count(*) FROM quota_reservations WHERE NOT released",
+            )
+          ).rows[0].count,
+        ).toBe("2");
+        expect(state.submit).not.toHaveBeenCalled();
+      },
+    );
+
+    it("releases a never-submitted adapted target and makes an explicit retry ready within a cap of one", async () => {
+      vi.stubEnv("YOUCAM_ADAPTATION_DAILY_JOB_LIMIT", "1");
+      const session = await adaptedFixture(true, "full", true);
+      const history = physicalHistory(session);
+      const first = await queuePreviews(
+        "owner-a",
+        session.id,
+        session.revision,
+        "ip-a",
+        applicationPreviewTarget(session),
+      );
+      await failJob(
+        first.jobs[0].id,
+        "upload_failed",
+        "Fixture upload stopped before submission.",
+        false,
+        true,
+      );
+      const saved = await ownedSession("owner-a", session.id);
+      expect(saved.activePlan).toMatchObject({
+        previewStatus: "failed",
+        previewRetryable: true,
+      });
+      const retry = await queuePreviews(
+        "owner-a",
+        saved.id,
+        saved.revision,
+        "ip-a",
+        applicationPreviewTarget(saved),
+      );
+      expect(retry.jobs).toHaveLength(1);
+      expect(retry.jobs[0].id).not.toBe(first.jobs[0].id);
+      expect(retry.jobs[0].input.variantId).toBe("full");
+      const assetId = await completeFixturePreview(retry.jobs[0].id);
+      const current = await ownedSession("owner-a", session.id);
+      expect(current.activePlan).toMatchObject({
+        previewStatus: "ready",
+        previewAsset: { id: assetId },
+      });
+      expect(physicalHistory(current)).toBe(history);
+      expect(
+        (
+          await state.pool!.query(
+            "SELECT released FROM quota_reservations ORDER BY created_at",
+          )
+        ).rows.map((row) => row.released),
+      ).toEqual([true, false]);
+      expect(state.submit).not.toHaveBeenCalled();
+    });
+
+    it("retains an ambiguous adapted recipe attempt without replacing it or switching the selected level", async () => {
+      const session = await adaptedFixture(false, "build", true);
+      const history = physicalHistory(session);
+      const first = await queuePreviews(
+        "owner-a",
+        session.id,
+        session.revision,
+        "ip-a",
+        applicationPreviewTarget(session),
+      );
+      await state.pool!.query(
+        "UPDATE provider_jobs SET submission_started_at=now() WHERE id=$1",
+        [first.jobs[0].id],
+      );
+      await failJob(
+        first.jobs[0].id,
+        "unknown_submission",
+        "Fixture ambiguous submission.",
+        true,
+      );
+      const saved = await ownedSession("owner-a", session.id);
+      const retry = await queuePreviews(
+        "owner-a",
+        saved.id,
+        saved.revision,
+        "ip-a",
+        applicationPreviewTarget(saved),
+      );
+      expect(retry.jobs).toEqual([]);
+      expect(retry.session.activePlan).toMatchObject({
+        selectedPreviewVariantId: "build",
+        previewStatus: "failed",
+        previewRetryable: false,
+      });
+      expect(physicalHistory(retry.session)).toBe(history);
+      expect(
+        (await state.pool!.query("SELECT count(*) FROM provider_jobs")).rows[0]
+          .count,
+      ).toBe("1");
+      expect(
+        (await state.pool!.query("SELECT released FROM quota_reservations"))
+          .rows[0].released,
+      ).toBe(false);
+      expect(state.submit).not.toHaveBeenCalled();
+    });
+
+    it("leaves the exact adapted selection and completed history saved when the floor refuses a new target", async () => {
+      state.credit.mockResolvedValue(199);
+      const session = await adaptedFixture(false, "build", true);
+      const before = JSON.stringify(session);
+      await expect(
+        queuePreviews(
+          "owner-a",
+          session.id,
+          session.revision,
+          "ip-a",
+          applicationPreviewTarget(session),
+        ),
+      ).rejects.toMatchObject({ code: "LIVE_PREVIEWS_RESTING" });
+      expect(JSON.stringify(await ownedSession("owner-a", session.id))).toBe(
+        before,
+      );
+      expect(
+        (await state.pool!.query("SELECT count(*) FROM provider_jobs")).rows[0]
+          .count,
+      ).toBe("0");
+      expect(state.submit).not.toHaveBeenCalled();
+    });
+
+    it.each(["light", undefined] as const)(
+      "recovers an exact historical %s job for a legacy Full-addressed softer recipe without relabeling the paid request",
+      async (historicalLevel) => {
+        const initial = await seedSession();
+        const powder = initial.candidates.find(
+          (candidate) => candidate.routeId === "sweep",
+        )!;
+        const first = await queuePreviews(
+          "owner-a",
+          initial.id,
+          initial.revision,
+          "ip-a",
+          {
+            candidateId: powder.id,
+            variantId: "light",
+          },
+        );
+        const jobId = first.jobs[0].id;
+        let session = applyCommand(first.session, {
+          type: "approve_candidate",
+          candidateId: powder.id,
+        });
+        session = applyCommand(session, { type: "start" });
+        session = applyCommand(session, {
+          type: "checkpoint",
+          actionId: currentAction(session)!.id,
+        });
+        session = applyCommand(session, {
+          type: "propose_adaptation",
+          reason: "softer",
+        });
+        session = applyCommand(session, {
+          type: "accept_adaptation",
+          proposalId: session.adaptation!.id,
+        });
+        // b01448a persisted approved softerRecipe(...)=25 targets before
+        // planner/state had ladder or selected-level fields. Keep that exact
+        // supported representation while the durable job retains its history.
+        for (const copy of [session.activePlan!, session.candidates[0]]) {
+          expect(copy.recipe).toEqual(softerRecipe(powder.recipe));
+          delete copy.previewVariants;
+          delete copy.selectedPreviewVariantId;
+        }
+        session = await storeFixture(session);
+        const history = physicalHistory(session);
+        await state.pool!.query(
+          "UPDATE provider_jobs SET state='failed',error_code='workflow_interrupted',provider_task_id='fixture-known-task',submission_started_at=now(),input=CASE WHEN $2::boolean THEN input-'variantId' ELSE input END WHERE id=$1",
+          [jobId, historicalLevel === undefined],
+        );
+        const original = (
+          await state.pool!.query(
+            "SELECT candidate_id,input,request_hash,provider_task_id FROM provider_jobs WHERE id=$1",
+            [jobId],
+          )
+        ).rows[0];
+        vi.stubEnv("YOUCAM_ADAPTATION_DAILY_JOB_LIMIT", "0");
+        state.credit.mockClear();
+        const resumed = await queuePreviews(
+          "owner-a",
+          session.id,
+          session.revision,
+          "ip-a",
+          applicationPreviewTarget(session),
+        );
+        expect(resumed.jobs.map((job) => job.id)).toEqual([jobId]);
+        expect(resumed.session.activePlan).toMatchObject({
+          selectedPreviewVariantId: "full",
+          previewStatus: "processing",
+          recipe: session.activePlan!.recipe,
+        });
+        const assetId = await completeFixturePreview(jobId);
+        const saved = await ownedSession("owner-a", session.id);
+        for (const copy of [saved.activePlan!, saved.candidates[0]])
+          expect(copy).toMatchObject({
+            selectedPreviewVariantId: "full",
+            recipe: session.activePlan!.recipe,
+            previewStatus: "ready",
+            previewAsset: { id: assetId },
+          });
+        expect(
+          (
+            await state.pool!.query(
+              "SELECT candidate_id,input,request_hash,provider_task_id FROM provider_jobs WHERE id=$1",
+              [jobId],
+            )
+          ).rows[0],
+        ).toEqual(original);
+        expect(
+          (await state.pool!.query("SELECT count(*) FROM provider_jobs"))
+            .rows[0].count,
+        ).toBe("1");
+        expect(
+          (
+            await state.pool!.query(
+              "SELECT count(*) FROM quota_reservations WHERE NOT released",
+            )
+          ).rows[0].count,
+        ).toBe("1");
+        expect(physicalHistory(saved)).toBe(history);
+        expect(state.credit).not.toHaveBeenCalled();
+        expect(state.submit).not.toHaveBeenCalled();
+      },
+    );
+
+    it.each(["cheek", "eye"] as const)(
+      "generates a legacy approved %s recipe exactly without rebuilding it from the current catalog",
+      async (goal) => {
+        let session =
+          goal === "eye"
+            ? await adaptedFixture(true, "full", true)
+            : await seedSession();
+        if (goal === "cheek") {
+          session = applyCommand(session, {
+            type: "approve_candidate",
+            candidateId: session.candidates[0].id,
+          });
+          session = applyCommand(session, { type: "start" });
+        }
+        const candidate = session.activePlan!;
+        for (const copy of [candidate, session.candidates[0]]) {
+          delete copy.previewVariants;
+          delete copy.selectedPreviewVariantId;
+          const palette = (
+            copy.recipe[1].palettes as { [key: string]: string | number }[]
+          )[0];
+          if (goal === "cheek") palette.glowStrength = 0;
+        }
+        session = await storeFixture(session);
+        const recipe = structuredClone(session.activePlan!.recipe);
+        const result = await queuePreviews(
+          "owner-a",
+          session.id,
+          session.revision,
+          "ip-a",
+          applicationPreviewTarget(session),
+        );
+        expect(result.jobs).toHaveLength(1);
+        expect(result.jobs[0].input).toMatchObject({
+          effects: recipe,
+          variantId: "full",
+          purpose: "adaptation",
+        });
+        const assetId = await completeFixturePreview(result.jobs[0].id);
+        const saved = await ownedSession("owner-a", session.id);
+        for (const copy of [saved.activePlan!, saved.candidates[0]]) {
+          expect(copy.recipe).toEqual(recipe);
+          expect(copy.previewVariants![0].intensity).toBe(
+            (recipe[1].palettes as { colorIntensity: number }[])[0]
+              .colorIntensity,
+          );
+          expect(copy.previewAsset?.id).toBe(assetId);
+          expect(copy.previewStatus).toBe("ready");
+        }
+        expect(state.submit).not.toHaveBeenCalled();
+      },
+    );
 
     it("keeps uncertain pending spend reserved after a balance-cache refresh", async () => {
       state.credit.mockResolvedValue(201);

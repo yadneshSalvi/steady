@@ -4,6 +4,7 @@ export {
   applyCommand,
   createSession,
   currentAction,
+  applicationPreviewTarget,
   DomainError,
 } from "./state";
 export type { DomainErrorCode } from "./state";

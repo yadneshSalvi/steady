@@ -2,9 +2,10 @@ import type { Region } from "@/lib/contracts";
 import {
   EYE_LANDMARKS,
   faceEligible,
-  REGION_LANDMARKS,
+  regionPolygon,
   type Point,
 } from "./geometry";
+export { regionPolygon } from "./geometry";
 
 /** Experimental image measurements; these are not physical success scores. */
 export const MEASUREMENT_VERSION = 1 as const;
@@ -85,6 +86,13 @@ export interface MeasurementDiagnostics {
   occlusionFraction: number | null;
 }
 
+export interface MeasurementRegionalProgress {
+  subregion: MeasurementSubregion;
+  /** Projection of this half's Lab change onto its own preview target vector. */
+  progress: number;
+  pixels: number;
+}
+
 export interface MeasurementResult {
   version: typeof MEASUREMENT_VERSION;
   region: Region;
@@ -96,6 +104,8 @@ export interface MeasurementResult {
   /** Spatial consistency relative to the preview; not confidence/accuracy. */
   uniformity: number | null;
   lagging: MeasurementSubregion | null;
+  /** Local spatial evidence only; omitted from persisted scalar summaries. */
+  regionalProgress?: MeasurementRegionalProgress[];
   reason?: MeasurementReason;
   heatmap: MeasurementHeatmapCell[];
   /** Exclude the inner mouth or eye surface when painting regional heatmaps. */
@@ -289,14 +299,6 @@ function landmarkPolygon(points: readonly Point[], indices: readonly number[]) {
   )
     ? polygon.map(({ x, y }) => ({ x, y }))
     : [];
-}
-
-/** Display/crop geometry in the same normalized image space as detection. */
-export function regionPolygon(
-  points: readonly Point[],
-  region: Region,
-): Point[] {
-  return landmarkPolygon(points, REGION_LANDMARKS[region]);
 }
 
 export function regionExclusions(
@@ -1052,10 +1054,16 @@ export function measureCheckpoint({
               0,
               1.5,
             ),
+            pixels: part.pixels,
           },
         ]
       : [];
   });
+  result.regionalProgress = subregions.map(({ id, progress, pixels }) => ({
+    subregion: id,
+    progress,
+    pixels,
+  }));
   subregions.sort((a, b) => a.progress - b.progress);
   if (
     subregions.length &&

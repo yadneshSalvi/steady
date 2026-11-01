@@ -1,11 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import type { Region } from "@/lib/contracts";
-import {
-  projectPoint,
-  REGION_LANDMARKS,
-  type Point,
-} from "@/lib/vision/geometry";
+import { projectPoint, regionPolygon, type Point } from "@/lib/vision/geometry";
 
 export function StaticFaceGuide({
   points,
@@ -31,8 +27,8 @@ export function StaticFaceGuide({
     observer.observe(ref.current);
     return () => observer.disconnect();
   }, []);
-  const polygon = REGION_LANDMARKS[region].map((index) =>
-    projectPoint(points[index], { width, height }, size, false),
+  const polygon = regionPolygon(points, region).map((point) =>
+    projectPoint(point, { width, height }, size, false),
   );
   return (
     <div

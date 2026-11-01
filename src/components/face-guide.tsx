@@ -1,11 +1,7 @@
 "use client";
 import { useEffect, useRef, useState, type RefObject } from "react";
 import type { Region } from "@/lib/contracts";
-import {
-  projectPoint,
-  REGION_LANDMARKS,
-  type Point,
-} from "@/lib/vision/geometry";
+import { projectPoint, regionPolygon, type Point } from "@/lib/vision/geometry";
 
 export function FaceGuide({
   videoRef,
@@ -165,8 +161,8 @@ export function FaceGuide({
   if (!enabled) return null;
   const projected =
     points.length && sourceSize.width
-      ? REGION_LANDMARKS[region].map((index) =>
-          projectPoint(points[index], sourceSize, size, mirrored),
+      ? regionPolygon(points, region).map((point) =>
+          projectPoint(point, sourceSize, size, mirrored),
         )
       : [];
   const label =

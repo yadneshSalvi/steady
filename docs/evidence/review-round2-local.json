@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-11-01T05:37:24.794323+00:00",
+  "status": "complete local verification; canonical release pending",
+  "evidenceClass": "synthetic_recordings_and_software_engineering_checks",
+  "scope": "Independent local in-app browser, exact recorded pixels, automated browser fixtures, and isolated local PostgreSQL; no human application or physical webcam validation.",
+  "viewports": [
+    {
+      "viewport": [1440, 813],
+      "documentWidth": 1440,
+      "provenanceChipWidth": 132.28125,
+      "overlap": 0
+    },
+    {
+      "viewport": [1366, 768],
+      "documentWidth": 1366,
+      "provenanceChipWidth": 132.28125,
+      "overlap": 0
+    },
+    {
+      "viewport": [1440, 900],
+      "documentWidth": 1440,
+      "provenanceChipWidth": 132.28125,
+      "overlap": 0
+    },
+    {
+      "viewport": [390, 844],
+      "documentWidth": 390,
+      "provenanceChipWidth": 132.28125,
+      "overlap": 0
+    }
+  ],
+  "thumbnails": {
+    "viewport": [1440, 813],
+    "displayedButtons": 9,
+    "uniqueThumbnailPayloads": 6,
+    "contentType": "image/webp",
+    "decodedSize": [256, 320],
+    "thumbnailBytes": 24694,
+    "originalBytes": 5120771,
+    "reductionPercentForTheseSixPayloadsOnly": 99.52,
+    "minimumBytes": 4106,
+    "maximumBytes": 4126,
+    "compactLadderImageCount": 0,
+    "fullMeasurementOriginalsUnchanged": true
+  },
+  "cheeks": {
+    "left": {
+      "displayPercent": 38,
+      "dominantLag": "upper",
+      "secondaryOuterPercent": 23,
+      "secondaryInnerPercent": 53
+    },
+    "right": {
+      "displayPercent": 38,
+      "dominantLag": "upper",
+      "secondaryOuterPercent": 26,
+      "secondaryInnerPercent": 51
+    }
+  },
+  "heatmap": {
+    "alpha": 0.42,
+    "legendVisible": true,
+    "targetLevel": "full",
+    "simulatedCheckpointChip": true,
+    "completePaddedOvalVisible": true,
+    "mobileViewport": [390, 844],
+    "mobileDocumentWidth": 390
+  },
+  "stalled": {
+    "reportedPasses": 2,
+    "directProposal": "Brush-blended cream",
+    "otherChangesMenuOneClick": true
+  },
+  "reloadedHistory": {
+    "exactFirstPass": "/examples/round2/blush-rose-satin.png",
+    "exactTarget": "/examples/ladder/rose-satin-full.png",
+    "bothScalarAndSecondaryReadingsPreserved": true
+  },
+  "eye": {
+    "target": "/examples/round2/shadow-full-warm-v2.png",
+    "displayPercent": 59,
+    "verdict": "build",
+    "fullCropVisible": true
+  },
+  "recordings": {
+    "expectedAndObservedPaidUnits": 10,
+    "balanceBefore": 962,
+    "balanceAfter": 952,
+    "successfulOneAttemptTasks": 10,
+    "adoptedPublicOutputs": 8,
+    "successfulButUnsuitablePrivateTrials": 2,
+    "historicalPngsUnchanged": 31,
+    "historicalManifestsUnchanged": 3,
+    "publicManifest": "/examples/recorded-round2.json",
+    "publicManifestSha256": "5d4560f533cf985b97fc7c2d9015e2738621f08709867e3c8ecb4456a6c5fe97",
+    "additionalPaidReleaseSmoke": 0
+  },
+  "localUnitGate": {
+    "passed": 366,
+    "failed": 0,
+    "skipped": 0,
+    "files": 36,
+    "isolatedPostgreSqlCases": 26
+  },
+  "independentBrowserPaidProviderCalls": 0,
+  "limits": [
+    "Synthetic outputs do not establish physical completion, usability benefit, cosmetic safety, or real webcam behavior.",
+    "The fixed below-eye audit describes those source/output pixels and does not mean natural shadows were removed.",
+    "Thumbnail reduction describes six sampled thumbnail payloads, not total page transfer or a live production benchmark."
+  ],
+  "optimizedBrowserGate": {
+    "observedAt": "2026-11-01T05:41:23.359Z",
+    "passed": 24,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "durationMs": 80675.931,
+    "workers": 1,
+    "retries": 0,
+    "privateUploadIsolationAndErasureEnabled": true,
+    "providerSubmissions": "blocked or mocked in automated suite"
+  },
+  "staticGates": {
+    "lint": "passed with zero warnings",
+    "typecheck": "passed",
+    "format": "passed",
+    "productionBuild": "passed; 19 generated pages",
+    "whitespace": "passed"
+  }
+}

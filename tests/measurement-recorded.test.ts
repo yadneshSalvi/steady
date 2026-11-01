@@ -4,7 +4,7 @@ import sharp from "sharp";
 import { describe, expect, it } from "vitest";
 import manifest from "../public/examples/recorded-ladders.json";
 import eyesManifest from "../public/examples/recorded-eyes.json";
-import { makeRecipe } from "@/lib/youcam/recipes";
+import { makeLegacyEyeRecipe } from "@/lib/youcam/recipes";
 import recordedLandmarks from "./fixtures/sample-landmarks.json";
 import {
   createMeasurementTarget,
@@ -157,7 +157,7 @@ describe("recorded YouCam ladder on one synthetic source portrait", () => {
     expect(Math.abs(changed.progress! - control.progress!)).toBeLessThan(0.03);
   });
 
-  it("retains five honest near-zero abstentions among the 36 selectable target regions", async () => {
+  it("retains the genuinely subtle cheek target under the R2 oval without changing its guard", async () => {
     const source = await loadFrame(manifest.source.url);
     const abstentions: string[] = [];
     for (const record of manifest.records) {
@@ -178,13 +178,7 @@ describe("recorded YouCam ladder on one synthetic source portrait", () => {
         );
       }
     }
-    expect(abstentions.sort()).toEqual([
-      "terracotta/matte/light/left_cheek",
-      "terracotta/matte/light/right_cheek",
-      "terracotta/satin/build/left_cheek",
-      "terracotta/satin/light/left_cheek",
-      "terracotta/satin/light/right_cheek",
-    ]);
+    expect(abstentions.sort()).toEqual(["terracotta/satin/light/left_cheek"]);
   });
 
   it("abstains when a held-out skin patch is relit independently of the fitted forehead", async () => {
@@ -244,10 +238,8 @@ describe("recorded eye previews on the same synthetic source", () => {
           .digest("hex"),
       ).toBe(record.output.sha256);
       expect(record.recipe).toEqual(
-        makeRecipe(
-          "eyes",
+        makeLegacyEyeRecipe(
           record.routeId as "liner" | "shadow",
-          false,
           record.intensity as 25 | 65,
         ),
       );

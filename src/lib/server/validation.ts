@@ -64,6 +64,13 @@ const id = z.string().min(1).max(150);
 export const measurementSchema = z
   .object({
     version: z.literal(1),
+    geometryVersion: z
+      .enum(["landmark-polygon-v1", "cheekbone-oval-v2"])
+      .optional(),
+    sampleCheckpointId: z
+      .string()
+      .regex(/^[a-f0-9]{64}$/)
+      .optional(),
     region: z.enum([
       "left_cheek",
       "right_cheek",

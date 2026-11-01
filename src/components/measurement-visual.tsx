@@ -12,7 +12,12 @@ import type {
 import type { Point } from "@/lib/vision/geometry";
 import type { LocalCheckpoint } from "@/lib/vision/local-checkpoints";
 import { regionCrop, regionPolygon } from "@/lib/vision/measure";
-import { checkpointGuidance } from "@/lib/vision/measurement-guidance";
+import {
+  checkpointGuidance,
+  secondarySpatialGuidance,
+} from "@/lib/vision/measurement-guidance";
+import { HEATMAP_COLORS, heatmapColor } from "@/lib/vision/display";
+import { RegionImage } from "./region-image";
 import { ProvenanceLabel } from "./ui";
 
 export function RegionTarget({
@@ -26,19 +31,18 @@ export function RegionTarget({
   region: Region;
   level: PreviewLevel;
 }) {
-  const crop = regionCrop(landmarks, region, 0.65);
+  const crop = regionCrop(landmarks, region, 0.28);
   return (
     <figure className="region-target">
       <div>
         {crop ? (
-          <svg
-            preserveAspectRatio="xMidYMid slice"
-            viewBox={`${crop.x * asset.width} ${crop.y * asset.height} ${crop.width * asset.width} ${crop.height * asset.height}`}
-            role="img"
-            aria-label={`${level} YouCam target for ${region.replaceAll("_", " ")}`}
-          >
-            <image href={asset.url} width={asset.width} height={asset.height} />
-          </svg>
+          <RegionImage
+            src={asset.url}
+            width={asset.width}
+            height={asset.height}
+            crop={crop}
+            label={`${level} YouCam target for ${region.replaceAll("_", " ")}`}
+          />
         ) : (
           <Image
             src={asset.url}
@@ -77,7 +81,7 @@ export function MeasurementVisual({
     ? regionPolygon(local.landmarks, measurement.region)
     : [];
   const crop = local
-    ? regionCrop(local.landmarks, measurement.region, 0.65)
+    ? regionCrop(local.landmarks, measurement.region, 0.28)
     : null;
   const title =
     measurement.verdict === "insufficient"
@@ -118,29 +122,38 @@ export function MeasurementVisual({
       <p className="measurement-guidance">
         {checkpointGuidance(measurement, action)}
       </p>
+      {local && secondarySpatialGuidance(local.result) ? (
+        <p className="measurement-spatial-guidance">
+          {secondarySpatialGuidance(local.result)}
+        </p>
+      ) : null}
+      {local && heatmap && local.result.heatmap.length ? (
+        <div className="measurement-legend" aria-label="Heatmap color scale">
+          <span>Less ← change → More</span>
+          <i
+            aria-hidden
+            style={{
+              background: `linear-gradient(to right, ${HEATMAP_COLORS.join(", ")})`,
+            }}
+          />
+          <strong>{measurement.targetLevel} target</strong>
+        </div>
+      ) : null}
       {local ? (
         <div className="measurement-images">
           <figure>
             <div className="measurement-still">
-              <svg
-                preserveAspectRatio="xMidYMid slice"
-                viewBox={
-                  crop
-                    ? `${crop.x * local.width} ${crop.y * local.height} ${crop.width * local.width} ${crop.height * local.height}`
-                    : `0 0 ${local.width} ${local.height}`
-                }
-                role="img"
-                aria-label={
+              <RegionImage
+                src={local.checkpointUrl}
+                width={local.width}
+                height={local.height}
+                crop={crop}
+                label={
                   local.isSample
-                    ? "Measured region of the lighter recorded render"
+                    ? "Measured region of the recorded sample checkpoint"
                     : "Measured region of your local checkpoint"
                 }
               >
-                <image
-                  href={local.checkpointUrl}
-                  width={local.width}
-                  height={local.height}
-                />
                 {heatmap && local.result.heatmap.length ? (
                   <g
                     transform={`scale(${local.width} ${local.height})`}
@@ -176,16 +189,8 @@ export function MeasurementVisual({
                           points={cell.polygon
                             .map((p) => `${p.x},${p.y}`)
                             .join(" ")}
-                          fill={
-                            cell.progress > 1.15
-                              ? "#9f4c79"
-                              : cell.progress > 0.8
-                                ? "#478c66"
-                                : cell.progress > 0.45
-                                  ? "#d2ae57"
-                                  : "#82c1c7"
-                          }
-                          fillOpacity=".6"
+                          fill={heatmapColor(cell.progress)}
+                          fillOpacity=".42"
                         />
                       ))}
                     </g>
@@ -194,10 +199,11 @@ export function MeasurementVisual({
                       fill="none"
                       stroke="#fff8dc"
                       strokeWidth=".0025"
+                      strokeLinejoin="round"
                     />
                   </g>
                 ) : null}
-              </svg>
+              </RegionImage>
             </div>
             <figcaption>
               <ProvenanceLabel

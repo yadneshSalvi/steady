@@ -2,7 +2,7 @@
 
 **A makeup method that makes room for you.** Choose a look, confirm your tools and comfortable movements, then compare genuine YouCam targets. STEADY guides one step at a time, measures local image-color change toward your chosen stopping point, and changes the remaining method while preserving what you have already confirmed.
 
-**[Open the studio](https://steady-taupe-pi.vercel.app)** · **Quick sample** opens the camera-free walkthrough in one click. Choose a method, compare Light / Build / Full, and measure a lighter recorded checkpoint against your target. **Explore the eye sample** demonstrates fine liner changing to softly tapped shadow while keeping eye emphasis.
+**[Open the studio](https://steady-taupe-pi.vercel.app)** · **Quick sample** opens the camera-free walkthrough in one click. Choose a method, compare Light / Build / Full, and measure a compact recorded blush pass against your target. See which part needs more color through a translucent heatmap and measured spatial guidance. **Explore the eye sample** demonstrates fine liner changing to warm, softly tapped shadow while keeping eye emphasis.
 
 ## What the studio does
 
@@ -40,7 +40,7 @@ pnpm test:e2e                    # against the local running application
 
 The sample uses hash-verified recordings and never creates a fresh YouCam task. Fresh personal previews show a unit estimate and use durable reservations, a cached account-balance floor, and application/owner/IP limits. See [operations](docs/operations.md) for database integration checks and the separate private-upload browser test.
 
-The final review release passes **265 unit/integration tests and 20 browser tests**, including the complete suite on canonical production. An injected session-read failure preserves the browser owner and saved studio without any sign-in, studio-mutation or preview POST. [Release verification](docs/release-checklist.md) records deployment identity and the separate bounded live-provider checks.
+The R2 local release gate passes **366 unit/integration tests and 24 browser tests** against the optimized build, including private upload/isolation/erasure. [Release verification](docs/release-checklist.md) records canonical deployment status and preserves the earlier release evidence. An injected session-read failure preserves the browser owner and saved studio without any sign-in, studio-mutation or preview POST.
 
 ## Evidence and limits
 

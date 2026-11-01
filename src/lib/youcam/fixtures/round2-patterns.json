@@ -1,0 +1,46 @@
+{
+  "metadata": {
+    "provenance": "sanitized_official_catalog_excerpt",
+    "observedAt": "2026-11-01",
+    "note": "Exact single-color entries; shape selected by catalog thumbnail inspection, subject to inspection of actual recorded outputs. No physical application claim.",
+    "sources": {
+      "blush": {
+        "url": "https://plugins-media.makeupar.com/wcm-saas/patterns/blush.json",
+        "observedAt": "2026-11-01T05:10:57.747Z",
+        "snapshotSha256": "82dc5d398d691f27977f525dd82c8b202d7bc698769a15718e5b2f4ea9a8efcf",
+        "selectedEntrySha256": "642b852da5367c0fc48dc4da4a6f960ebdacc98857b06a8354a912d5286f4ecd"
+      },
+      "eye_shadow": {
+        "url": "https://plugins-media.makeupar.com/wcm-saas/patterns/eyeshadow.json",
+        "observedAt": "2026-11-01T05:10:21.960Z",
+        "snapshotSha256": "ce0c89a813d38d3505064d5dfe6f24c82ee09290df6da2625fdde61d76ada758",
+        "selectedEntrySha256": "4043fa9f494cb098ffa38753dcbec3b9586eba0969553d3c1b2579c3bdcb029c"
+      }
+    }
+  },
+  "patterns": {
+    "blush": {
+      "category": "1 color",
+      "label": "Circle2",
+      "thumbnail": "https://app-cdn-01.makeupar.com/console/SkuCustomImage/guest/333/e0812e53-25d2-48f5-a256-63a35a524027.jpg",
+      "tags": [
+        {
+          "id": 99,
+          "name": "Circle"
+        },
+        {
+          "id": 105,
+          "name": "Blush 2D"
+        }
+      ],
+      "colorNum": 1
+    },
+    "eye_shadow": {
+      "category": "1 color",
+      "label": "1color20",
+      "thumbnail": "https://app-cdn-01.makeupar.com/console/SkuCustomImage/guest/141/ba9e51a5-37ef-4382-b887-9824e1596c34.jpg",
+      "tags": [],
+      "colorNum": 1
+    }
+  }
+}

@@ -63,8 +63,8 @@ export default function EvidencePage() {
       <section>
         <h2>Why the sample is useful</h2>
         <p>
-          The fictional portrait, the Light render, and the selected target go
-          through the same pixel calculation. The guide comes from the actual
+          The fictional portrait, a recorded checkpoint, and the selected target
+          go through the same pixel calculation. The guide comes from the actual
           local MediaPipe model. This gives a camera-free demonstration of
           measurement, target choice, and adaptation. It does not stand in for a
           person applying makeup.

@@ -110,8 +110,10 @@ export default function HomePage() {
               sizes="(max-width: 740px) 100vw, 52vw"
               className="hero-portrait"
             />
-            <div className="portrait-caption">
+            <div className="portrait-provenance">
               <ProvenanceLabel kind="synthetic_inspiration" />
+            </div>
+            <div className="portrait-caption">
               <span>A soft start. A look that’s yours.</span>
             </div>
             <span className="portrait-edition">THE EVERYDAY STUDIO / 01</span>

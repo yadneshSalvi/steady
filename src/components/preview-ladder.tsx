@@ -33,6 +33,15 @@ export function PreviewLadder({
             (item) => item.id === id,
           );
           const chosen = (candidate.selectedPreviewVariantId ?? "full") === id;
+          const asset = variant?.previewAsset;
+          // The optimizer can fetch public recordings. Personal assets need the
+          // owning browser's cookies, so keep their authenticated URL untouched.
+          const publicRecording =
+            asset?.provenance === "virtual_preview" &&
+            !!asset.recordedAt &&
+            /^\/examples\/(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-]+\.(?:png|jpe?g|webp)$/.test(
+              asset.url,
+            );
           return (
             <button
               key={id}
@@ -42,22 +51,24 @@ export function PreviewLadder({
               aria-label={`Stop at ${label} for ${candidate.name}`}
               onClick={() => onChoose(id)}
             >
-              {variant?.previewAsset ? (
-                <Image
-                  src={variant.previewAsset.url}
-                  alt={`${label} color target`}
-                  width={160}
-                  height={180}
-                  unoptimized
-                />
-              ) : (
-                <span className="ladder-placeholder" aria-hidden>
-                  {variant?.previewStatus === "queued" ||
-                  variant?.previewStatus === "processing"
-                    ? "…"
-                    : "○"}
-                </span>
-              )}
+              {!compact &&
+                (asset ? (
+                  <Image
+                    src={asset.url}
+                    alt={`${label} color target`}
+                    width={160}
+                    height={180}
+                    sizes="(max-width: 740px) 28vw, (max-width: 1100px) 15vw, 10vw"
+                    unoptimized={!publicRecording}
+                  />
+                ) : (
+                  <span className="ladder-placeholder" aria-hidden>
+                    {variant?.previewStatus === "queued" ||
+                    variant?.previewStatus === "processing"
+                      ? "…"
+                      : "○"}
+                  </span>
+                ))}
               <span>{label}</span>
             </button>
           );

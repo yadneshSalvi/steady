@@ -10,6 +10,12 @@ import {
   type RecordedLadderManifest,
 } from "../youcam/ladder-recorded";
 import { RECORDED_EYES_MANIFEST_SHA256 } from "../youcam/eye-integrity";
+import { RECORDED_ROUND2_MANIFEST_SHA256 } from "../youcam/round2-integrity";
+import {
+  RecordedRound2ManifestSchema,
+  round2CheckpointAssetId,
+  type RecordedRound2Manifest,
+} from "../youcam/round2-recorded";
 import {
   RecordedEyesManifestSchema,
   type RecordedEyesManifest,
@@ -60,6 +66,33 @@ async function verifiedCatalog(): Promise<RecordedSamplesManifest | undefined> {
 let catalog: Promise<RecordedSamplesManifest | undefined> | undefined;
 let ladders: Promise<RecordedLadderManifest | undefined> | undefined;
 let eyes: Promise<RecordedEyesManifest | undefined> | undefined;
+let round2: Promise<RecordedRound2Manifest | undefined> | undefined;
+
+async function verifiedRound2(): Promise<RecordedRound2Manifest | undefined> {
+  try {
+    const root = join(process.cwd(), "public");
+    const [raw, source] = await Promise.all([
+      readFile(join(root, "examples/recorded-round2.json")),
+      readFile(join(root, "images/studio-portrait.jpg")),
+    ]);
+    if (hash(raw) !== RECORDED_ROUND2_MANIFEST_SHA256) return undefined;
+    const manifest = RecordedRound2ManifestSchema.parse(
+      JSON.parse(raw.toString("utf8")),
+    );
+    if (hash(source) !== manifest.source.sha256) return undefined;
+    const verified = await Promise.all(
+      manifest.records.map(
+        async (record) =>
+          recipeHash(record.recipe) === record.recipeHash &&
+          hash(await readFile(join(root, record.output.url.slice(1)))) ===
+            record.output.sha256,
+      ),
+    );
+    return verified.every(Boolean) ? manifest : undefined;
+  } catch {
+    return undefined;
+  }
+}
 
 async function verifiedEyes(): Promise<RecordedEyesManifest | undefined> {
   if (!RECORDED_EYES_MANIFEST_SHA256) return undefined;
@@ -149,6 +182,32 @@ export async function attachRecordedSamplePreviews(
     source.width === ladder.source.width &&
     source.height === ladder.source.height
   ) {
+    round2 ??= verifiedRound2();
+    const adopted = await round2;
+    if (!adopted) round2 = undefined;
+    const targetRecords = [
+      ...ladder.records,
+      ...(adopted?.records.filter(
+        (record) => record.purpose === "shadow_target",
+      ) ?? []),
+    ];
+    const attachCheckpoint = (
+      record: RecordedRound2Manifest["records"][number],
+    ) => {
+      const id = round2CheckpointAssetId(record.output.sha256);
+      if (!session.assets.some((asset) => asset.id === id))
+        session.assets.push({
+          id,
+          url: record.output.url,
+          provenance: "virtual_preview",
+          purpose: "preview",
+          createdAt: record.generatedAt,
+          recordedAt: record.generatedAt,
+          providerRequestHash: record.providerRequestHash,
+          width: record.output.width,
+          height: record.output.height,
+        });
+    };
     const plans = [
       ...session.candidates,
       ...(session.activePlan ? [session.activePlan] : []),
@@ -175,7 +234,7 @@ export async function attachRecordedSamplePreviews(
           (variant.previewAsset && !variant.previewAsset.recordedAt)
         )
           continue;
-        const exact = ladder.records.find(
+        const exact = targetRecords.find(
           (record) =>
             ("lookId" in record
               ? record.lookId === session.lookId
@@ -204,6 +263,21 @@ export async function attachRecordedSamplePreviews(
         delete variant.previewError;
         if (!session.assets.some((item) => item.id === asset.id))
           session.assets.push(asset);
+        if (
+          "purpose" in exact &&
+          exact.purpose === "shadow_target" &&
+          exact.level === "light"
+        )
+          attachCheckpoint(exact);
+        if ("lookId" in exact && exact.lookId !== "eyes") {
+          const firstPass = adopted?.records.find(
+            (record) =>
+              record.purpose === "simulated_first_pass" &&
+              record.lookId === exact.lookId &&
+              record.texture === exact.texture,
+          );
+          if (firstPass) attachCheckpoint(firstPass);
+        }
       }
       if (plan.previewVariants?.length)
         selectPreviewLevel(plan, plan.selectedPreviewVariantId ?? "full");
