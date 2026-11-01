@@ -138,7 +138,7 @@ export function SavedMethods() {
                         ? "Choose a method"
                         : session.stage === "reviewing"
                           ? "Ready to review"
-                          : `${session.completedActionIds.length} steps done`}
+                          : `${session.completedActionIds.length} ${session.completedActionIds.length === 1 ? "step" : "steps"} done`}
                     </small>
                   </div>
                   <ButtonLink href={sessionHref(session)} variant="secondary">

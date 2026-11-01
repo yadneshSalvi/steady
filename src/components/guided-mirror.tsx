@@ -807,8 +807,10 @@ export function GuidedMirror({ id }: { id: string }) {
                     <h3>{session.adaptation.candidate.name}</h3>
                     <p>
                       {session.adaptation.preservedActionIds.length} confirmed;{" "}
-                      {session.adaptation.removedActionIds.length} remaining
-                      steps change.
+                      {session.adaptation.removedActionIds.length} remaining{" "}
+                      {session.adaptation.removedActionIds.length === 1
+                        ? "step changes."
+                        : "steps change."}
                     </p>
                     {session.adaptation.productChangeNote ? (
                       <Notice>
