@@ -212,28 +212,28 @@
       "file": "after/adaptation-1366x768.png",
       "width": 1366,
       "height": 768,
-      "sha256": "c9ec06ccc86a8bd6ab7d76d569d568245d370018c80293ff917d148fdfa46d82",
+      "sha256": "fd0b7517fd34facb9027ec0ce2ec125a8bc4ac21b50bd66cad553ab5ee829077",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/adaptation-1440x900.png",
       "width": 1440,
       "height": 900,
-      "sha256": "70614aa00d6e79db9ca65d3429e85fa66cda1aa825aa7b0f8512551893edfb7a",
+      "sha256": "74cf6f4c41c11023fd7a6b6556f476a3763f9a5eb772687f9dcd45f8fe69fee0",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/checkpoint-1366x768.png",
       "width": 1366,
       "height": 768,
-      "sha256": "1b9462f1bd75d0d5af60e12c3036376195fb0621e6a0fb055f8cec1000186578",
+      "sha256": "521cc77d5e18a3fead6d396a14772b16ca84a383a55c7699ab6ca0a0fe33e69e",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/checkpoint-1440x900.png",
       "width": 1440,
       "height": 900,
-      "sha256": "bc898d03d8e78fe9977ac6b0e82f2f0faa9f962df6ab56e1c4b389f04ce95dc0",
+      "sha256": "6c6a8820739baa08427605fd71f7846495cd6db7c6156ba914af45fd8f243ea6",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
@@ -254,42 +254,42 @@
       "file": "after/eye-checkpoint-1366x768.png",
       "width": 1366,
       "height": 768,
-      "sha256": "8f03ef31523f3d36df6898a095afa288cd435135fdb259be21bf70f65aa6db45",
+      "sha256": "88d1310ae39230f66166b68bd1403fab6a1b3ec20aca4ed11d881c44e08c10a5",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/eye-checkpoint-1440x900.png",
       "width": 1440,
       "height": 900,
-      "sha256": "4d5c2d9028d662efc4afbb0164a7b26730bda522c42413af292495a88304d3c9",
+      "sha256": "f198162cdc095cc55d4c5ad773995d58461d1f052cf96d154e4ab545c1d55d11",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/eye-methods-1366x768.png",
       "width": 1366,
       "height": 768,
-      "sha256": "d2fc6fbc389bd187659ba6e25a5285ba5c0649442de2d087021bf3af17267c09",
+      "sha256": "6c9c8c180901c9fafab97d8e0b8a8730d698d3c463492d49a92e09699e319afe",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/eye-methods-1440x900.png",
       "width": 1440,
       "height": 900,
-      "sha256": "b249c4bb3cf7f8d44c413e3cba14c1a9d26c2e0ff645e0989e9d15e24f63778d",
+      "sha256": "8791b6916c2d75848c60d8959086ef34a4d62ce723ec10ff4c4c45977535b6c2",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/eye-mirror-1366x768.png",
       "width": 1366,
       "height": 768,
-      "sha256": "4096b4cd17033c5e89128cbba8fac6bbe99e4a661db51c4c2bea1df9f2217c9e",
+      "sha256": "638dbac80e5f2a1beca10625e3abd02f64d2838c9c8717b2b94786c72770cf6b",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/eye-mirror-1440x900.png",
       "width": 1440,
       "height": 900,
-      "sha256": "395e609b473efc73c724c63dd062c80e3bd5ad73e63cd30ab6872c77f6284921",
+      "sha256": "30a069b1628cc01719725273480b3175ae4143507e359f4a603020d5862eb675",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
@@ -310,56 +310,56 @@
       "file": "after/methods-1366x768.png",
       "width": 1366,
       "height": 768,
-      "sha256": "03317efb3e66764c98798842891c352d968b87caf2a8ee81ca3cbc6b3a954216",
+      "sha256": "20b42e254d8466e1e88d16e9fb95411ac6f309fa23aebaffb62723f5ee6c1e21",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/methods-1440x900.png",
       "width": 1440,
       "height": 900,
-      "sha256": "6bf553bb8aaeba75f33c4b96bfb422767d437ba114f9044bf6e7c1399f1fba9f",
+      "sha256": "60a2c6e341e702ee954c6e423d76a8b47afc0c0af14de6565019a98222a2f460",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/mirror-ready-1366x768.png",
       "width": 1366,
       "height": 768,
-      "sha256": "093590c48b1af395a3192f29975377d10e591ceac078c6277ddd50bdee3f3981",
+      "sha256": "046dcf15b678a73020a3ea16758530481684f07686c18efd4d3bcef4de6e6d3b",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/mirror-ready-1440x900.png",
       "width": 1440,
       "height": 900,
-      "sha256": "b16aad44be4f5c47dee4c901b928f1e897f306f3e392388c9eeff973a6a8031d",
+      "sha256": "5f9bc0c4af3efa58ee508c95d9a3d5a5d769371b21d605810071296dd69b37b7",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/mirror-step-1366x768.png",
       "width": 1366,
       "height": 768,
-      "sha256": "dbe64ec5db18f3a0c4989bc36d5ecd6646f5b0023aa0537f72bada10947bf857",
+      "sha256": "ec5f3fdfd321515177f54d3e1ad46487eea7b3702a2044cf4a9df7f9bd23a1bb",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/mirror-step-1440x900.png",
       "width": 1440,
       "height": 900,
-      "sha256": "f2759486023fa0ef9012dfdbb0d6ef18a9751f532141fcffd0bd2376e9508067",
+      "sha256": "7761b55d755ebe893a57ba27b1b3e70e48b43dc00db9b8a8b5bfc8794a892e3b",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/review-1366x768.png",
       "width": 1366,
       "height": 768,
-      "sha256": "ded9944d24299754843139f72f242104fbd5e10f10ef71c306cbd3afa878e54d",
+      "sha256": "7057763e0b81d13e07dad063052f35c5d5d851de234c846e4ba8f72b0b5c73e8",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/review-1440x900.png",
       "width": 1440,
       "height": 900,
-      "sha256": "f9ee23f59af537201956cc29958b81d65ba509db1b3bf09c4136bf1760abb34e",
+      "sha256": "7e6dc9ba4eb5628f6971ab115f85b32556882aff8da69104c57229076d005b1f",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
@@ -394,62 +394,95 @@
       "file": "after/setup-color-1366x768.png",
       "width": 1366,
       "height": 768,
-      "sha256": "cc4d1d94090213c7fb1edce2a2844b92653cb69a93984bad211cf9f79b8da419",
+      "sha256": "180ae4ba5d90986f366479ac6d68dee3c1d0bc51048caf213835c4e5ccc3ef94",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/setup-color-1440x900.png",
       "width": 1440,
       "height": 900,
-      "sha256": "a9d0612eaf0bf5211dc2c8c93af1dab7e31f15b3d034f7f7eeb11d8200e8d743",
+      "sha256": "55cffa5cf0f7687423741bef220ce40ca477aaa94f1147ba37b3e94c14a41ffb",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/setup-movements-1366x768.png",
       "width": 1366,
       "height": 768,
-      "sha256": "6e8e01a28cc52912041bab47ce39d6ba4a64883be4a8a873e5e915ba006ee521",
+      "sha256": "6d38073c81fe923224c8a7f42332b226c063ace0bf7c638fe954ba4e2e7eb894",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/setup-movements-1440x900.png",
       "width": 1440,
       "height": 900,
-      "sha256": "fe99002929e8ae173afc9ba49798f2dd7d6eb443901e54c7d872742cf15441dd",
+      "sha256": "eeeb775239ace84782a205c7f79852d3326f9e872822a2f1b7fe4aeb8e828ad5",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/setup-photo-1366x768.png",
       "width": 1366,
       "height": 768,
-      "sha256": "e0c0ad2590407a93e572ff27e729ae583240cab6bc65437d66e64383210d0653",
+      "sha256": "385dbbc1d72f0edc23a28680699deeceddf2b09395fb8f992d5106ca1a81fbd9",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/setup-photo-1440x900.png",
       "width": 1440,
       "height": 900,
-      "sha256": "a0c9fa38a8128c00ea40c3176621ce0aac1dbbd9ef4597b302b70d7e6a7e8347",
+      "sha256": "596b01b07c08e5873bfc40391c0d3522b0bca62dc714ca0114535301e3f24328",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/setup-tools-1366x768.png",
       "width": 1366,
       "height": 768,
-      "sha256": "3506a642ebda9b5bd66978b868739c63ca8bb7a495f04abdacf663834fea556f",
+      "sha256": "4e8e575f35249610b91964b6eecd862cff374652849471f9820d268857d73b66",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     },
     {
       "file": "after/setup-tools-1440x900.png",
       "width": 1440,
       "height": 900,
-      "sha256": "b407218a257d4fe1e00545b4eabd263d416678a9cbe9262e0778fe740655dcce",
+      "sha256": "d5aa6640265ff41064657ca772d165305c2f58abd1f41e5098a20b426efc6492",
       "applicationCommit": "a724361f893000241ee848f847652654673973bb"
     }
   ],
   "notes": [
     "Screenshots show recorded example/sample workflows, not human validation.",
     "Before and after captures use separate sessions; compare layout and workflow state, not record identity.",
-    "After screenshots were promoted from the passing canonical browser-suite attachments."
-  ]
+    "After screenshots were promoted from the passing canonical browser-suite attachments.",
+    "Round four re-captured the changed after screens from the local production build listed under round4; the remaining after files are the canonical round-three captures."
+  ],
+  "round4": {
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8",
+    "environment": "local production build (next start); recorded sample paths; paid routes blocked",
+    "recapturedAfterFiles": [
+      "after/adaptation-1366x768.png",
+      "after/adaptation-1440x900.png",
+      "after/checkpoint-1366x768.png",
+      "after/checkpoint-1440x900.png",
+      "after/eye-checkpoint-1366x768.png",
+      "after/eye-checkpoint-1440x900.png",
+      "after/eye-methods-1366x768.png",
+      "after/eye-methods-1440x900.png",
+      "after/eye-mirror-1366x768.png",
+      "after/eye-mirror-1440x900.png",
+      "after/methods-1366x768.png",
+      "after/methods-1440x900.png",
+      "after/mirror-ready-1366x768.png",
+      "after/mirror-ready-1440x900.png",
+      "after/mirror-step-1366x768.png",
+      "after/mirror-step-1440x900.png",
+      "after/review-1366x768.png",
+      "after/review-1440x900.png",
+      "after/setup-color-1366x768.png",
+      "after/setup-color-1440x900.png",
+      "after/setup-movements-1366x768.png",
+      "after/setup-movements-1440x900.png",
+      "after/setup-photo-1366x768.png",
+      "after/setup-photo-1440x900.png",
+      "after/setup-tools-1366x768.png",
+      "after/setup-tools-1440x900.png"
+    ]
+  }
 }

@@ -16,93 +16,87 @@
   },
   "methods-1440x900": {
     "screen": "methods",
+    "profile": "sample",
     "viewport": {
       "width": 1440,
       "height": 900
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/methods-1440x900.png",
-    "testStartedAt": "2026-11-01T12:52:41.248Z",
-    "testDurationSeconds": 29.705,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:05:58.820Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "mirror-ready-1440x900": {
     "screen": "mirror-ready",
+    "profile": "sample",
     "viewport": {
       "width": 1440,
       "height": 900
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/mirror-ready-1440x900.png",
-    "testStartedAt": "2026-11-01T12:52:41.248Z",
-    "testDurationSeconds": 29.705,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:05:59.471Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "mirror-step-1440x900": {
     "screen": "mirror-step",
+    "profile": "sample",
     "viewport": {
       "width": 1440,
       "height": 900
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/mirror-step-1440x900.png",
-    "testStartedAt": "2026-11-01T12:52:41.248Z",
-    "testDurationSeconds": 29.705,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:05:59.713Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "checkpoint-1440x900": {
     "screen": "checkpoint",
+    "profile": "sample",
     "viewport": {
       "width": 1440,
       "height": 900
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/checkpoint-1440x900.png",
-    "testStartedAt": "2026-11-01T12:52:41.248Z",
-    "testDurationSeconds": 29.705,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:00.414Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "adaptation-1440x900": {
     "screen": "adaptation",
+    "profile": "sample",
     "viewport": {
       "width": 1440,
       "height": 900
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/adaptation-1440x900.png",
-    "testStartedAt": "2026-11-01T12:52:41.248Z",
-    "testDurationSeconds": 29.705,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:01.258Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "review-1440x900": {
     "screen": "review",
+    "profile": "sample",
     "viewport": {
       "width": 1440,
       "height": 900
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/review-1440x900.png",
-    "testStartedAt": "2026-11-01T12:52:41.248Z",
-    "testDurationSeconds": 29.705,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:01.854Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "saved-methods-1440x900": {
     "screen": "saved-methods",
@@ -121,108 +115,101 @@
   },
   "setup-color-1440x900": {
     "screen": "setup-color",
+    "profile": "sample-setup",
     "viewport": {
       "width": 1440,
       "height": 900
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/setup-color-1440x900.png",
-    "testStartedAt": "2026-11-01T12:52:41.248Z",
-    "testDurationSeconds": 29.705,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:02.631Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "setup-movements-1440x900": {
     "screen": "setup-movements",
+    "profile": "sample-setup",
     "viewport": {
       "width": 1440,
       "height": 900
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/setup-movements-1440x900.png",
-    "testStartedAt": "2026-11-01T12:52:41.248Z",
-    "testDurationSeconds": 29.705,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:03.079Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "setup-tools-1440x900": {
     "screen": "setup-tools",
+    "profile": "sample-setup",
     "viewport": {
       "width": 1440,
       "height": 900
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/setup-tools-1440x900.png",
-    "testStartedAt": "2026-11-01T12:52:41.248Z",
-    "testDurationSeconds": 29.705,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:03.494Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "setup-photo-1440x900": {
     "screen": "setup-photo",
+    "profile": "personal-empty-upload",
     "viewport": {
       "width": 1440,
       "height": 900
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/setup-photo-1440x900.png",
-    "testStartedAt": "2026-11-01T12:52:41.248Z",
-    "testDurationSeconds": 29.705,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:05.142Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "eye-methods-1440x900": {
     "screen": "eye-methods",
+    "profile": "sample",
     "viewport": {
       "width": 1440,
       "height": 900
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/eye-methods-1440x900.png",
-    "testStartedAt": "2026-11-01T12:52:41.248Z",
-    "testDurationSeconds": 29.705,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:06.432Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "eye-mirror-1440x900": {
     "screen": "eye-mirror",
+    "profile": "sample",
     "viewport": {
       "width": 1440,
       "height": 900
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/eye-mirror-1440x900.png",
-    "testStartedAt": "2026-11-01T12:52:41.248Z",
-    "testDurationSeconds": 29.705,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:06.760Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "eye-checkpoint-1440x900": {
     "screen": "eye-checkpoint",
+    "profile": "sample",
     "viewport": {
       "width": 1440,
       "height": 900
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/eye-checkpoint-1440x900.png",
-    "testStartedAt": "2026-11-01T12:52:41.248Z",
-    "testDurationSeconds": 29.705,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:07.215Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "settings-1440x900": {
     "screen": "settings",
@@ -271,93 +258,87 @@
   },
   "methods-1366x768": {
     "screen": "methods",
+    "profile": "sample",
     "viewport": {
       "width": 1366,
       "height": 768
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/methods-1366x768.png",
-    "testStartedAt": "2026-11-01T12:53:10.959Z",
-    "testDurationSeconds": 27.633,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:10.763Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "mirror-ready-1366x768": {
     "screen": "mirror-ready",
+    "profile": "sample",
     "viewport": {
       "width": 1366,
       "height": 768
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/mirror-ready-1366x768.png",
-    "testStartedAt": "2026-11-01T12:53:10.959Z",
-    "testDurationSeconds": 27.633,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:11.059Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "mirror-step-1366x768": {
     "screen": "mirror-step",
+    "profile": "sample",
     "viewport": {
       "width": 1366,
       "height": 768
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/mirror-step-1366x768.png",
-    "testStartedAt": "2026-11-01T12:53:10.959Z",
-    "testDurationSeconds": 27.633,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:11.261Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "checkpoint-1366x768": {
     "screen": "checkpoint",
+    "profile": "sample",
     "viewport": {
       "width": 1366,
       "height": 768
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/checkpoint-1366x768.png",
-    "testStartedAt": "2026-11-01T12:53:10.959Z",
-    "testDurationSeconds": 27.633,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:11.611Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "adaptation-1366x768": {
     "screen": "adaptation",
+    "profile": "sample",
     "viewport": {
       "width": 1366,
       "height": 768
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/adaptation-1366x768.png",
-    "testStartedAt": "2026-11-01T12:53:10.959Z",
-    "testDurationSeconds": 27.633,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:12.276Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "review-1366x768": {
     "screen": "review",
+    "profile": "sample",
     "viewport": {
       "width": 1366,
       "height": 768
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/review-1366x768.png",
-    "testStartedAt": "2026-11-01T12:53:10.959Z",
-    "testDurationSeconds": 27.633,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:12.871Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "saved-methods-1366x768": {
     "screen": "saved-methods",
@@ -376,108 +357,101 @@
   },
   "setup-color-1366x768": {
     "screen": "setup-color",
+    "profile": "sample-setup",
     "viewport": {
       "width": 1366,
       "height": 768
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/setup-color-1366x768.png",
-    "testStartedAt": "2026-11-01T12:53:10.959Z",
-    "testDurationSeconds": 27.633,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:13.673Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "setup-movements-1366x768": {
     "screen": "setup-movements",
+    "profile": "sample-setup",
     "viewport": {
       "width": 1366,
       "height": 768
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/setup-movements-1366x768.png",
-    "testStartedAt": "2026-11-01T12:53:10.959Z",
-    "testDurationSeconds": 27.633,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:14.084Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "setup-tools-1366x768": {
     "screen": "setup-tools",
+    "profile": "sample-setup",
     "viewport": {
       "width": 1366,
       "height": 768
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/setup-tools-1366x768.png",
-    "testStartedAt": "2026-11-01T12:53:10.959Z",
-    "testDurationSeconds": 27.633,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:14.522Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "setup-photo-1366x768": {
     "screen": "setup-photo",
+    "profile": "personal-empty-upload",
     "viewport": {
       "width": 1366,
       "height": 768
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/setup-photo-1366x768.png",
-    "testStartedAt": "2026-11-01T12:53:10.959Z",
-    "testDurationSeconds": 27.633,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:16.178Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "eye-methods-1366x768": {
     "screen": "eye-methods",
+    "profile": "sample",
     "viewport": {
       "width": 1366,
       "height": 768
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/eye-methods-1366x768.png",
-    "testStartedAt": "2026-11-01T12:53:10.959Z",
-    "testDurationSeconds": 27.633,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:17.472Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "eye-mirror-1366x768": {
     "screen": "eye-mirror",
+    "profile": "sample",
     "viewport": {
       "width": 1366,
       "height": 768
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/eye-mirror-1366x768.png",
-    "testStartedAt": "2026-11-01T12:53:10.959Z",
-    "testDurationSeconds": 27.633,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:17.797Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "eye-checkpoint-1366x768": {
     "screen": "eye-checkpoint",
+    "profile": "sample",
     "viewport": {
       "width": 1366,
       "height": 768
     },
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local production build",
     "path": "after/eye-checkpoint-1366x768.png",
-    "testStartedAt": "2026-11-01T12:53:10.959Z",
-    "testDurationSeconds": 27.633,
-    "capture": "Native screenshot attachment from the passing fresh-context canonical judge path. Fonts, finite animations, visible images and active-panel opacity settled before capture; no compositing."
+    "capturedAt": "2026-11-01T20:06:18.226Z",
+    "capture": "Fresh isolated Chromium context at native viewport; expected heading, finished finite animations, heading-ancestor opacity1 and loaded visible images; actual rendered UI, no composites. Round-four refresh from `next start` of the committed build; recorded sample paths only; paid routes blocked.",
+    "applicationCommit": "bbc2fb1fa18036de3047744b6883889745ae07a8"
   },
   "settings-1366x768": {
     "screen": "settings",

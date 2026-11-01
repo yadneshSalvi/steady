@@ -1,18 +1,16 @@
 {
   "1440x900": {
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local",
     "audits": [
       {
         "screen": "landing",
-        "observedAt": "2026-11-01T12:52:42.060Z",
+        "observedAt": "2026-11-01T20:05:57.398Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
-        "target": 21,
-        "limit": 23.1,
-        "authoredCount": 23,
+        "target": 22,
+        "limit": 24.200000000000003,
+        "authoredCount": 24,
         "withinLimit": true,
         "visibleDataCount": 0,
         "excludedCount": 0,
@@ -64,7 +62,7 @@
             "reason": null
           },
           {
-            "text": "\u2733",
+            "text": "✳",
             "path": "main > div.r3-home > section.hero.wrap:nth-of-type(1) > div.hero-visual:nth-of-type(2) > span.hero-star",
             "kind": "authored",
             "reason": null
@@ -136,7 +134,7 @@
             "reason": null
           },
           {
-            "text": "\u2733",
+            "text": "✳",
             "path": "main > div.r3-home > section.manifesto:nth-of-type(4) > div.wrap.manifesto-inner > span.manifesto-symbol",
             "kind": "authored",
             "reason": null
@@ -156,6 +154,12 @@
           {
             "text": "your next step.",
             "path": "main > div.r3-home > section.manifesto:nth-of-type(4) > div.wrap.manifesto-inner > h2 > em",
+            "kind": "authored",
+            "reason": null
+          },
+          {
+            "text": "Find your way",
+            "path": "main > div.r3-home > section.manifesto:nth-of-type(4) > div.wrap.manifesto-inner > a.button.button--primary",
             "kind": "authored",
             "reason": null
           }
@@ -184,6 +188,24 @@
             "ariaLabel": null,
             "alt": "STEADY simulated sample measurement with target progress and a regional heatmap",
             "excludedFromAuthoredCount": true
+          },
+          {
+            "path": "main > div.r3-home > section.look-section.wrap:nth-of-type(3) > div.inspiration-grid:nth-of-type(2) > a.inspiration-card.inspiration-card--rose:nth-of-type(1)",
+            "ariaLabel": "Start with Rose",
+            "alt": null,
+            "excludedFromAuthoredCount": true
+          },
+          {
+            "path": "main > div.r3-home > section.look-section.wrap:nth-of-type(3) > div.inspiration-grid:nth-of-type(2) > a.inspiration-card.inspiration-card--terracotta:nth-of-type(2)",
+            "ariaLabel": "Start with Terracotta",
+            "alt": null,
+            "excludedFromAuthoredCount": true
+          },
+          {
+            "path": "main > div.r3-home > section.look-section.wrap:nth-of-type(3) > div.inspiration-grid:nth-of-type(2) > a.inspiration-card.inspiration-card--berry:nth-of-type(3)",
+            "ariaLabel": "Start with Berry",
+            "alt": null,
+            "excludedFromAuthoredCount": true
           }
         ],
         "chrome": [
@@ -200,7 +222,7 @@
       },
       {
         "screen": "methods",
-        "observedAt": "2026-11-01T12:52:43.785Z",
+        "observedAt": "2026-11-01T20:05:58.819Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 32,
@@ -306,73 +328,73 @@
           },
           {
             "text": "Fingertip tapping",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option.is-viewed:nth-of-type(1) > div.method-option-top:nth-of-type(1) > h2",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option.is-viewed:nth-of-type(1) > div.method-option-top:nth-of-type(1) > h2",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Cream blush",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option.is-viewed:nth-of-type(1) > p",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option.is-viewed:nth-of-type(1) > p",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Choose",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option.is-viewed:nth-of-type(1) > div.method-option-actions:nth-of-type(2) > button.button.button--primary:nth-of-type(1)",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option.is-viewed:nth-of-type(1) > div.method-option-actions:nth-of-type(2) > button.button.button--primary:nth-of-type(1)",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "View target",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option.is-viewed:nth-of-type(1) > div.method-option-actions:nth-of-type(2) > button.button.button--quiet:nth-of-type(2)",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option.is-viewed:nth-of-type(1) > div.method-option-actions:nth-of-type(2) > button.button.button--quiet:nth-of-type(2)",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Wide-brush blending",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(2) > div.method-option-top:nth-of-type(1) > h2",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(2) > div.method-option-top:nth-of-type(1) > h2",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Powder blush",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(2) > p",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(2) > p",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Choose",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(2) > div.method-option-actions:nth-of-type(2) > button.button.button--secondary:nth-of-type(1)",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(2) > div.method-option-actions:nth-of-type(2) > button.button.button--secondary:nth-of-type(1)",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "View target",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(2) > div.method-option-actions:nth-of-type(2) > button.button.button--quiet:nth-of-type(2)",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(2) > div.method-option-actions:nth-of-type(2) > button.button.button--quiet:nth-of-type(2)",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Sponge tapping",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(3) > div.method-option-top:nth-of-type(1) > h2",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(3) > div.method-option-top:nth-of-type(1) > h2",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Cream blush",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(3) > p",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(3) > p",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Choose",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(3) > div.method-option-actions:nth-of-type(2) > button.button.button--secondary:nth-of-type(1)",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(3) > div.method-option-actions:nth-of-type(2) > button.button.button--secondary:nth-of-type(1)",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "View target",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(3) > div.method-option-actions:nth-of-type(2) > button.button.button--quiet:nth-of-type(2)",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(3) > div.method-option-actions:nth-of-type(2) > button.button.button--quiet:nth-of-type(2)",
             "kind": "authored",
             "reason": null
           }
@@ -403,7 +425,7 @@
             "excludedFromAuthoredCount": true
           },
           {
-            "path": "main > div.wrap.page-wrap.comparison-page > section.method-target-stage > div.method-target-controls:nth-of-type(2) > fieldset.preview-ladder > div > button:nth-of-type(1) > img",
+            "path": "main > div.wrap.page-wrap.comparison-page > section.method-target-stage > div.method-target-controls:nth-of-type(2) > fieldset.preview-ladder > div > button:nth-of-type(1) > div.region-photo > img",
             "ariaLabel": null,
             "alt": "Light color target",
             "excludedFromAuthoredCount": true
@@ -415,7 +437,7 @@
             "excludedFromAuthoredCount": true
           },
           {
-            "path": "main > div.wrap.page-wrap.comparison-page > section.method-target-stage > div.method-target-controls:nth-of-type(2) > fieldset.preview-ladder > div > button:nth-of-type(2) > img",
+            "path": "main > div.wrap.page-wrap.comparison-page > section.method-target-stage > div.method-target-controls:nth-of-type(2) > fieldset.preview-ladder > div > button:nth-of-type(2) > div.region-photo > img",
             "ariaLabel": null,
             "alt": "Build color target",
             "excludedFromAuthoredCount": true
@@ -427,13 +449,13 @@
             "excludedFromAuthoredCount": true
           },
           {
-            "path": "main > div.wrap.page-wrap.comparison-page > section.method-target-stage > div.method-target-controls:nth-of-type(2) > fieldset.preview-ladder > div > button.is-selected:nth-of-type(3) > img",
+            "path": "main > div.wrap.page-wrap.comparison-page > section.method-target-stage > div.method-target-controls:nth-of-type(2) > fieldset.preview-ladder > div > button.is-selected:nth-of-type(3) > div.region-photo > img",
             "ariaLabel": null,
             "alt": "Full color target",
             "excludedFromAuthoredCount": true
           },
           {
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3)",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3)",
             "ariaLabel": "Available methods",
             "alt": null,
             "excludedFromAuthoredCount": true
@@ -453,12 +475,12 @@
       },
       {
         "screen": "checkpoint",
-        "observedAt": "2026-11-01T12:52:47.176Z",
+        "observedAt": "2026-11-01T20:06:00.413Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 37,
         "limit": 40.7,
-        "authoredCount": 24,
+        "authoredCount": 25,
         "withinLimit": true,
         "visibleDataCount": 4,
         "excludedCount": 58,
@@ -541,25 +563,25 @@
           },
           {
             "text": "Hide heatmap",
-            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > button.button.button--secondary",
-            "kind": "authored",
-            "reason": null
-          },
-          {
-            "text": "100% target",
-            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > div.measurement-legend > div.heatmap-scale:nth-of-type(1) > span.heatmap-target-marker",
+            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > button.mirror-heatmap-toggle",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Less",
-            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > div.measurement-legend > div.heatmap-endpoints:nth-of-type(2) > span:nth-of-type(1)",
+            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > div.measurement-legend.measurement-legend--pill > span:nth-of-type(1)",
+            "kind": "authored",
+            "reason": null
+          },
+          {
+            "text": "100% target",
+            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > div.measurement-legend.measurement-legend--pill > div.heatmap-scale > span.heatmap-target-marker",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "More",
-            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > div.measurement-legend > div.heatmap-endpoints:nth-of-type(2) > span:nth-of-type(2)",
+            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > div.measurement-legend.measurement-legend--pill > span:nth-of-type(2)",
             "kind": "authored",
             "reason": null
           },
@@ -625,7 +647,13 @@
           },
           {
             "text": "Work up along the cheekbone.",
-            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > p.measurement-guidance",
+            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > p.measurement-guidance:nth-of-type(1)",
+            "kind": "authored",
+            "reason": null
+          },
+          {
+            "text": "Upper 21% · lower 56%",
+            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > p.measurement-areas:nth-of-type(2)",
             "kind": "authored",
             "reason": null
           },
@@ -636,13 +664,13 @@
             "reason": null
           },
           {
-            "text": "Work gently toward your ear.",
+            "text": "Tap gently toward your ear.",
             "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > details.measurement-details > p.measurement-spatial-guidance",
             "kind": "excluded",
             "reason": "collapsed disclosure"
           },
           {
-            "text": "Redness change \u00b7 \u0394a*",
+            "text": "Redness change · Δa*",
             "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > details.measurement-details > dl > div:nth-of-type(1) > dt",
             "kind": "excluded",
             "reason": "collapsed disclosure"
@@ -654,7 +682,7 @@
             "reason": "collapsed disclosure"
           },
           {
-            "text": "Color difference \u00b7 \u0394E00",
+            "text": "Color difference · ΔE00",
             "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > details.measurement-details > dl > div:nth-of-type(2) > dt",
             "kind": "excluded",
             "reason": "collapsed disclosure"
@@ -684,7 +712,7 @@
             "reason": "collapsed disclosure"
           },
           {
-            "text": "91",
+            "text": "49",
             "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > details.measurement-details > dl > div:nth-of-type(4) > dd",
             "kind": "excluded",
             "reason": "collapsed disclosure"
@@ -828,7 +856,7 @@
             "reason": "closed dialog"
           },
           {
-            "text": "I\u2019ll choose breaks",
+            "text": "I’ll choose breaks",
             "path": "main > div.wrap.mirror-page.r3-mirror > dialog.controls-drawer > div.preference-row:nth-of-type(4) > div.segmented-control:nth-of-type(2) > label:nth-of-type(1) > span",
             "kind": "excluded",
             "reason": "closed dialog"
@@ -858,7 +886,7 @@
             "reason": "closed dialog"
           },
           {
-            "text": "Say \u201cSteady,\u201d then pause, repeat, check, help, next or stop.",
+            "text": "Say “Steady,” then pause, repeat, check, help, next or stop.",
             "path": "main > div.wrap.mirror-page.r3-mirror > dialog.controls-drawer > details.photo-assist.voice-controls:nth-of-type(1) > div.photo-assist-body > p:nth-of-type(1)",
             "kind": "excluded",
             "reason": "closed dialog"
@@ -1016,7 +1044,7 @@
             "excludedFromAuthoredCount": true
           },
           {
-            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > div.measurement-legend",
+            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > div.measurement-legend.measurement-legend--pill",
             "ariaLabel": "Heatmap color scale: 0% to 150%, target at 100%",
             "alt": null,
             "excludedFromAuthoredCount": true
@@ -1053,7 +1081,7 @@
           },
           {
             "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-control-dock:nth-of-type(2) > div.instruction-buttons > button.button.button--secondary:nth-of-type(2)",
-            "ariaLabel": "I made a pass \u00b7 check again",
+            "ariaLabel": "I made a pass · check again",
             "alt": null,
             "excludedFromAuthoredCount": true
           },
@@ -1114,15 +1142,15 @@
       },
       {
         "screen": "review",
-        "observedAt": "2026-11-01T12:52:52.091Z",
+        "observedAt": "2026-11-01T20:06:01.849Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 31,
         "limit": 34.1,
-        "authoredCount": 31,
+        "authoredCount": 32,
         "withinLimit": true,
-        "visibleDataCount": 5,
-        "excludedCount": 15,
+        "visibleDataCount": 6,
+        "excludedCount": 0,
         "viewport": {
           "width": 1440,
           "height": 900
@@ -1249,24 +1277,6 @@
             "reason": null
           },
           {
-            "text": "100% target",
-            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(1) > div.measurement-visual.measurement-visual--compact > div.measurement-legend:nth-of-type(4) > div.heatmap-scale:nth-of-type(1) > span.heatmap-target-marker",
-            "kind": "authored",
-            "reason": null
-          },
-          {
-            "text": "Less",
-            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(1) > div.measurement-visual.measurement-visual--compact > div.measurement-legend:nth-of-type(4) > div.heatmap-endpoints:nth-of-type(2) > span:nth-of-type(1)",
-            "kind": "authored",
-            "reason": null
-          },
-          {
-            "text": "More",
-            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(1) > div.measurement-visual.measurement-visual--compact > div.measurement-legend:nth-of-type(4) > div.heatmap-endpoints:nth-of-type(2) > span:nth-of-type(2)",
-            "kind": "authored",
-            "reason": null
-          },
-          {
             "text": "Your right cheek",
             "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(2) > h3",
             "kind": "authored",
@@ -1310,127 +1320,67 @@
           },
           {
             "text": "100% target",
-            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(2) > div.measurement-visual.measurement-visual--compact > div.measurement-legend:nth-of-type(4) > div.heatmap-scale:nth-of-type(1) > span.heatmap-target-marker",
+            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > div.review-checkpoint-legend > div.measurement-legend > div.heatmap-scale:nth-of-type(1) > span.heatmap-target-marker",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Less",
-            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(2) > div.measurement-visual.measurement-visual--compact > div.measurement-legend:nth-of-type(4) > div.heatmap-endpoints:nth-of-type(2) > span:nth-of-type(1)",
+            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > div.review-checkpoint-legend > div.measurement-legend > div.heatmap-endpoints:nth-of-type(2) > span:nth-of-type(1)",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "More",
-            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(2) > div.measurement-visual.measurement-visual--compact > div.measurement-legend:nth-of-type(4) > div.heatmap-endpoints:nth-of-type(2) > span:nth-of-type(2)",
+            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > div.review-checkpoint-legend > div.measurement-legend > div.heatmap-endpoints:nth-of-type(2) > span:nth-of-type(2)",
             "kind": "authored",
             "reason": null
           },
           {
-            "text": "Fingertips \u2192 Wide blush brush \u00b7 1 method change",
-            "path": "main > div.wrap.page-wrap.review-page > p.review-method-diff",
+            "text": "Right cheek: Fingertips → Brush-blended cream",
+            "path": "main > div.wrap.page-wrap.review-page > div.review-method-diff:nth-of-type(4) > p",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Your method",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > summary",
+            "path": "main > div.wrap.page-wrap.review-page > section.shopping-note.shopping-note--card > div.shopping-note-lines:nth-of-type(1) > h2",
             "kind": "authored",
             "reason": null
           },
           {
-            "text": "Rose",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > div.shade-reference:nth-of-type(1) > div > strong",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
+            "text": "Rose · Satin cream ·",
+            "path": "main > div.wrap.page-wrap.review-page > section.shopping-note.shopping-note--card > div.shopping-note-lines:nth-of-type(1) > p:nth-of-type(1)",
+            "kind": "authored",
+            "reason": null
           },
           {
             "text": "#BE6680",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > div.shade-reference:nth-of-type(1) > div > code",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
+            "path": "main > div.wrap.page-wrap.review-page > section.shopping-note.shopping-note--card > div.shopping-note-lines:nth-of-type(1) > p:nth-of-type(1) > code",
+            "kind": "data",
+            "reason": "semantic data container: code."
           },
           {
-            "text": "Satin cream",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > div.shade-reference:nth-of-type(1) > div > p",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "Fingertips",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ul > li:nth-of-type(1)",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "+",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ul > li:nth-of-type(1)",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "Cream blush",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ul > li:nth-of-type(1)",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "Wide blush brush",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ul > li:nth-of-type(2)",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "+",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ul > li:nth-of-type(2)",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "Cream blush",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ul > li:nth-of-type(2)",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
+            "text": "Fingertips + Cream blush · Wide blush brush + Cream blush",
+            "path": "main > div.wrap.page-wrap.review-page > section.shopping-note.shopping-note--card > div.shopping-note-lines:nth-of-type(1) > p:nth-of-type(2)",
+            "kind": "authored",
+            "reason": null
           },
           {
             "text": "Copy shade",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > div.button-row:nth-of-type(2) > button.button.button--secondary:nth-of-type(1)",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
+            "path": "main > div.wrap.page-wrap.review-page > section.shopping-note.shopping-note--card > div.button-row:nth-of-type(2) > button.button.button--secondary:nth-of-type(1)",
+            "kind": "authored",
+            "reason": null
           },
           {
             "text": "Print shopping note",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > div.button-row:nth-of-type(2) > button.button.button--quiet:nth-of-type(2)",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "Your left cheek",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ol.action-list > li:nth-of-type(1) > div > strong",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "Use your clean fingertips to tap cream blush over your left cheek. Pause to look at the color and edge.",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ol.action-list > li:nth-of-type(1) > div > p",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "Your right cheek",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ol.action-list > li:nth-of-type(2) > div > strong",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "Use a clean brush suitable for cream products to gently blend cream blush over your right cheek with small, broad circles. Keep the pressure light and pause to look at the edge.",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ol.action-list > li:nth-of-type(2) > div > p",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
+            "path": "main > div.wrap.page-wrap.review-page > section.shopping-note.shopping-note--card > div.button-row:nth-of-type(2) > button.button.button--quiet:nth-of-type(2)",
+            "kind": "authored",
+            "reason": null
           },
           {
             "text": "Delete this session",
-            "path": "main > div.wrap.page-wrap.review-page > div.review-data-actions:nth-of-type(4) > button.button.button--quiet",
+            "path": "main > div.wrap.page-wrap.review-page > div.review-data-actions:nth-of-type(5) > button.button.button--quiet",
             "kind": "authored",
             "reason": null
           }
@@ -1479,12 +1429,6 @@
             "excludedFromAuthoredCount": true
           },
           {
-            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(1) > div.measurement-visual.measurement-visual--compact > div.measurement-legend:nth-of-type(4)",
-            "ariaLabel": "Heatmap color scale: 0% to 150%, target at 100%",
-            "alt": null,
-            "excludedFromAuthoredCount": true
-          },
-          {
             "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(2) > div.measurement-visual.measurement-visual--compact > div.measurement-progress:nth-of-type(2) > div:nth-of-type(1)",
             "ariaLabel": "Color change toward your chosen target",
             "alt": null,
@@ -1503,13 +1447,13 @@
             "excludedFromAuthoredCount": true
           },
           {
-            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(2) > div.measurement-visual.measurement-visual--compact > div.measurement-legend:nth-of-type(4)",
+            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > div.review-checkpoint-legend > div.measurement-legend",
             "ariaLabel": "Heatmap color scale: 0% to 150%, target at 100%",
             "alt": null,
             "excludedFromAuthoredCount": true
           },
           {
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > div.shade-reference:nth-of-type(1) > span",
+            "path": "main > div.wrap.page-wrap.review-page > section.shopping-note.shopping-note--card > span.shopping-note-swatch",
             "ariaLabel": "Shade reference #BE6680",
             "alt": null,
             "excludedFromAuthoredCount": true
@@ -1529,7 +1473,7 @@
       },
       {
         "screen": "saved-methods",
-        "observedAt": "2026-11-01T12:52:54.114Z",
+        "observedAt": "2026-11-01T20:06:02.162Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 8,
@@ -1643,7 +1587,7 @@
       },
       {
         "screen": "setup-color",
-        "observedAt": "2026-11-01T12:52:54.646Z",
+        "observedAt": "2026-11-01T20:06:02.630Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 12,
@@ -1830,7 +1774,7 @@
       },
       {
         "screen": "setup-movements",
-        "observedAt": "2026-11-01T12:52:55.081Z",
+        "observedAt": "2026-11-01T20:06:03.078Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 30,
@@ -2001,7 +1945,7 @@
             "reason": null
           },
           {
-            "text": "I\u2019ll choose breaks",
+            "text": "I’ll choose breaks",
             "path": "main > div.wrap.page-wrap.r3-setup > div.setup-form > div.preference-row:nth-of-type(4) > div.segmented-control:nth-of-type(2) > label:nth-of-type(1) > span",
             "kind": "authored",
             "reason": null
@@ -2119,7 +2063,7 @@
       },
       {
         "screen": "setup-tools",
-        "observedAt": "2026-11-01T12:52:55.496Z",
+        "observedAt": "2026-11-01T20:06:03.494Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 18,
@@ -2324,7 +2268,7 @@
       },
       {
         "screen": "setup-photo",
-        "observedAt": "2026-11-01T12:52:57.131Z",
+        "observedAt": "2026-11-01T20:06:05.142Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 19,
@@ -2417,7 +2361,7 @@
             "reason": null
           },
           {
-            "text": "I\u2019m 18+, have photo permission, and allow private storage and YouCam previews.",
+            "text": "I’m 18+, have photo permission, and allow private storage and YouCam previews.",
             "path": "main > div.wrap.page-wrap.r3-setup > div.setup-form > div.form-field:nth-of-type(4) > label.checkbox-label > span",
             "kind": "authored",
             "reason": null
@@ -2499,7 +2443,7 @@
       },
       {
         "screen": "settings",
-        "observedAt": "2026-11-01T12:53:04.289Z",
+        "observedAt": "2026-11-01T20:06:07.438Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 50,
@@ -2652,7 +2596,7 @@
             "reason": null
           },
           {
-            "text": "I\u2019ll choose breaks",
+            "text": "I’ll choose breaks",
             "path": "main > div.wrap.page-wrap.settings-page > div.settings-layout:nth-of-type(2) > div > section.settings-section:nth-of-type(1) > div.preference-row:nth-of-type(3) > div.segmented-control:nth-of-type(2) > label:nth-of-type(1) > span",
             "kind": "authored",
             "reason": null
@@ -2676,7 +2620,7 @@
             "reason": null
           },
           {
-            "text": "Your browser\u2019s voice reads each step.",
+            "text": "Your browser’s voice reads each step.",
             "path": "main > div.wrap.page-wrap.settings-page > div.settings-layout:nth-of-type(2) > div > section.settings-section:nth-of-type(2) > div.setting-toggle:nth-of-type(1) > div > p",
             "kind": "authored",
             "reason": null
@@ -2778,7 +2722,7 @@
             "reason": null
           },
           {
-            "text": "Sample \u00b7",
+            "text": "Sample ·",
             "path": "main > div.wrap.page-wrap.settings-page > div.settings-layout:nth-of-type(2) > div > section.settings-section:nth-of-type(3) > div.data-row:nth-of-type(2) > div:nth-of-type(1) > small",
             "kind": "authored",
             "reason": null
@@ -2808,7 +2752,7 @@
             "reason": null
           },
           {
-            "text": "Sample \u00b7",
+            "text": "Sample ·",
             "path": "main > div.wrap.page-wrap.settings-page > div.settings-layout:nth-of-type(2) > div > section.settings-section:nth-of-type(3) > div.data-row:nth-of-type(3) > div:nth-of-type(1) > small",
             "kind": "authored",
             "reason": null
@@ -2908,7 +2852,7 @@
       },
       {
         "screen": "evidence",
-        "observedAt": "2026-11-01T12:53:04.978Z",
+        "observedAt": "2026-11-01T20:06:07.644Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 23,
@@ -3001,7 +2945,7 @@
             "reason": null
           },
           {
-            "text": "Unreliable tracking, pose, visibility, or reference lighting can prevent measurement. Region-only lighting changes can still resemble pigment. Camera processing, skin appearance, texture, and products also affect readings. These engineering thresholds aren\u2019t calibrated cosmetic assessments. Reloading clears local frames; STEADY asks before capturing another baseline.",
+            "text": "Unreliable tracking, pose, visibility, or reference lighting can prevent measurement. Region-only lighting changes can still resemble pigment. Camera processing, skin appearance, texture, and products also affect readings. These engineering thresholds aren’t calibrated cosmetic assessments. Reloading clears local frames; STEADY asks before capturing another baseline.",
             "path": "main > div.wrap.page-wrap.evidence-page > section:nth-of-type(2) > p:nth-of-type(2)",
             "kind": "authored",
             "reason": null
@@ -3025,7 +2969,7 @@
             "reason": null
           },
           {
-            "text": "The planner checks confirmed movements, products, and tools against finite methods. Adaptation preserves confirmed steps and prefers the existing product family. Instructions are AI-assisted drafts, without makeup-artist or participant validation. Follow product directions; skip or stop movements you don\u2019t want. Light, Build, and Full are visual targets, not calibrated doses. Your chosen photo and assessment describe your physical result.",
+            "text": "The planner checks confirmed movements, products, and tools against finite methods. Adaptation preserves confirmed steps and prefers the existing product family. Instructions are AI-assisted drafts, without makeup-artist or participant validation. Follow product directions; skip or stop movements you don’t want. Light, Build, and Full are visual targets, not calibrated doses. Your chosen photo and assessment describe your physical result.",
             "path": "main > div.wrap.page-wrap.evidence-page > section:nth-of-type(4) > p",
             "kind": "authored",
             "reason": null
@@ -3096,19 +3040,17 @@
     ]
   },
   "1366x768": {
-    "origin": "https://steady-taupe-pi.vercel.app",
-    "environment": "canonical production",
-    "applicationCommit": "a724361f893000241ee848f847652654673973bb",
-    "deploymentId": "dpl_5vY28FatzoUuu2vmb8KxY5iems6J",
+    "origin": "http://localhost:3000",
+    "environment": "local",
     "audits": [
       {
         "screen": "landing",
-        "observedAt": "2026-11-01T12:53:11.665Z",
+        "observedAt": "2026-11-01T20:06:09.628Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
-        "target": 21,
-        "limit": 23.1,
-        "authoredCount": 23,
+        "target": 22,
+        "limit": 24.200000000000003,
+        "authoredCount": 24,
         "withinLimit": true,
         "visibleDataCount": 0,
         "excludedCount": 0,
@@ -3160,7 +3102,7 @@
             "reason": null
           },
           {
-            "text": "\u2733",
+            "text": "✳",
             "path": "main > div.r3-home > section.hero.wrap:nth-of-type(1) > div.hero-visual:nth-of-type(2) > span.hero-star",
             "kind": "authored",
             "reason": null
@@ -3232,7 +3174,7 @@
             "reason": null
           },
           {
-            "text": "\u2733",
+            "text": "✳",
             "path": "main > div.r3-home > section.manifesto:nth-of-type(4) > div.wrap.manifesto-inner > span.manifesto-symbol",
             "kind": "authored",
             "reason": null
@@ -3252,6 +3194,12 @@
           {
             "text": "your next step.",
             "path": "main > div.r3-home > section.manifesto:nth-of-type(4) > div.wrap.manifesto-inner > h2 > em",
+            "kind": "authored",
+            "reason": null
+          },
+          {
+            "text": "Find your way",
+            "path": "main > div.r3-home > section.manifesto:nth-of-type(4) > div.wrap.manifesto-inner > a.button.button--primary",
             "kind": "authored",
             "reason": null
           }
@@ -3280,6 +3228,24 @@
             "ariaLabel": null,
             "alt": "STEADY simulated sample measurement with target progress and a regional heatmap",
             "excludedFromAuthoredCount": true
+          },
+          {
+            "path": "main > div.r3-home > section.look-section.wrap:nth-of-type(3) > div.inspiration-grid:nth-of-type(2) > a.inspiration-card.inspiration-card--rose:nth-of-type(1)",
+            "ariaLabel": "Start with Rose",
+            "alt": null,
+            "excludedFromAuthoredCount": true
+          },
+          {
+            "path": "main > div.r3-home > section.look-section.wrap:nth-of-type(3) > div.inspiration-grid:nth-of-type(2) > a.inspiration-card.inspiration-card--terracotta:nth-of-type(2)",
+            "ariaLabel": "Start with Terracotta",
+            "alt": null,
+            "excludedFromAuthoredCount": true
+          },
+          {
+            "path": "main > div.r3-home > section.look-section.wrap:nth-of-type(3) > div.inspiration-grid:nth-of-type(2) > a.inspiration-card.inspiration-card--berry:nth-of-type(3)",
+            "ariaLabel": "Start with Berry",
+            "alt": null,
+            "excludedFromAuthoredCount": true
           }
         ],
         "chrome": [
@@ -3296,7 +3262,7 @@
       },
       {
         "screen": "methods",
-        "observedAt": "2026-11-01T12:53:13.359Z",
+        "observedAt": "2026-11-01T20:06:10.762Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 32,
@@ -3402,73 +3368,73 @@
           },
           {
             "text": "Fingertip tapping",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option.is-viewed:nth-of-type(1) > div.method-option-top:nth-of-type(1) > h2",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option.is-viewed:nth-of-type(1) > div.method-option-top:nth-of-type(1) > h2",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Cream blush",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option.is-viewed:nth-of-type(1) > p",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option.is-viewed:nth-of-type(1) > p",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Choose",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option.is-viewed:nth-of-type(1) > div.method-option-actions:nth-of-type(2) > button.button.button--primary:nth-of-type(1)",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option.is-viewed:nth-of-type(1) > div.method-option-actions:nth-of-type(2) > button.button.button--primary:nth-of-type(1)",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "View target",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option.is-viewed:nth-of-type(1) > div.method-option-actions:nth-of-type(2) > button.button.button--quiet:nth-of-type(2)",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option.is-viewed:nth-of-type(1) > div.method-option-actions:nth-of-type(2) > button.button.button--quiet:nth-of-type(2)",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Wide-brush blending",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(2) > div.method-option-top:nth-of-type(1) > h2",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(2) > div.method-option-top:nth-of-type(1) > h2",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Powder blush",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(2) > p",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(2) > p",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Choose",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(2) > div.method-option-actions:nth-of-type(2) > button.button.button--secondary:nth-of-type(1)",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(2) > div.method-option-actions:nth-of-type(2) > button.button.button--secondary:nth-of-type(1)",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "View target",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(2) > div.method-option-actions:nth-of-type(2) > button.button.button--quiet:nth-of-type(2)",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(2) > div.method-option-actions:nth-of-type(2) > button.button.button--quiet:nth-of-type(2)",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Sponge tapping",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(3) > div.method-option-top:nth-of-type(1) > h2",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(3) > div.method-option-top:nth-of-type(1) > h2",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Cream blush",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(3) > p",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(3) > p",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Choose",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(3) > div.method-option-actions:nth-of-type(2) > button.button.button--secondary:nth-of-type(1)",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(3) > div.method-option-actions:nth-of-type(2) > button.button.button--secondary:nth-of-type(1)",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "View target",
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(3) > div.method-option-actions:nth-of-type(2) > button.button.button--quiet:nth-of-type(2)",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3) > article.candidate-card.method-option:nth-of-type(3) > div.method-option-actions:nth-of-type(2) > button.button.button--quiet:nth-of-type(2)",
             "kind": "authored",
             "reason": null
           }
@@ -3499,7 +3465,7 @@
             "excludedFromAuthoredCount": true
           },
           {
-            "path": "main > div.wrap.page-wrap.comparison-page > section.method-target-stage > div.method-target-controls:nth-of-type(2) > fieldset.preview-ladder > div > button:nth-of-type(1) > img",
+            "path": "main > div.wrap.page-wrap.comparison-page > section.method-target-stage > div.method-target-controls:nth-of-type(2) > fieldset.preview-ladder > div > button:nth-of-type(1) > div.region-photo > img",
             "ariaLabel": null,
             "alt": "Light color target",
             "excludedFromAuthoredCount": true
@@ -3511,7 +3477,7 @@
             "excludedFromAuthoredCount": true
           },
           {
-            "path": "main > div.wrap.page-wrap.comparison-page > section.method-target-stage > div.method-target-controls:nth-of-type(2) > fieldset.preview-ladder > div > button:nth-of-type(2) > img",
+            "path": "main > div.wrap.page-wrap.comparison-page > section.method-target-stage > div.method-target-controls:nth-of-type(2) > fieldset.preview-ladder > div > button:nth-of-type(2) > div.region-photo > img",
             "ariaLabel": null,
             "alt": "Build color target",
             "excludedFromAuthoredCount": true
@@ -3523,13 +3489,13 @@
             "excludedFromAuthoredCount": true
           },
           {
-            "path": "main > div.wrap.page-wrap.comparison-page > section.method-target-stage > div.method-target-controls:nth-of-type(2) > fieldset.preview-ladder > div > button.is-selected:nth-of-type(3) > img",
+            "path": "main > div.wrap.page-wrap.comparison-page > section.method-target-stage > div.method-target-controls:nth-of-type(2) > fieldset.preview-ladder > div > button.is-selected:nth-of-type(3) > div.region-photo > img",
             "ariaLabel": null,
             "alt": "Full color target",
             "excludedFromAuthoredCount": true
           },
           {
-            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options:nth-of-type(3)",
+            "path": "main > div.wrap.page-wrap.comparison-page > div.method-options.method-options--3:nth-of-type(3)",
             "ariaLabel": "Available methods",
             "alt": null,
             "excludedFromAuthoredCount": true
@@ -3549,12 +3515,12 @@
       },
       {
         "screen": "checkpoint",
-        "observedAt": "2026-11-01T12:53:16.556Z",
+        "observedAt": "2026-11-01T20:06:11.611Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 37,
         "limit": 40.7,
-        "authoredCount": 24,
+        "authoredCount": 25,
         "withinLimit": true,
         "visibleDataCount": 4,
         "excludedCount": 58,
@@ -3637,25 +3603,25 @@
           },
           {
             "text": "Hide heatmap",
-            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > button.button.button--secondary",
-            "kind": "authored",
-            "reason": null
-          },
-          {
-            "text": "100% target",
-            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > div.measurement-legend > div.heatmap-scale:nth-of-type(1) > span.heatmap-target-marker",
+            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > button.mirror-heatmap-toggle",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Less",
-            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > div.measurement-legend > div.heatmap-endpoints:nth-of-type(2) > span:nth-of-type(1)",
+            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > div.measurement-legend.measurement-legend--pill > span:nth-of-type(1)",
+            "kind": "authored",
+            "reason": null
+          },
+          {
+            "text": "100% target",
+            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > div.measurement-legend.measurement-legend--pill > div.heatmap-scale > span.heatmap-target-marker",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "More",
-            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > div.measurement-legend > div.heatmap-endpoints:nth-of-type(2) > span:nth-of-type(2)",
+            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > div.measurement-legend.measurement-legend--pill > span:nth-of-type(2)",
             "kind": "authored",
             "reason": null
           },
@@ -3721,7 +3687,13 @@
           },
           {
             "text": "Work up along the cheekbone.",
-            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > p.measurement-guidance",
+            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > p.measurement-guidance:nth-of-type(1)",
+            "kind": "authored",
+            "reason": null
+          },
+          {
+            "text": "Upper 21% · lower 56%",
+            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > p.measurement-areas:nth-of-type(2)",
             "kind": "authored",
             "reason": null
           },
@@ -3732,13 +3704,13 @@
             "reason": null
           },
           {
-            "text": "Work gently toward your ear.",
+            "text": "Tap gently toward your ear.",
             "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > details.measurement-details > p.measurement-spatial-guidance",
             "kind": "excluded",
             "reason": "collapsed disclosure"
           },
           {
-            "text": "Redness change \u00b7 \u0394a*",
+            "text": "Redness change · Δa*",
             "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > details.measurement-details > dl > div:nth-of-type(1) > dt",
             "kind": "excluded",
             "reason": "collapsed disclosure"
@@ -3750,7 +3722,7 @@
             "reason": "collapsed disclosure"
           },
           {
-            "text": "Color difference \u00b7 \u0394E00",
+            "text": "Color difference · ΔE00",
             "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > details.measurement-details > dl > div:nth-of-type(2) > dt",
             "kind": "excluded",
             "reason": "collapsed disclosure"
@@ -3780,7 +3752,7 @@
             "reason": "collapsed disclosure"
           },
           {
-            "text": "87",
+            "text": "49",
             "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-scroll:nth-of-type(1) > section.checkpoint-panel > div.measurement-visual:nth-of-type(2) > details.measurement-details > dl > div:nth-of-type(4) > dd",
             "kind": "excluded",
             "reason": "collapsed disclosure"
@@ -3924,7 +3896,7 @@
             "reason": "closed dialog"
           },
           {
-            "text": "I\u2019ll choose breaks",
+            "text": "I’ll choose breaks",
             "path": "main > div.wrap.mirror-page.r3-mirror > dialog.controls-drawer > div.preference-row:nth-of-type(4) > div.segmented-control:nth-of-type(2) > label:nth-of-type(1) > span",
             "kind": "excluded",
             "reason": "closed dialog"
@@ -3954,7 +3926,7 @@
             "reason": "closed dialog"
           },
           {
-            "text": "Say \u201cSteady,\u201d then pause, repeat, check, help, next or stop.",
+            "text": "Say “Steady,” then pause, repeat, check, help, next or stop.",
             "path": "main > div.wrap.mirror-page.r3-mirror > dialog.controls-drawer > details.photo-assist.voice-controls:nth-of-type(1) > div.photo-assist-body > p:nth-of-type(1)",
             "kind": "excluded",
             "reason": "closed dialog"
@@ -4112,7 +4084,7 @@
             "excludedFromAuthoredCount": true
           },
           {
-            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > div.measurement-legend",
+            "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > div.mirror-view > div.mirror-heatmap-control:nth-of-type(3) > div.measurement-legend.measurement-legend--pill",
             "ariaLabel": "Heatmap color scale: 0% to 150%, target at 100%",
             "alt": null,
             "excludedFromAuthoredCount": true
@@ -4149,7 +4121,7 @@
           },
           {
             "path": "main > div.wrap.mirror-page.r3-mirror > div.mirror-layout.mirror-layout--applying.mirror-layout--checkpoint:nth-of-type(3) > section.instruction-panel > div.instruction-control-dock:nth-of-type(2) > div.instruction-buttons > button.button.button--secondary:nth-of-type(2)",
-            "ariaLabel": "I made a pass \u00b7 check again",
+            "ariaLabel": "I made a pass · check again",
             "alt": null,
             "excludedFromAuthoredCount": true
           },
@@ -4210,15 +4182,15 @@
       },
       {
         "screen": "review",
-        "observedAt": "2026-11-01T12:53:21.280Z",
+        "observedAt": "2026-11-01T20:06:12.870Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 31,
         "limit": 34.1,
-        "authoredCount": 31,
+        "authoredCount": 32,
         "withinLimit": true,
-        "visibleDataCount": 5,
-        "excludedCount": 15,
+        "visibleDataCount": 6,
+        "excludedCount": 0,
         "viewport": {
           "width": 1366,
           "height": 768
@@ -4345,24 +4317,6 @@
             "reason": null
           },
           {
-            "text": "100% target",
-            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(1) > div.measurement-visual.measurement-visual--compact > div.measurement-legend:nth-of-type(4) > div.heatmap-scale:nth-of-type(1) > span.heatmap-target-marker",
-            "kind": "authored",
-            "reason": null
-          },
-          {
-            "text": "Less",
-            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(1) > div.measurement-visual.measurement-visual--compact > div.measurement-legend:nth-of-type(4) > div.heatmap-endpoints:nth-of-type(2) > span:nth-of-type(1)",
-            "kind": "authored",
-            "reason": null
-          },
-          {
-            "text": "More",
-            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(1) > div.measurement-visual.measurement-visual--compact > div.measurement-legend:nth-of-type(4) > div.heatmap-endpoints:nth-of-type(2) > span:nth-of-type(2)",
-            "kind": "authored",
-            "reason": null
-          },
-          {
             "text": "Your right cheek",
             "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(2) > h3",
             "kind": "authored",
@@ -4406,127 +4360,67 @@
           },
           {
             "text": "100% target",
-            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(2) > div.measurement-visual.measurement-visual--compact > div.measurement-legend:nth-of-type(4) > div.heatmap-scale:nth-of-type(1) > span.heatmap-target-marker",
+            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > div.review-checkpoint-legend > div.measurement-legend > div.heatmap-scale:nth-of-type(1) > span.heatmap-target-marker",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Less",
-            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(2) > div.measurement-visual.measurement-visual--compact > div.measurement-legend:nth-of-type(4) > div.heatmap-endpoints:nth-of-type(2) > span:nth-of-type(1)",
+            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > div.review-checkpoint-legend > div.measurement-legend > div.heatmap-endpoints:nth-of-type(2) > span:nth-of-type(1)",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "More",
-            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(2) > div.measurement-visual.measurement-visual--compact > div.measurement-legend:nth-of-type(4) > div.heatmap-endpoints:nth-of-type(2) > span:nth-of-type(2)",
+            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > div.review-checkpoint-legend > div.measurement-legend > div.heatmap-endpoints:nth-of-type(2) > span:nth-of-type(2)",
             "kind": "authored",
             "reason": null
           },
           {
-            "text": "Fingertips \u2192 Wide blush brush \u00b7 1 method change",
-            "path": "main > div.wrap.page-wrap.review-page > p.review-method-diff",
+            "text": "Right cheek: Fingertips → Brush-blended cream",
+            "path": "main > div.wrap.page-wrap.review-page > div.review-method-diff:nth-of-type(4) > p",
             "kind": "authored",
             "reason": null
           },
           {
             "text": "Your method",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > summary",
+            "path": "main > div.wrap.page-wrap.review-page > section.shopping-note.shopping-note--card > div.shopping-note-lines:nth-of-type(1) > h2",
             "kind": "authored",
             "reason": null
           },
           {
-            "text": "Rose",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > div.shade-reference:nth-of-type(1) > div > strong",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
+            "text": "Rose · Satin cream ·",
+            "path": "main > div.wrap.page-wrap.review-page > section.shopping-note.shopping-note--card > div.shopping-note-lines:nth-of-type(1) > p:nth-of-type(1)",
+            "kind": "authored",
+            "reason": null
           },
           {
             "text": "#BE6680",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > div.shade-reference:nth-of-type(1) > div > code",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
+            "path": "main > div.wrap.page-wrap.review-page > section.shopping-note.shopping-note--card > div.shopping-note-lines:nth-of-type(1) > p:nth-of-type(1) > code",
+            "kind": "data",
+            "reason": "semantic data container: code."
           },
           {
-            "text": "Satin cream",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > div.shade-reference:nth-of-type(1) > div > p",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "Fingertips",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ul > li:nth-of-type(1)",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "+",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ul > li:nth-of-type(1)",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "Cream blush",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ul > li:nth-of-type(1)",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "Wide blush brush",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ul > li:nth-of-type(2)",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "+",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ul > li:nth-of-type(2)",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "Cream blush",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ul > li:nth-of-type(2)",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
+            "text": "Fingertips + Cream blush · Wide blush brush + Cream blush",
+            "path": "main > div.wrap.page-wrap.review-page > section.shopping-note.shopping-note--card > div.shopping-note-lines:nth-of-type(1) > p:nth-of-type(2)",
+            "kind": "authored",
+            "reason": null
           },
           {
             "text": "Copy shade",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > div.button-row:nth-of-type(2) > button.button.button--secondary:nth-of-type(1)",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
+            "path": "main > div.wrap.page-wrap.review-page > section.shopping-note.shopping-note--card > div.button-row:nth-of-type(2) > button.button.button--secondary:nth-of-type(1)",
+            "kind": "authored",
+            "reason": null
           },
           {
             "text": "Print shopping note",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > div.button-row:nth-of-type(2) > button.button.button--quiet:nth-of-type(2)",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "Your left cheek",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ol.action-list > li:nth-of-type(1) > div > strong",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "Use your clean fingertips to tap cream blush over your left cheek. Pause to look at the color and edge.",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ol.action-list > li:nth-of-type(1) > div > p",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "Your right cheek",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ol.action-list > li:nth-of-type(2) > div > strong",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
-          },
-          {
-            "text": "Use a clean brush suitable for cream products to gently blend cream blush over your right cheek with small, broad circles. Keep the pressure light and pause to look at the edge.",
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > ol.action-list > li:nth-of-type(2) > div > p",
-            "kind": "excluded",
-            "reason": "collapsed disclosure"
+            "path": "main > div.wrap.page-wrap.review-page > section.shopping-note.shopping-note--card > div.button-row:nth-of-type(2) > button.button.button--quiet:nth-of-type(2)",
+            "kind": "authored",
+            "reason": null
           },
           {
             "text": "Delete this session",
-            "path": "main > div.wrap.page-wrap.review-page > div.review-data-actions:nth-of-type(4) > button.button.button--quiet",
+            "path": "main > div.wrap.page-wrap.review-page > div.review-data-actions:nth-of-type(5) > button.button.button--quiet",
             "kind": "authored",
             "reason": null
           }
@@ -4575,12 +4469,6 @@
             "excludedFromAuthoredCount": true
           },
           {
-            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(1) > div.measurement-visual.measurement-visual--compact > div.measurement-legend:nth-of-type(4)",
-            "ariaLabel": "Heatmap color scale: 0% to 150%, target at 100%",
-            "alt": null,
-            "excludedFromAuthoredCount": true
-          },
-          {
             "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(2) > div.measurement-visual.measurement-visual--compact > div.measurement-progress:nth-of-type(2) > div:nth-of-type(1)",
             "ariaLabel": "Color change toward your chosen target",
             "alt": null,
@@ -4599,13 +4487,13 @@
             "excludedFromAuthoredCount": true
           },
           {
-            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > article.review-checkpoint:nth-of-type(2) > div.measurement-visual.measurement-visual--compact > div.measurement-legend:nth-of-type(4)",
+            "path": "main > div.wrap.page-wrap.review-page > div.review-summary-grid:nth-of-type(3) > section.review-checkpoints > div.review-checkpoint-legend > div.measurement-legend",
             "ariaLabel": "Heatmap color scale: 0% to 150%, target at 100%",
             "alt": null,
             "excludedFromAuthoredCount": true
           },
           {
-            "path": "main > div.wrap.page-wrap.review-page > details.shopping-note > div.shopping-note-content > div.shade-reference:nth-of-type(1) > span",
+            "path": "main > div.wrap.page-wrap.review-page > section.shopping-note.shopping-note--card > span.shopping-note-swatch",
             "ariaLabel": "Shade reference #BE6680",
             "alt": null,
             "excludedFromAuthoredCount": true
@@ -4625,7 +4513,7 @@
       },
       {
         "screen": "saved-methods",
-        "observedAt": "2026-11-01T12:53:22.777Z",
+        "observedAt": "2026-11-01T20:06:13.191Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 8,
@@ -4739,7 +4627,7 @@
       },
       {
         "screen": "setup-color",
-        "observedAt": "2026-11-01T12:53:23.275Z",
+        "observedAt": "2026-11-01T20:06:13.671Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 12,
@@ -4926,7 +4814,7 @@
       },
       {
         "screen": "setup-movements",
-        "observedAt": "2026-11-01T12:53:23.707Z",
+        "observedAt": "2026-11-01T20:06:14.083Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 30,
@@ -5097,7 +4985,7 @@
             "reason": null
           },
           {
-            "text": "I\u2019ll choose breaks",
+            "text": "I’ll choose breaks",
             "path": "main > div.wrap.page-wrap.r3-setup > div.setup-form > div.preference-row:nth-of-type(4) > div.segmented-control:nth-of-type(2) > label:nth-of-type(1) > span",
             "kind": "authored",
             "reason": null
@@ -5215,7 +5103,7 @@
       },
       {
         "screen": "setup-tools",
-        "observedAt": "2026-11-01T12:53:24.137Z",
+        "observedAt": "2026-11-01T20:06:14.521Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 18,
@@ -5420,7 +5308,7 @@
       },
       {
         "screen": "setup-photo",
-        "observedAt": "2026-11-01T12:53:25.777Z",
+        "observedAt": "2026-11-01T20:06:16.177Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 19,
@@ -5513,7 +5401,7 @@
             "reason": null
           },
           {
-            "text": "I\u2019m 18+, have photo permission, and allow private storage and YouCam previews.",
+            "text": "I’m 18+, have photo permission, and allow private storage and YouCam previews.",
             "path": "main > div.wrap.page-wrap.r3-setup > div.setup-form > div.form-field:nth-of-type(4) > label.checkbox-label > span",
             "kind": "authored",
             "reason": null
@@ -5595,7 +5483,7 @@
       },
       {
         "screen": "settings",
-        "observedAt": "2026-11-01T12:53:32.470Z",
+        "observedAt": "2026-11-01T20:06:18.430Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 50,
@@ -5748,7 +5636,7 @@
             "reason": null
           },
           {
-            "text": "I\u2019ll choose breaks",
+            "text": "I’ll choose breaks",
             "path": "main > div.wrap.page-wrap.settings-page > div.settings-layout:nth-of-type(2) > div > section.settings-section:nth-of-type(1) > div.preference-row:nth-of-type(3) > div.segmented-control:nth-of-type(2) > label:nth-of-type(1) > span",
             "kind": "authored",
             "reason": null
@@ -5772,7 +5660,7 @@
             "reason": null
           },
           {
-            "text": "Your browser\u2019s voice reads each step.",
+            "text": "Your browser’s voice reads each step.",
             "path": "main > div.wrap.page-wrap.settings-page > div.settings-layout:nth-of-type(2) > div > section.settings-section:nth-of-type(2) > div.setting-toggle:nth-of-type(1) > div > p",
             "kind": "authored",
             "reason": null
@@ -5874,7 +5762,7 @@
             "reason": null
           },
           {
-            "text": "Sample \u00b7",
+            "text": "Sample ·",
             "path": "main > div.wrap.page-wrap.settings-page > div.settings-layout:nth-of-type(2) > div > section.settings-section:nth-of-type(3) > div.data-row:nth-of-type(2) > div:nth-of-type(1) > small",
             "kind": "authored",
             "reason": null
@@ -5904,7 +5792,7 @@
             "reason": null
           },
           {
-            "text": "Sample \u00b7",
+            "text": "Sample ·",
             "path": "main > div.wrap.page-wrap.settings-page > div.settings-layout:nth-of-type(2) > div > section.settings-section:nth-of-type(3) > div.data-row:nth-of-type(3) > div:nth-of-type(1) > small",
             "kind": "authored",
             "reason": null
@@ -6004,7 +5892,7 @@
       },
       {
         "screen": "evidence",
-        "observedAt": "2026-11-01T12:53:32.683Z",
+        "observedAt": "2026-11-01T20:06:18.601Z",
         "scope": "Visible non-empty DOM text nodes inside main; default-collapsed controls. Global header/footer reported separately. Text remains counted below the fold; CSS-clipped overflow is not used to reduce counts.",
         "source": "review_round3/steady-copy.md after-count inventory; main R3 takes precedence",
         "target": 23,
@@ -6097,7 +5985,7 @@
             "reason": null
           },
           {
-            "text": "Unreliable tracking, pose, visibility, or reference lighting can prevent measurement. Region-only lighting changes can still resemble pigment. Camera processing, skin appearance, texture, and products also affect readings. These engineering thresholds aren\u2019t calibrated cosmetic assessments. Reloading clears local frames; STEADY asks before capturing another baseline.",
+            "text": "Unreliable tracking, pose, visibility, or reference lighting can prevent measurement. Region-only lighting changes can still resemble pigment. Camera processing, skin appearance, texture, and products also affect readings. These engineering thresholds aren’t calibrated cosmetic assessments. Reloading clears local frames; STEADY asks before capturing another baseline.",
             "path": "main > div.wrap.page-wrap.evidence-page > section:nth-of-type(2) > p:nth-of-type(2)",
             "kind": "authored",
             "reason": null
@@ -6121,7 +6009,7 @@
             "reason": null
           },
           {
-            "text": "The planner checks confirmed movements, products, and tools against finite methods. Adaptation preserves confirmed steps and prefers the existing product family. Instructions are AI-assisted drafts, without makeup-artist or participant validation. Follow product directions; skip or stop movements you don\u2019t want. Light, Build, and Full are visual targets, not calibrated doses. Your chosen photo and assessment describe your physical result.",
+            "text": "The planner checks confirmed movements, products, and tools against finite methods. Adaptation preserves confirmed steps and prefers the existing product family. Instructions are AI-assisted drafts, without makeup-artist or participant validation. Follow product directions; skip or stop movements you don’t want. Light, Build, and Full are visual targets, not calibrated doses. Your chosen photo and assessment describe your physical result.",
             "path": "main > div.wrap.page-wrap.evidence-page > section:nth-of-type(4) > p",
             "kind": "authored",
             "reason": null

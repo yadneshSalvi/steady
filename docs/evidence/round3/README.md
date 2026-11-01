@@ -1,6 +1,6 @@
 # Round-three visual review
 
-Application `a724361f893000241ee848f847652654673973bb`; after screenshots from canonical production. Each pair shows the same workflow stage at the requested CSS viewport; sessions and example decisions can differ. Before capture details remain in [before-captures.json](before-captures.json). Exact dimensions and SHA-256 values are in [screenshot-manifest.json](screenshot-manifest.json).
+Application `a724361f893000241ee848f847652654673973bb`; after screenshots from canonical production. Round four re-captured the changed screens (methods, eye methods, mirror, checkpoint, adaptation, review and setup) from a local production build of `bbc2fb1fa18036de3047744b6883889745ae07a8` on the recorded sample paths; landing, saved methods, settings and evidence are unchanged canonical captures. Each pair shows the same workflow stage at the requested CSS viewport; sessions and example decisions can differ. Before capture details remain in [before-captures.json](before-captures.json). Exact dimensions and SHA-256 values are in [screenshot-manifest.json](screenshot-manifest.json).
 
 | Screen          | 1440 × 900                                                                                  | 1366 × 768                                                                                  |
 | --------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
