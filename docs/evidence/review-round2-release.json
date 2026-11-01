@@ -1,0 +1,181 @@
+{
+  "version": 1,
+  "updatedAt": "2026-11-01T05:52:14.225271+00:00",
+  "status": "released and verified",
+  "applicationCommit": "88f47f29649fa8339580b460cb425fd05e63895d",
+  "deploymentId": "dpl_Bs3kZRMZZE7fv3JBKJ2eyUuarXMj",
+  "canonicalUrl": "https://steady-taupe-pi.vercel.app",
+  "immutableDeploymentUrl": "https://steady-39o40drcs-yadneshsalvis-projects.vercel.app",
+  "deploymentState": "READY",
+  "localUnitTests": {
+    "passed": 366,
+    "total": 366,
+    "failed": 0,
+    "skipped": 0,
+    "files": 36,
+    "isolatedLocalPostgresCases": 26
+  },
+  "localBrowser": {
+    "passed": 24,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "retries": 0,
+    "durationSeconds": 80.675931,
+    "optimizedBuild": true
+  },
+  "gates": {
+    "lint": "passed with zero warnings",
+    "typecheck": "passed",
+    "format": "passed",
+    "productionBuild": "passed; 19 generated pages",
+    "whitespace": "passed"
+  },
+  "canonicalBrowser": {
+    "status": "passed",
+    "startedAt": "2026-11-01T05:47:23.776Z",
+    "passed": 24,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "durationSeconds": 129.390367,
+    "durationScope": "Playwright browser suite statistics; excludes wrapper setup and final reporting",
+    "wrapperElapsedSeconds": 130.14,
+    "workers": 1,
+    "retries": 0,
+    "freshIsolatedAppContexts": true,
+    "sharedProtectionState": false,
+    "sharedAppOwnerCookies": false,
+    "normalFreshAvailability": true,
+    "realPrivateUploadIsolationAndErasurePassed": true,
+    "paidYouCamSubmissions": 0,
+    "providerBoundary": "Fresh provider operations are blocked or mocked in automated tests; no additional paid live smoke was run."
+  },
+  "deployedPrivateUpload": {
+    "source": "AI-created synthetic portrait through personal upload flow",
+    "ownerRead": 200,
+    "unauthenticatedRead": 401,
+    "foreignOwnerRead": 404,
+    "injectedAssetRejected": 400,
+    "deleteAccepted": 200,
+    "ownerReadAfterDelete": 404,
+    "privateObjectErased": true,
+    "testStudioErased": true,
+    "youcamTaskSubmissions": 0,
+    "floorProbeRequests": 0
+  },
+  "independentCanonicalBrowser": {
+    "observedAt": "2026-11-01T05:47:51.139479+00:00",
+    "scope": "Independent in-app browser on canonical deployment; separate from automated browser suite",
+    "hero": [
+      {
+        "chipWidth": 132.28125,
+        "documentWidth": 1366,
+        "overlap": 0,
+        "viewport": [1366, 768]
+      },
+      {
+        "chipWidth": 132.28125,
+        "documentWidth": 1440,
+        "overlap": 0,
+        "viewport": [1440, 900]
+      },
+      {
+        "chipWidth": 132.28125,
+        "documentWidth": 390,
+        "overlap": 0,
+        "viewport": [390, 844]
+      },
+      {
+        "chipWidth": 132.28125,
+        "documentWidth": 1440,
+        "overlap": 0,
+        "viewport": [1440, 813]
+      }
+    ],
+    "thumbnails": {
+      "domButtons": 9,
+      "uniquePayloads": 6,
+      "type": "image/webp",
+      "decodedSize": [256, 320],
+      "bytes": 24694,
+      "originalBytes": 5120771,
+      "reductionPercentForTheseSixPayloadsOnly": 99.52,
+      "measurementOriginalsUnchanged": true
+    },
+    "freshSample": {
+      "selectedLevel": "full",
+      "leftPercent": 38,
+      "dominantLag": "upper",
+      "secondaryOuterPercent": 23,
+      "secondaryInnerPercent": 53,
+      "paddedOvalVisible": true,
+      "translucentHeatmap": true,
+      "legendVisible": true,
+      "simulatedChipVisible": true
+    },
+    "historicalStudio": {
+      "sameUrl": true,
+      "readingsPreserved": true,
+      "leftPercent": 38,
+      "rightPercent": 37,
+      "newGeometryHeatmapsNotInvented": true,
+      "earlierGeometryExplanationVisible": true
+    },
+    "paidYouCamSubmissions": 0
+  },
+  "recordings": {
+    "expectedAndObservedPaidUnits": 10,
+    "balanceBefore": 962,
+    "balanceAfter": 952,
+    "successfulOneAttemptTasks": 10,
+    "adoptedPublicOutputs": 8,
+    "successfulButUnsuitablePrivateTrials": 2,
+    "historicalPngsUnchanged": 31,
+    "historicalManifestsUnchanged": 3,
+    "publicManifest": "/examples/recorded-round2.json",
+    "publicManifestSha256": "5d4560f533cf985b97fc7c2d9015e2738621f08709867e3c8ecb4456a6c5fe97",
+    "additionalPaidReleaseSmoke": 0,
+    "balanceLastCheckedAt": "2026-11-01T05:50:53.928Z",
+    "balanceAtReadOnlyCheck": 952,
+    "balanceCheckScope": "read-only balance after canonical browser suite"
+  },
+  "preReleaseCredentialScan": {
+    "checkedAt": "2026-11-01T05:44:55.113654+00:00",
+    "textFiles": 246,
+    "clientChunks": 38,
+    "knownValuesChecked": 27,
+    "findings": 0
+  },
+  "deploymentPackageAudit": {
+    "checkedAt": "2026-11-01T05:45:14.297097+00:00",
+    "entries": 261,
+    "totalBytes": 40176607,
+    "privateFiles": 0
+  },
+  "limits": [
+    "The recorded targets and sample checkpoints are synthetic-image demonstrations, not evidence of physical makeup completion or usability benefit.",
+    "Physical webcam plus real blush remains unverified; local IMAGE/VIDEO timing evidence measures warmed synthetic capture, inference, encoding and calculation only.",
+    "The thumbnail reduction describes six observed payloads, not the entire page transfer.",
+    "Historical scalar observations retain their original geometry; a new oval heatmap is not reconstructed for earlier cheek measurements."
+  ],
+  "canonicalQaCleanup": {
+    "completedAt": "2026-11-01T05:51:04.180Z",
+    "scope": "Only owners tagged with the exact isolated browser-run user agent and their test studios",
+    "taggedOwners": 9,
+    "providerJobsBeforeCleanup": 0,
+    "ownersRemoved": 9,
+    "remainingTestStudiosRemoved": 3,
+    "additionalBlobsRemoved": 0,
+    "remainingTaggedOwners": 0,
+    "remainingTaggedStudios": 0,
+    "independentReviewStudiosPreserved": true
+  },
+  "finalDocumentationCredentialScan": {
+    "checkedAt": "2026-11-01T05:52:03.484357+00:00",
+    "textFiles": 247,
+    "clientChunks": 38,
+    "knownValuesChecked": 27,
+    "findings": 0
+  }
+}

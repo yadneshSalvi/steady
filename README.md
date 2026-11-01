@@ -40,7 +40,7 @@ pnpm test:e2e                    # against the local running application
 
 The sample uses hash-verified recordings and never creates a fresh YouCam task. Fresh personal previews show a unit estimate and use durable reservations, a cached account-balance floor, and application/owner/IP limits. See [operations](docs/operations.md) for database integration checks and the separate private-upload browser test.
 
-The R2 local release gate passes **366 unit/integration tests and 24 browser tests** against the optimized build, including private upload/isolation/erasure. [Release verification](docs/release-checklist.md) records canonical deployment status and preserves the earlier release evidence. An injected session-read failure preserves the browser owner and saved studio without any sign-in, studio-mutation or preview POST.
+R2 is released and verified on [canonical production](https://steady-taupe-pi.vercel.app). **366 local unit/integration tests** pass, and **all 24 browser tests** pass against both the optimized local build and deployed application, including private upload/isolation/erasure. The canonical run took 129.390367 seconds with no retries or paid YouCam submissions. [Release verification](docs/release-checklist.md) records the deployed commit and preserves earlier evidence. An injected session-read failure preserves the browser owner and saved studio without any sign-in, studio-mutation or preview POST.
 
 ## Evidence and limits
 
