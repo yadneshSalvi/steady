@@ -153,6 +153,7 @@ export default function HomePage() {
               href={`/studio/new?look=${look.id}`}
               className={`inspiration-card inspiration-card--${look.id}`}
               key={look.id}
+              aria-label={`Start with ${look.name}`}
             >
               <div className="look-art">
                 <span
@@ -186,6 +187,9 @@ export default function HomePage() {
             <br />
             Just <em>your next step.</em>
           </h2>
+          <ButtonLink href="/studio/new">
+            Find your way <ArrowUpRight size={21} aria-hidden />
+          </ButtonLink>
         </div>
       </section>
     </div>

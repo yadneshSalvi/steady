@@ -226,12 +226,54 @@ export function ResultReview({ id }: { id: string }) {
   const changes = session.events.filter(
     (event) => event.type === "accept_adaptation",
   ).length;
-  const methodTools = [
+  const plan = session.activePlan;
+  // Adapted steps carry the adapted plan's id; confirmed steps keep the
+  // original method's actions, so the pair is a true before → after.
+  const adaptedActions = changes
+    ? (plan?.actions.filter((action) => action.id.startsWith(`${plan.id}:`)) ??
+      [])
+    : [];
+  const originalTools = [
     ...new Set(
-      session.activePlan?.actions.map((action) => TOOL_LABELS[action.tool]) ??
-        [],
+      plan?.actions
+        .filter((action) => !adaptedActions.includes(action))
+        .map((action) => TOOL_LABELS[action.tool]) ?? [],
     ),
   ];
+  const methodChanges =
+    plan && adaptedActions.length
+      ? [
+          ...new Set(
+            adaptedActions.map((action) => {
+              const area = action.title.replace(/^Your /, "");
+              const label = `${area[0].toUpperCase()}${area.slice(1)}`;
+              return originalTools.length
+                ? `${label}: ${originalTools.join(" + ")} → ${plan.name}`
+                : `${label}: ${plan.name}`;
+            }),
+          ),
+        ]
+      : [];
+  const measured = session.observations.some(
+    (observation) => observation.measurement,
+  );
+  const methodSummary = plan ? (
+    <div className="review-method-diff">
+      {methodChanges.length ? (
+        methodChanges.map((line) => <p key={line}>{line}</p>)
+      ) : (
+        <p>{plan.name}</p>
+      )}
+    </div>
+  ) : null;
+  const methodCard = plan ? (
+    <ShoppingNote
+      plan={plan}
+      lookId={session.lookId}
+      completed={session.completedActionIds}
+      variant="card"
+    />
+  ) : null;
   const canSave =
     session.stage !== "stopped" && (isSample || !!session.outcome);
   return (
@@ -280,7 +322,9 @@ export function ResultReview({ id }: { id: string }) {
       {studio.error || localError ? (
         <Notice kind="error">{localError || studio.error}</Notice>
       ) : null}
-      <div className="review-summary-grid">
+      <div
+        className={`review-summary-grid ${measured ? "" : "review-summary-grid--plain"}`}
+      >
         <figure className="review-reference">
           <figcaption>Before</figcaption>
           <Image
@@ -313,14 +357,14 @@ export function ResultReview({ id }: { id: string }) {
           />
         </figure>
         <CheckpointHistory session={session} />
+        {!measured && (methodSummary || methodCard) ? (
+          <div className="review-side">
+            {methodSummary}
+            {methodCard}
+          </div>
+        ) : null}
       </div>
-      {session.activePlan ? (
-        <p className="review-method-diff">
-          {changes
-            ? `${methodTools.join(" → ")} · ${changes} method ${changes === 1 ? "change" : "changes"}`
-            : session.activePlan.name}
-        </p>
-      ) : null}
+      {measured ? methodSummary : null}
       {!isSample ? (
         <div className="review-personal-grid">
           <div className="review-visual">
@@ -463,13 +507,7 @@ export function ResultReview({ id }: { id: string }) {
           </div>
         </div>
       ) : null}
-      {session.activePlan ? (
-        <ShoppingNote
-          plan={session.activePlan}
-          lookId={session.lookId}
-          completed={session.completedActionIds}
-        />
-      ) : null}
+      {measured ? methodCard : null}
       <div className="review-data-actions">
         <Button
           variant="quiet"

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 import { useId, useState } from "react";
 import type {
   PlanAction,
@@ -230,6 +231,7 @@ export function MeasurementVisual({
   targetAsset,
   compact = false,
   showImages = true,
+  legend = true,
 }: {
   measurement: StoredMeasurement;
   local?: LocalCheckpoint | null;
@@ -237,6 +239,8 @@ export function MeasurementVisual({
   targetAsset?: StudioAsset;
   compact?: boolean;
   showImages?: boolean;
+  /** Off when a group of checkpoints shares one legend. */
+  legend?: boolean;
 }) {
   const [heatmap, setHeatmap] = useState(true);
   const progress = measurement.progress;
@@ -319,12 +323,18 @@ export function MeasurementVisual({
           ) : null}
         </div>
       ) : null}
-      {showImages && local && heatmap && local.result.heatmap.length ? (
+      {legend &&
+      showImages &&
+      local &&
+      heatmap &&
+      local.result.heatmap.length ? (
         <HeatmapLegend />
       ) : null}
       {!compact ? (
         <details className="measurement-details">
-          <summary>Measurement details</summary>
+          <summary>
+            Measurement details <ChevronDown size={17} aria-hidden />
+          </summary>
           {spatial ? (
             <p className="measurement-spatial-guidance">{spatial}</p>
           ) : null}

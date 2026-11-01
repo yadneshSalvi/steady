@@ -37,7 +37,9 @@ test("plain hero keeps its title, portrait and movement card readable at all rev
     expect(overlapsTitle).toBe(false);
     await expect(page.locator(".hero-portrait")).toBeVisible();
     await expect(
-      page.getByRole("link", { name: "Find your way", exact: true }),
+      page
+        .locator(".hero")
+        .getByRole("link", { name: "Find your way", exact: true }),
     ).toBeVisible();
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth),

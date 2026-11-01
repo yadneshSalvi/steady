@@ -409,6 +409,12 @@ for (const viewport of viewports) {
         expect(
           reviewed.assets.filter((asset) => asset.purpose === "checkpoint"),
         ).toEqual([]);
+        await expect(page.locator(".review-method-diff")).toHaveText(
+          `Right cheek: Fingertips → ${reviewed.activePlan!.name}`,
+        );
+        await expect(
+          page.locator(".review-checkpoints .measurement-legend"),
+        ).toHaveCount(1);
         await capture(page, info, "review", audits);
         await page
           .getByRole("button", { name: "Save my method", exact: true })
@@ -580,6 +586,10 @@ for (const viewport of viewports) {
         expect((await saved(unmeasuredId)).observations).toEqual([]);
         await done.click();
         await page.waitForURL(/\/review$/);
+        await expect(page.locator(".review-checkpoints")).toHaveCount(0);
+        await expect(page.locator(".review-summary-grid--plain")).toHaveCount(
+          1,
+        );
         const unmeasured = await saved(unmeasuredId);
         expect(unmeasured.stage).toBe("reviewing");
         expect(unmeasured.completedActionIds).toHaveLength(2);

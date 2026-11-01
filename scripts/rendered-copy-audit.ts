@@ -1,7 +1,8 @@
 import type { Page } from "@playwright/test";
 
 export const COPY_TARGETS = {
-  landing: 21,
+  // Round 4: +1 for the closing "Find your way" action (a functional label).
+  landing: 22,
   "setup-color": 12,
   "setup-movements": 30,
   "setup-tools": 18,

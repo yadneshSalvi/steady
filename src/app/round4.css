@@ -160,3 +160,145 @@
     width: 72px;
   }
 }
+
+/* Disclosures share the chevron used by the other summaries. */
+:is(.shopping-note, .measurement-details) > summary {
+  list-style: none;
+}
+:is(.shopping-note, .measurement-details) > summary::-webkit-details-marker {
+  display: none;
+}
+:is(.shopping-note, .measurement-details) > summary > svg {
+  flex: none;
+  margin-left: auto;
+  color: var(--forest);
+  transition: transform 160ms ease;
+}
+:is(.shopping-note, .measurement-details)[open] > summary > svg {
+  transform: rotate(180deg);
+}
+
+/* Setup: the horizontal stepper keeps every step on one baseline. */
+.r3-setup .setup-steps li + li {
+  margin-top: 0;
+}
+
+/* One Sample badge position: beside the title, as on Methods and Mirror. */
+:is(.r3-setup, .r3-methods, .r3-mirror, .r3-review) .page-intro {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+:is(.r3-setup, .r3-methods, .r3-mirror, .r3-review) .page-intro .sample-badge {
+  margin: 0;
+}
+
+/* Review: one legend under the pair, a real method diff, a short method card. */
+.r3-review .review-checkpoint-legend {
+  grid-column: 1 / -1;
+}
+.r3-review .review-checkpoint-legend .measurement-legend {
+  padding-top: 16px;
+}
+.r3-review .review-method-diff {
+  display: grid;
+  gap: 4px;
+}
+.r3-review .review-method-diff p {
+  margin: 0;
+}
+.r3-review .shopping-note--card {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 24px;
+  padding: 24px;
+}
+.shopping-note-swatch {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 50% 40% 50% 35%;
+  border: 1px solid #0002;
+}
+.shopping-note-lines {
+  flex: 1;
+  min-width: 0;
+}
+.shopping-note-lines h2 {
+  margin: 0 0 4px;
+  font: 600 15px/1.4 var(--sans);
+}
+.shopping-note-lines p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.shopping-note-lines p strong {
+  color: var(--ink, inherit);
+  font-weight: 600;
+}
+.shopping-note-lines code {
+  font-size: 13px;
+}
+.shopping-note--card .button-row {
+  flex: none;
+  margin: 0;
+}
+@media (max-width: 740px) {
+  .r3-review .shopping-note--card {
+    flex-wrap: wrap;
+    padding: 16px;
+  }
+  .shopping-note--card .button-row {
+    width: 100%;
+  }
+}
+@media (min-width: 741px) {
+  .review-summary-grid--plain {
+    grid-template-columns:
+      minmax(0, 320px) 24px minmax(0, 320px)
+      minmax(0, 1fr);
+  }
+}
+.r3-review .review-side {
+  align-self: center;
+  min-width: 0;
+  padding-left: 24px;
+}
+.r3-review .review-side .review-method-diff {
+  padding-block: 0 16px;
+  border: 0;
+  font: 400 28px/1.2 var(--serif);
+}
+.r3-review .review-side .shopping-note--card {
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.r3-review .review-side .shopping-note--card .button-row {
+  width: 100%;
+}
+@media (max-width: 740px) {
+  .r3-review .review-side {
+    grid-column: 1 / -1;
+    padding: 16px 0 0;
+  }
+}
+
+/* Landing: equal product frames so the captions share one baseline. */
+.r3-product-frame {
+  aspect-ratio: 1328 / 637;
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+}
+.r3-product-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.r3-home .manifesto-inner .button {
+  margin-top: 32px;
+}

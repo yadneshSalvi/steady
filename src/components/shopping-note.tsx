@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Copy, Printer } from "lucide-react";
+import { ChevronDown, Copy, Printer } from "lucide-react";
 import { LOOKS, PRODUCT_LABELS, TOOL_LABELS } from "@/lib/catalog";
 import type { CandidatePlan, LookId } from "@/lib/contracts";
 import { ActionList, Button } from "./ui";
@@ -9,10 +9,13 @@ export function ShoppingNote({
   plan,
   lookId,
   completed = [],
+  variant = "disclosure",
 }: {
   plan: CandidatePlan;
   lookId: LookId;
   completed?: string[];
+  /** "card" keeps the short note visible (review); the drawer discloses it. */
+  variant?: "disclosure" | "card";
 }) {
   const [copied, setCopied] = useState(false);
   const look = LOOKS.find((item) => item.id === lookId)!;
@@ -74,13 +77,66 @@ export function ShoppingNote({
     tab.opener = null;
     tab.print();
   }
+  const actions = (
+    <div className="button-row">
+      <Button
+        variant="secondary"
+        onClick={() => {
+          void navigator.clipboard
+            .writeText(shade)
+            .then(() => setCopied(true))
+            .catch(() => setCopied(false));
+        }}
+      >
+        <Copy size={16} aria-hidden />
+        {copied ? "Shade copied" : "Copy shade"}
+      </Button>
+      <Button variant="quiet" onClick={printNote}>
+        <Printer size={16} aria-hidden />
+        Print shopping note
+      </Button>
+    </div>
+  );
+  if (variant === "card")
+    return (
+      <section
+        className="shopping-note shopping-note--card"
+        aria-labelledby="shopping-note-title"
+      >
+        <span
+          className="shopping-note-swatch"
+          style={{ background: shade }}
+          role="img"
+          aria-label={`Shade reference ${shade}`}
+        />
+        <div className="shopping-note-lines">
+          <h2 id="shopping-note-title">Your method</h2>
+          <p>
+            {`${look.title} · ${texture} · `}
+            <code>{shade}</code>
+          </p>
+          <p>
+            {supplies
+              .map(
+                (item) =>
+                  `${TOOL_LABELS[item.tool]} + ${PRODUCT_LABELS[item.product]}`,
+              )
+              .join(" · ")}
+          </p>
+        </div>
+        {actions}
+      </section>
+    );
   return (
     <details className="shopping-note">
-      <summary>Your method</summary>
+      <summary>
+        Your method <ChevronDown size={17} aria-hidden />
+      </summary>
       <div className="shopping-note-content">
         <div className="shade-reference">
           <span
             style={{ background: shade }}
+            role="img"
             aria-label={`Shade reference ${shade}`}
           />
           <div>
@@ -96,24 +152,7 @@ export function ShoppingNote({
             </li>
           ))}
         </ul>
-        <div className="button-row">
-          <Button
-            variant="secondary"
-            onClick={() => {
-              void navigator.clipboard
-                .writeText(shade)
-                .then(() => setCopied(true))
-                .catch(() => setCopied(false));
-            }}
-          >
-            <Copy size={16} aria-hidden />
-            {copied ? "Shade copied" : "Copy shade"}
-          </Button>
-          <Button variant="quiet" onClick={printNote}>
-            <Printer size={16} aria-hidden />
-            Print shopping note
-          </Button>
-        </div>
+        {actions}
         <ActionList actions={plan.actions} completed={completed} />
       </div>
     </details>

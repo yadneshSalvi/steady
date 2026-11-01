@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type {
   CheckpointObservation,
   PlanAction,
@@ -14,7 +14,7 @@ import {
   readLocalCheckpoint,
   type LocalCheckpoint,
 } from "@/lib/vision/local-checkpoints";
-import { MeasurementVisual } from "./measurement-visual";
+import { HeatmapLegend, MeasurementVisual } from "./measurement-visual";
 import { sameStoredMeasurement } from "@/lib/vision/measurement-guidance";
 import { CHEEK_GEOMETRY_VERSION } from "@/lib/vision/geometry";
 import { sampleCheckpointForHistory } from "@/lib/youcam/sample-checkpoints";
@@ -23,12 +23,18 @@ function CheckpointEntry({
   session,
   observation,
   action,
+  onHeatmap,
 }: {
   session: StudioSession;
   observation: CheckpointObservation;
   action: PlanAction;
+  onHeatmap: (id: string, shown: boolean) => void;
 }) {
   const [local, setLocal] = useState<LocalCheckpoint | null>(null);
+  const hasHeatmap = !!local?.result.heatmap.length;
+  useEffect(() => {
+    onHeatmap(observation.id, hasHeatmap);
+  }, [onHeatmap, observation.id, hasHeatmap]);
   const measurement = observation.measurement!;
   const currentGeometry =
     !measurement.region.endsWith("_cheek") ||
@@ -94,6 +100,7 @@ function CheckpointEntry({
         action={action}
         targetAsset={target}
         compact
+        legend={false}
       />
       {!local && session.mode === "personal" ? (
         <p className="small muted">Image no longer on this device.</p>
@@ -106,6 +113,14 @@ function CheckpointEntry({
 }
 
 export function CheckpointHistory({ session }: { session: StudioSession }) {
+  const [heatmaps, setHeatmaps] = useState<Record<string, boolean>>({});
+  const onHeatmap = useCallback(
+    (id: string, shown: boolean) =>
+      setHeatmaps((current) =>
+        current[id] === shown ? current : { ...current, [id]: shown },
+      ),
+    [],
+  );
   const latest = new Map<string, CheckpointObservation>();
   for (const observation of session.observations)
     if (observation.measurement) latest.set(observation.actionId, observation);
@@ -133,8 +148,14 @@ export function CheckpointHistory({ session }: { session: StudioSession }) {
           session={session}
           observation={observation}
           action={action}
+          onHeatmap={onHeatmap}
         />
       ))}
+      {Object.values(heatmaps).some(Boolean) ? (
+        <div className="review-checkpoint-legend">
+          <HeatmapLegend />
+        </div>
+      ) : null}
     </section>
   );
 }
