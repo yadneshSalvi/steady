@@ -14,6 +14,7 @@ import {
   readLocalCheckpoint,
   type LocalCheckpoint,
 } from "@/lib/vision/local-checkpoints";
+import { LOOKS } from "@/lib/catalog";
 import { HeatmapLegend, MeasurementVisual } from "./measurement-visual";
 import { sameStoredMeasurement } from "@/lib/vision/measurement-guidance";
 import { CHEEK_GEOMETRY_VERSION } from "@/lib/vision/geometry";
@@ -101,6 +102,7 @@ function CheckpointEntry({
         targetAsset={target}
         compact
         legend={false}
+        shade={LOOKS.find((look) => look.id === session.lookId)?.color}
       />
       {!local && session.mode === "personal" ? (
         <p className="small muted">Image no longer on this device.</p>
@@ -153,7 +155,9 @@ export function CheckpointHistory({ session }: { session: StudioSession }) {
       ))}
       {Object.values(heatmaps).some(Boolean) ? (
         <div className="review-checkpoint-legend">
-          <HeatmapLegend />
+          <HeatmapLegend
+            shade={LOOKS.find((look) => look.id === session.lookId)?.color}
+          />
         </div>
       ) : null}
     </section>

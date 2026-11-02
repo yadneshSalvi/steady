@@ -19,8 +19,9 @@ import {
   secondarySpatialGuidance,
 } from "@/lib/vision/measurement-guidance";
 import {
-  HEATMAP_COLORS,
   heatmapColor,
+  heatmapGradient,
+  heatmapOpacity,
   smoothHeatmap,
 } from "@/lib/vision/display";
 import { RegionImage } from "./region-image";
@@ -72,12 +73,18 @@ export function RegionTarget({
   );
 }
 
-export function HeatmapLegend({ compact = false }: { compact?: boolean }) {
+export function HeatmapLegend({
+  compact = false,
+  shade,
+}: {
+  compact?: boolean;
+  shade?: string;
+}) {
   const scale = (
     <div
       className="heatmap-scale"
       style={{
-        background: `linear-gradient(to right, ${HEATMAP_COLORS.join(", ")})`,
+        background: heatmapGradient(shade, compact),
       }}
     >
       <span className="heatmap-target-marker" style={{ left: `${100 / 1.5}%` }}>
@@ -108,17 +115,16 @@ export function HeatmapLegend({ compact = false }: { compact?: boolean }) {
   );
 }
 
-/** Mirror overlays read from a distance; review crops stay subtler. */
-const HEATMAP_OPACITY = { mirror: 0.62, crop: 0.45 } as const;
-
 export function CheckpointImage({
   local,
   heatmap = true,
   full = false,
+  shade,
 }: {
   local: LocalCheckpoint;
   heatmap?: boolean;
   full?: boolean;
+  shade?: string;
 }) {
   const maskId = useId().replaceAll(":", "");
   const blurId = `${maskId}-blur`;
@@ -138,7 +144,6 @@ export function CheckpointImage({
     heatmap && polygon.length
       ? smoothHeatmap(local.result.heatmap, bounds)
       : [];
-  const opacity = full ? HEATMAP_OPACITY.mirror : HEATMAP_OPACITY.crop;
   const overlay =
     heatmap && tiles.length ? (
       <g
@@ -186,8 +191,8 @@ export function CheckpointImage({
             <polygon
               key={tile.id}
               points={`${tile.x},${tile.y} ${tile.x + tile.width},${tile.y} ${tile.x + tile.width},${tile.y + tile.height} ${tile.x},${tile.y + tile.height}`}
-              fill={heatmapColor(tile.progress)}
-              fillOpacity={opacity}
+              fill={heatmapColor(tile.progress, shade)}
+              fillOpacity={heatmapOpacity(tile.progress, full)}
             />
           ))}
         </g>
@@ -239,6 +244,7 @@ export function MeasurementVisual({
   compact = false,
   showImages = true,
   legend = true,
+  shade,
 }: {
   measurement: StoredMeasurement;
   local?: LocalCheckpoint | null;
@@ -248,6 +254,7 @@ export function MeasurementVisual({
   showImages?: boolean;
   /** Off when a group of checkpoints shares one legend. */
   legend?: boolean;
+  shade?: string;
 }) {
   const [heatmap, setHeatmap] = useState(true);
   const progress = measurement.progress;
@@ -305,7 +312,7 @@ export function MeasurementVisual({
         <div className="measurement-images">
           <figure>
             <div className="measurement-still">
-              <CheckpointImage local={local} heatmap={heatmap} />
+              <CheckpointImage local={local} heatmap={heatmap} shade={shade} />
             </div>
             {local.result.heatmap.length ? (
               <figcaption>
@@ -335,7 +342,7 @@ export function MeasurementVisual({
       local &&
       heatmap &&
       local.result.heatmap.length ? (
-        <HeatmapLegend />
+        <HeatmapLegend shade={shade} />
       ) : null}
       {!compact ? (
         <details className="measurement-details">

@@ -24,7 +24,7 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { TOOL_LABELS } from "@/lib/catalog";
+import { LOOKS, TOOL_LABELS } from "@/lib/catalog";
 import { uploadPhoto } from "@/lib/upload-client";
 import type {
   CandidatePlan,
@@ -758,6 +758,7 @@ export function GuidedMirror({ id }: { id: string }) {
               <CheckpointImage
                 local={measurement.checkpoint}
                 heatmap={showHeatmap}
+                shade={LOOKS.find((look) => look.id === session.lookId)?.color}
                 full
               />
             </div>
@@ -783,7 +784,14 @@ export function GuidedMirror({ id }: { id: string }) {
               >
                 {showHeatmap ? "Hide heatmap" : "Show heatmap"}
               </button>
-              {showHeatmap ? <HeatmapLegend compact /> : null}
+              {showHeatmap ? (
+                <HeatmapLegend
+                  compact
+                  shade={
+                    LOOKS.find((look) => look.id === session.lookId)?.color
+                  }
+                />
+              ) : null}
             </div>
           ) : null}
           {cameraError ? (

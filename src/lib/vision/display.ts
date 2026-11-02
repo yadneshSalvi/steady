@@ -40,23 +40,69 @@ export function containedRegionViewBox(
   };
 }
 
-export const HEATMAP_COLORS = ["#729CB4", "#E8C37A", "#B9675D", "#8A567D"];
+export const DEFAULT_HEATMAP_SHADE = "#BE6680";
 
-/** A continuous display scale; measurement values are never changed here. */
-export function heatmapColor(progress: number): string {
-  const position = Math.max(0, Math.min(1.5, progress)) * 2;
-  const lower = Math.min(2, Math.floor(position));
-  const fraction = position - lower;
+const clampedProgress = (progress: number) =>
+  Math.max(0, Math.min(1.5, progress));
+
+function mixColor(from: string, to: string, fraction: number): string {
   const channel = (color: string, index: number) =>
     parseInt(color.slice(index * 2 + 1, index * 2 + 3), 16);
-  return `rgb(${[0, 1, 2]
+  return `#${[0, 1, 2]
     .map((index) =>
       Math.round(
-        channel(HEATMAP_COLORS[lower], index) * (1 - fraction) +
-          channel(HEATMAP_COLORS[lower + 1], index) * fraction,
-      ),
+        channel(from, index) * (1 - fraction) + channel(to, index) * fraction,
+      )
+        .toString(16)
+        .padStart(2, "0"),
     )
-    .join(" ")})`;
+    .join("")}`;
+}
+
+/** Warm tints of the chosen cosmetic shade, then a deeper plum/brown. */
+export function heatmapColors(shade = DEFAULT_HEATMAP_SHADE): string[] {
+  return [
+    mixColor(shade, "#FFF1E8", 0.78),
+    mixColor(shade, "#FFF1E8", 0.3),
+    shade,
+    mixColor(shade, "#39201E", 0.55),
+  ];
+}
+
+/** A continuous display scale; measurement values are never changed here. */
+export function heatmapColor(
+  progress: number,
+  shade = DEFAULT_HEATMAP_SHADE,
+): string {
+  const colors = heatmapColors(shade);
+  const position = clampedProgress(progress) * 2;
+  const lower = Math.min(2, Math.floor(position));
+  const color = mixColor(colors[lower], colors[lower + 1], position - lower);
+  return `rgb(${[1, 3, 5].map((index) => parseInt(color.slice(index, index + 2), 16)).join(" ")})`;
+}
+
+/** Low progress leaves skin visible; mirrors retain their stronger target alpha. */
+export function heatmapOpacity(progress: number, full = false): number {
+  const value = clampedProgress(progress);
+  const target = full ? 0.62 : 0.45;
+  return value <= 1
+    ? 0.13 + (target - 0.13) * value
+    : target + (value - 1) * 0.1;
+}
+
+/** The same color and alpha stops as the face, over a warm skin backing. */
+export function heatmapGradient(
+  shade = DEFAULT_HEATMAP_SHADE,
+  full = false,
+): string {
+  const stops = [0, 0.5, 1, 1.5].map(
+    (progress) =>
+      `${heatmapColor(progress, shade).replace(
+        ")",
+        ` / ${heatmapOpacity(progress, full)})`,
+      )} ${(progress / 1.5) * 100}%`,
+  );
+  return `linear-gradient(to right, ${stops.join(", ")}), #C9977E`;
 }
 
 /** One display window around every region a method paints (e.g. both cheeks). */

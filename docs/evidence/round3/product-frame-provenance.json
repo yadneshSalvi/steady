@@ -30,10 +30,11 @@
       "destination": "public/images/product-checkpoint-r4.webp",
       "width": 1328,
       "height": 637,
-      "sourceBytes": 685500,
-      "webpBytes": 40000,
-      "sourceSha256": "d23eab6d52ccf3d3bf211a3c9c471a48cff683c42947bc0e06d53b7e6da0885c",
-      "webpSha256": "f5a644eb8a3edd98baa0c35e9d3a343a2ff5f0238e29d475ea4bf32f0fc2e3f7"
+      "sourceBytes": 685845,
+      "webpBytes": 42702,
+      "sourceSha256": "5c336d871b4614e8e9b3a01c546bf22c59a42de3a74a1c23fa5093060cc0698a",
+      "webpSha256": "57c841aebc27364d4e9648be3156044907f1d00e8bfe00c991c17a9219f60995",
+      "revision": "Warm heatmap display refresh, 2026-11-02. Actual 1440×900 recorded-sample UI crop from next start, pointer off UI; no compositing. Native-size WebP quality 82."
     }
   ]
 }

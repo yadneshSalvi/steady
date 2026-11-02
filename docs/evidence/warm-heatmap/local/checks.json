@@ -1,0 +1,44 @@
+{
+  "origin": "http://localhost:3100",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "recordedSamples": true,
+  "paidRequests": [],
+  "browserErrors": [],
+  "evidence": {
+    "mirror-cheek": {
+      "cells": 82,
+      "colors": 49,
+      "alphaMin": 0.13026311296403154,
+      "alphaMax": 0.47304614758412494,
+      "legend": "linear-gradient(to right, rgba(241, 210, 209, 0.13) 0%, rgba(210, 144, 159, 0.376) 33.3333%, rgba(190, 102, 128, 0.62) 66.6667%, rgba(117, 64, 74, 0.67) 100%), rgb(201, 151, 126)",
+      "warmChannels": true
+    },
+    "review-left-cheek": {
+      "cells": 82,
+      "colors": 49,
+      "alphaMin": 0.13017182887446957,
+      "alphaMax": 0.35403013719779586,
+      "legend": "linear-gradient(to right, rgba(241, 210, 209, 0.13) 0%, rgba(210, 144, 159, 0.29) 33.3333%, rgba(190, 102, 128, 0.45) 66.6667%, rgba(117, 64, 74, 0.5) 100%), rgb(201, 151, 126)",
+      "warmChannels": true
+    },
+    "review-right-cheek": {
+      "cells": 82,
+      "colors": 47,
+      "alphaMin": 0.1338580524237839,
+      "alphaMax": 0.3437650350903605,
+      "legend": "linear-gradient(to right, rgba(241, 210, 209, 0.13) 0%, rgba(210, 144, 159, 0.29) 33.3333%, rgba(190, 102, 128, 0.45) 66.6667%, rgba(117, 64, 74, 0.5) 100%), rgb(201, 151, 126)",
+      "warmChannels": true
+    },
+    "mirror-eye": {
+      "cells": 62,
+      "colors": 11,
+      "alphaMin": 0.39007310829382463,
+      "alphaMax": 0.42291173356204803,
+      "legend": "linear-gradient(to right, rgba(222, 204, 195, 0.13) 0%, rgba(151, 124, 114, 0.376) 33.3333%, rgba(107, 74, 64, 0.62) 66.6667%, rgba(80, 51, 45, 0.67) 100%), rgb(201, 151, 126)",
+      "warmChannels": true
+    }
+  }
+}

@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { containedRegionViewBox, heatmapColor } from "@/lib/vision/display";
+import {
+  containedRegionViewBox,
+  heatmapColor,
+  heatmapGradient,
+  heatmapOpacity,
+} from "@/lib/vision/display";
+import { LOOKS } from "@/lib/catalog";
 import { regionCrop, regionPolygon } from "@/lib/vision/measure";
 import sample from "./fixtures/sample-landmarks.json";
 
@@ -44,4 +50,40 @@ describe("complete measured-region crops", () => {
     expect(heatmapColor(-1)).toBe(heatmapColor(0));
     expect(heatmapColor(2)).toBe(heatmapColor(1.5));
   });
+
+  it.each(LOOKS)(
+    "uses the $id shade with increasing pigment and alpha",
+    (look) => {
+      const channels = (color: string) => color.match(/\d+/g)!.map(Number);
+      const target = [1, 3, 5].map((index) =>
+        parseInt(look.color.slice(index, index + 2), 16),
+      );
+      expect(channels(heatmapColor(1, look.color))).toEqual(target);
+      const brightness = [0, 0.5, 1, 1.5].map((progress) => {
+        const [red, green, blue] = channels(heatmapColor(progress, look.color));
+        // Warm rose, terracotta, berry and brown remain red-led at every stop.
+        expect(red).toBeGreaterThan(green);
+        expect(red).toBeGreaterThan(blue);
+        return red + green + blue;
+      });
+      expect(brightness).toEqual([...brightness].sort((a, b) => b - a));
+      for (const full of [false, true]) {
+        const alpha = [0, 0.5, 1, 1.5].map((progress) =>
+          heatmapOpacity(progress, full),
+        );
+        expect(alpha[0]).toBeCloseTo(0.13);
+        expect(alpha[1]).toBeGreaterThan(alpha[0]);
+        expect(alpha[2]).toBeGreaterThan(alpha[1]);
+        expect(alpha[3]).toBeGreaterThan(alpha[2]);
+        expect(heatmapOpacity(-1, full)).toBe(alpha[0]);
+        expect(heatmapOpacity(2, full)).toBe(alpha[3]);
+        // The legend uses the same target color/alpha at the 100% position,
+        // with a warm skin backing rather than an opaque unrelated gradient.
+        expect(heatmapGradient(look.color, full)).toContain(
+          `${heatmapColor(1, look.color).replace(")", ` / ${alpha[2]})`)} `,
+        );
+        expect(heatmapGradient(look.color, full)).toContain("#C9977E");
+      }
+    },
+  );
 });

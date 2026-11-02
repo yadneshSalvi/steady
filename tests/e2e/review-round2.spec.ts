@@ -178,9 +178,18 @@ test("actual partial sample keeps its full translucent cheek heatmap and opens a
           color: item.getAttribute("fill"),
         })),
       );
-      // Mirror overlay: readable from a distance (display only).
+      // Display strength rises with measured progress; low areas show skin.
       expect(
-        fills.every((fill) => fill.opacity >= 0.6 && fill.opacity <= 0.65),
+        fills.every((fill) => fill.opacity >= 0.13 && fill.opacity <= 0.67),
+      ).toBe(true);
+      expect(new Set(fills.map((fill) => fill.opacity)).size).toBeGreaterThan(
+        2,
+      );
+      expect(
+        fills.every((fill) => {
+          const [red, green, blue] = fill.color!.match(/\d+/g)!.map(Number);
+          return red > green && red > blue;
+        }),
       ).toBe(true);
       expect(new Set(fills.map((fill) => fill.color)).size).toBeGreaterThan(2);
       expect(
