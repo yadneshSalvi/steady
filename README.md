@@ -66,3 +66,7 @@ The measurement is experimental image-color change relative to a chosen virtual 
 - [Round-three before/after gallery](docs/evidence/round3/README.md) and [sanitized production evidence](docs/evidence/review-round3-release.json)
 
 Credentials, plans, private captures, and execution artifacts remain outside version control. Public fictional inputs and recorded outputs have explicit source, recipe, and output provenance.
+
+## License
+
+Original application source code is licensed under the [MIT License](LICENSE). Third-party dependencies, fonts, models and provider assets retain their own terms and notices; see [asset licenses](docs/asset-licenses.md). This license does not grant rights to provider services, trademarks, private uploads or credentials.
