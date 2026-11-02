@@ -86,4 +86,51 @@ describe("complete measured-region crops", () => {
       }
     },
   );
+
+  it.each(LOOKS)(
+    "makes the $id scale visibly stronger after compositing on warm skin",
+    (look) => {
+      const skins = [
+        [155, 97, 73],
+        [201, 151, 126],
+        [232, 185, 157],
+      ];
+      const composite = (skin: number[], progress: number, full: boolean) => {
+        const color = heatmapColor(progress, look.color)
+          .match(/\d+/g)!
+          .map(Number);
+        const alpha = heatmapOpacity(progress, full);
+        return color.map(
+          (channel, index) => channel * alpha + skin[index] * (1 - alpha),
+        );
+      };
+      const distance = (a: number[], b: number[]) =>
+        Math.hypot(...a.map((channel, index) => channel - b[index]));
+      for (const skin of skins)
+        for (const full of [false, true]) {
+          const low = composite(skin, 0, full);
+          // Measure visible travel from the pale, low-progress appearance after
+          // alpha compositing, rather than treating raw overlay RGB as the result.
+          const strengths = [0.5, 1, 1.5].map((progress) =>
+            distance(composite(skin, progress, full), low),
+          );
+          expect(strengths[0]).toBeGreaterThan(4);
+          expect(strengths[1]).toBeGreaterThan(strengths[0] + 3);
+          expect(strengths[2]).toBeGreaterThan(strengths[1] + 3);
+        }
+      // A deeper backing may naturally resemble the chosen brown/plum shade.
+      // It must still show a distinguishable target and retain warm channels.
+      const deep = [96, 59, 42];
+      for (const full of [false, true]) {
+        expect(
+          distance(composite(deep, 1, full), composite(deep, 0, full)),
+        ).toBeGreaterThan(12);
+        for (const progress of [0, 0.25, 0.5, 0.75, 1, 1.25, 1.5]) {
+          const [red, green, blue] = composite(deep, progress, full);
+          expect(red).toBeGreaterThan(green);
+          expect(red).toBeGreaterThan(blue);
+        }
+      }
+    },
+  );
 });
