@@ -1,10 +1,14 @@
 # STEADY
 
+Watch the [2:41 product demo](https://youtu.be/P03O0VRLvHE) with English captions.
+
 **A makeup method that makes room for you.** Choose a look, confirm your tools and comfortable movements, then compare genuine YouCam targets. STEADY guides one step at a time, measures local image-color change toward your chosen stopping point, and changes the remaining method while preserving what you have already confirmed.
 
 **[Open the studio](https://steady-taupe-pi.vercel.app)** · **Quick sample** opens the camera-free walkthrough in one click. Choose a method, compare Light / Build / Full, and measure a compact recorded blush pass against your target. See which part needs more color through a translucent heatmap and measured spatial guidance. **Explore the eye sample** demonstrates fine liner changing to warm, softly tapped shadow while keeping eye emphasis.
 
 Round three is released and verified on [canonical production](https://steady-taupe-pi.vercel.app). Checks pass **479 local unit/database tests**, **28 optimized local browser tests**, and **28 final canonical browser tests**. [Release verification](docs/release-checklist.md) records the exact application, timings, cleanup and limitations.
+
+The **2 November warm-heatmap follow-up** is also deployed. Its shade-derived overlays, review frames and landing imagery were checked with **493 unit/integration tests**, lint, type checking, a production build and production browser inspection. [Follow-up verification](docs/evidence/warm-heatmap/README.md) records the exact commit and deployment separately from the earlier round-three suite.
 
 ## What the studio does
 

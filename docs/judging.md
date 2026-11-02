@@ -1,6 +1,6 @@
 # Judge walkthrough
 
-Open [STEADY](https://steady-taupe-pi.vercel.app) in a fresh browser profile. **Quick sample** needs no camera, personal photo, account form, or provider credits. The round-three interface described here is pending release; the release checklist identifies the deployed build.
+Open [STEADY](https://steady-taupe-pi.vercel.app) in a fresh browser profile. **Quick sample** needs no camera, personal photo, account form, or provider credits. This workflow is deployed, including the warm shade-derived heatmap follow-up. The [warm-heatmap verification](evidence/warm-heatmap/README.md) identifies that release; the [release checklist](release-checklist.md) retains the earlier round-three checks.
 
 ## Cheeks: measure, adapt, and finish
 
